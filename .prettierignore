@@ -1,0 +1,6 @@
+package-lock.json
+package.json
+LICENSE.md
+**/*.ts
+**/*.js
+discover-types.perf.json

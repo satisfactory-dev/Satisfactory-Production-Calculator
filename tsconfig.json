@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"sourceMap": true,
+		"newLine": "lf",
+		"esModuleInterop": true,
+		"strict": true,
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"isolatedModules": true
+	},
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node"
+	},
+	"lib": ["esnext"]
+}

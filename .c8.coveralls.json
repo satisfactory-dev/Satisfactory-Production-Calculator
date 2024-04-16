@@ -1,0 +1,7 @@
+{
+	"reporter": ["lcovonly"],
+	"report-dir": "./coverage",
+	"all": true,
+	"include": ["assert", "lib"],
+	"exclude": ["."]
+}

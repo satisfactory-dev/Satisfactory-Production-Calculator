@@ -1,0 +1,22 @@
+{
+	"type": "module",
+	"private": true,
+	"name": "@signpostmarv/docs.json.ts-production-planner",
+	"description": "Docs.json.ts-driven production planner",
+	"license": "SEE LICENSE IN proprietary",
+	"devDependencies": {
+		"@eslint/js": "^9.0.0",
+		"@signpostmarv/ts-assert": "^0.2.1",
+		"@types/eslint": "^8.56.9",
+		"@types/node": "^20.12.7",
+		"ajv": "^8.12.0",
+		"c8": "^9.1.0",
+		"eslint": "^8.57.0",
+		"glob": "^10.3.12",
+		"prettier": "^3.2.5",
+		"ts-node": "^10.9.2",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.5",
+		"typescript-eslint": "^7.7.0"
+	}
+}

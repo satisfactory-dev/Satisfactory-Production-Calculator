@@ -1,0 +1,20 @@
+{
+	"name": "Docs.json.ts production planner",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"postCreateCommand": "npm install && echo \"source ./.devcontainer/.post-create\" >> /home/node/.bashrc",
+	"remoteUser": "node",
+	"updateRemoteUserUID": true,
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"EditorConfig.EditorConfig",
+				"dbaeumer.vscode-eslint",
+				"github.vscode-github-actions",
+				"ms-azuretools.vscode-docker",
+				"ms-vscode.makefile-tools"
+			]
+		}
+	}
+}

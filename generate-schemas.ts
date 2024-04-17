@@ -56,22 +56,22 @@ type recipe_selection_properties = {
 };
 
 let recipe_selection_enums = FGRecipe.Classes.reduce(
-		(was:recipe_selection_properties, is): recipe_selection_properties => {
-			for (const product of is.mProduct) {
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					product.ItemClass
-				);
+	(was:recipe_selection_properties, is): recipe_selection_properties => {
+		for (const product of is.mProduct) {
+			const Desc_C = UnrealEngineString_right_x_C_suffix(
+				product.ItemClass
+			);
 
-				if (!(Desc_C in was)) {
-					was[Desc_C] = {type: 'string', enum: [is.ClassName]};
-				} else {
-					was[Desc_C].enum.push(is.ClassName);
-				}
+			if (!(Desc_C in was)) {
+				was[Desc_C] = {type: 'string', enum: [is.ClassName]};
+			} else {
+				was[Desc_C].enum.push(is.ClassName);
 			}
+		}
 
-			return was;
-		},
-		{} as recipe_selection_properties,
+		return was;
+	},
+	{} as recipe_selection_properties,
 );
 
 const RF_SOLID = FGResourceDescriptor.Classes.filter(

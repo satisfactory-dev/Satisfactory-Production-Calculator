@@ -44,8 +44,8 @@ export function UnrealEngineString_right_x_C_suffix(
 ) : UnrealEngineString_right_x_C_suffix {
 	const maybe_match =
 		UnrealEngineString_right_x_C_suffix_extraction_regex.exec(
-		value.right
-	);
+			value.right
+		);
 
 	assert.notEqual(maybe_match, null, new NoMatchError(
 		value,

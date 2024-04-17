@@ -5,11 +5,24 @@ import {
 	FGRecipe,
 } from './generated-types/update8/data/CoreUObject/FGRecipe';
 import {
+	FGBuildableFrackingActivator,
+} from './generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
+import {
+	FGBuildableWaterPump,
+} from './generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
+import {
 	__dirname_from_meta,
 } from './Docs.json.ts/lib/__dirname';
 import {
+	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
 } from './lib/planner-request';
+import {
+	FGBuildableResourceExtractor,
+} from './generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
+import {
+	FGResourceDescriptor,
+} from './generated-types/update8/data/CoreUObject/FGResourceDescriptor';
 
 const __dirname = __dirname_from_meta(import.meta);
 
@@ -42,11 +55,7 @@ type recipe_selection_properties = {
 	}
 };
 
-const recipe_selection = {
-	type: 'object',
-	minProperties: 0,
-	additionalProperties: false,
-	properties: FGRecipe.Classes.reduce(
+let recipe_selection_enums = FGRecipe.Classes.reduce(
 		(was:recipe_selection_properties, is): recipe_selection_properties => {
 			for (const product of is.mProduct) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
@@ -63,7 +72,57 @@ const recipe_selection = {
 			return was;
 		},
 		{} as recipe_selection_properties,
-	),
+);
+
+const RF_SOLID = FGResourceDescriptor.Classes.filter(
+	(maybe) => (
+		'RF_SOLID' === maybe.mForm
+		&& filter_UnrealEngineString_right_x_C_suffix(
+			maybe.ClassName
+		)
+	)
+).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix);
+
+recipe_selection_enums = [
+	...FGBuildableFrackingActivator.Classes,
+	...FGBuildableWaterPump.Classes,
+	...FGBuildableResourceExtractor.Classes,
+].reduce(
+	(was:recipe_selection_properties, is): recipe_selection_properties => {
+		if (!(is.mAllowedResources instanceof Array)) {
+			for (const Desc_C of RF_SOLID) {
+				if (!(Desc_C in was)) {
+					was[Desc_C] = {type: 'string', enum: [is.ClassName]};
+				} else {
+					was[Desc_C].enum.push(is.ClassName);
+				}
+			}
+
+			return was;
+		}
+
+		for (const resource of is.mAllowedResources) {
+			const Desc_C = UnrealEngineString_right_x_C_suffix(
+				resource
+			);
+
+			if (!(Desc_C in was)) {
+				was[Desc_C] = {type: 'string', enum: [is.ClassName]};
+			} else {
+				was[Desc_C].enum.push(is.ClassName);
+			}
+		}
+
+		return was;
+	},
+	recipe_selection_enums
+);
+
+const recipe_selection = {
+	type: 'object',
+	minProperties: 0,
+	additionalProperties: false,
+	properties: recipe_selection_enums,
 };
 
 await writeFile(

@@ -35,7 +35,7 @@
 							"minItems": 1,
 							"items": {
 								"type": "string",
-								"pattern": "^Recipe_[^.]+_C$"
+								"pattern": "^(?:Recipe|Build)_[^.]+_C$"
 							}
 						}
 					}

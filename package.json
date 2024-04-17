@@ -18,5 +18,8 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.5",
 		"typescript-eslint": "^7.7.0"
+	},
+	"dependencies": {
+		"bignumber.js": "^9.1.2"
 	}
 }

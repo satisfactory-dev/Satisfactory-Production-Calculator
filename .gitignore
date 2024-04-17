@@ -1,8 +1,9 @@
 /node_modules/
 /data/
 /generated-types/
+/generated-schemas/
 /.eslintcache
-/*.js
-/*.js.map
+/**/*.js
+/**/*.js.map
 /coverage/
 /discover-types.perf.json

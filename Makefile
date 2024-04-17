@@ -25,7 +25,7 @@ generate--post-docs-json:
 	@./node_modules/.bin/ts-node ./generate-schemas.ts
 	@make build
 
-generate--schemas:
+generate--schemas: build
 	@./node_modules/.bin/ts-node ./generate-schemas.ts
 	@make lint--schemas
 

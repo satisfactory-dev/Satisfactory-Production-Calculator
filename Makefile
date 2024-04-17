@@ -17,6 +17,7 @@ generate--post-build:
 	@./node_modules/.bin/eslint \
 		--config ./generated-types/.eslintrc.json \
 		--cache-location ./generated-types/update8/.eslintcache \
+		--cache-strategy content \
 		--cache \
 		./generated-types/
 
@@ -38,9 +39,18 @@ lint--prettier:
 
 lint--eslint:
 	@echo 'checking eslint for fixable issues'
-	@./node_modules/.bin/eslint --cache './*.ts' lib tests --fix-dry-run
+	@./node_modules/.bin/eslint \
+		--cache-location ./.eslintcache \
+		--cache-strategy content \
+		--cache \
+		'./*.ts' lib tests \
+		--fix-dry-run
 	@echo 'checking eslint for all issues'
-	@./node_modules/.bin/eslint --cache './*.ts' lib tests
+	@./node_modules/.bin/eslint  \
+		--cache-location ./.eslintcache \
+		--cache-strategy content \
+		--cache \
+		'./*.ts' lib tests
 
 lint--schemas: build
 	@./node_modules/.bin/ts-node ./validate-schemas.ts

@@ -24,7 +24,8 @@ void describe('RecipeIngredientsRequest', () => {
 	}));
 
 	void describe('validates', () => {
-		const result_1 = [
+		const result_1:recipe_ingredients_request_result = {
+			ingredients: [
 			{
 				item: 'Desc_ModularFrame_C',
 				amount: Math.amount_string('15'),
@@ -41,8 +42,17 @@ void describe('RecipeIngredientsRequest', () => {
 				item: 'Desc_SteelPlate_C',
 				amount: Math.amount_string('100'),
 			},
-		];
-		const result_1000001 = [
+			],
+			output: [
+				{
+					item: 'Desc_BlueprintDesigner_C',
+					type: 'FGBuildingDescriptor',
+					amount: Math.amount_string('1'),
+				},
+			],
+		};
+		const result_1000001:recipe_ingredients_request_result = {
+			ingredients: [
 			{
 				item: 'Desc_ModularFrame_C',
 				amount: Math.amount_string('15.000015'),
@@ -59,12 +69,20 @@ void describe('RecipeIngredientsRequest', () => {
 				item: 'Desc_SteelPlate_C',
 				amount: Math.amount_string('100.0001'),
 			},
-		];
+			],
+			output: [
+				{
+					item: 'Desc_BlueprintDesigner_C',
+					type: 'FGBuildingDescriptor',
+					amount: Math.amount_string('1.000001'),
+				},
+			],
+		};
 
 		const test_cases:[
 			unknown,
 			| false
-			| (recipe_ingredients_request_result[])
+			| recipe_ingredients_request_result,
 		][] = [
 			[
 				[{

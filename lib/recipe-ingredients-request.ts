@@ -213,10 +213,10 @@ export class RecipeIngredientsRequest extends PlannerRequest<
 
 		return {
 			ingredients: Object.entries(ingredients).map(e => {
-			return {
-				item: e[0],
-				amount: e[1],
-			};
+				return {
+					item: e[0],
+					amount: e[1],
+				};
 			}),
 			output: Object.entries(output).map(e => {
 				return {

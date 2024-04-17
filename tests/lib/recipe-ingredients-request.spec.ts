@@ -26,22 +26,22 @@ void describe('RecipeIngredientsRequest', () => {
 	void describe('validates', () => {
 		const result_1:recipe_ingredients_request_result = {
 			ingredients: [
-			{
-				item: 'Desc_ModularFrame_C',
-				amount: Math.amount_string('15'),
-			},
-			{
-				item: 'Desc_Cable_C',
-				amount: Math.amount_string('25'),
-			},
-			{
-				item: 'Desc_Cement_C',
-				amount: Math.amount_string('100'),
-			},
-			{
-				item: 'Desc_SteelPlate_C',
-				amount: Math.amount_string('100'),
-			},
+				{
+					item: 'Desc_ModularFrame_C',
+					amount: Math.amount_string('15'),
+				},
+				{
+					item: 'Desc_Cable_C',
+					amount: Math.amount_string('25'),
+				},
+				{
+					item: 'Desc_Cement_C',
+					amount: Math.amount_string('100'),
+				},
+				{
+					item: 'Desc_SteelPlate_C',
+					amount: Math.amount_string('100'),
+				},
 			],
 			output: [
 				{
@@ -53,22 +53,22 @@ void describe('RecipeIngredientsRequest', () => {
 		};
 		const result_1000001:recipe_ingredients_request_result = {
 			ingredients: [
-			{
-				item: 'Desc_ModularFrame_C',
-				amount: Math.amount_string('15.000015'),
-			},
-			{
-				item: 'Desc_Cable_C',
-				amount: Math.amount_string('25.000025'),
-			},
-			{
-				item: 'Desc_Cement_C',
-				amount: Math.amount_string('100.0001'),
-			},
-			{
-				item: 'Desc_SteelPlate_C',
-				amount: Math.amount_string('100.0001'),
-			},
+				{
+					item: 'Desc_ModularFrame_C',
+					amount: Math.amount_string('15.000015'),
+				},
+				{
+					item: 'Desc_Cable_C',
+					amount: Math.amount_string('25.000025'),
+				},
+				{
+					item: 'Desc_Cement_C',
+					amount: Math.amount_string('100.0001'),
+				},
+				{
+					item: 'Desc_SteelPlate_C',
+					amount: Math.amount_string('100.0001'),
+				},
 			],
 			output: [
 				{

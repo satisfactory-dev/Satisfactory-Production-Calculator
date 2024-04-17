@@ -28,6 +28,7 @@ import {
 } from './Math';
 import {
 	PlannerRequest,
+	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
 import {
 	FGBuildingDescriptor,
@@ -133,78 +134,58 @@ export class RecipeIngredientsRequest extends PlannerRequest<
 			} = recipes[recipe];
 
 			for (const ingredient of mIngredients) {
-				const maybe_match = /^(?:\/[^/]+)+\/(Desc_[^.]+).(\1_C)/.exec(
-					ingredient.ItemClass.right
+				const Desc_c = UnrealEngineString_right_x_C_suffix(
+					ingredient.ItemClass
 				);
 
-				assert.notEqual(maybe_match, null, new NoMatchError(
+				assert.equal(Desc_c in items, true, new NoMatchError(
 					{
 						recipe,
 						ingredient: ingredient.ItemClass.right,
-					},
-					'Recipe contains unsupported ingredients!'
-				));
-
-				const match = maybe_match as RegExpExecArray;
-
-				assert.equal(match[2] in items, true, new NoMatchError(
-					{
-						recipe,
-						ingredient: ingredient.ItemClass.right,
-						expected: match[2],
+						expected: Desc_c,
 					},
 					'Supported ingredient found but missing item!'
 				));
 
-				if (!(match[2] in ingredients)) {
-					ingredients[match[2]] = '0';
+				if (!(Desc_c in ingredients)) {
+					ingredients[Desc_c] = '0';
 				}
 
-				ingredients[match[2]] = Math.append_multiply(
-					ingredients[match[2]],
+				ingredients[Desc_c] = Math.append_multiply(
+					ingredients[Desc_c],
 					ingredient.Amount,
 					amount
 				);
 			}
 
 			for (const product of mProduct) {
-				const maybe_match = /^(?:\/[^/]+)+\/(Desc_[^.]+).(\1_C)/.exec(
-					product.ItemClass.right
+				const Desc_c = UnrealEngineString_right_x_C_suffix(
+					product.ItemClass
 				);
-
-				assert.notEqual(maybe_match, null, new NoMatchError(
-					{
-						recipe,
-						product: product.ItemClass.right,
-					},
-					'Recipe contains unsupported products!'
-				));
-
-				const match = maybe_match as RegExpExecArray;
 
 				assert.equal(
 					(
-						match[2] in buildings
-						|| match[2] in items
-						|| match[2] in resources
+						Desc_c in buildings
+						|| Desc_c in items
+						|| Desc_c in resources
 					),
 					true,
 					new NoMatchError(
 						{
 							recipe,
 							product: product.ItemClass.right,
-							expected: match[2],
+							expected: Desc_c,
 						},
 						'Supported product found but missing item!'
 					)
 				);
 
-				if (!(match[2] in output)) {
-					output[match[2]] = '0';
+				if (!(Desc_c in output)) {
+					output[Desc_c] = '0';
 				}
 
-				output[match[2]] = Math.append_multiply(
-					output[match[2]],
+				output[Desc_c] = Math.append_multiply(
+					output[Desc_c],
 					product.Amount,
 					amount
 				);

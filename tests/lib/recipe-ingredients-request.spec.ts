@@ -112,6 +112,32 @@ void describe('RecipeIngredientsRequest', () => {
 				}],
 				false,
 			],
+			[
+				[{
+					recipe: 'Recipe_UnpackageWater_C',
+					amount: '123.456',
+				}],
+				{
+					ingredients: [
+						{
+							item: 'Desc_PackagedWater_C',
+							amount: Math.amount_string('246.912'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('246912'),
+							type: 'FGResourceDescriptor',
+						},
+						{
+							item: 'Desc_FluidCanister_C',
+							amount: Math.amount_string('246.912'),
+							type: 'FGItemDescriptor',
+						},
+					],
+				},
+			],
 		];
 
 		for (const entry of test_cases) {

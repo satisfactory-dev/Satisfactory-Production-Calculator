@@ -31,6 +31,7 @@ const files = Object.fromEntries(
 
 const schemas = {
 	'recipe-ingredients-request.json': `${__dirname}/schema/recipe-ingredients-request.json`,
+	'recipe-selection.json': `${__dirname}/schema/recipe-selection.json`,
 };
 
 for (const entry of Object.entries(files)) {

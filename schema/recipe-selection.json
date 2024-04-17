@@ -1,0 +1,46 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "recipe-selection--meta-schema",
+	"type": "object",
+	"required": [
+		"$schema",
+		"$id",
+		"type",
+		"minProperties",
+		"additionalProperties",
+		"properties"
+	],
+	"additionalProperties": false,
+	"properties": {
+		"$schema": {
+			"type": "string",
+			"const": "https://json-schema.org/draft/2020-12/schema"
+		},
+		"$id": {"type": "string", "const": "recipe-selection"},
+		"type": {"type": "string", "const": "object"},
+		"minProperties": {"type": "integer", "const": 0},
+		"additionalProperties": {"type": "boolean", "const": false},
+		"properties": {
+			"type": "object",
+			"additionalProperties": false,
+			"patternProperties": {
+				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+					"type": "object",
+					"required": ["type", "enum"],
+					"additionalProperties": false,
+					"properties": {
+						"type": {"type": "string", "const": "string"},
+						"enum": {
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "string",
+								"pattern": "^Recipe_[^.]+_C$"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -94,8 +94,8 @@ declare type production_ingredients_request = {
 		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
 	},
 	pool: {
-	production: keyof typeof recipe_selection_schema['properties'],
-	amount: number_arg,
+		production: keyof typeof recipe_selection_schema['properties'],
+		amount: number_arg,
 	}[],
 };
 

@@ -19,6 +19,11 @@ export type number_arg =
 
 export class Math
 {
+	static add(a: number_arg, b: number_arg): amount_string
+	{
+		return this.round_off(BigNumber(a).plus(b));
+	}
+
 	static amount_string(maybe:string): amount_string
 	{
 		if (
@@ -44,8 +49,6 @@ export class Math
 		),
 		b:number_arg
 	): amount_string {
-		this.configure();
-
 		let result = BigNumber(append_to);
 		const b_parsed = BigNumber(b);
 
@@ -55,16 +58,14 @@ export class Math
 			);
 		}
 
-		return result.toString() as amount_string;
+		return this.round_off(result);
 	}
 
 	static divide(
 		a: number_arg,
 		b: number_arg
 	) : amount_string {
-		this.configure();
-
-		return BigNumber(a).dividedBy(b).toString() as amount_string;
+		return this.round_off(BigNumber(a).dividedBy(b));
 	}
 
 	static greatest_common_denominator(
@@ -91,22 +92,39 @@ export class Math
 			...number_arg[]
 		]
 	): amount_string {
-		this.configure();
-
 		const as_BigNumber = numbers.map(e => BigNumber(e));
 
-		return as_BigNumber.reduce(
+		return this.round_off(as_BigNumber.reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
 			(was, is) => {
 				return was.multipliedBy(is).absoluteValue().dividedBy(
 					this.greatest_common_denominator(was, is)
 				);
 			}
-		).toString() as amount_string;
+		));
 	}
 
-	private static configure()
+	static sub(a:number_arg, b:number_arg): amount_string
 	{
-		BigNumber.set({DECIMAL_PLACES: 6});
+		return this.round_off(BigNumber(a).minus(b));
+	}
+
+	private static round_off(number:BigNumber): amount_string
+	{
+		const result = number.toString();
+
+		if (/\.\d{7,}$/.test(result)) {
+			const [before, after] = result.split('.');
+
+			return `${
+				before
+			}.${
+				'0' === after.substring(6, 7)
+					? after.substring(0, 6).replace(/0+$/, '')
+					: BigNumber(after.substring(0, 6)).plus(1).toString()
+			}` as amount_string;
+		}
+
+		return result as amount_string;
 	}
 }

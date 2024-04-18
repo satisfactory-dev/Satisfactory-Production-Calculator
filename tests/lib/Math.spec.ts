@@ -16,6 +16,33 @@ import {
 } from '../../generated-types/update8/common/unassigned';
 
 void describe('Math', () => {
+	void describe('add', () => {
+		const data_sets: [number_arg, number_arg, amount_string][] = [
+			[1,2, '3' as amount_string],
+			[0, 22.5000001, '22.500001' as amount_string],
+			[0, 22.50000001, '22.5' as amount_string],
+		];
+
+		for (const entry of data_sets) {
+			const [a, b, expectation] = entry;
+			void it(
+				`Math.add(${
+					a
+				}, ${
+					b
+				}) returns ${
+					expectation
+				}`,
+				() => {
+					assert.equal(
+						Math.add(a, b),
+						expectation
+					);
+				}
+			)
+		}
+	})
+
 	void describe('amount_string', () => {
 		const expectations: [
 			string,
@@ -121,6 +148,32 @@ void describe('Math', () => {
 		}
 	})
 
+	void describe('divide', () => {
+		const data_sets:[number_arg, number_arg, amount_string][] = [
+			[2, 3, '0.666667' as amount_string],
+		];
+
+		for (const entry of data_sets) {
+			const [a, b, expectation] = entry;
+
+			void it(
+				`Math.divide(${
+					a
+				}, ${
+					b
+				}) returns ${
+					expectation
+				}`,
+				() => {
+					assert.equal(
+						Math.divide(a, b),
+						expectation
+					);
+				}
+			)
+		}
+	})
+
 	void describe('greatest_common_denominator', () => {
 		const data_set:[number_arg, number_arg, amount_string][] = [
 			[1, 2, '1' as integer_string__type],
@@ -177,6 +230,33 @@ void describe('Math', () => {
 				() => {
 					assert.equal(
 						Math.least_common_multiple(numbers),
+						expectation
+					);
+				}
+			)
+		}
+	})
+
+	void describe('sub', () => {
+		const data_sets:[number_arg, number_arg, amount_string][] = [
+			[1.0000001, 0.0000001, '1' as amount_string],
+			[3, 2, '1' as amount_string],
+		];
+
+		for (const entry of data_sets) {
+			const [a, b, expectation] = entry;
+
+			void it(
+				`Math.sub(${
+					a
+				}, ${
+					b
+				}) returns ${
+					expectation
+				}`,
+				() => {
+					assert.equal(
+						Math.sub(a, b),
 						expectation
 					);
 				}

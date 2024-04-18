@@ -44,27 +44,27 @@ void describe('ProductionIngredientsRequest', () => {
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: Math.amount_string('3.75'),
-				},
-				{
-					item: 'Desc_IronRod_C',
-					amount: Math.amount_string('26.25'),
-				},
-				{
-					item: 'Desc_IronPlate_C',
 					amount: Math.amount_string('22.5'),
 				},
 				{
+					item: 'Desc_IronRod_C',
+					amount: Math.amount_string('157.5'),
+				},
+				{
+					item: 'Desc_IronPlate_C',
+					amount: Math.amount_string('135'),
+				},
+				{
 					item: 'Desc_IronScrew_C',
-					amount: Math.amount_string('45'),
+					amount: Math.amount_string('270'),
 				},
 				{
 					item: 'Desc_IronIngot_C',
-					amount: Math.amount_string('48.75'),
+					amount: Math.amount_string('360'),
 				},
 				{
 					item: 'Desc_OreIron_C',
-					amount: Math.amount_string('448.75'),
+					amount: Math.amount_string('760'),
 				},
 				{
 					item: 'Desc_Wire_C',

@@ -277,8 +277,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				e => 0 !== BigNumber(e).comparedTo(1)
 			)
 				? Math.least_common_multiple(
-					amounts as [number_arg, number_arg, ...number_arg[]]
+
+					[
+						1,
+						...product_amounts,
+					] as [number_arg, number_arg, ...number_arg[]]
 				) : 1;
+
+			if (divisor !== 1) {
+				console.log(product_amounts, amounts, divisor);
+			}
 
 			for (const ingredient of mIngredients) {
 				const Desc_c = UnrealEngineString_right_x_C_suffix(

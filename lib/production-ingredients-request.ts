@@ -257,8 +257,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amounts as [number_arg, number_arg, ...number_arg[]]
 				) : 1;
 
-			console.log(amounts, divisor);
-
 			for (const ingredient of mIngredients) {
 				const Desc_c = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass

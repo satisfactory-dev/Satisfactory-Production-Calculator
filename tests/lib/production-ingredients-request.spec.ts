@@ -220,7 +220,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					ingredients: [
 						{
-							item: 'Desc_LiquidOil',
+							item: 'Desc_LiquidOil_C',
 							amount: Math.amount_string('1.5'),
 						},
 					],

@@ -29,28 +29,6 @@ import {
 
 const __dirname = __dirname_from_meta(import.meta);
 
-const recipe_ingredients_request = {
-	type: 'array',
-	minItems: 1,
-	items: {
-		type: 'object',
-		required: ['recipe', 'amount'],
-		additionalProperties: false,
-		properties: {
-			recipe: {
-				type: 'string',
-				enum: FGRecipe.Classes.map(e => e.ClassName),
-			},
-			amount: {
-				oneOf: [
-					{type: 'number', minimum: 0, multipleOf: 0.000001},
-					{type: 'string', pattern: '^\\d+(?:\\.\\d{1,6})?$'},
-				],
-			},
-		},
-	},
-};
-
 type recipe_selection_properties = {
 	[key: UnrealEngineString_right_x_C_suffix]: {
 		type: 'string',
@@ -142,14 +120,15 @@ for (const entry of Object.entries(recipe_selection_enums)) {
 		1 === value.enum.length
 			? value.enum[0]
 			: (
-				value.enum.find(maybe => preferred_defaults.includes(maybe))
+				preferred_defaults.find(maybe => value.enum.includes(maybe))
 				|| (
 					value.enum.find(maybe => maybe.includes('_Alternate_'))
 						? value.enum.find(
 							maybe => !maybe.includes('_Alternate_')
 						)
 						: undefined
-				) || (
+				)
+				|| (
 					(
 						value.enum.find(
 							maybe => maybe.startsWith('Recipe_Liquid')
@@ -215,17 +194,53 @@ for (const entry of Object.entries(recipe_selection_enums)) {
 const recipe_selection = {
 	type: 'object',
 	additionalProperties: false,
-	required: Object.keys(recipe_selection_enums),
 	properties: recipe_selection_enums,
 };
 
+const production_ingredients_request = {
+	type: 'object',
+	required: ['pool'],
+	additionalProperties: false,
+	properties: {
+		recipe_selection: {
+			$ref: 'recipe-selection',
+		},
+		pool: {
+			type: 'array',
+			minItems: 1,
+			items: {
+				type: 'object',
+				required: ['production', 'amount'],
+				additionalProperties: false,
+				properties: {
+					production: {
+						type: 'string',
+						enum: {
+							$ref: 'recipe-selection#required',
+						},
+					},
+					amount: {
+						oneOf: [
+							{type: 'number', minimum: 0, multipleOf: 0.000001},
+							{
+								type: 'string',
+								pattern: '^\\d+(?:\\.\\d{1,6})?$',
+							},
+						],
+					},
+				},
+			},
+		},
+	},
+};
+
 await writeFile(
-	`${__dirname}/generated-schemas/recipe-ingredients-request.json`,
+	`${__dirname}/generated-schemas/production-ingredients-request.json`,
 	`${JSON.stringify(
 		{
 			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'recipe-ingredients-request',
-			...recipe_ingredients_request,
+			$id: 'production-ingredients-request',
+			...production_ingredients_request,
 		},
 		null,
 		'\t'

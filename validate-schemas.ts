@@ -1,5 +1,6 @@
 import Ajv, {
 	AnySchema,
+	SchemaObject,
 } from "ajv/dist/2020";
 import {
 	glob,
@@ -30,9 +31,19 @@ const files = Object.fromEntries(
 );
 
 const schemas = {
-	'recipe-ingredients-request.json': `${__dirname}/schema/recipe-ingredients-request.json`,
+	'production-ingredients-request.json': `${__dirname}/schema/production-ingredients-request.json`,
 	'recipe-selection.json': `${__dirname}/schema/recipe-selection.json`,
 };
+
+for (const schema_file_path of Object.values(schemas)) {
+	const schema = (
+		await import(
+			schema_file_path,
+			{with: {type: 'json'}}
+		) as {default: unknown}
+	).default;
+	ajv.addSchema(schema as SchemaObject);
+}
 
 for (const entry of Object.entries(files)) {
 	const [expected_key, file_path] = entry;

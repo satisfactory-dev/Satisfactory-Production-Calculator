@@ -4,16 +4,16 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-	recipe_ingredients_request_result,
-	RecipeIngredientsRequest,
-} from '../../lib/recipe-ingredients-request';
+	production_ingredients_request_result,
+	ProductionIngredientsRequest,
+} from '../../lib/production-ingredients-request';
 import Ajv from 'ajv/dist/2020';
 import {
 	Math,
 } from '../../lib/Math';
 
-void describe('RecipeIngredientsRequest', () => {
-	const instance = new RecipeIngredientsRequest(new Ajv({
+void describe('ProductionIngredientsRequest', () => {
+	const instance = new ProductionIngredientsRequest(new Ajv({
 		verbose: true,
 		code: {
 			source: true,
@@ -24,7 +24,7 @@ void describe('RecipeIngredientsRequest', () => {
 	}));
 
 	void describe('validates', () => {
-		const result_1:recipe_ingredients_request_result = {
+		const result_1:production_ingredients_request_result = {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
@@ -51,7 +51,7 @@ void describe('RecipeIngredientsRequest', () => {
 				},
 			],
 		};
-		const result_1000001:recipe_ingredients_request_result = {
+		const result_1000001:production_ingredients_request_result = {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
@@ -82,41 +82,64 @@ void describe('RecipeIngredientsRequest', () => {
 		const test_cases:[
 			unknown,
 			| false
-			| recipe_ingredients_request_result,
+			| production_ingredients_request_result,
 		][] = [
 			[
-				[{
-					recipe: 'Recipe_BlueprintDesigner_C',
+				{pool: [{
+					production: 'Desc_BlueprintDesigner_C',
 					amount: 1,
-				}],
+				}]},
 				result_1,
 			],
 			[
-				[{
-					recipe: 'Recipe_BlueprintDesigner_C',
+				{pool: [{
+					production: 'Desc_BlueprintDesigner_C',
 					amount: '1',
-				}],
+				}]},
 				result_1,
 			],
 			[
-				[{
-					recipe: 'Recipe_BlueprintDesigner_C',
+				{pool: [{
+					production: 'Desc_BlueprintDesigner_C',
 					amount: '1.000001',
-				}],
+				}]},
 				result_1000001,
 			],
 			[
-				[{
-					recipe: 'Recipe_BlueprintDesigner_C',
+				{pool: [{
+					production: 'Desc_BlueprintDesigner_C',
 					amount: '1.0000001',
-				}],
+				}]},
 				false,
 			],
 			[
-				[{
-					recipe: 'Recipe_UnpackageWater_C',
+				{pool: [{
+					production: 'Desc_Water_C',
 					amount: '123.456',
-				}],
+				}]},
+				{
+					ingredients: [],
+					output: [
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('123.456'),
+							type: 'FGResourceDescriptor',
+						},
+					],
+				},
+			],
+			[
+				{
+					recipe_selection: {
+						Desc_Water_C: 'Recipe_UnpackageWater_C',
+					},
+					pool: [
+						{
+							production: 'Desc_Water_C',
+							amount: '123.456',
+						},
+					],
+				},
 				{
 					ingredients: [
 						{

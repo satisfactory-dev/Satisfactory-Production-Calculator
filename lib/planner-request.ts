@@ -92,6 +92,7 @@ export abstract class PlannerRequest<
 			throw new NoMatchError(
 				{
 					data,
+					errors: this.check.errors,
 				},
 				'Data not a supported request!'
 			);

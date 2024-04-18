@@ -4,8 +4,10 @@ import Ajv, {
 	SchemaObject,
 } from 'ajv/dist/2020';
 
-import recipe_ingredients_request_schema from
-	'../generated-schemas/recipe-ingredients-request.json' with {type: 'json'};
+import production_ingredients_request_schema from
+	'../generated-schemas/production-ingredients-request.json' with {type: 'json'};
+import recipe_selection_schema from
+	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
 } from '../Docs.json.ts/lib/Exceptions';
@@ -80,10 +82,15 @@ const resources:{
 	FGResourceDescriptor.Classes.map(e => [e.ClassName, e])
 );
 
-declare type recipe_ingredients_request = {
-	recipe: keyof typeof recipes,
+declare type production_ingredients_request = {
+	recipe_selection?: {
+		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
+	},
+	pool: {
+	production: keyof typeof recipe_selection_schema['properties'],
 	amount: number_arg,
-}[];
+	}[],
+};
 
 export type recipe_ingredients_request_ingredient = {
 	item: keyof typeof items,
@@ -101,32 +108,88 @@ export type recipe_ingredients_request_output = {
 	amount: amount_string,
 };
 
-export type recipe_ingredients_request_result = {
+export type production_ingredients_request_result = {
 	ingredients: recipe_ingredients_request_ingredient[],
 	output: recipe_ingredients_request_output[],
 };
 
-export class RecipeIngredientsRequest extends PlannerRequest<
-	recipe_ingredients_request,
-	recipe_ingredients_request_result
+export class ProductionIngredientsRequest extends PlannerRequest<
+	production_ingredients_request,
+	production_ingredients_request_result
 > {
 	constructor(ajv:Ajv)
 	{
-		super(ajv, recipe_ingredients_request_schema as SchemaObject);
+		ajv.addSchema(recipe_selection_schema);
+		(production_ingredients_request_schema
+			.properties
+			.pool
+			.items
+			.properties
+			.production
+			.enum as unknown) = Object.keys(
+				recipe_selection_schema.properties
+			);
+		super(ajv, production_ingredients_request_schema as SchemaObject);
 	}
 
 	protected calculate_validated(
-		data:recipe_ingredients_request
-	): recipe_ingredients_request_result {
+		data:production_ingredients_request
+	): production_ingredients_request_result {
 		const ingredients:{
 			[key in keyof typeof items]: amount_string;
 		} = {};
 		const output:{
-			[key in keyof typeof buildings]: amount_string;
+			[key in keyof (
+				| typeof buildings
+				| typeof resources
+			)]: amount_string;
 		} = {};
 
-		for (const entry of data) {
-			const {recipe, amount} = entry;
+		for (const entry of data.pool) {
+			const {production, amount} = entry;
+
+			const recipe = (
+				data.recipe_selection && production in data.recipe_selection
+					? data.recipe_selection[production]
+					: recipe_selection_schema.properties[production].default
+			);
+
+			if (undefined === recipes[recipe]) {
+				assert.equal(
+					recipe.startsWith('Build_'),
+					true,
+					new NoMatchError(
+						{
+							production,
+							amount,
+							recipe,
+						},
+						'Expecting to find a building recipe!'
+					)
+				);
+
+				assert.equal(production in resources, true, new NoMatchError(
+					{
+						recipe,
+						expected: production,
+					},
+					`Supported ingredient found but missing item!`
+				));
+
+				if (!(production in output)) {
+					output[production as keyof typeof resources] = '0';
+				}
+
+				output[
+					production as keyof typeof resources
+				] = Math.append_multiply(
+					output[production as keyof typeof resources],
+					1,
+					amount
+				);
+
+				continue;
+			}
 
 			const {
 				mIngredients,

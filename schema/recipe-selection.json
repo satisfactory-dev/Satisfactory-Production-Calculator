@@ -12,7 +12,6 @@
 		"$schema",
 		"$id",
 		"type",
-		"required",
 		"additionalProperties",
 		"properties"
 	],
@@ -25,14 +24,6 @@
 		"$id": {"type": "string", "const": "recipe-selection"},
 		"type": {"type": "string", "const": "object"},
 		"additionalProperties": {"type": "boolean", "const": false},
-		"required": {
-			"type": "array",
-			"minItems": 1,
-			"items": {
-				"type": "string",
-				"pattern": "^(?:Desc|BP|Foundation)_.+_C$"
-			}
-		},
 		"properties": {
 			"type": "object",
 			"additionalProperties": false,

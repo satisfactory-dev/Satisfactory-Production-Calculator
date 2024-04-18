@@ -44,8 +44,12 @@ import {
 import {
 	FGResourceDescriptor__type,
 } from '../generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
-import { integer_string__type } from '../generated-types/update8/common/unassigned';
-import { UnrealEngineString } from '../generated-types/update8/utils/validators';
+import {
+	integer_string__type,
+} from '../generated-types/update8/common/unassigned';
+import {
+	UnrealEngineString,
+} from '../generated-types/update8/utils/validators';
 import BigNumber from 'bignumber.js';
 
 const recipes:{

@@ -144,18 +144,18 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_PackagedWater_C',
-							amount: Math.amount_string('246.912'),
+							amount: Math.amount_string('123.456'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('246912'),
+							amount: Math.amount_string('123.456'),
 							type: 'FGResourceDescriptor',
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							amount: Math.amount_string('246.912'),
+							amount: Math.amount_string('123.456'),
 							type: 'FGItemDescriptor',
 						},
 					],

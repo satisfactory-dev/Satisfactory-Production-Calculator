@@ -58,6 +58,53 @@ export class Math
 		return result.toString() as amount_string;
 	}
 
+	static divide(
+		a: number_arg,
+		b: number_arg
+	) : amount_string {
+		this.configure();
+
+		return BigNumber(a).dividedBy(b).toString() as amount_string;
+	}
+
+	static greatest_common_denominator(
+		a:number_arg|BigNumber,
+		b:number_arg|BigNumber
+	): BigNumber {
+		const a_Bignumber = BigNumber(a);
+		const b_Bignumber = BigNumber(b);
+
+		if (0 === b_Bignumber.comparedTo(0)) {
+			return a_Bignumber;
+		}
+
+		return this.greatest_common_denominator(
+			b_Bignumber,
+			a_Bignumber.modulo(b_Bignumber)
+		);
+	}
+
+	static least_common_multiple(
+		numbers:[
+			number_arg,
+			number_arg,
+			...number_arg[]
+		]
+	): amount_string {
+		this.configure();
+
+		const as_BigNumber = numbers.map(e => BigNumber(e));
+
+		return as_BigNumber.reduce(
+			// based on https://www.npmjs.com/package/mlcm?activeTab=code
+			(was, is) => {
+				return was.multipliedBy(is).absoluteValue().dividedBy(
+					this.greatest_common_denominator(was, is)
+				);
+			}
+		).toString() as amount_string;
+	}
+
 	private static configure()
 	{
 		BigNumber.set({DECIMAL_PLACES: 6});

@@ -44,6 +44,9 @@ import {
 import {
 	FGResourceDescriptor__type,
 } from '../generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
+import { integer_string__type } from '../generated-types/update8/common/unassigned';
+import { UnrealEngineString } from '../generated-types/update8/utils/validators';
+import BigNumber from 'bignumber.js';
 
 const recipes:{
 	[
@@ -132,6 +135,33 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		super(ajv, production_ingredients_request_schema as SchemaObject);
 	}
 
+	protected amend_ItemClass_amount(
+		ItemClass:{
+			ItemClass: UnrealEngineString;
+			Amount: integer_string__type;
+		}
+	): {
+		ItemClass: UnrealEngineString;
+		Amount: number_arg;
+	} {
+
+		const Desc_c = UnrealEngineString_right_x_C_suffix(
+			ItemClass.ItemClass
+		);
+
+		return {
+			ItemClass: ItemClass.ItemClass,
+			Amount: (
+				(
+					Desc_c in resources
+					&& 'RF_SOLID' !== resources[Desc_c].mForm
+				)
+					? Math.divide(ItemClass.Amount, 1000)
+					: ItemClass.Amount
+			),
+		};
+	}
+
 	protected calculate_validated(
 		data:production_ingredients_request
 	): production_ingredients_request_result {
@@ -196,6 +226,35 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				mProduct,
 			} = recipes[recipe];
 
+			const product_amounts = mProduct.map(
+				e => this.amend_ItemClass_amount(e).Amount
+			);
+
+			const amounts = [
+				...mIngredients.map(e => e.Amount),
+				...product_amounts,
+			];
+
+			assert.equal(
+				amounts.length >= 2,
+				true,
+				new NoMatchError(
+					{
+						amounts,
+					},
+					'Expected at least two numbers!'
+				)
+			);
+
+			const divisor = product_amounts.find(
+				e => 0 !== BigNumber(e).comparedTo(1)
+			)
+				? Math.least_common_multiple(
+					amounts as [number_arg, number_arg, ...number_arg[]]
+				) : 1;
+
+			console.log(amounts, divisor);
+
 			for (const ingredient of mIngredients) {
 				const Desc_c = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass
@@ -216,7 +275,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				ingredients[Desc_c] = Math.append_multiply(
 					ingredients[Desc_c],
-					ingredient.Amount,
+					Math.divide(ingredient.Amount, divisor),
 					amount
 				);
 			}
@@ -249,7 +308,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				output[Desc_c] = Math.append_multiply(
 					output[Desc_c],
-					product.Amount,
+					Math.divide(
+						this.amend_ItemClass_amount(product).Amount,
+						divisor
+					),
 					amount
 				);
 			}

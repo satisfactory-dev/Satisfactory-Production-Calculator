@@ -104,6 +104,8 @@ void describe('Math', () => {
 		][] = [
 			['1', '2', '3', '7'],
 			['1', ['2', '3'], '4', '21'],
+			['0', '22.5', '1.000001', '22.500023'],
+			['0', '45', '1.000001', '45.000045'],
 		];
 		const expectations:data_set[] = unmapped_expectations.map((
 			data_set

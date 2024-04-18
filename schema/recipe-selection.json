@@ -1,12 +1,18 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "recipe-selection--meta-schema",
+	"$defs": {
+		"enum_item": {
+			"type": "string",
+			"pattern": "^(?:Recipe|Build)_[^.]+_C$"
+		}
+	},
 	"type": "object",
 	"required": [
 		"$schema",
 		"$id",
 		"type",
-		"minProperties",
+		"required",
 		"additionalProperties",
 		"properties"
 	],
@@ -18,24 +24,31 @@
 		},
 		"$id": {"type": "string", "const": "recipe-selection"},
 		"type": {"type": "string", "const": "object"},
-		"minProperties": {"type": "integer", "const": 0},
 		"additionalProperties": {"type": "boolean", "const": false},
+		"required": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "string",
+				"pattern": "^(?:Desc|BP|Foundation)_.+_C$"
+			}
+		},
 		"properties": {
 			"type": "object",
 			"additionalProperties": false,
 			"patternProperties": {
 				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
 					"type": "object",
-					"required": ["type", "enum"],
+					"required": ["type", "enum", "default"],
 					"additionalProperties": false,
 					"properties": {
 						"type": {"type": "string", "const": "string"},
+						"default": {"$ref": "#/$defs/enum_item"},
 						"enum": {
 							"type": "array",
 							"minItems": 1,
 							"items": {
-								"type": "string",
-								"pattern": "^(?:Recipe|Build)_[^.]+_C$"
+								"$ref": "#/$defs/enum_item"
 							}
 						}
 					}

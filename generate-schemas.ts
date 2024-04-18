@@ -23,6 +23,9 @@ import {
 import {
 	FGResourceDescriptor,
 } from './generated-types/update8/data/CoreUObject/FGResourceDescriptor';
+import {
+	NoMatchError,
+} from './Docs.json.ts/lib/Exceptions';
 
 const __dirname = __dirname_from_meta(import.meta);
 
@@ -118,10 +121,101 @@ recipe_selection_enums = [
 	recipe_selection_enums
 );
 
+const preferred_defaults = [
+	'Build_MinerMk1_C',
+	'Build_OilPump_C',
+	'Build_WaterPump_C',
+	// have to ensure OilPump & WaterPump come first
+	'Build_FrackingSmasher_C',
+];
+
+const permitted_first_match = [
+	'Desc_AlienProtein_C',
+	'Desc_GenericBiomass_C',
+	'Desc_Medkit_C',
+];
+
+for (const entry of Object.entries(recipe_selection_enums)) {
+	const [key, value] = entry;
+
+	const default_value = (
+		1 === value.enum.length
+			? value.enum[0]
+			: (
+				value.enum.find(maybe => preferred_defaults.includes(maybe))
+				|| (
+					value.enum.find(maybe => maybe.includes('_Alternate_'))
+						? value.enum.find(
+							maybe => !maybe.includes('_Alternate_')
+						)
+						: undefined
+				) || (
+					(
+						value.enum.find(
+							maybe => maybe.startsWith('Recipe_Liquid')
+						)
+						&& value.enum.find(
+							maybe => maybe.startsWith('Recipe_Unpackage')
+						)
+					)
+						? value.enum.find(
+							maybe => maybe.startsWith('Recipe_Liquid')
+						)
+						: undefined
+				) || (
+					(
+						value.enum.find(
+							maybe => maybe.startsWith('Recipe_Ingot')
+						)
+						&& value.enum.find(
+							maybe => maybe.startsWith('Recipe_Pure')
+						)
+					)
+						? value.enum.find(
+							maybe => maybe.startsWith('Recipe_Ingot')
+						)
+						: undefined
+				) || (
+					key.startsWith('Desc_')
+						? value.enum.find(
+							maybe => `Recipe_${key.substring(5)}` === maybe
+						)
+						: undefined
+				) || (
+					permitted_first_match.includes(key)
+						? value.enum[0]
+						: undefined
+				) || (
+					value.enum.every(maybe => /^Recipe_.+_\d+_C$/.test(maybe))
+						? value.enum.find(maybe => maybe.endsWith('_1_C'))
+						: undefined
+				)
+			)
+	);
+
+	if (undefined === default_value) {
+		throw new NoMatchError(
+			{
+				[key]: value,
+			},
+			'Could not find default!'
+		);
+	}
+
+	(
+		value as unknown as (
+			& recipe_selection_properties
+			& {
+				default:string,
+			}
+		)
+	).default = default_value;
+}
+
 const recipe_selection = {
 	type: 'object',
-	minProperties: 0,
 	additionalProperties: false,
+	required: Object.keys(recipe_selection_enums),
 	properties: recipe_selection_enums,
 };
 

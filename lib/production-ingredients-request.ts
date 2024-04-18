@@ -29,7 +29,6 @@ import {
 	number_arg,
 } from './Math';
 import {
-	filter_UnrealEngineString_right_x_C_suffix,
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
@@ -168,10 +167,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			ItemClass: ItemClass.ItemClass,
 			Amount: (
 				(
-				(
-					Desc_c in resources
-					&& 'RF_SOLID' !== resources[Desc_c].mForm
-				)
+					(
+						Desc_c in resources
+						&& 'RF_SOLID' !== resources[Desc_c].mForm
+					)
 					|| (
 						Desc_c in items
 						&& 'RF_SOLID' !== items[Desc_c].mForm
@@ -293,13 +292,14 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					),
 					true,
 					new NoMatchError(
-					{
-						recipe,
-						ingredient: ingredient.ItemClass.right,
-						expected: Desc_c,
-					},
+						{
+							recipe,
+							ingredient: ingredient.ItemClass.right,
+							expected: Desc_c,
+						},
 						`Supported ingredient found (${Desc_c}) but missing item!`
-				));
+					)
+				);
 
 				if (!(Desc_c in ingredients)) {
 					ingredients[Desc_c] = BigNumber(0);

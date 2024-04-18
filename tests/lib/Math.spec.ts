@@ -27,9 +27,9 @@ void describe('Math', () => {
 			const [a, b, expectation] = entry;
 			void it(
 				`Math.add(${
-					a
+					a.toString()
 				}, ${
-					b
+					b.toString()
 				}) returns ${
 					expectation
 				}`,
@@ -128,13 +128,13 @@ void describe('Math', () => {
 			const [append_to, a, b, expectation] = entry;
 			void it (
 				`Math.append_multiply(${
-					append_to
+					append_to.toString()
 				}, ${
-					a instanceof Array ? JSON.stringify(a) : a
+					a instanceof Array ? JSON.stringify(a) : a.toString()
 				}, ${
-					b
+					b.toString()
 				}) returns ${
-					expectation
+					expectation.toString()
 				}`,
 				() => {
 					const get_result = () => Math.append_multiply(
@@ -160,9 +160,9 @@ void describe('Math', () => {
 
 			void it(
 				`Math.divide(${
-					a
+					a.toString()
 				}, ${
-					b
+					b.toString()
 				}) returns ${
 					expectation
 				}`,
@@ -188,9 +188,9 @@ void describe('Math', () => {
 
 			void it(
 				`Math.greatest_common_denominator(${
-					a
+					a.toString()
 				}, ${
-					b
+					b.toString()
 				}) returns ${
 					expectation
 				}`,
@@ -250,9 +250,9 @@ void describe('Math', () => {
 
 			void it(
 				`Math.sub(${
-					a
+					a.toString()
 				}, ${
-					b
+					b.toString()
 				}) returns ${
 					expectation
 				}`,

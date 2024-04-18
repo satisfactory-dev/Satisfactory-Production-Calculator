@@ -14,14 +14,17 @@ export type amount_string =
 	| integer_string__type
 	| '0';
 export type number_arg =
+	| BigNumber
 	| number
 	| amount_string;
 
 export class Math
 {
-	static add(a: number_arg, b: number_arg): amount_string
+	static add(a: number_arg, b: number_arg): BigNumber
 	{
-		return this.round_off(BigNumber(a).plus(b));
+		this.configure();
+
+		return BigNumber(a).plus(b);
 	}
 
 	static amount_string(maybe:string): amount_string
@@ -48,7 +51,9 @@ export class Math
 			| [amount_string, ...amount_string[]]
 		),
 		b:number_arg
-	): amount_string {
+	): BigNumber {
+		this.configure();
+
 		let result = BigNumber(append_to);
 		const b_parsed = BigNumber(b);
 
@@ -58,14 +63,16 @@ export class Math
 			);
 		}
 
-		return this.round_off(result);
+		return result;
 	}
 
 	static divide(
 		a: number_arg,
 		b: number_arg
-	) : amount_string {
-		return this.round_off(BigNumber(a).dividedBy(b));
+	) : BigNumber {
+		this.configure();
+
+		return BigNumber(a).dividedBy(b);
 	}
 
 	static greatest_common_denominator(
@@ -79,6 +86,8 @@ export class Math
 			return a_Bignumber;
 		}
 
+		this.configure();
+
 		return this.greatest_common_denominator(
 			b_Bignumber,
 			a_Bignumber.modulo(b_Bignumber)
@@ -91,26 +100,23 @@ export class Math
 			number_arg,
 			...number_arg[]
 		]
-	): amount_string {
+	): BigNumber {
+		this.configure();
 		const as_BigNumber = numbers.map(e => BigNumber(e));
 
-		return this.round_off(as_BigNumber.reduce(
+		return as_BigNumber.reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
 			(was, is) => {
 				return was.multipliedBy(is).absoluteValue().dividedBy(
 					this.greatest_common_denominator(was, is)
 				);
 			}
-		));
+		);
 	}
 
-	static sub(a:number_arg, b:number_arg): amount_string
+	static round_off(number:BigNumber): amount_string
 	{
-		return this.round_off(BigNumber(a).minus(b));
-	}
-
-	private static round_off(number:BigNumber): amount_string
-	{
+		this.configure();
 		const result = number.toString();
 
 		if (/\.\d{7,}$/.test(result)) {
@@ -126,5 +132,20 @@ export class Math
 		}
 
 		return result as amount_string;
+	}
+
+	static sub(a:number_arg, b:number_arg): BigNumber
+	{
+		this.configure();
+
+		return BigNumber(a).minus(b);
+	}
+
+	private static configure()
+	{
+		BigNumber.set({
+			DECIMAL_PLACES: 6,
+			ROUNDING_MODE: BigNumber.ROUND_HALF_CEIL,
+		});
 	}
 }

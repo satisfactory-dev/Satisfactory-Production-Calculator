@@ -121,6 +121,9 @@ for (const entry of Object.entries(recipe_selection_enums)) {
 			? value.enum[0]
 			: (
 				preferred_defaults.find(maybe => value.enum.includes(maybe))
+				|| value.enum.find(
+					maybe => maybe === key.replace(/^Desc_/, 'Recipe_')
+				)
 				|| (
 					value.enum.find(maybe => maybe.includes('_Alternate_'))
 						? value.enum.find(

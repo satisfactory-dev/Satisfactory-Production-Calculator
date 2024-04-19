@@ -16,5 +16,8 @@
 				"ms-vscode.makefile-tools"
 			]
 		}
-	}
+	},
+	"mounts": [
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/FModel/Output/Exports/FactoryGame/Content,target=/textures,type=bind,consistency=cached"
+	]
 }

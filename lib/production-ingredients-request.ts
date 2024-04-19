@@ -51,6 +51,9 @@ import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';
 import BigNumber from 'bignumber.js';
+import {
+	not_undefined,
+} from '../Docs.json.ts/assert/CustomAssert';
 
 const recipes:{
 	[
@@ -183,8 +186,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	}
 
 	protected calculate_precisely(
-		data:production_ingredients_request,
-		recursively_already_checked?:[string, ...string[]]
+		data:production_ingredients_request
 	): production_ingredients_request_result<BigNumber> {
 		const ingredients:{
 			[key in keyof typeof items]: BigNumber;
@@ -273,20 +275,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			);
 
-			const divisor = product_amounts.find(
-				e => 0 !== BigNumber(e).comparedTo(1)
-			)
-				? Math.least_common_multiple(
-
-					[
-						1,
-						...product_amounts,
-					] as [number_arg, number_arg, ...number_arg[]]
-				) : 1;
-
-			if (divisor !== 1) {
-				console.log(product_amounts, amounts, divisor);
-			}
+			const divisor = Math.least_common_multiple(
+				[
+					1,
+					...product_amounts,
+				] as [number_arg, number_arg, ...number_arg[]]
+			);
 
 			for (const ingredient of mIngredients) {
 				const Desc_c = UnrealEngineString_right_x_C_suffix(
@@ -315,7 +309,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				ingredients[Desc_c] = Math.append_multiply(
 					ingredients[Desc_c],
-					Math.divide(ingredient.Amount, divisor),
+					Math.divide(
+						this.amend_ItemClass_amount(ingredient).Amount,
+						divisor
+					),
 					amount
 				);
 			}
@@ -357,71 +354,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 		}
 
-		for (
-			const Desc_C of Object.keys(
-				ingredients
-			).filter(
-				(maybe) => !recursively_already_checked?.includes(maybe)
-			)
-		) {
-			const fresh_check:[string, ...string[]] = [Desc_C];
-			if (recursively_already_checked) {
-				fresh_check.push(...recursively_already_checked);
-			}
-
-			assert.equal(
-				Desc_C in recipe_selection_schema['properties'],
-				true,
-				new NoMatchError(
-					Desc_C,
-					'Item not found in recipe selection!'
-				)
-			);
-
-			const recursive = this.calculate_precisely(
-				{
-					recipe_selection: data.recipe_selection,
-					pool: [
-						{
-							production: Desc_C as (
-								keyof typeof recipe_selection_schema[
-									'properties'
-								]
-							),
-							amount: ingredients[Desc_C],
-						},
-					],
-				},
-				fresh_check
-			);
-
-			for (const ingredient of recursive.ingredients) {
-				if (!(ingredient.item in ingredients)) {
-					ingredients[ingredient.item] = ingredient.amount;
-				} else {
-					ingredients[ingredient.item] = Math.add(
-						ingredients[ingredient.item],
-						ingredient.amount
-					);
-				}
-			}
-
-			for (const entry of recursive.output) {
-				if (entry.item === Desc_C) {
-					continue;
-				}
-
-				if (!(entry.item in output)) {
-					output[entry.item] = entry.amount;
-				} else {
-					output[entry.item] = Math.add(
-						output[entry.item],
-						entry.amount
-					);
-				}
-			}
-		}
-
 		const result:production_ingredients_request_result<BigNumber> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
@@ -452,28 +384,112 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	protected calculate_validated(
 		data:production_ingredients_request
 	): production_ingredients_request_result {
-		const result = this.calculate_precisely(data);
+		const initial_result = this.calculate_precisely(data);
+		const results = [initial_result];
+
+		let checking_recursively = initial_result.ingredients.filter(
+			maybe => !(maybe.item in resources)
+		);
+
+		while (checking_recursively.length > 0) {
+			const when_done:recipe_ingredients_request_ingredient<
+				BigNumber
+			>[] = [];
+
+			for (const check_deeper of checking_recursively) {
+				assert.equal(
+					check_deeper.item in recipe_selection_schema['properties'],
+					true,
+					new NoMatchError(
+						check_deeper.item,
+						'Item not found in recipe selection!'
+					)
+				);
+
+				const deeper_result = this.calculate_precisely({
+					...data,
+					pool: [{
+						production: (
+							check_deeper.item as keyof (
+								typeof recipe_selection_schema['properties']
+							)
+						),
+						amount: check_deeper.amount,
+					}],
+				});
+
+				const self_output = deeper_result.output.find(
+					maybe => maybe.item === check_deeper.item
+				);
+
+				not_undefined(self_output);
+
+				self_output.amount = self_output.amount.minus(
+					check_deeper.amount
+				);
+
+				const maybe_check_further = deeper_result.ingredients.filter(
+					maybe => !(maybe.item in resources)
+				);
+
+				if (maybe_check_further.length) {
+					when_done.push(...maybe_check_further);
+				}
+
+				results.push(deeper_result);
+			}
+
+			checking_recursively = when_done;
+		}
+
+		const ingredients:{[key: string]: BigNumber} = {};
+		const output:{[key: string]: BigNumber} = {};
+		const type:{
+			[key: string]: recipe_ingredients_request_output['type'],
+		} = {};
+
+		for (const entry of results) {
+			for (const ingredient of entry.ingredients) {
+				if (!(ingredient.item in ingredients)) {
+					ingredients[ingredient.item] = ingredient.amount;
+				} else {
+					ingredients[
+						ingredient.item
+					] = ingredients[ingredient.item].plus(
+						ingredient.amount
+					);
+				}
+			}
+
+			for (const output_entry of entry.output) {
+				type[output_entry.item] = output_entry.type;
+
+				if (!(output_entry.item in output)) {
+					output[output_entry.item] = output_entry.amount;
+				} else {
+					output[
+						output_entry.item
+					] = output[output_entry.item].plus(
+						output_entry.amount
+					);
+				}
+			}
+		}
 
 		return {
-			ingredients: result.ingredients.map(e => {
+			ingredients: Object.entries(ingredients).map(e => {
 				return {
-					item: e.item,
-					amount: Math.round_off(e.amount),
-				};
+					item: e[0],
+					amount: Math.round_off(e[1]),
+				}
 			}),
-			output: result.output.map(e => {
+			output: Object.entries(output).map(e => {
 				return {
-					item: e.item,
-					type: e.type,
-					amount: Math.round_off(e.amount),
-				};
-			}),
+					item: e[0],
+					type: type[e[0]],
+					amount: Math.round_off(e[1]),
+				}
+			}).filter(maybe => '0' !== maybe.amount),
 		};
-	}
-
-	protected requires_recursion(
-		maybe:UnrealEngineString_right_x_C_suffix
-	): boolean {
-		return !(maybe in resources);
 	}
 }

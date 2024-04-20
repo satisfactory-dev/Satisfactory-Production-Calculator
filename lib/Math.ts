@@ -23,13 +23,6 @@ export type number_arg =
 
 export class Math
 {
-	static add(a: number_arg, b: number_arg): BigNumber
-	{
-		this.configure();
-
-		return BigNumber(a).plus(b);
-	}
-
 	static amount_string(maybe:string): amount_string
 	{
 		if (
@@ -65,15 +58,6 @@ export class Math
 		}
 
 		return result;
-	}
-
-	static divide(
-		a: number_arg,
-		b: number_arg
-	) : BigNumber {
-		this.configure();
-
-		return BigNumber(a).dividedBy(b);
 	}
 
 	static greatest_common_denominator(
@@ -144,13 +128,6 @@ export class Math
 		}
 
 		return result as amount_string;
-	}
-
-	static sub(a:number_arg, b:number_arg): BigNumber
-	{
-		this.configure();
-
-		return BigNumber(a).minus(b);
 	}
 
 	private static configure()

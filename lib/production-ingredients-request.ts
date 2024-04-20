@@ -264,7 +264,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						&& 'RF_SOLID' !== items[Desc_c].mForm
 					)
 				)
-					? Math.divide(ItemClass.Amount, 1000)
+					? BigNumber(ItemClass.Amount).dividedBy(1000)
 					: ItemClass.Amount
 			),
 		};
@@ -415,8 +415,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				ingredients[Desc_c] = Math.append_multiply(
 					ingredients[Desc_c],
-					Math.divide(
-						this.amend_ItemClass_amount(ingredient).Amount,
+					BigNumber(
+						this.amend_ItemClass_amount(ingredient).Amount
+					).dividedBy(
 						divisor
 					),
 					amount
@@ -451,8 +452,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				output[Desc_c] = Math.append_multiply(
 					output[Desc_c],
-					Math.divide(
-						this.amend_ItemClass_amount(product).Amount,
+					BigNumber(
+						this.amend_ItemClass_amount(product).Amount
+					).dividedBy(
 						divisor
 					),
 					amount

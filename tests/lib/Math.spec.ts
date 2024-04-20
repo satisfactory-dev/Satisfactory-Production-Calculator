@@ -17,33 +17,6 @@ import {
 import BigNumber from 'bignumber.js';
 
 void describe('Math', () => {
-	void describe('add', () => {
-		const data_sets: [number_arg, number_arg, string][] = [
-			[1,2, '3' as string],
-			[0, 22.5000001, '22.5000001'],
-			[0, 22.50000001, '22.50000001'],
-		];
-
-		for (const entry of data_sets) {
-			const [a, b, expectation] = entry;
-			void it(
-				`Math.add(${
-					a.toString()
-				}, ${
-					b.toString()
-				}) returns ${
-					expectation
-				}`,
-				() => {
-					assert.equal(
-						BigNumber(expectation).comparedTo(Math.add(a, b)),
-						0
-					);
-				}
-			)
-		}
-	})
-
 	void describe('amount_string', () => {
 		const expectations: [
 			string,
@@ -164,32 +137,6 @@ void describe('Math', () => {
 		}
 	})
 
-	void describe('divide', () => {
-		const data_sets:[number_arg, number_arg, string][] = [
-			[2, 3, '0.666667'],
-		];
-
-		for (const entry of data_sets) {
-			const [a, b, expectation] = entry;
-
-			void it(
-				`Math.divide(${
-					a.toString()
-				}, ${
-					b.toString()
-				}) returns ${
-					expectation
-				}`,
-				() => {
-					assert.equal(
-						BigNumber(expectation).comparedTo(Math.divide(a, b)),
-						0
-					);
-				}
-			)
-		}
-	})
-
 	void describe('greatest_common_denominator', () => {
 		const data_set:[number_arg, number_arg, amount_string][] = [
 			[1, 2, '1' as integer_string__type],
@@ -275,33 +222,6 @@ void describe('Math', () => {
 						Math.round_off(BigNumber(input)),
 						expectation
 					)
-				}
-			)
-		}
-	})
-
-	void describe('sub', () => {
-		const data_sets:[number_arg, number_arg, string][] = [
-			[1.0000001, 0.0000001, '1'],
-			[3, 2, '1'],
-		];
-
-		for (const entry of data_sets) {
-			const [a, b, expectation] = entry;
-
-			void it(
-				`Math.sub(${
-					a.toString()
-				}, ${
-					b.toString()
-				}) returns ${
-					expectation
-				}`,
-				() => {
-					assert.equal(
-						BigNumber(expectation).comparedTo(Math.sub(a, b)),
-						0
-					);
 				}
 			)
 		}

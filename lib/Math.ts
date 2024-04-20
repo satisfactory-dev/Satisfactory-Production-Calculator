@@ -8,6 +8,9 @@ import {
 import {
 	NoMatchError,
 } from '../Docs.json.ts/lib/Exceptions';
+import {
+	is_string,
+} from '../Docs.json.ts/lib/StringStartsWith';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
@@ -30,9 +33,7 @@ export class Math
 	static amount_string(maybe:string): amount_string
 	{
 		if (
-			maybe !== '0'
-			&& !/^\d+(?:\.\d{1,6})?$/.test(maybe)
-			&& !/^\d+$/.test(maybe)
+			!this.is_amount_string(maybe)
 		) {
 			throw new NoMatchError(
 				maybe,
@@ -40,7 +41,7 @@ export class Math
 			);
 		}
 
-		return maybe as amount_string;
+		return maybe;
 	}
 
 	static append_multiply(
@@ -94,6 +95,17 @@ export class Math
 		);
 	}
 
+	static is_amount_string(maybe:unknown): maybe is amount_string {
+		return (
+			is_string(maybe)
+			&& (
+				maybe === '0'
+				|| /^\d+(?:\.\d{1,6})?$/.test(maybe)
+				|| /^\d+$/.test(maybe)
+			)
+		);
+	}
+
 	static least_common_multiple(
 		numbers:[
 			number_arg,
@@ -144,7 +156,7 @@ export class Math
 	private static configure()
 	{
 		BigNumber.set({
-			DECIMAL_PLACES: 6,
+			DECIMAL_PLACES: 7,
 			ROUNDING_MODE: BigNumber.ROUND_HALF_CEIL,
 		});
 	}

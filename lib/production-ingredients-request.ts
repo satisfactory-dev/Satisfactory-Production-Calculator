@@ -54,6 +54,9 @@ import BigNumber from 'bignumber.js';
 import {
 	not_undefined,
 } from '../Docs.json.ts/assert/CustomAssert';
+import {
+	is_string,
+} from '../Docs.json.ts/lib/StringStartsWith';
 
 const recipes:{
 	[
@@ -92,7 +95,7 @@ const resources:{
 	FGResourceDescriptor.Classes.map(e => [e.ClassName, e])
 );
 
-declare type production_ingredients_request = {
+export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],
 	recipe_selection?: {
 		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
@@ -147,6 +150,91 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				recipe_selection_schema.properties
 			);
 		super(ajv, production_ingredients_request_schema as SchemaObject);
+	}
+
+	fromUrlQuery(query:string): production_ingredients_request
+	{
+		const regex =
+			/^(input|pool|recipe_selection)\[(?:Desc|BP|Foundation)_[^.]+_C\]$/
+		;
+		const params = new URLSearchParams(query);
+
+		const keys = [...params.keys()].filter(maybe => regex.test(maybe));
+
+		const input = keys.filter(maybe => maybe.startsWith('input['));
+		const pool = keys.filter(maybe => maybe.startsWith('pool['));
+		const recipe_selection = Object.fromEntries(keys.filter(
+			maybe => maybe.startsWith('recipe_selection[')
+		).map((e): [string, unknown] => [
+			e.substring(17, e.length - 1),
+			params.get(e),
+		]).filter((maybe): maybe is [
+			string,
+			`${'Recipe'|'Build'}_${string}_C`,
+		] => {
+			return (
+				is_string(maybe[1])
+				&& /^(?:Recipe|Build)_[^.]+_C$/.test(maybe[1])
+			);
+		}));
+
+		function map_filter<
+			Property extends string = string
+		>(
+			keys:string[],
+			key_prefix:string,
+			property:Exclude<Property, 'amount'>
+		): (
+			& {
+				[key in Property]: keyof (
+					typeof recipe_selection_schema['properties']
+				)
+			}
+			& {amount: amount_string}
+		)[] {
+			return keys.map((e) => {
+				return {
+					[property]: e.substring(
+						key_prefix.length,
+						e.length - 1
+					),
+					amount: params.get(e),
+				};
+			}).filter(
+				(maybe): maybe is (
+					& {
+						[key in Property]: keyof (
+							typeof recipe_selection_schema['properties']
+						)
+					}
+					& {amount: amount_string}
+				) => {
+					const value = maybe[property];
+
+					return (
+						is_string(value)
+						&& value in recipe_selection_schema.properties
+						&& Math.is_amount_string(maybe.amount)
+					);
+				}
+			);
+		}
+
+		const result:production_ingredients_request = {
+			pool: map_filter(pool, 'pool[', 'production'),
+		};
+
+		const input_value = map_filter(input, 'input[', 'item');
+
+		if (input_value.length) {
+			result.input = input_value;
+		}
+
+		if (Object.keys(recipe_selection).length > 0) {
+			result.recipe_selection = recipe_selection;
+		}
+
+		return result;
 	}
 
 	protected amend_ItemClass_amount(
@@ -205,7 +293,25 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		} = {};
 
 		for (const entry of data.pool) {
-			const {production, amount} = entry;
+			const {production, amount:output_amount} = entry;
+			let {amount} = entry;
+			let amount_from_input = BigNumber(0);
+
+			if (production in input) {
+				if (input[production].isLessThan(amount)) {
+					amount_from_input = input[production].minus(0);
+					amount = BigNumber(amount).minus(amount_from_input);
+				} else {
+					amount_from_input = BigNumber(output_amount);
+					amount = BigNumber(0);
+				}
+			}
+
+			output[production] = amount_from_input;
+
+			if (0 === BigNumber(amount).comparedTo(0)) {
+				continue;
+			}
 
 			const recipe = (
 				data.recipe_selection && production in data.recipe_selection
@@ -234,12 +340,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					},
 					`Supported ingredient found but missing item!`
 				));
-
-				if (!(production in output)) {
-					output[
-						production as keyof typeof resources
-					] = BigNumber(0);
-				}
 
 				output[
 					production as keyof typeof resources
@@ -376,7 +476,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			surplus: Object.entries(input).map(e => {
 				return {
 					item: e[0],
-					amount: e[1].minus(ingredients[e[0]] || 0),
+					amount: e[1]
+						.minus(ingredients[e[0]] || 0)
+						.minus(output[e[0]] || 0),
 				};
 			}).filter(maybe => maybe.amount.isGreaterThan(0)),
 		};

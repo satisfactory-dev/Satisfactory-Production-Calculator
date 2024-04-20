@@ -4,6 +4,7 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+	production_ingredients_request,
 	production_ingredients_request_result,
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';
@@ -907,6 +908,191 @@ void describe('ProductionIngredientsRequest', () => {
 					}
 				}
 			)
+		}
+	})
+
+	void describe('fromUrlString', () => {
+		const data_sets:[
+			string,
+			production_ingredients_request,
+			production_ingredients_request_result,
+		][] = [
+			[
+				'pool[Desc_IronIngot_C]=1',
+				{
+					pool: [
+						{
+							production: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [],
+				},
+			],
+			[
+				'input[Desc_IronIngot_C]=10&pool[Desc_IronIngot_C]=1',
+				{
+					input: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('10'),
+						},
+					],
+					pool: [
+						{
+							production: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+				{
+					ingredients: [
+					],
+					output: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('9'),
+						},
+					],
+				},
+			],
+			[
+				'input[Desc_IronIngot_C]=10&pool[Desc_IronIngot_C]=11',
+				{
+					input: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('10'),
+						},
+					],
+					pool: [
+						{
+							production: 'Desc_IronIngot_C',
+							amount: Math.amount_string('11'),
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('11'),
+						},
+					],
+					surplus: [],
+				},
+			],
+			[
+				Object.entries({
+					'recipe_selection[Desc_IronIngot_C]':
+						'Recipe_Alternate_PureIronIngot_C',
+					'pool[Desc_IronIngot_C]': 1,
+				}).map(e => `${e[0]}=${e[1]}`).join('&'),
+				{
+					recipe_selection: {
+						'Desc_IronIngot_C': 'Recipe_Alternate_PureIronIngot_C',
+					},
+					pool: [
+						{
+							production: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('0.538462'),
+						},
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('0.307693'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [],
+				},
+			],
+		];
+
+		for (const entry of data_sets) {
+			const [
+				url_query_string,
+				expectation_fromString,
+				expectation_result,
+			] = entry;
+
+			void it(
+				`${
+					instance.constructor.name
+				}.fromString(${
+					url_query_string
+				}) returns ${
+					JSON.stringify(expectation_fromString)
+				} and results in an output of ${
+					JSON.stringify(expectation_result)
+				}`,
+				() => {
+					const get_result = () => instance.fromUrlQuery(
+						url_query_string
+					);
+
+					assert.doesNotThrow(get_result);
+
+					const result = get_result();
+
+					assert.deepEqual(
+						result,
+						expectation_fromString
+					);
+
+					const get_final_output = (
+					) => flattened_production_ingredients_request_result(
+						instance.calculate(result)
+					);
+
+					assert.doesNotThrow(get_final_output);
+
+					assert.deepEqual(
+						get_final_output(),
+						flattened_production_ingredients_request_result(
+							expectation_result
+						)
+					);
+				}
+			);
 		}
 	})
 })

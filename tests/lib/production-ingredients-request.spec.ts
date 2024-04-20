@@ -265,7 +265,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronIngot_C',
+							item: 'Desc_IronIngot_C',
 							amount: 1,
 						},
 					],
@@ -290,7 +290,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronRod_C',
+							item: 'Desc_IronRod_C',
 							amount: 1,
 						},
 					],
@@ -319,7 +319,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronScrew_C',
+							item: 'Desc_IronScrew_C',
 							amount: 1,
 						},
 					],
@@ -352,7 +352,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronPlate_C',
+							item: 'Desc_IronPlate_C',
 							amount: 1,
 						},
 					],
@@ -381,7 +381,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_Cement_C',
+							item: 'Desc_Cement_C',
 							amount: 1,
 						},
 					],
@@ -406,7 +406,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_SteelIngot_C',
+							item: 'Desc_SteelIngot_C',
 							amount: 1,
 						},
 					],
@@ -435,7 +435,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_SteelPlate_C',
+							item: 'Desc_SteelPlate_C',
 							amount: 1,
 						},
 					],
@@ -468,7 +468,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_CopperIngot_C',
+							item: 'Desc_CopperIngot_C',
 							amount: 1,
 						},
 					],
@@ -493,7 +493,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_Wire_C',
+							item: 'Desc_Wire_C',
 							amount: 1,
 						},
 					],
@@ -522,7 +522,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_Cable_C',
+							item: 'Desc_Cable_C',
 							amount: 1,
 						},
 					],
@@ -555,7 +555,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronPlateReinforced_C',
+							item: 'Desc_IronPlateReinforced_C',
 							amount: 1,
 						},
 					],
@@ -596,7 +596,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_ModularFrame_C',
+							item: 'Desc_ModularFrame_C',
 							amount: 1,
 						},
 					],
@@ -639,28 +639,28 @@ void describe('ProductionIngredientsRequest', () => {
 			],
 			[
 				{pool: [{
-					production: 'Desc_BlueprintDesigner_C',
+					item: 'Desc_BlueprintDesigner_C',
 					amount: 1,
 				}]},
 				result_1,
 			],
 			[
 				{pool: [{
-					production: 'Desc_BlueprintDesigner_C',
+					item: 'Desc_BlueprintDesigner_C',
 					amount: '1',
 				}]},
 				result_1,
 			],
 			[
 				{pool: [{
-					production: 'Desc_BlueprintDesigner_C',
+					item: 'Desc_BlueprintDesigner_C',
 					amount: '1.000001',
 				}]},
 				result_1000001,
 			],
 			[
 				{pool: [{
-					production: 'Desc_BlueprintDesigner_C',
+					item: 'Desc_BlueprintDesigner_C',
 					amount: '1.0000001',
 				}]},
 				false,
@@ -669,7 +669,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_Plastic_C',
+							item: 'Desc_Plastic_C',
 							amount: '1',
 						},
 					],
@@ -696,7 +696,7 @@ void describe('ProductionIngredientsRequest', () => {
 			],
 			[
 				{pool: [{
-					production: 'Desc_Water_C',
+					item: 'Desc_Water_C',
 					amount: '123.456',
 				}]},
 				{
@@ -717,7 +717,7 @@ void describe('ProductionIngredientsRequest', () => {
 					},
 					pool: [
 						{
-							production: 'Desc_Water_C',
+							item: 'Desc_Water_C',
 							amount: '123.456',
 						},
 					],
@@ -766,7 +766,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_Cable_C',
+							item: 'Desc_Cable_C',
 							amount: 1,
 						},
 					],
@@ -805,7 +805,7 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 					pool: [
 						{
-							production: 'Desc_Cable_C',
+							item: 'Desc_Cable_C',
 							amount: 1,
 						},
 					],
@@ -836,7 +836,7 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 					pool: [
 						{
-							production: 'Desc_ModularFrame_C',
+							item: 'Desc_ModularFrame_C',
 							amount: 1,
 						},
 					],
@@ -922,7 +922,7 @@ void describe('ProductionIngredientsRequest', () => {
 				{
 					pool: [
 						{
-							production: 'Desc_IronIngot_C',
+							item: 'Desc_IronIngot_C',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -954,7 +954,7 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 					pool: [
 						{
-							production: 'Desc_IronIngot_C',
+							item: 'Desc_IronIngot_C',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -987,7 +987,7 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 					pool: [
 						{
-							production: 'Desc_IronIngot_C',
+							item: 'Desc_IronIngot_C',
 							amount: Math.amount_string('11'),
 						},
 					],
@@ -1020,7 +1020,7 @@ void describe('ProductionIngredientsRequest', () => {
 					},
 					pool: [
 						{
-							production: 'Desc_IronIngot_C',
+							item: 'Desc_IronIngot_C',
 							amount: Math.amount_string('1'),
 						},
 					],

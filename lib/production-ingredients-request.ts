@@ -101,7 +101,7 @@ export type production_ingredients_request = {
 		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
 	},
 	pool: {
-		production: keyof typeof recipe_selection_schema['properties'],
+		item: keyof typeof recipe_selection_schema['properties'],
 		amount: number_arg,
 	}[],
 };
@@ -145,7 +145,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			.pool
 			.items
 			.properties
-			.production
+			.item
 			.enum as unknown) = Object.keys(
 				recipe_selection_schema.properties
 			);
@@ -178,42 +178,29 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 		}));
 
-		function map_filter<
-			Property extends string = string
-		>(
+		function map_filter(
 			keys:string[],
-			key_prefix:string,
-			property:Exclude<Property, 'amount'>
-		): (
-			& {
-				[key in Property]: keyof (
-					typeof recipe_selection_schema['properties']
-				)
-			}
-			& {amount: amount_string}
-		)[] {
+			key_prefix:string
+		): {
+			item: keyof typeof recipe_selection_schema['properties'],
+			amount: amount_string
+		}[] {
 			return keys.map((e) => {
 				return {
-					[property]: e.substring(
+					item: e.substring(
 						key_prefix.length,
 						e.length - 1
 					),
 					amount: params.get(e),
 				};
 			}).filter(
-				(maybe): maybe is (
-					& {
-						[key in Property]: keyof (
-							typeof recipe_selection_schema['properties']
-						)
-					}
-					& {amount: amount_string}
-				) => {
-					const value = maybe[property];
-
+				(maybe): maybe is {
+					item: keyof typeof recipe_selection_schema['properties'],
+					amount: amount_string
+				} => {
 					return (
-						is_string(value)
-						&& value in recipe_selection_schema.properties
+						is_string(maybe.item)
+						&& maybe.item in recipe_selection_schema.properties
 						&& Math.is_amount_string(maybe.amount)
 					);
 				}
@@ -221,10 +208,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		const result:production_ingredients_request = {
-			pool: map_filter(pool, 'pool[', 'production'),
+			pool: map_filter(pool, 'pool['),
 		};
 
-		const input_value = map_filter(input, 'input[', 'item');
+		const input_value = map_filter(input, 'input[');
 
 		if (input_value.length) {
 			result.input = input_value;
@@ -293,7 +280,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		} = {};
 
 		for (const entry of data.pool) {
-			const {production, amount:output_amount} = entry;
+			const {item: production, amount:output_amount} = entry;
 			let {amount} = entry;
 			let amount_from_input = BigNumber(0);
 
@@ -520,7 +507,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					{
 						...data,
 						pool: [{
-							production: (
+							item: (
 								check_deeper.item as keyof (
 									typeof recipe_selection_schema[
 										'properties'

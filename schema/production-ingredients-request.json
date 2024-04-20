@@ -146,7 +146,7 @@
 								"type": {"type": "string", "const": "object"},
 								"required": {
 									"type": "array",
-									"const": ["production", "amount"]
+									"const": ["item", "amount"]
 								},
 								"additionalProperties": {
 									"type": "boolean",
@@ -154,10 +154,10 @@
 								},
 								"properties": {
 									"type": "object",
-									"required": ["production", "amount"],
+									"required": ["item", "amount"],
 									"additionalProperties": false,
 									"properties": {
-										"production": {
+										"item": {
 											"type": "object",
 											"required": ["type", "enum"],
 											"additionalProperties": false,

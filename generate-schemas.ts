@@ -243,10 +243,10 @@ const production_ingredients_request = {
 			minItems: 1,
 			items: {
 				type: 'object',
-				required: ['production', 'amount'],
+				required: ['item', 'amount'],
 				additionalProperties: false,
 				properties: {
-					production: {
+					item: {
 						type: 'string',
 						enum: {
 							$ref: 'recipe-selection#required',

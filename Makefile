@@ -29,9 +29,6 @@ generate--schemas: build
 	@./node_modules/.bin/ts-node ./generate-schemas.ts
 	@make lint--schemas
 
-grab-textures:
-	@./node_modules/.bin/ts-node ./grab-textures.ts
-
 lint--tsc:
 	@echo 'running syntax check'
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-check.json

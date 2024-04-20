@@ -371,15 +371,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				return {
 					item: e[0],
 					amount: e[1],
-					type: (
-						e[0] in buildings
-							? 'FGBuildingDescriptor'
-							: (
-								e[0] in items
-									? 'FGItemDescriptor'
-									: 'FGResourceDescriptor'
-							)
-					),
 				};
 			}),
 			surplus: Object.entries(input).map(e => {

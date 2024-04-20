@@ -204,7 +204,37 @@ const production_ingredients_request = {
 	type: 'object',
 	required: ['pool'],
 	additionalProperties: false,
+	$defs: {
+		number_arg: {
+			oneOf: [
+				{type: 'number', minimum: 0, multipleOf: 0.000001},
+				{
+					type: 'string',
+					pattern: '^\\d+(?:\\.\\d{1,6})?$',
+				},
+			],
+		},
+	},
 	properties: {
+		input: {
+			type: 'array',
+			minItems: 1,
+			uniqueItems: true,
+			items: {
+				type: 'object',
+				required: ['item', 'amount'],
+				additionalProperties: false,
+				properties: {
+					item: {
+						type: 'string',
+						enum: Object.keys(recipe_selection_enums),
+					},
+					amount: {
+						$ref: '#/$defs/number_arg',
+					},
+				},
+			},
+		},
 		recipe_selection: {
 			$ref: 'recipe-selection',
 		},
@@ -223,13 +253,7 @@ const production_ingredients_request = {
 						},
 					},
 					amount: {
-						oneOf: [
-							{type: 'number', minimum: 0, multipleOf: 0.000001},
-							{
-								type: 'string',
-								pattern: '^\\d+(?:\\.\\d{1,6})?$',
-							},
-						],
+						$ref: '#/$defs/number_arg',
 					},
 				},
 			},

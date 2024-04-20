@@ -19,13 +19,16 @@ function flattened_production_ingredients_request_result(
 ) : {
 	ingredients: {[key: string]: amount_string},
 	output: {[key: string]: amount_string},
+	surplus: {[key: string]: amount_string},
 } {
 	const calculating:{
 		ingredients: {[key: string]: BigNumber},
 		output: {[key: string]: BigNumber},
+		surplus: {[key: string]: BigNumber},
 	} = {
 		ingredients: {},
 		output: {},
+		surplus: {},
 	};
 
 	for (const entry of input.ingredients) {
@@ -52,6 +55,18 @@ function flattened_production_ingredients_request_result(
 		].plus(entry.amount);
 	}
 
+	for (const entry of input.surplus) {
+		if (!(entry.item in calculating.surplus)) {
+			calculating.surplus[entry.item] = BigNumber(0);
+		}
+
+		calculating.surplus[
+			entry.item
+		] = calculating.surplus[
+			entry.item
+		].plus(entry.amount);
+	}
+
 	return {
 		ingredients: Object.fromEntries(
 			Object.entries(
@@ -61,6 +76,14 @@ function flattened_production_ingredients_request_result(
 		output: Object.fromEntries(
 			Object.entries(
 				calculating.output
+			).map(e => [
+				e[0],
+				Math.round_off(e[1]),
+			])
+		),
+		surplus: Object.fromEntries(
+			Object.entries(
+				calculating.surplus
 			).map(e => [
 				e[0],
 				Math.round_off(e[1]),
@@ -154,6 +177,7 @@ void describe('ProductionIngredientsRequest', () => {
 					amount: Math.amount_string('1'),
 				},
 			],
+			surplus: [],
 		};
 		const result_1000001:production_ingredients_request_result = {
 			ingredients: [
@@ -228,6 +252,7 @@ void describe('ProductionIngredientsRequest', () => {
 					amount: Math.amount_string('1.000001'),
 				},
 			],
+			surplus: [],
 		};
 
 		const test_cases:[
@@ -257,6 +282,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -285,6 +311,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -317,6 +344,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -345,6 +373,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -369,6 +398,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -397,6 +427,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -429,6 +460,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -453,6 +485,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -481,6 +514,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -513,6 +547,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -553,6 +588,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -597,6 +633,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -653,6 +690,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('0.5'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -668,6 +706,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('123.456'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -719,6 +758,7 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('30.864'),
 						},
 					],
+					surplus: [],
 				},
 			],
 			[
@@ -749,6 +789,90 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Cable_C',
 							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [],
+				},
+			],
+			[
+				{
+					input: [
+						{
+							item: 'Desc_Wire_C',
+							amount: Math.amount_string('10'),
+						},
+					],
+					pool: [
+						{
+							production: 'Desc_Cable_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [],
+					output: [
+						{
+							item: 'Desc_Cable_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_Wire_C',
+							amount: Math.amount_string('8'),
+						},
+					],
+				},
+			],
+			[
+				{
+					input: [
+						{
+							item: 'Desc_OreIron_C',
+							amount: 30,
+						},
+					],
+					pool: [
+						{
+							production: 'Desc_ModularFrame_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_IronPlateReinforced_C',
+							amount: Math.amount_string('1.5'),
+						},
+						{
+							item: 'Desc_IronRod_C',
+							amount: Math.amount_string('10.5'),
+						},
+						{
+							item: 'Desc_IronPlate_C',
+							amount: Math.amount_string('9'),
+						},
+						{
+							item: 'Desc_IronScrew_C',
+							amount: Math.amount_string('18'),
+						},
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('24'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_ModularFrame_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('6'),
 						},
 					],
 				},

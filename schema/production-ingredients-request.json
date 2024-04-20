@@ -1,10 +1,24 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "production-ingredients-request--meta-schema",
+	"$defs": {
+		"number_arg": {
+			"type": "object",
+			"required": ["$ref"],
+			"additionalProperties": false,
+			"properties": {
+				"$ref": {
+					"type": "string",
+					"const": "#/$defs/number_arg"
+				}
+			}
+		}
+	},
 	"type": "object",
 	"required": [
 		"$schema",
 		"$id",
+		"$defs",
 		"type",
 		"required",
 		"additionalProperties",
@@ -17,14 +31,98 @@
 			"const": "https://json-schema.org/draft/2020-12/schema"
 		},
 		"$id": {"type": "string", "const": "production-ingredients-request"},
+		"$defs": {
+			"type": "object",
+			"required": ["number_arg"],
+			"additionalProperties": false,
+			"properties": {
+				"number_arg": {
+					"type": "object",
+					"const": {
+						"oneOf": [
+							{
+								"type": "number",
+								"minimum": 0,
+								"multipleOf": 0.000001
+							},
+							{
+								"type": "string",
+								"pattern": "^\\d+(?:\\.\\d{1,6})?$"
+							}
+						]
+					}
+				}
+			}
+		},
 		"type": {"type": "string", "const": "object"},
 		"required": {"type": "array", "const": ["pool"]},
 		"additionalProperties": {"type": "boolean", "const": false},
 		"properties": {
 			"type": "object",
-			"required": ["recipe_selection", "pool"],
+			"required": ["input", "recipe_selection", "pool"],
 			"additionalProperties": false,
 			"properties": {
+				"input": {
+					"type": "object",
+					"required": ["type", "minItems", "uniqueItems", "items"],
+					"additionalProperties": false,
+					"properties": {
+						"type": {"type": "string", "const": "array"},
+						"minItems": {"type": "integer", "const": 1},
+						"uniqueItems": {"type": "boolean", "const": true},
+						"items": {
+							"type": "object",
+							"required": [
+								"type",
+								"required",
+								"additionalProperties",
+								"properties"
+							],
+							"additionalProperties": false,
+							"properties": {
+								"type": {"type": "string", "const": "object"},
+								"required": {
+									"type": "array",
+									"const": ["item", "amount"]
+								},
+								"additionalProperties": {
+									"type": "boolean",
+									"const": false
+								},
+								"properties": {
+									"type": "object",
+									"required": ["item", "amount"],
+									"additionalProperties": false,
+									"properties": {
+										"item": {
+											"type": "object",
+											"required": ["type", "enum"],
+											"additionalProperties": false,
+											"properties": {
+												"type": {
+													"type": "string",
+													"const": "string"
+												},
+												"enum": {
+													"type": "array",
+													"minItems": 1,
+													"uniqueItems": true,
+													"items": {
+														"type": "string",
+														"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
+													}
+												}
+											}
+										},
+										"amount": {
+											"$ref": "#/$defs/number_arg"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
 				"recipe_selection": {
 					"type": "object",
 					"const": {"$ref": "recipe-selection"}
@@ -82,20 +180,7 @@
 											}
 										},
 										"amount": {
-											"type": "object",
-											"const": {
-												"oneOf": [
-													{
-														"type": "number",
-														"minimum": 0,
-														"multipleOf": 0.000001
-													},
-													{
-														"type": "string",
-														"pattern": "^\\d+(?:\\.\\d{1,6})?$"
-													}
-												]
-											}
+											"$ref": "#/$defs/number_arg"
 										}
 									}
 								}

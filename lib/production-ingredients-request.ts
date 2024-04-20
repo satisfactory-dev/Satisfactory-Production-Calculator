@@ -93,6 +93,7 @@ const resources:{
 );
 
 declare type production_ingredients_request = {
+	input?: recipe_ingredients_request_output<amount_string>[],
 	recipe_selection?: {
 		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
 	},
@@ -126,6 +127,7 @@ export type production_ingredients_request_result<
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
+	surplus: recipe_ingredients_request_output<T>[],
 };
 
 export class ProductionIngredientsRequest extends PlannerRequest<
@@ -181,11 +183,20 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	}
 
 	protected calculate_precisely(
-		data:production_ingredients_request
+		data:production_ingredients_request,
+		surplus?:recipe_ingredients_request_output<BigNumber>[]
 	): production_ingredients_request_result<BigNumber> {
 		const ingredients:{
 			[key in keyof typeof items]: BigNumber;
 		} = {};
+		const input:{[key: string]: BigNumber} = {};
+		for (const entry of (surplus || data.input || [])) {
+			if (!(entry.item in input)) {
+				input[entry.item] = BigNumber(0);
+			}
+
+			input[entry.item] = input[entry.item].plus(entry.amount);
+		}
 		const output:{
 			[key in keyof (
 				| typeof buildings
@@ -353,9 +364,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
 					item: e[0],
-					amount: e[1],
+					amount: BigNumber.max(0, e[1].minus(input[e[0]] || 0)),
 				};
-			}),
+			}).filter(maybe => maybe.amount.isGreaterThan(0)),
 			output: Object.entries(output).map(e => {
 				return {
 					item: e[0],
@@ -371,6 +382,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					),
 				};
 			}),
+			surplus: Object.entries(input).map(e => {
+				return {
+					item: e[0],
+					amount: e[1].minus(ingredients[e[0]] || 0),
+				};
+			}).filter(maybe => maybe.amount.isGreaterThan(0)),
 		};
 
 		return result;
@@ -381,6 +398,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	): production_ingredients_request_result {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
+		let surplus:recipe_ingredients_request_output<BigNumber>[] = initial_result.surplus;
 
 		let checking_recursively = initial_result.ingredients.filter(
 			maybe => !(maybe.item in resources)
@@ -401,7 +419,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					)
 				);
 
-				const deeper_result = this.calculate_precisely({
+				const deeper_result = this.calculate_precisely(
+					{
 					...data,
 					pool: [{
 						production: (
@@ -411,7 +430,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						),
 						amount: check_deeper.amount,
 					}],
-				});
+					},
+					surplus
+				);
+				surplus = deeper_result.surplus;
 
 				const self_output = deeper_result.output.find(
 					maybe => maybe.item === check_deeper.item
@@ -479,6 +501,14 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: Math.round_off(e[1]),
 				}
 			}).filter(maybe => '0' !== maybe.amount),
+			surplus: surplus.filter(
+				maybe => maybe.amount.isGreaterThan(0)
+			).map(e => {
+				return {
+					item: e.item,
+					amount: Math.round_off(e.amount),
+				};
+			}),
 		};
 	}
 }

@@ -18,11 +18,11 @@ function flattened_production_ingredients_request_result(
 	input:production_ingredients_request_result
 ) : {
 	ingredients: {[key: string]: amount_string},
-	output: {[key: string]: {type: string, amount: amount_string}},
+	output: {[key: string]: amount_string},
 } {
 	const calculating:{
 		ingredients: {[key: string]: BigNumber},
-		output: {[key: string]: [string, BigNumber]},
+		output: {[key: string]: BigNumber},
 	} = {
 		ingredients: {},
 		output: {},
@@ -42,19 +42,14 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.output) {
 		if (!(entry.item in calculating.output)) {
-			calculating.output[entry.item] = [entry.type, BigNumber(0)];
+			calculating.output[entry.item] = BigNumber(0);
 		}
-
-		assert.equal(
-			entry.type,
-			calculating.output[entry.item][0]
-		);
 
 		calculating.output[
 			entry.item
-		][1] = calculating.output[
+		] = calculating.output[
 			entry.item
-		][1].plus(entry.amount);
+		].plus(entry.amount);
 	}
 
 	return {
@@ -68,10 +63,7 @@ function flattened_production_ingredients_request_result(
 				calculating.output
 			).map(e => [
 				e[0],
-				{
-					type: e[1][0],
-					amount: Math.round_off(e[1][1]),
-				},
+				Math.round_off(e[1]),
 			])
 		),
 	};
@@ -159,7 +151,6 @@ void describe('ProductionIngredientsRequest', () => {
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					type: 'FGBuildingDescriptor',
 					amount: Math.amount_string('1'),
 				},
 			],
@@ -234,7 +225,6 @@ void describe('ProductionIngredientsRequest', () => {
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					type: 'FGBuildingDescriptor',
 					amount: Math.amount_string('1.000001'),
 				},
 			],
@@ -264,7 +254,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronIngot_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -293,7 +282,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronRod_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -326,7 +314,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronScrew_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -355,7 +342,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -380,7 +366,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Cement_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -409,7 +394,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_SteelIngot_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -442,7 +426,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -467,7 +450,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_CopperIngot_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -496,7 +478,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Wire_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -529,7 +510,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -570,7 +550,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -615,7 +594,6 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_ModularFrame_C',
-							type: 'FGItemDescriptor',
 							amount: Math.amount_string('1'),
 						},
 					],
@@ -669,12 +647,10 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Plastic_C',
 							amount: Math.amount_string('1'),
-							type: 'FGItemDescriptor',
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
 							amount: Math.amount_string('0.5'),
-							type: 'FGItemDescriptor',
 						},
 					],
 				},
@@ -690,7 +666,6 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Water_C',
 							amount: Math.amount_string('123.456'),
-							type: 'FGResourceDescriptor',
 						},
 					],
 				},
@@ -734,17 +709,14 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Water_C',
 							amount: Math.amount_string('123.456'),
-							type: 'FGResourceDescriptor',
 						},
 						{
 							item: 'Desc_FluidCanister_C',
 							amount: Math.amount_string('123.456'),
-							type: 'FGItemDescriptor',
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
 							amount: Math.amount_string('30.864'),
-							type: 'FGItemDescriptor',
 						},
 					],
 				},
@@ -777,7 +749,6 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Cable_C',
 							amount: Math.amount_string('1'),
-							type: 'FGItemDescriptor',
 						},
 					],
 				},

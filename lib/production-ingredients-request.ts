@@ -118,11 +118,6 @@ export type recipe_ingredients_request_output<
 			| typeof resources
 		)
 	),
-	type: (
-		| 'FGBuildingDescriptor'
-		| 'FGItemDescriptor'
-		| 'FGResourceDescriptor'
-	),
 	amount: T,
 };
 
@@ -444,9 +439,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		const ingredients:{[key: string]: BigNumber} = {};
 		const output:{[key: string]: BigNumber} = {};
-		const type:{
-			[key: string]: recipe_ingredients_request_output['type'],
-		} = {};
 
 		for (const entry of results) {
 			for (const ingredient of entry.ingredients) {
@@ -462,8 +454,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 
 			for (const output_entry of entry.output) {
-				type[output_entry.item] = output_entry.type;
-
 				if (!(output_entry.item in output)) {
 					output[output_entry.item] = output_entry.amount;
 				} else {
@@ -486,7 +476,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			output: Object.entries(output).map(e => {
 				return {
 					item: e[0],
-					type: type[e[0]],
 					amount: Math.round_off(e[1]),
 				}
 			}).filter(maybe => '0' !== maybe.amount),

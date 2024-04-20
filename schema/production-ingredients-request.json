@@ -12,6 +12,17 @@
 					"const": "#/$defs/number_arg"
 				}
 			}
+		},
+		"item_amount_object": {
+			"type": "object",
+			"required": ["$ref"],
+			"additionalProperties": false,
+			"properties": {
+				"$ref": {
+					"type": "string",
+					"const": "#/$defs/item_amount_object"
+				}
+			}
 		}
 	},
 	"type": "object",
@@ -33,7 +44,7 @@
 		"$id": {"type": "string", "const": "production-ingredients-request"},
 		"$defs": {
 			"type": "object",
-			"required": ["number_arg"],
+			"required": ["number_arg", "item_amount_object"],
 			"additionalProperties": false,
 			"properties": {
 				"number_arg": {
@@ -50,6 +61,57 @@
 								"pattern": "^\\d+(?:\\.\\d{1,6})?$"
 							}
 						]
+					}
+				},
+				"item_amount_object": {
+					"type": "object",
+					"required": [
+						"type",
+						"required",
+						"additionalProperties",
+						"properties"
+					],
+					"additionalProperties": false,
+					"properties": {
+						"type": {"type": "string", "const": "object"},
+						"required": {
+							"type": "array",
+							"const": ["item", "amount"]
+						},
+						"additionalProperties": {
+							"type": "boolean",
+							"const": false
+						},
+						"properties": {
+							"type": "object",
+							"required": ["item", "amount"],
+							"additionalProperties": false,
+							"properties": {
+								"item": {
+									"type": "object",
+									"required": ["type", "enum"],
+									"additionalProperties": false,
+									"properties": {
+										"type": {
+											"type": "string",
+											"const": "string"
+										},
+										"enum": {
+											"type": "array",
+											"minItems": 1,
+											"uniqueItems": true,
+											"items": {
+												"type": "string",
+												"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
+											}
+										}
+									}
+								},
+								"amount": {
+									"$ref": "#/$defs/number_arg"
+								}
+							}
+						}
 					}
 				}
 			}
@@ -71,55 +133,7 @@
 						"minItems": {"type": "integer", "const": 1},
 						"uniqueItems": {"type": "boolean", "const": true},
 						"items": {
-							"type": "object",
-							"required": [
-								"type",
-								"required",
-								"additionalProperties",
-								"properties"
-							],
-							"additionalProperties": false,
-							"properties": {
-								"type": {"type": "string", "const": "object"},
-								"required": {
-									"type": "array",
-									"const": ["item", "amount"]
-								},
-								"additionalProperties": {
-									"type": "boolean",
-									"const": false
-								},
-								"properties": {
-									"type": "object",
-									"required": ["item", "amount"],
-									"additionalProperties": false,
-									"properties": {
-										"item": {
-											"type": "object",
-											"required": ["type", "enum"],
-											"additionalProperties": false,
-											"properties": {
-												"type": {
-													"type": "string",
-													"const": "string"
-												},
-												"enum": {
-													"type": "array",
-													"minItems": 1,
-													"uniqueItems": true,
-													"items": {
-														"type": "string",
-														"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
-													}
-												}
-											}
-										},
-										"amount": {
-											"$ref": "#/$defs/number_arg"
-										}
-									}
-								}
-							}
+							"$ref": "#/$defs/item_amount_object"
 						}
 					}
 				},
@@ -134,57 +148,7 @@
 						"type": {"type": "string", "const": "array"},
 						"minItems": {"type": "integer", "const": 1},
 						"items": {
-							"type": "object",
-							"required": [
-								"type",
-								"required",
-								"additionalProperties",
-								"properties"
-							],
-							"additionalProperties": false,
-							"properties": {
-								"type": {"type": "string", "const": "object"},
-								"required": {
-									"type": "array",
-									"const": ["item", "amount"]
-								},
-								"additionalProperties": {
-									"type": "boolean",
-									"const": false
-								},
-								"properties": {
-									"type": "object",
-									"required": ["item", "amount"],
-									"additionalProperties": false,
-									"properties": {
-										"item": {
-											"type": "object",
-											"required": ["type", "enum"],
-											"additionalProperties": false,
-											"properties": {
-												"type": {
-													"type": "string",
-													"const": "string"
-												},
-												"enum": {
-													"type": "object",
-													"required": ["$ref"],
-													"additionalProperties": false,
-													"properties": {
-														"$ref": {
-															"type": "string",
-															"const": "recipe-selection#required"
-														}
-													}
-												}
-											}
-										},
-										"amount": {
-											"$ref": "#/$defs/number_arg"
-										}
-									}
-								}
-							}
+							"$ref": "#/$defs/item_amount_object"
 						}
 					}
 				}

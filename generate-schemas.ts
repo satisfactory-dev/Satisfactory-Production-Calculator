@@ -214,6 +214,20 @@ const production_ingredients_request = {
 				},
 			],
 		},
+		item_amount_object: {
+			type: 'object',
+			required: ['item', 'amount'],
+			additionalProperties: false,
+			properties: {
+				item: {
+					type: 'string',
+					enum: Object.keys(recipe_selection_enums),
+				},
+				amount: {
+					$ref: '#/$defs/number_arg',
+				},
+			},
+		},
 	},
 	properties: {
 		input: {
@@ -221,18 +235,7 @@ const production_ingredients_request = {
 			minItems: 1,
 			uniqueItems: true,
 			items: {
-				type: 'object',
-				required: ['item', 'amount'],
-				additionalProperties: false,
-				properties: {
-					item: {
-						type: 'string',
-						enum: Object.keys(recipe_selection_enums),
-					},
-					amount: {
-						$ref: '#/$defs/number_arg',
-					},
-				},
+				$ref: '#/$defs/item_amount_object',
 			},
 		},
 		recipe_selection: {
@@ -242,20 +245,7 @@ const production_ingredients_request = {
 			type: 'array',
 			minItems: 1,
 			items: {
-				type: 'object',
-				required: ['item', 'amount'],
-				additionalProperties: false,
-				properties: {
-					item: {
-						type: 'string',
-						enum: {
-							$ref: 'recipe-selection#required',
-						},
-					},
-					amount: {
-						$ref: '#/$defs/number_arg',
-					},
-				},
+				$ref: '#/$defs/item_amount_object',
 			},
 		},
 	},

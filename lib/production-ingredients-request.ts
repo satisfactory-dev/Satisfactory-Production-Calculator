@@ -140,15 +140,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	constructor(ajv:Ajv)
 	{
 		ajv.addSchema(recipe_selection_schema);
-		(production_ingredients_request_schema
-			.properties
-			.pool
-			.items
-			.properties
-			.item
-			.enum as unknown) = Object.keys(
-				recipe_selection_schema.properties
-			);
 		super(ajv, production_ingredients_request_schema as SchemaObject);
 	}
 

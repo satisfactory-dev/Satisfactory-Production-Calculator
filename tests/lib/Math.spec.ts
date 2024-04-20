@@ -258,6 +258,7 @@ void describe('Math', () => {
 	void describe('round_off', () => {
 		const data_sets:[number_arg, string][] = [
 			[22.50000001, '22.5'],
+			[20/65, '0.307693'],
 		];
 
 		for (const entry of data_sets) {

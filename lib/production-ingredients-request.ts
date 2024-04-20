@@ -398,7 +398,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	): production_ingredients_request_result {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
-		let surplus:recipe_ingredients_request_output<BigNumber>[] = initial_result.surplus;
+		let surplus:recipe_ingredients_request_output<
+			BigNumber
+		>[] = initial_result.surplus;
 
 		let checking_recursively = initial_result.ingredients.filter(
 			maybe => !(maybe.item in resources)
@@ -421,15 +423,17 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				const deeper_result = this.calculate_precisely(
 					{
-					...data,
-					pool: [{
-						production: (
-							check_deeper.item as keyof (
-								typeof recipe_selection_schema['properties']
-							)
-						),
-						amount: check_deeper.amount,
-					}],
+						...data,
+						pool: [{
+							production: (
+								check_deeper.item as keyof (
+									typeof recipe_selection_schema[
+										'properties'
+									]
+								)
+							),
+							amount: check_deeper.amount,
+						}],
 					},
 					surplus
 				);

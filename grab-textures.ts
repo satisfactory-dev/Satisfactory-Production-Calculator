@@ -19,12 +19,17 @@ import {
 } from 'node:path';
 import {
 	mkdir,
+	readFile,
 	writeFile,
 } from 'node:fs/promises';
 import {
 	__dirname_from_meta,
 } from './Docs.json.ts/lib/__dirname';
 import sharp from 'sharp';
+import hash_cache from './data/grabbed-textures.json' with {type: 'json'};
+import {
+	createHash,
+} from 'node:crypto';
 
 const __dirname = __dirname_from_meta(import.meta);
 
@@ -76,12 +81,41 @@ for (const png of images) {
 		await mkdir(directory, {recursive: true});
 	}
 
+	if (existsSync(destination) && png in hash_cache) {
+		const cached_hash = (hash_cache as {[key in typeof png]: string})[png];
+
+		const hash = createHash('sha512');
+		hash.update(await readFile(png));
+		hash.update(await readFile(destination));
+
+		const current_hash = hash.digest('hex');
+
+		if (current_hash === cached_hash) {
+			++progress;
+			continue;
+		}
+	}
+
 	await writeFile(destination, await sharp(png).avif({
 		quality: 100,
 		lossless: true,
 		effort: 9,
 	}).toBuffer());
+
+	const hash = createHash('sha512');
+	hash.update(await readFile(png));
+	hash.update(await readFile(destination));
+
+	const current_hash = hash.digest('hex');
+
+	(hash_cache as {[key: string]: string})[png] = current_hash;
+
 	++progress;
 }
 
-process.stdout.write('\n');
+process.stdout.write(`\r${progress} of ${images.length}\n`);
+
+await writeFile(
+	`${__dirname}/data/grabbed-textures.json`,
+	`${JSON.stringify(hash_cache, null, '\t')}\n`
+);

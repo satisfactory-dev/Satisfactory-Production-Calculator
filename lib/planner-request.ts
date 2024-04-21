@@ -8,7 +8,7 @@ import {
 import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';
-import assert from 'node:assert/strict';
+import assert from 'assert';
 import {
 	is_string,
 } from '../Docs.json.ts/lib/StringStartsWith';
@@ -47,14 +47,14 @@ export function UnrealEngineString_right_x_C_suffix(
 			value.right
 		);
 
-	assert.notEqual(maybe_match, null, new NoMatchError(
+	assert.notStrictEqual(maybe_match, null, new NoMatchError(
 		value,
 		'UnrealEngineString contains unsupported value!'
 	));
 
 	const match = maybe_match as RegExpExecArray;
 
-	assert.equal(
+	assert.strictEqual(
 		match[1].toLowerCase(),
 		match[3].toLowerCase(),
 		new NoMatchError(

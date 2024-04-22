@@ -12,7 +12,7 @@ import {
 } from './generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
 import {
 	__dirname_from_meta,
-} from './Docs.json.ts/lib/__dirname';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
@@ -25,7 +25,7 @@ import {
 } from './generated-types/update8/data/CoreUObject/FGResourceDescriptor';
 import {
 	NoMatchError,
-} from './Docs.json.ts/lib/Exceptions';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
 
 const __dirname = __dirname_from_meta(import.meta);
 

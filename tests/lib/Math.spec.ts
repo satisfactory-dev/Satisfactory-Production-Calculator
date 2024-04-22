@@ -10,7 +10,7 @@ import {
 } from '../../lib/Math';
 import {
 	require_non_empty_array,
-} from '../../Docs.json.ts/lib/ArrayUtilities';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
 import {
 	integer_string__type,
 } from '../../generated-types/update8/common/unassigned';

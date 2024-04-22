@@ -10,7 +10,7 @@ import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
-} from '../Docs.json.ts/lib/Exceptions';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
 	FGItemDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptor';
@@ -53,10 +53,10 @@ import {
 import BigNumber from 'bignumber.js';
 import {
 	not_undefined,
-} from '../Docs.json.ts/assert/CustomAssert';
+} from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 import {
 	is_string,
-} from '../Docs.json.ts/lib/StringStartsWith';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 
 const recipes:{
 	[

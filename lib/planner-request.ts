@@ -4,14 +4,14 @@ import Ajv, {
 } from 'ajv/dist/2020';
 import {
 	NoMatchError,
-} from '../Docs.json.ts/lib/Exceptions';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';
 import assert from 'assert';
 import {
 	is_string,
-} from '../Docs.json.ts/lib/StringStartsWith';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 
 export type UnrealEngineString_right_x_C_suffix =
 	`${'Desc'|'BP'|'Foundation'}_${string}_C`;

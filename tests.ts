@@ -9,7 +9,7 @@ import {
 } from 'glob';
 import {
 	__dirname_from_meta,
-} from './Docs.json.ts/lib/__dirname';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
 
 const __dirname = __dirname_from_meta(import.meta);
 

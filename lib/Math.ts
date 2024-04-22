@@ -7,10 +7,10 @@ import {
 } from '../generated-types/update8/common/unassigned';
 import {
 	NoMatchError,
-} from '../Docs.json.ts/lib/Exceptions';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
 	is_string,
-} from '../Docs.json.ts/lib/StringStartsWith';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>

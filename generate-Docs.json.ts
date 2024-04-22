@@ -1,25 +1,25 @@
 import {
 	TypeDefinitionWriter,
-} from './Docs.json.ts/lib/TypeDefinitionWriter';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/TypeDefinitionWriter';
 import {
 	NoMatchError,
-} from './Docs.json.ts/lib/Exceptions';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
 import {
 	writeFile,
 } from 'node:fs/promises';
 import {
 	__dirname_from_meta,
-} from './Docs.json.ts/lib/__dirname';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
 import {
 	setup_PerformanceObserver,
-} from './Docs.json.ts/setup_PerformanceObserver';
+} from '@satisfactory-clips-archive/docs.json.ts/setup_PerformanceObserver';
 import Ajv from 'ajv/dist/2020';
 import {
 	configure_ajv,
-} from './Docs.json.ts/lib/DocsValidation';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/DocsValidation';
 import {
 	DocsTsGenerator,
-} from './Docs.json.ts/lib/DocsTsGenerator';
+} from '@satisfactory-clips-archive/docs.json.ts/lib/DocsTsGenerator';
 
 const __dirname = __dirname_from_meta(import.meta);
 const ajv = new Ajv({

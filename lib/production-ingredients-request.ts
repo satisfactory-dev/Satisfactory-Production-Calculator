@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+import assert from 'assert';
 
 import Ajv, {
 	SchemaObject,
@@ -265,7 +265,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 
 			if (undefined === recipes[recipe]) {
-				assert.equal(
+				assert.strictEqual(
 					recipe.startsWith('Build_'),
 					true,
 					new NoMatchError(
@@ -278,13 +278,17 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					)
 				);
 
-				assert.equal(production in resources, true, new NoMatchError(
+				assert.strictEqual(
+					production in resources,
+					true,
+					new NoMatchError(
 					{
 						recipe,
 						expected: production,
 					},
 					`Supported ingredient found but missing item!`
-				));
+					)
+				);
 
 				output[
 					production as keyof typeof resources
@@ -319,7 +323,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				...product_amounts,
 			];
 
-			assert.equal(
+			assert.strictEqual(
 				amounts.length >= 2,
 				true,
 				new NoMatchError(
@@ -342,7 +346,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					ingredient.ItemClass
 				);
 
-				assert.equal(
+				assert.strictEqual(
 					(
 						Desc_c in items
 						|| Desc_c in resources
@@ -380,7 +384,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					product.ItemClass
 				);
 
-				assert.equal(
+				assert.strictEqual(
 					(
 						Desc_c in buildings
 						|| Desc_c in items
@@ -460,7 +464,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			>[] = [];
 
 			for (const check_deeper of checking_recursively) {
-				assert.equal(
+				assert.strictEqual(
 					check_deeper.item in recipe_selection_schema['properties'],
 					true,
 					new NoMatchError(

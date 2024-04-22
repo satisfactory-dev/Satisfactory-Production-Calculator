@@ -282,11 +282,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					production in resources,
 					true,
 					new NoMatchError(
-					{
-						recipe,
-						expected: production,
-					},
-					`Supported ingredient found but missing item!`
+						{
+							recipe,
+							expected: production,
+						},
+						`Supported ingredient found but missing item!`
 					)
 				);
 

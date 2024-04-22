@@ -215,39 +215,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		return result;
 	}
 
-	protected amend_ItemClass_amount(
-		ItemClass:{
-			ItemClass: UnrealEngineString;
-			Amount: integer_string__type;
-		}
-	): {
-		ItemClass: UnrealEngineString;
-		Amount: number_arg;
-	} {
-
-		const Desc_c = UnrealEngineString_right_x_C_suffix(
-			ItemClass.ItemClass
-		);
-
-		return {
-			ItemClass: ItemClass.ItemClass,
-			Amount: (
-				(
-					(
-						Desc_c in resources
-						&& 'RF_SOLID' !== resources[Desc_c].mForm
-					)
-					|| (
-						Desc_c in items
-						&& 'RF_SOLID' !== items[Desc_c].mForm
-					)
-				)
-					? BigNumber(ItemClass.Amount).dividedBy(1000)
-					: ItemClass.Amount
-			),
-		};
-	}
-
 	protected calculate_precisely(
 		data:production_ingredients_request,
 		surplus?:recipe_ingredients_request_output<BigNumber>[]
@@ -336,11 +303,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			} = recipes[recipe];
 
 			const ingredient_amounts = mIngredients.map(
-				e => this.amend_ItemClass_amount(e).Amount
+				e => ProductionIngredientsRequest.amend_ItemClass_amount(
+					e
+				).Amount
 			);
 
 			const product_amounts = mProduct.map(
-				e => this.amend_ItemClass_amount(e).Amount
+				e => ProductionIngredientsRequest.amend_ItemClass_amount(
+					e
+				).Amount
 			);
 
 			const amounts = [
@@ -394,7 +365,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				ingredients[Desc_c] = Math.append_multiply(
 					ingredients[Desc_c],
 					BigNumber(
-						this.amend_ItemClass_amount(ingredient).Amount
+						ProductionIngredientsRequest.amend_ItemClass_amount(
+							ingredient
+						).Amount
 					).dividedBy(
 						divisor
 					),
@@ -431,7 +404,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				output[Desc_c] = Math.append_multiply(
 					output[Desc_c],
 					BigNumber(
-						this.amend_ItemClass_amount(product).Amount
+						ProductionIngredientsRequest.amend_ItemClass_amount(
+							product
+						).Amount
 					).dividedBy(
 						divisor
 					),
@@ -586,6 +561,39 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: Math.round_off(e.amount),
 				};
 			}),
+		};
+	}
+
+	static amend_ItemClass_amount(
+		ItemClass:{
+			ItemClass: UnrealEngineString;
+			Amount: integer_string__type;
+		}
+	): {
+		ItemClass: UnrealEngineString;
+		Amount: number_arg;
+	} {
+
+		const Desc_c = UnrealEngineString_right_x_C_suffix(
+			ItemClass.ItemClass
+		);
+
+		return {
+			ItemClass: ItemClass.ItemClass,
+			Amount: (
+				(
+					(
+						Desc_c in resources
+						&& 'RF_SOLID' !== resources[Desc_c].mForm
+					)
+					|| (
+						Desc_c in items
+						&& 'RF_SOLID' !== items[Desc_c].mForm
+					)
+				)
+					? BigNumber(ItemClass.Amount).dividedBy(1000)
+					: ItemClass.Amount
+			),
 		};
 	}
 }

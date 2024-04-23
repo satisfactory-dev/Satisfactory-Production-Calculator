@@ -7,3 +7,4 @@
 /**/*.js.map
 /coverage/
 /discover-types.perf.json
+/validator/

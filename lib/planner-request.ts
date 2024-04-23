@@ -1,5 +1,4 @@
-import Ajv, {
-	SchemaObject,
+import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
 import {
@@ -76,9 +75,9 @@ export abstract class PlannerRequest<
 > {
 	protected readonly check:ValidateFunction<Data>;
 
-	constructor(ajv:Ajv, schema:SchemaObject)
+	constructor(check:ValidateFunction<Data>)
 	{
-		this.check = ajv.compile<Data>(schema);
+		this.check = check;
 	}
 
 	calculate(data:unknown): Result

@@ -8,7 +8,6 @@ import {
 	production_ingredients_request_result,
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';
-import Ajv from 'ajv/dist/2020';
 import {
 	amount_string,
 	Math,
@@ -94,16 +93,7 @@ function flattened_production_ingredients_request_result(
 }
 
 void describe('ProductionIngredientsRequest', () => {
-	const instance = new ProductionIngredientsRequest(new Ajv({
-		verbose: true,
-		code: {
-			source: true,
-			es5: false,
-			esm: true,
-			optimize: true,
-		},
-	}));
-
+	const instance = new ProductionIngredientsRequest();
 	void describe('validates', () => {
 		const result_1:production_ingredients_request_result = {
 			ingredients: [

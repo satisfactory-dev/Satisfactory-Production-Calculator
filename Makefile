@@ -29,6 +29,10 @@ generate--schemas: build
 	@./node_modules/.bin/ts-node ./generate-schemas.ts
 	@make lint--schemas
 
+generate--validators: build
+	@./node_modules/.bin/ts-node ./generate-validators.ts
+	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/production_ingredients_request_schema.mjs --outDir ./validator/
+
 lint--tsc:
 	@echo 'running syntax check'
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-check.json

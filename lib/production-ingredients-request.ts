@@ -1,11 +1,9 @@
 import assert from 'assert';
-
-import Ajv, {
-	SchemaObject,
+import {
+	ValidateFunction,
 } from 'ajv/dist/2020';
-
-import production_ingredients_request_schema from
-	'../generated-schemas/production-ingredients-request.json' with {type: 'json'};
+import production_ingredients_request_validator from
+	'../validator/production_ingredients_request_schema.mjs';
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
@@ -137,10 +135,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request,
 	production_ingredients_request_result
 > {
-	constructor(ajv:Ajv)
+	constructor()
 	{
-		ajv.addSchema(recipe_selection_schema);
-		super(ajv, production_ingredients_request_schema as SchemaObject);
+		super(
+			production_ingredients_request_validator as ValidateFunction<
+				production_ingredients_request
+			>
+		);
 	}
 
 	fromUrlQuery(query:string): production_ingredients_request

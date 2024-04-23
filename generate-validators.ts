@@ -31,11 +31,9 @@ await writeFile(
 		ajv.compile(production_ingredients_request_schema)
 	).replace(/^"use strict";/, [
 		'"use strict";',
-		/*
-		* adapted from solution on stackoverflow
-		* https://stackoverflow.com/a/77047149/23528553
-		*/
-		'import { createRequire } from "module";',
-		'const require = createRequire(import.meta.url);',
-	].join(''))
+		`import fast_deep_equal from 'fast-deep-equal';`,
+	].join('')).replace(
+		'require("ajv/dist/runtime/equal").default',
+		'fast_deep_equal'
+	)
 );

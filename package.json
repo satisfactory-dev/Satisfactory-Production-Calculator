@@ -20,7 +20,7 @@
 		"typescript-eslint": "^7.7.0"
 	},
 	"dependencies": {
-		"@satisfactory-clips-archive/docs.json.ts": "^0.1.0-rc3",
+		"@satisfactory-clips-archive/docs.json.ts": "^0.1.1",
 		"bignumber.js": "^9.1.2"
 	}
 }

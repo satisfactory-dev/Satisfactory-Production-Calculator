@@ -10,6 +10,9 @@ import recipe_selection_schema from
 import {
 	__dirname_from_meta,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
+import {
+	esmify,
+} from '@satisfactory-clips-archive/docs.json.ts/lib/AjvUtilities';
 
 const __dirname = __dirname_from_meta(import.meta);
 
@@ -28,14 +31,8 @@ ajv.addSchema(recipe_selection_schema);
 
 await writeFile(
 	`${__dirname}/validator/production_ingredients_request_schema.mjs`,
-	standalone(
+	esmify(standalone(
 		ajv,
 		ajv.compile(production_ingredients_request_schema)
-	).replace(/^"use strict";/, [
-		'"use strict";',
-		`import fast_deep_equal from 'fast-deep-equal';`,
-	].join('')).replace(
-		'require("ajv/dist/runtime/equal").default',
-		'fast_deep_equal'
-	)
+	))
 );

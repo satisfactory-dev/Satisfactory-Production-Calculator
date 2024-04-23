@@ -6,7 +6,6 @@
 	"license": "SEE LICENSE IN proprietary",
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
-		"@signpostmarv/ts-assert": "^0.2.1",
 		"@types/eslint": "^8.56.9",
 		"@types/node": "^20.12.7",
 		"ajv": "^8.12.0",

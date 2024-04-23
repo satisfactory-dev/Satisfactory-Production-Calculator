@@ -85,15 +85,6 @@ export abstract class PlannerRequest<
 		return this.calculate_validated(this.validate(data));
 	}
 
-	calculate_unvalidated(data:unknown): Result
-	{
-		console.warn(`calling ${
-			this.constructor.name
-		}.calculate_unvalidated() is done at your own peril`);
-
-		return this.calculate_validated(data as Data);
-	}
-
 	validate(data:unknown): Data
 	{
 		if (!this.check(data)) {

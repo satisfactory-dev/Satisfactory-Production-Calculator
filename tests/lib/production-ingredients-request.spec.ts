@@ -33,13 +33,15 @@ import {
 	FGBuildableResourceExtractor,
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 
-function flattened_production_ingredients_request_result(
-	input:production_ingredients_request_result
-) : {
+type flattened_result = {
 	ingredients: {[key: string]: amount_string},
 	output: {[key: string]: amount_string},
-	surplus: {[key: string]: amount_string},
-} {
+	surplus?: {[key: string]: amount_string},
+};
+
+function flattened_production_ingredients_request_result(
+	input:production_ingredients_request_result
+) : flattened_result {
 	const calculating:{
 		ingredients: {[key: string]: BigNumber},
 		output: {[key: string]: BigNumber},
@@ -74,7 +76,7 @@ function flattened_production_ingredients_request_result(
 		].plus(entry.amount);
 	}
 
-	for (const entry of input.surplus) {
+	for (const entry of input.surplus || []) {
 		if (!(entry.item in calculating.surplus)) {
 			calculating.surplus[entry.item] = BigNumber(0);
 		}
@@ -86,7 +88,14 @@ function flattened_production_ingredients_request_result(
 		].plus(entry.amount);
 	}
 
-	return {
+	const surplus_entries = Object.entries(
+		calculating.surplus
+	).map((e): [string, amount_string] => [
+		e[0],
+		Math.round_off(e[1]),
+	]);
+
+	const result:flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
 				calculating.ingredients
@@ -100,15 +109,13 @@ function flattened_production_ingredients_request_result(
 				Math.round_off(e[1]),
 			])
 		),
-		surplus: Object.fromEntries(
-			Object.entries(
-				calculating.surplus
-			).map(e => [
-				e[0],
-				Math.round_off(e[1]),
-			])
-		),
 	};
+
+	if (surplus_entries.length > 0) {
+		result.surplus = Object.fromEntries(surplus_entries);
+	}
+
+	return result;
 }
 
 void describe('ProductionIngredientsRequest', () => {
@@ -258,7 +265,6 @@ void describe('ProductionIngredientsRequest', () => {
 					amount: Math.amount_string('1'),
 				},
 			],
-			surplus: [],
 		};
 		const result_1000001:production_ingredients_request_result = {
 			ingredients: [
@@ -333,7 +339,6 @@ void describe('ProductionIngredientsRequest', () => {
 					amount: Math.amount_string('1.000001'),
 				},
 			],
-			surplus: [],
 		};
 
 		const test_cases:[
@@ -363,7 +368,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -392,7 +396,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -425,7 +428,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -454,7 +456,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -479,7 +480,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -508,7 +508,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -541,7 +540,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -566,7 +564,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -595,7 +592,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -628,7 +624,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -669,7 +664,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -714,7 +708,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -771,7 +764,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('0.5'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -787,7 +779,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('123.456'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -839,7 +830,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('30.864'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -872,7 +862,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -1040,7 +1029,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -1105,7 +1093,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('11'),
 						},
 					],
-					surplus: [],
 				},
 			],
 			[
@@ -1142,7 +1129,6 @@ void describe('ProductionIngredientsRequest', () => {
 							amount: Math.amount_string('1'),
 						},
 					],
-					surplus: [],
 				},
 			],
 		];

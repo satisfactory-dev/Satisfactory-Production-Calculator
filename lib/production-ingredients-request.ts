@@ -102,6 +102,9 @@ import {
 import {
 	FGAmmoTypeSpreadshot,
 } from '../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot';
+import {
+	require_non_empty_array,
+} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
 
 const ammo = Object.fromEntries(
 	[
@@ -266,7 +269,10 @@ export type production_ingredients_request_result<
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
-	surplus: recipe_ingredients_request_output<T>[],
+	surplus?: [
+		recipe_ingredients_request_output<T>,
+		...recipe_ingredients_request_output<T>[],
+	],
 };
 
 export class ProductionIngredientsRequest extends PlannerRequest<
@@ -569,6 +575,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 		}
 
+		const surplus_entries = Object.entries(input).map(e => {
+			return {
+				item: e[0],
+				amount: e[1]
+					.minus(ingredients[e[0]] || 0)
+					.minus(output[e[0]] || 0),
+			};
+		}).filter(maybe => maybe.amount.isGreaterThan(0));
+
 		const result:production_ingredients_request_result<BigNumber> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
@@ -582,15 +597,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: e[1],
 				};
 			}),
-			surplus: Object.entries(input).map(e => {
-				return {
-					item: e[0],
-					amount: e[1]
-						.minus(ingredients[e[0]] || 0)
-						.minus(output[e[0]] || 0),
-				};
-			}).filter(maybe => maybe.amount.isGreaterThan(0)),
 		};
+
+		if (surplus_entries.length > 0) {
+			result.surplus = require_non_empty_array(surplus_entries);
+		}
 
 		return result;
 	}
@@ -602,7 +613,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const results = [initial_result];
 		let surplus:recipe_ingredients_request_output<
 			BigNumber
-		>[] = initial_result.surplus;
+		>[] = initial_result.surplus || [];
 
 		let checking_recursively = initial_result.ingredients.filter(
 			maybe => !(maybe.item in resources)
@@ -660,7 +671,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					},
 					surplus
 				);
-				surplus = deeper_result.surplus;
+				surplus = deeper_result.surplus || [];
 
 				const self_output = deeper_result.output.find(
 					maybe => maybe.item === check_deeper.item
@@ -715,7 +726,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 		}
 
-		return {
+		const result:production_ingredients_request_result = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
 					item: e[0],
@@ -728,15 +739,22 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: Math.round_off(e[1]),
 				}
 			}).filter(maybe => '0' !== maybe.amount),
-			surplus: surplus.filter(
-				maybe => maybe.amount.isGreaterThan(0)
-			).map(e => {
-				return {
-					item: e.item,
-					amount: Math.round_off(e.amount),
-				};
-			}),
 		};
+
+		const surplus_filtered = surplus.filter(
+			maybe => maybe.amount.isGreaterThan(0)
+		).map(e => {
+			return {
+				item: e.item,
+				amount: Math.round_off(e.amount),
+			};
+		});
+
+		if (surplus_filtered.length > 0) {
+			result.surplus = require_non_empty_array(surplus_filtered);
+		}
+
+		return result;
 	}
 
 	static amend_ItemClass_amount(

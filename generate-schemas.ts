@@ -127,8 +127,26 @@ for (const entry of Object.entries(recipe_selection_enums)) {
 				|| (
 					value.enum.find(maybe => maybe.includes('_Alternate_'))
 						? value.enum.find(
-							maybe => !maybe.includes('_Alternate_')
+							maybe => (
+								!maybe.includes('_Alternate_')
+								&& !maybe.includes('_Unpackage')
+							)
 						)
+						: undefined
+				)
+				|| (
+					(
+						value.enum.find(maybe => maybe.includes('_Alternate_'))
+						&& ! value.enum.find(
+							maybe => (
+								!maybe.includes('_Alternate_')
+								&& !maybe.includes('_Unpackage')
+							)
+						)
+					)
+						? [...value.enum.filter(
+							maybe => maybe.includes('_Alternate_')
+						)].sort((a, b) => a.length - b.length)[0]
 						: undefined
 				)
 				|| (

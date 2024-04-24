@@ -13,6 +13,25 @@ import {
 	Math,
 } from '../../lib/Math';
 import BigNumber from 'bignumber.js';
+import {
+	FGRecipe,
+} from '../../generated-types/update8/data/CoreUObject/FGRecipe';
+import {
+	FGBuildableFrackingActivator,
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
+import {
+	filter_UnrealEngineString_right_x_C_suffix,
+	UnrealEngineString_right_x_C_suffix,
+} from '../../lib/planner-request';
+import {
+	FGResourceDescriptor,
+} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor';
+import {
+	FGBuildableWaterPump,
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
+import {
+	FGBuildableResourceExtractor,
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 
 function flattened_production_ingredients_request_result(
 	input:production_ingredients_request_result
@@ -94,6 +113,77 @@ function flattened_production_ingredients_request_result(
 
 void describe('ProductionIngredientsRequest', () => {
 	const instance = new ProductionIngredientsRequest();
+
+	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =
+		FGRecipe.Classes.reduce(
+			(was, is) => {
+				for (const product of is.mProduct) {
+					const Desc_C = UnrealEngineString_right_x_C_suffix(
+						product.ItemClass
+					);
+
+					if (!was.includes(Desc_C)) {
+						was.push(Desc_C);
+					}
+				}
+
+				return was;
+			},
+			FGResourceDescriptor.Classes.filter(
+				(maybe) => (
+					'RF_SOLID' === maybe.mForm
+					&& filter_UnrealEngineString_right_x_C_suffix(
+						maybe.ClassName
+					)
+				)
+			).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix)
+		);
+
+	does_not_throw_cases = [
+		...FGBuildableFrackingActivator.Classes,
+		...FGBuildableWaterPump.Classes,
+		...FGBuildableResourceExtractor.Classes,
+	].reduce(
+		(was, is) => {
+			if (is.mAllowedResources instanceof Array) {
+				for (const resource of is.mAllowedResources) {
+					const Desc_C = UnrealEngineString_right_x_C_suffix(
+						resource
+					);
+
+					if (!was.includes(Desc_C)) {
+						was.push(Desc_C);
+					}
+				}
+			}
+
+			return was;
+		},
+		does_not_throw_cases
+	);
+
+	void describe('calculate', () => {
+		for (const Desc_C of does_not_throw_cases) {
+			void it(
+				`${
+					instance.constructor.name
+				}.calculate({pool: [{item: ${Desc_C}, amount: 1}]}) behaves`,
+				() => {
+					const get_result = () => instance.calculate({
+						pool: [
+							{
+								item: Desc_C,
+								amount: 1,
+							},
+						],
+					});
+
+					assert.doesNotThrow(get_result);
+				}
+			)
+		}
+	})
+
 	void describe('validates', () => {
 		const result_1:production_ingredients_request_result = {
 			ingredients: [
@@ -896,6 +986,26 @@ void describe('ProductionIngredientsRequest', () => {
 							)
 						);
 					}
+				}
+			)
+		}
+
+		for (const Desc_C of does_not_throw_cases) {
+			void it(
+				`${
+					instance.constructor.name
+				}.validate({pool: [{item: ${Desc_C}, amount: 1}]}) behaves`,
+				() => {
+					const get_result = () => instance.validate({
+						pool: [
+							{
+								item: Desc_C,
+								amount: 1,
+							},
+						],
+					});
+
+					assert.doesNotThrow(get_result);
 				}
 			)
 		}

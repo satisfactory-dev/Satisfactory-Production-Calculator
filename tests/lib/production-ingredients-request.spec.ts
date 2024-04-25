@@ -947,6 +947,290 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 				},
 			],
+			[
+				{
+					pool: [
+						{
+							item: 'Desc_UraniumCell_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_Cement_C',
+							amount: Math.amount_string('0.6'),
+						},
+						{
+							item: 'Desc_OreUranium_C',
+							amount: Math.amount_string('2'),
+						},
+						{
+							item: 'Desc_Stone_C',
+							amount: Math.amount_string('1.8'),
+						},
+						{
+							item: 'Desc_Sulfur_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('1.6'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_UraniumCell_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('0.4'),
+						},
+					],
+				},
+			],
+			[
+				{
+					pool: [
+						{
+							item: 'Desc_NuclearFuelRod_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_Cement_C',
+							amount: Math.amount_string('45'),
+						},
+						{
+							item: 'Desc_CircuitBoardHighSpeed_C',
+							amount: Math.amount_string('5'),
+						},
+						{
+							item: 'Desc_Coal_C',
+							amount: Math.amount_string('81.75'),
+						},
+						{
+							item: 'Desc_CopperIngot_C',
+							amount: Math.amount_string('80'),
+						},
+						{
+							item: 'Desc_CopperSheet_C',
+							amount: Math.amount_string('25'),
+						},
+						{
+							item: 'Desc_ElectromagneticControlRod_C',
+							amount: Math.amount_string('5'),
+						},
+						{
+							item: 'Desc_GoldIngot_C',
+							amount: Math.amount_string('20'),
+						},
+						{
+							item: 'Desc_HighSpeedWire_C',
+							amount: Math.amount_string('100'),
+						},
+						{
+							item: 'Desc_OreCopper_C',
+							amount: Math.amount_string('80'),
+						},
+						{
+							item: 'Desc_OreGold_C',
+							amount: Math.amount_string('60'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('81.75'),
+						},
+						{
+							item: 'Desc_OreUranium_C',
+							amount: Math.amount_string('100'),
+						},
+						{
+							item: 'Desc_Stator_C',
+							amount: Math.amount_string('7.5'),
+						},
+						{
+							item: 'Desc_SteelIngot_C',
+							amount: Math.amount_string('81.75'),
+						},
+						{
+							item: 'Desc_SteelPipe_C',
+							amount: Math.amount_string('22.5'),
+						},
+						{
+							item: 'Desc_SteelPlateReinforced_C',
+							amount: Math.amount_string('3'),
+						},
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: Math.amount_string('12'),
+						},
+						{
+							item: 'Desc_Stone_C',
+							amount: Math.amount_string('135'),
+						},
+						{
+							item: 'Desc_Sulfur_C',
+							amount: Math.amount_string('80'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('80'),
+						},
+						{
+							item: 'Desc_UraniumCell_C',
+							amount: Math.amount_string('50'),
+						},
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('80'),
+						},
+						{
+							item: 'Desc_Wire_C',
+							amount: Math.amount_string('60'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_NuclearFuelRod_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('20'),
+						},
+					],
+				},
+			],
+			[
+				{
+					pool: [
+						{
+							item: 'Desc_NuclearWaste_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_Cement_C',
+							amount: Math.amount_string('0.9'),
+						},
+						{
+							item: 'Desc_CircuitBoardHighSpeed_C',
+							amount: Math.amount_string('0.1'),
+						},
+						{
+							item: 'Desc_Coal_C',
+							amount: Math.amount_string('1.635'),
+						},
+						{
+							item: 'Desc_CopperIngot_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_CopperSheet_C',
+							amount: Math.amount_string('0.5'),
+						},
+						{
+							item: 'Desc_ElectromagneticControlRod_C',
+							amount: Math.amount_string('0.1'),
+						},
+						{
+							item: 'Desc_GoldIngot_C',
+							amount: Math.amount_string('0.4'),
+						},
+						{
+							item: 'Desc_HighSpeedWire_C',
+							amount: Math.amount_string('2'),
+						},
+						{
+							item: 'Desc_NuclearFuelRod_C',
+							amount: Math.amount_string('0.02'),
+						},
+						{
+							item: 'Desc_OreCopper_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_OreGold_C',
+							amount: Math.amount_string('1.2'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('1.635'),
+						},
+						{
+							item: 'Desc_OreUranium_C',
+							amount: Math.amount_string('2'),
+						},
+						{
+							item: 'Desc_Stator_C',
+							amount: Math.amount_string('0.15'),
+						},
+						{
+							item: 'Desc_SteelIngot_C',
+							amount: Math.amount_string('1.635'),
+						},
+						{
+							item: 'Desc_SteelPipe_C',
+							amount: Math.amount_string('0.45'),
+						},
+						{
+							item: 'Desc_SteelPlateReinforced_C',
+							amount: Math.amount_string('0.06'),
+						},
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: Math.amount_string('0.24'),
+						},
+						{
+							item: 'Desc_Stone_C',
+							amount: Math.amount_string('2.7'),
+						},
+						{
+							item: 'Desc_Sulfur_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_UraniumCell_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_Water_C',
+							amount: Math.amount_string('1.6'),
+						},
+						{
+							item: 'Desc_Wire_C',
+							amount: Math.amount_string('1.2'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_NuclearWaste_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_SulfuricAcid_C',
+							amount: Math.amount_string('0.4'),
+						},
+					],
+				},
+			],
 		];
 
 		for (const entry of test_cases) {

@@ -3,8 +3,16 @@
 	"$id": "recipe-selection--meta-schema",
 	"$defs": {
 		"enum_item": {
+			"oneOf": [
+				{
 			"type": "string",
 			"pattern": "^(?:Recipe|Build)_[^.]+_C$"
+				},
+				{
+					"type": "string",
+					"pattern": "^Recipe_--faux--Build_.+_C--Desc_.+_C--\\d+(?:\\.\\d+)?--_C$"
+				}
+			]
 		}
 	},
 	"type": "object",

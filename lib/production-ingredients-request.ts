@@ -420,6 +420,75 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 
 			if (undefined === recipes[recipe]) {
+
+				if (
+					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
+						.test(recipe)
+				) {
+					const [
+						,
+						,
+						,
+						faux_ingredient,
+						faux_amount,
+					] = recipe.split('--');
+
+					assert.strictEqual(
+						(
+							faux_ingredient in ammo
+							|| faux_ingredient in biomass
+							|| faux_ingredient in consumable
+							|| faux_ingredient in equipment
+							|| faux_ingredient in fuel_nuclear
+							|| faux_ingredient in items
+							|| faux_ingredient in resources
+						),
+						true,
+						new NoMatchError(
+							{
+								recipe,
+								faux_ingredient,
+							},
+							`Supported faux-recipe found, but missing item (${faux_ingredient})!`
+						)
+					);
+
+					assert.strictEqual(
+						(
+							production in items
+							|| production in resources
+						),
+						true,
+						new NoMatchError(
+							{
+								recipe,
+								expected: production,
+							},
+							`Supported ingredient found but missing production item (${production})!`
+						)
+					);
+
+					if (!(faux_ingredient in ingredients)) {
+						ingredients[faux_ingredient] = BigNumber(0);
+					}
+
+					ingredients[faux_ingredient] = Math.append_multiply(
+						ingredients[faux_ingredient],
+						Math.amount_string(faux_amount),
+						amount
+					);
+
+					output[
+						production as keyof typeof resources
+					] = Math.append_multiply(
+						output[production as keyof typeof resources],
+						1,
+						amount
+					);
+
+					continue;
+				}
+
 				assert.strictEqual(
 					recipe.startsWith('Build_'),
 					true,
@@ -467,11 +536,28 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				).Amount
 			);
 
-			const product_amounts = mProduct.map(
-				e => ProductionIngredientsRequest.amend_ItemClass_amount(
-					e
-				).Amount
+			const mapped_product_amounts = Object.fromEntries(mProduct.map(
+				(e): [string, number_arg] => [
+					UnrealEngineString_right_x_C_suffix(e.ItemClass),
+					ProductionIngredientsRequest.amend_ItemClass_amount(
+						e
+					).Amount,
+				]
+			));
+
+			assert.strictEqual(
+				production in mapped_product_amounts,
+				true,
+				new NoMatchError(
+					{
+						production,
+						mapped_product_amounts,
+					},
+					'Production item not found in mapped product amounts!'
+				)
 			);
+
+			const product_amounts = Object.values(mapped_product_amounts);
 
 			const amounts = [
 				...ingredient_amounts,
@@ -489,11 +575,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			);
 
-			const divisor = Math.least_common_multiple(
+			let divisor = Math.least_common_multiple(
 				[
-					1,
 					...product_amounts,
 				] as [number_arg, number_arg, ...number_arg[]]
+			);
+
+			divisor = divisor.dividedBy(
+				BigNumber(1).dividedBy(
+					BigNumber(
+						mapped_product_amounts[production]
+					).dividedBy(divisor)
+				)
 			);
 
 			for (const ingredient of mIngredients) {

@@ -26,6 +26,8 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
+import { FGBuildableGeneratorNuclear } from './generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
+import BigNumber from 'bignumber.js';
 
 const __dirname = __dirname_from_meta(import.meta);
 
@@ -63,6 +65,29 @@ const RF_SOLID = FGResourceDescriptor.Classes.filter(
 		)
 	)
 ).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix);
+
+for (const nuke_gen_fuel of FGBuildableGeneratorNuclear.Classes[0].mFuel) {
+	const fuel = nuke_gen_fuel.mFuelClass;
+	const byproduct = nuke_gen_fuel.mByproduct;
+	const faux_recipe = `Recipe_--faux--${
+		FGBuildableGeneratorNuclear.Classes[0].ClassName
+	}--${
+		fuel
+	}--${
+		BigNumber(1).dividedBy(nuke_gen_fuel.mByproductAmount).toString()
+	}--_C`;
+
+	if (!(byproduct in recipe_selection_enums)) {
+		recipe_selection_enums[byproduct] = {
+			type: 'string',
+			enum: [
+				faux_recipe,
+			],
+		};
+	} else {
+		recipe_selection_enums[byproduct].enum.push(faux_recipe);
+	}
+}
 
 recipe_selection_enums = [
 	...FGBuildableFrackingActivator.Classes,
@@ -239,7 +264,9 @@ const production_ingredients_request = {
 			properties: {
 				item: {
 					type: 'string',
-					enum: Object.keys(recipe_selection_enums),
+					enum: Object.keys(recipe_selection_enums).sort((a, b) => {
+						return a.localeCompare(b);
+					}),
 				},
 				amount: {
 					$ref: '#/$defs/number_arg',

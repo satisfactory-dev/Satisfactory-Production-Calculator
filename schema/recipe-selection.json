@@ -5,8 +5,8 @@
 		"enum_item": {
 			"oneOf": [
 				{
-			"type": "string",
-			"pattern": "^(?:Recipe|Build)_[^.]+_C$"
+					"type": "string",
+					"pattern": "^(?:Recipe|Build)_[^.]+_C$"
 				},
 				{
 					"type": "string",

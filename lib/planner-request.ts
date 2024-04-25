@@ -13,10 +13,10 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 
 export type UnrealEngineString_right_x_C_suffix =
-	`${'Desc'|'BP'|'Foundation'|'Recipe'}_${string}_C`;
+	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'}_${string}_C`;
 
 const UnrealEngineString_right_x_C_suffix_regex_prefixes =
-	'(?:Desc|BP|Foundation|Recipe)'
+	'(?:Desc|BP|Foundation|Recipe|SC)'
 
 const UnrealEngineString_right_x_C_suffix_regex = new RegExp(
 	`^${UnrealEngineString_right_x_C_suffix_regex_prefixes}_[^.]+_C$`

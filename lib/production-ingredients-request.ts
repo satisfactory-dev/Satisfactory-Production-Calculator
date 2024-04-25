@@ -216,22 +216,31 @@ const vehicles:{
 	FGVehicleDescriptor.Classes.map(e => [e.ClassName, e])
 );
 
-/**
- * @todo remove hardcoding
- */
-const known_not_sourced_from_recipe = [
-	'Desc_HUBParts_C',
-	'Desc_FlowerPetals_C',
-	'Desc_Gift_C',
-	'Desc_StingerParts_C',
-	'Desc_Mycelia_C',
-	'Desc_Nut_C',
-	'Desc_Crystal_C',
-];
+const ingredients = (new Set(FGRecipe.Classes.flatMap(
+	e => e.mIngredients.map(
+		e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
+	)
+)));
+const products = (new Set(FGRecipe.Classes.flatMap(
+	e => e.mProduct.map(
+		e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
+	)
+)));
+const resource_keys = Object.keys(resources);
 
 const known_byproduct:string[] = FGBuildableGeneratorNuclear.Classes.flatMap(
 	(e) => e.mFuel.map(
 		fuel => fuel.mByproduct
+	)
+);
+
+const known_not_sourced_from_recipe:string[] = [
+	...ingredients.values(),
+].filter(
+	maybe => (
+		!products.has(maybe)
+		&& !resource_keys.includes(maybe)
+		&& !known_byproduct.includes(maybe)
 	)
 );
 

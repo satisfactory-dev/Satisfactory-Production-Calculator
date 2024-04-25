@@ -26,7 +26,9 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
-import { FGBuildableGeneratorNuclear } from './generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
+import {
+	FGBuildableGeneratorNuclear,
+} from './generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import BigNumber from 'bignumber.js';
 
 const __dirname = __dirname_from_meta(import.meta);

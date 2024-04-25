@@ -105,6 +105,9 @@ import {
 import {
 	require_non_empty_array,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
+import {
+	FGBuildableGeneratorNuclear,
+} from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 
 const ammo = Object.fromEntries(
 	[
@@ -226,13 +229,11 @@ const known_not_sourced_from_recipe = [
 	'Desc_Crystal_C',
 ];
 
-/**
- * @todo remove hardcoding
- */
-const known_byproduct = [
-	'Desc_NuclearWaste_C',
-	'Desc_PlutoniumWaste_C',
-];
+const known_byproduct:string[] = FGBuildableGeneratorNuclear.Classes.flatMap(
+	(e) => e.mFuel.map(
+		fuel => fuel.mByproduct
+	)
+);
 
 export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],

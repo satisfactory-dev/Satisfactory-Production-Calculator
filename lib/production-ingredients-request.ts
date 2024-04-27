@@ -274,15 +274,19 @@ export type recipe_ingredients_request_output<
 	amount: T,
 };
 
+export type production_ingredients_request_result_surplus<
+	T extends amount_string|BigNumber = amount_string
+> = [
+	recipe_ingredients_request_output<T>,
+	...recipe_ingredients_request_output<T>[],
+];
+
 export type production_ingredients_request_result<
 	T extends amount_string|BigNumber = amount_string
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
-	surplus?: [
-		recipe_ingredients_request_output<T>,
-		...recipe_ingredients_request_output<T>[],
-	],
+	surplus?: production_ingredients_request_result_surplus<T>,
 };
 
 export class ProductionIngredientsRequest extends PlannerRequest<

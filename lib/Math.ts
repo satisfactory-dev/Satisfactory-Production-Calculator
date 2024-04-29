@@ -1,4 +1,7 @@
+import assert from 'assert';
 import BigNumber from 'bignumber.js';
+import Fraction from 'fraction.js';
+import sum_series from '@stdlib/math-base-tools-sum-series';
 import {
 	StringPassedRegExp,
 } from '../generated-types/update8/utils/validators';
@@ -11,6 +14,9 @@ import {
 import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
+import {
+	production_ingredients_request_result,
+} from './production-ingredients-request';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
@@ -110,6 +116,32 @@ export class Math
 		);
 	}
 
+	static multiply_result(
+		result:production_ingredients_request_result,
+		by:number_arg
+	): production_ingredients_request_result<BigNumber> {
+		function perform_multiplication({item, amount}:{
+			item: string,
+			amount: number_arg,
+		}) : {
+			item: string,
+			amount: BigNumber,
+		} {
+			return {
+				item,
+				amount: BigNumber(amount).times(by),
+			};
+		}
+
+		const ingredients = result.ingredients.map(perform_multiplication);
+		const output = result.output.map(perform_multiplication);
+
+		return {
+			ingredients,
+			output,
+		};
+	}
+
 	static round_off(number:BigNumber): amount_string
 	{
 		this.configure();
@@ -128,6 +160,32 @@ export class Math
 		}
 
 		return result as amount_string;
+	}
+
+	static sum_series(a:number_arg, b:number_arg)
+	{
+		assert.strictEqual(
+			BigNumber(b).isLessThan(a),
+			true,
+			`Expecting ${b.toString()} to be less than ${a.toString()}`
+		);
+
+		const divisor = parseFloat((
+			new Fraction(a.toString())
+		).div(b.toString()).toString());
+
+		function calculate(number:number_arg) {
+			let previous = parseFloat(number.toString());
+
+			return () => {
+				const next = previous / divisor;
+				previous = next;
+
+				return next;
+			}
+		}
+
+		return BigNumber(a).plus(BigNumber(sum_series(calculate(a))));
 	}
 
 	private static configure()

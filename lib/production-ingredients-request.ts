@@ -2,6 +2,7 @@ import assert from 'assert';
 import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
+import sum_series from '@stdlib/math-base-tools-sum-series';
 import production_ingredients_request_validator from
 	'../validator/production_ingredients_request_schema.mjs';
 import recipe_selection_schema from
@@ -732,6 +733,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		let checking_recursively = initial_result.ingredients.filter(
 			maybe => !(maybe.item in resources)
 		);
+		const avoid_checking_further = new Set<string>();
+
+		const production_items = Object.fromEntries(
+			data.pool.map(e => [e.item, e.amount])
+		);
 
 		while (checking_recursively.length > 0) {
 			const when_done:recipe_ingredients_request_ingredient<
@@ -769,6 +775,48 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					continue;
 				}
 
+				let possibly_recursive = false;
+				let recursive_multiplier = BigNumber(1);
+
+				if (check_deeper.item in production_items) {
+					assert.strictEqual(
+						BigNumber(
+							production_items[check_deeper.item]
+						).isGreaterThan(
+							check_deeper.amount
+						),
+						true,
+						`Recursive production for ${
+							check_deeper.item
+						} increases over time instead of decreases!`
+					);
+
+					possibly_recursive = true;
+
+					const lcm = Math.least_common_multiple([
+						production_items[check_deeper.item],
+						check_deeper.amount,
+					]).toString();
+					const a = (
+						new Fraction(
+							production_items[check_deeper.item].toString()
+						)
+					).div(lcm).toString()
+					const b = (
+						new Fraction(
+							check_deeper.amount.toString()
+						)
+					).div(lcm).toString();
+					recursive_multiplier = Math.sum_series(
+						BigNumber(a),
+						BigNumber(b)
+					);
+				}
+
+				if (possibly_recursive) {
+					avoid_checking_further.add(check_deeper.item);
+				}
+
 				const deeper_result = this.calculate_precisely(
 					{
 						...data,
@@ -780,7 +828,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 									]
 								)
 							),
-							amount: check_deeper.amount,
+							amount: check_deeper.amount.times(
+								recursive_multiplier
+							),
 						}],
 					},
 					surplus
@@ -798,7 +848,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				const maybe_check_further = deeper_result.ingredients.filter(
-					maybe => !(maybe.item in resources)
+					maybe => (
+						!(maybe.item in resources)
+						&& !avoid_checking_further.has(maybe.item)
+					)
 				);
 
 				if (maybe_check_further.length) {
@@ -813,6 +866,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		const ingredients:{[key: string]: BigNumber} = {};
 		const output:{[key: string]: BigNumber} = {};
+		const surplus_map = surplus.reduce(
+			(was, is) => {
+				if (!(is.item in was)) {
+					was[is.item] = BigNumber(0);
+				}
+
+				was[is.item] = was[is.item].plus(is.amount);
+
+				return was;
+			},
+			{} as {[key: string]: BigNumber}
+		);
 
 		for (const entry of results) {
 			for (const ingredient of entry.ingredients) {
@@ -840,6 +905,40 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 		}
 
+		const production_map = data.pool.reduce(
+			(was, is) => {
+				if (!(is.item in was)) {
+					was[is.item] = BigNumber(0);
+				}
+
+				was[is.item] = was[is.item].plus(is.amount);
+
+				return was;
+			},
+			{} as {[key: string]: BigNumber}
+		);
+
+		for (const entry of Object.entries(production_map)) {
+			assert.strictEqual(
+				entry[0] in output,
+				true,
+				`${entry[0]} not on output map!`
+			);
+
+			if (output[entry[0]].isGreaterThan(entry[1])) {
+				if (!(entry[0] in surplus_map)) {
+					surplus_map[entry[0]] = BigNumber(0);
+				}
+
+				surplus_map[entry[0]] = surplus_map[entry[0]].plus(
+					output[entry[0]].minus(entry[1])
+				);
+
+				output[entry[0]] = entry[1];
+			}
+		}
+
+
 		const result:production_ingredients_request_result = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
@@ -855,12 +954,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}).filter(maybe => '0' !== maybe.amount),
 		};
 
-		const surplus_filtered = surplus.filter(
-			maybe => maybe.amount.isGreaterThan(0)
+		const surplus_filtered = Object.entries(surplus_map).filter(
+			maybe => maybe[1].isGreaterThan(0)
 		).map(e => {
 			return {
-				item: e.item,
-				amount: Math.round_off(e.amount),
+				item: e[0],
+				amount: Math.round_off(e[1]),
 			};
 		});
 

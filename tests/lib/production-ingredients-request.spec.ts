@@ -1231,6 +1231,56 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 				},
 			],
+			[
+				{
+					recipe_selection: {
+						Desc_Plastic_C: 'Recipe_Alternate_Plastic_1_C',
+						Desc_Rubber_C: 'Recipe_Alternate_RecycledRubber_C',
+					},
+					pool: [
+						{
+							item: 'Desc_Plastic_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_LiquidOil_C',
+							amount: Math.amount_string('1.5'),
+						},
+						{
+							item: 'Desc_LiquidFuel_C',
+							amount: Math.amount_string('0.1'),
+						},
+						{
+							item: 'Desc_Plastic_C',
+							amount: Math.amount_string('0.333334'),
+						},
+						{
+							item: 'Desc_Rubber_C',
+							amount: Math.amount_string('0.666667'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_Plastic_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_PolymerResin_C',
+							amount: Math.amount_string('0.75'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_Plastic_C',
+							amount: Math.amount_string('0.83334'),
+						},
+					],
+				},
+			],
 		];
 
 		for (const entry of test_cases) {

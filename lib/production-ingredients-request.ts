@@ -2,7 +2,6 @@ import assert from 'assert';
 import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
-import sum_series from '@stdlib/math-base-tools-sum-series';
 import production_ingredients_request_validator from
 	'../validator/production_ingredients_request_schema.mjs';
 import recipe_selection_schema from

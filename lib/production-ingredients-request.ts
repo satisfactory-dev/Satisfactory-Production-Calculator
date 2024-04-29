@@ -49,6 +49,7 @@ import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';
 import BigNumber from 'bignumber.js';
+import Fraction from 'fraction.js';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
@@ -585,12 +586,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				] as [number_arg, number_arg, ...number_arg[]]
 			);
 
-			divisor = divisor.dividedBy(
-				BigNumber(1).dividedBy(
-					BigNumber(
-						mapped_product_amounts[production]
-					).dividedBy(divisor)
-				)
+			const divisor_pre_adjustment = divisor;
+
+			divisor = BigNumber(
+				(new Fraction(divisor_pre_adjustment.toString())).div(
+					(new Fraction(1)).div(
+						(
+							new Fraction(
+								mapped_product_amounts[production].toString()
+							)
+						).div(divisor_pre_adjustment.toString())
+					)
+				).toString()
 			);
 
 			for (const ingredient of mIngredients) {

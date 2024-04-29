@@ -1281,6 +1281,59 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 				},
 			],
+			[
+				{
+					recipe_selection: {
+						Desc_IronPlate_C: 'Recipe_Alternate_CoatedIronPlate_C',
+						Desc_Plastic_C: 'Recipe_Alternate_Plastic_1_C',
+						Desc_Rubber_C: 'Recipe_Alternate_RecycledRubber_C',
+					},
+					pool: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('0.666667'),
+						},
+						{
+							item: 'Desc_LiquidFuel_C',
+							amount: Math.amount_string('0.133334'),
+						},
+						{
+							item: 'Desc_LiquidOil_C',
+							amount: Math.amount_string('0.2'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('0.666667'),
+						},
+						{
+							item: 'Desc_Plastic_C',
+							amount: Math.amount_string('0.177778'),
+						},
+						{
+							item: 'Desc_Rubber_C',
+							amount: Math.amount_string('0.88889'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: Math.amount_string('1'),
+						},
+						{
+							item: 'Desc_PolymerResin_C',
+							amount: Math.amount_string('0.1'),
+						},
+					],
+				},
+			],
 		];
 
 		for (const entry of test_cases) {

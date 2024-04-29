@@ -414,7 +414,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			output[production] = amount_from_input;
 
-			if (0 === BigNumber(amount).comparedTo(0)) {
+			if (BigNumber(amount).isLessThan(0.0000001)) {
 				continue;
 			}
 
@@ -937,6 +937,20 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			}
 		}
 
+		const output_entries = Object.entries(output);
+		const negative_outputs = output_entries.filter(
+			maybe => maybe[1].isLessThan(0)
+		);
+
+		for (const entry of negative_outputs) {
+			if (!(entry[0] in ingredients)) {
+				ingredients[entry[0]] = BigNumber(0);
+			}
+
+			ingredients[entry[0]] = ingredients[entry[0]].plus(
+				entry[1].abs()
+			);
+		}
 
 		const result:production_ingredients_request_result = {
 			ingredients: Object.entries(ingredients).map(e => {
@@ -945,7 +959,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: Math.round_off(e[1]),
 				}
 			}),
-			output: Object.entries(output).map(e => {
+			output: output_entries.filter(
+				maybe => maybe[1].isGreaterThan(0)
+			).map(e => {
 				return {
 					item: e[0],
 					amount: Math.round_off(e[1]),

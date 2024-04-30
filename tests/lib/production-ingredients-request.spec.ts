@@ -1334,6 +1334,212 @@ void describe('ProductionIngredientsRequest', () => {
 					],
 				},
 			],
+			[
+				{
+					pool: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1.5'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('1.5'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+			],
+			[
+				{
+					input: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: 3,
+						},
+					],
+					pool: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [],
+					output: [
+						{
+							item: 'Desc_IronPlate_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('1.5'),
+						},
+					],
+				},
+			],
+			[
+				{
+					pool: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_SteelIngot_C',
+							amount: Math.amount_string('4'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('4'),
+						},
+						{
+							item: 'Desc_Coal_C',
+							amount: Math.amount_string('4'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+			],
+			[
+				{
+					recipe_selection: {
+						Desc_SteelIngot_C: 'Recipe_Alternate_IngotSteel_1_C',
+					},
+					pool: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_SteelIngot_C',
+							amount: Math.amount_string('4'),
+						},
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('2.666667'),
+						},
+						{
+							item: 'Desc_OreIron_C',
+							amount: Math.amount_string('2.666667'),
+						},
+						{
+							item: 'Desc_Coal_C',
+							amount: Math.amount_string('2.666667'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+				},
+			],
+			[
+				{
+					input: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: 3,
+						},
+					],
+					recipe_selection: {
+						Desc_SteelIngot_C: 'Recipe_Alternate_IngotSteel_1_C',
+					},
+					pool: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: [
+						{
+							item: 'Desc_SteelIngot_C',
+							amount: Math.amount_string('4'),
+						},
+						{
+							item: 'Desc_Coal_C',
+							amount: Math.amount_string('2.666667'),
+						},
+					],
+					output: [
+						{
+							item: 'Desc_SteelPlate_C',
+							amount: Math.amount_string('1'),
+						},
+					],
+					surplus: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: Math.amount_string('0.333334'),
+						},
+					],
+				},
+			],
+			[
+				{
+					input: [
+						{
+							item: 'Desc_IronIngot_C',
+							amount: 360,
+						},
+					],
+					pool: [
+						{
+							item: 'Desc_BlueprintDesigner_C',
+							amount: 1,
+						},
+					],
+				},
+				{
+					ingredients: result_1.ingredients.filter(
+						(maybe) => 'Desc_IronIngot_C' !== maybe.item
+					).map(
+						(ingredient) => {
+							if (ingredient.item === 'Desc_OreIron_C') {
+								return {
+									item: 'Desc_OreIron_C',
+									amount: Math.amount_string('400'),
+								};
+							}
+
+							return ingredient;
+						}
+					),
+					output: result_1.output,
+				},
+			],
 		];
 
 		for (const entry of test_cases) {

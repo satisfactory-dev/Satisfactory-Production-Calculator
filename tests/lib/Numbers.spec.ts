@@ -104,7 +104,7 @@ void describe('Math', () => {
 		for (const entry of expectations) {
 			const [append_to, a, b, expectation, rounded_off] = entry;
 			void it (
-				`Math.append_multiply(${
+				`Numbers.append_multiply(${
 					append_to.toString()
 				}, ${
 					a instanceof Array ? JSON.stringify(a) : a.toString()
@@ -152,7 +152,7 @@ void describe('Math', () => {
 			] = data_set;
 
 			void it(
-				`Math.fraction_to_BigNumber(${
+				`Numbers.fraction_to_BigNumber(${
 					a
 				}/${
 					b
@@ -188,7 +188,7 @@ void describe('Math', () => {
 			const [a, b, expectation] = entry;
 
 			void it(
-				`Math.greatest_common_denominator(${
+				`Numbers.greatest_common_denominator(${
 					a.toString()
 				}, ${
 					b.toString()
@@ -227,7 +227,7 @@ void describe('Math', () => {
 		for (const entry of data_set) {
 			const [numbers, expectation] = entry;
 			void it(
-				`Math.least_common_multiple(${
+				`Numbers.least_common_multiple(${
 					JSON.stringify(numbers)
 				}) returns ${expectation}`,
 				() => {
@@ -252,7 +252,7 @@ void describe('Math', () => {
 			const [input, expectation] = entry;
 
 			void it(
-				`Math.round_off(${
+				`Numbers.round_off(${
 					input.toString()
 				}) returns ${
 					expectation

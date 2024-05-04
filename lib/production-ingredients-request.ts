@@ -354,7 +354,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			const divisor_pre_adjustment = divisor;
 
-			divisor = Math.fraction_to_BigNumber(
+			divisor = Numbers.fraction_to_BigNumber(
 				(new Fraction(divisor_pre_adjustment.toString())).div(
 					(new Fraction(1)).div(
 						(

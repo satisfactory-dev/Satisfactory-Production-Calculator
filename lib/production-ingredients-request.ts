@@ -10,18 +10,6 @@ import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
-	FGItemDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGItemDescriptor';
-import {
-	FGItemDescriptor__FGResourceDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptor';
-import {
-	FGRecipe,
-} from '../generated-types/update8/data/CoreUObject/FGRecipe';
-import {
-	FGRecipe__type,
-} from '../generated-types/update8/classes/CoreUObject/FGRecipe';
-import {
 	amount_string,
 	Math,
 	number_arg,
@@ -30,18 +18,6 @@ import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
-import {
-	FGBuildingDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGBuildingDescriptor';
-import {
-	FGBuildingDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGBuildingDescriptor';
-import {
-	FGResourceDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGResourceDescriptor';
-import {
-	FGResourceDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
 import {
 	integer_string__type,
 } from '../generated-types/update8/common/unassigned';
@@ -54,196 +30,31 @@ import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 import {
-	is_string,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
-import {
-	FGItemDescriptorBiomass__type,
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorBiomass';
-import {
-	FGItemDescriptorBiomass,
-} from '../generated-types/update8/data/CoreUObject/FGItemDescriptorBiomass';
-import {
-	FGPoleDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGPoleDescriptor';
-import {
-	FGPoleDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGPoleDescriptor';
-import {
-	FGEquipmentDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGEquipmentDescriptor';
-import {
-	FGEquipmentDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGEquipmentDescriptor';
-import {
-	FGAmmoTypeProjectile,
-} from '../generated-types/update8/data/CoreUObject/FGAmmoTypeProjectile';
-import {
-	FGVehicleDescriptor__fueled_with_inventory__type,
-	FGVehicleDescriptor__powered_no_inventory__type,
-	FGVehicleDescriptor__unfueled_with_inventory__type,
-} from '../generated-types/update8/classes/CoreUObject/FGVehicleDescriptor';
-import {
-	FGVehicleDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGVehicleDescriptor';
-import {
-	FGItemDescriptorNuclearFuel__type,
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorNuclearFuel';
-import {
-	FGItemDescriptorNuclearFuel,
-} from '../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel';
-import {
-	FGConsumableDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGConsumableDescriptor';
-import {
-	FGConsumableDescriptor,
-} from '../generated-types/update8/data/CoreUObject/FGConsumableDescriptor';
-import {
-	FGAmmoTypeInstantHit,
-} from '../generated-types/update8/data/CoreUObject/FGAmmoTypeInstantHit';
-import {
-	FGAmmoTypeSpreadshot,
-} from '../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot';
-import {
 	require_non_empty_array,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
 import {
-	FGBuildableGeneratorNuclear,
-} from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
-
-const ammo = Object.fromEntries(
-	[
-		...FGAmmoTypeProjectile.Classes,
-		...FGAmmoTypeInstantHit.Classes,
-		...FGAmmoTypeSpreadshot.Classes,
-	].map(e => [e.ClassName, e])
-);
-const biomass:{
-	[
-		key in FGItemDescriptorBiomass__type[
-			'ClassName'
-		]
-	]: FGItemDescriptorBiomass__type
-} = Object.fromEntries(
-	FGItemDescriptorBiomass.Classes.map(e => [e.ClassName, e])
-);
-const buildings:{
-	[
-		key in FGBuildingDescriptor__type[
-			'ClassName'
-		]
-	]: FGBuildingDescriptor__type
-} = Object.fromEntries(
-	FGBuildingDescriptor.Classes.map(e => [e.ClassName, e])
-);
-const consumable:{
-	[
-		key in FGConsumableDescriptor__type[
-			'ClassName'
-		]
-	]: FGConsumableDescriptor__type
-} = Object.fromEntries(
-	FGConsumableDescriptor.Classes.map(e => [e.ClassName, e])
-);
-const equipment:{
-	[
-		key in FGEquipmentDescriptor__type[
-			'ClassName'
-		]
-	]: FGEquipmentDescriptor__type
-} = Object.fromEntries(
-	FGEquipmentDescriptor.Classes.map(e => [e.ClassName, e])
-);
-
-const fuel_nuclear:{
-	[
-		key in FGItemDescriptorNuclearFuel__type[
-			'ClassName'
-		]
-	]: FGItemDescriptorNuclearFuel__type
-} = Object.fromEntries(
-	FGItemDescriptorNuclearFuel.Classes.map(e => [e.ClassName, e])
-);
-
-const items:{
-	[
-		key in FGItemDescriptor__FGResourceDescriptor__type[
-			'ClassName'
-		]
-	]: FGItemDescriptor__FGResourceDescriptor__type;
-} = Object.fromEntries(
-	FGItemDescriptor.Classes.map(e => [e.ClassName, e])
-);
-const poles:{
-	[
-		key in FGPoleDescriptor__type[
-			'ClassName'
-		]
-	]: FGPoleDescriptor__type
-} = Object.fromEntries(
-	FGPoleDescriptor.Classes.map(e => [e.ClassName, e])
-);
-const recipes:{
-	[
-		key in FGRecipe__type[
-			'ClassName'
-		]
-	]: FGRecipe__type
-} = Object.fromEntries(
-	FGRecipe.Classes.map(e => [e.ClassName, e])
-);
-const resources:{
-	[
-		key in FGResourceDescriptor__type[
-			'ClassName'
-		]
-	]: FGResourceDescriptor__type
-} = Object.fromEntries(
-	FGResourceDescriptor.Classes.map(e => [e.ClassName, e])
-);
-
-type FGVehicleDescriptor__type = (
-	| FGVehicleDescriptor__powered_no_inventory__type
-	| FGVehicleDescriptor__unfueled_with_inventory__type
-	| FGVehicleDescriptor__fueled_with_inventory__type
-);
-
-const vehicles:{
-	[
-		key in FGVehicleDescriptor__type[
-			'ClassName'
-		]
-	]: FGVehicleDescriptor__type
-} = Object.fromEntries(
-	FGVehicleDescriptor.Classes.map(e => [e.ClassName, e])
-);
-
-const ingredients = (new Set(FGRecipe.Classes.flatMap(
-	e => e.mIngredients.map(
-		e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
-	)
-)));
-const products = (new Set(FGRecipe.Classes.flatMap(
-	e => e.mProduct.map(
-		e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
-	)
-)));
-const resource_keys = Object.keys(resources);
-
-const known_byproduct:string[] = FGBuildableGeneratorNuclear.Classes.flatMap(
-	(e) => e.mFuel.map(
-		fuel => fuel.mByproduct
-	)
-);
-
-const known_not_sourced_from_recipe:string[] = [
-	...ingredients.values(),
-].filter(
-	maybe => (
-		!products.has(maybe)
-		&& !resource_keys.includes(maybe)
-		&& !known_byproduct.includes(maybe)
-	)
-);
+	ammo,
+	biomass,
+	buildings,
+	consumable,
+	equipment,
+	fuel_nuclear,
+	items,
+	known_byproduct,
+	known_not_sourced_from_recipe,
+	poles,
+	recipes,
+	resources,
+	vehicles,
+} from './production-data'
+import {
+	AmountSplitter,
+	CanRequestOutputToBeSentSomewhere,
+	CanRequestToReceiveOutput,
+	production_item,
+	production_set,
+	ProductionMerger,
+} from './production-flinging';
 
 export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],
@@ -265,13 +76,7 @@ T extends amount_string|BigNumber = amount_string
 export type recipe_ingredients_request_output<
 	T extends amount_string|BigNumber = amount_string
 > = {
-	item: (
-		keyof (
-			| typeof buildings
-			| typeof items
-			| typeof resources
-		)
-	),
+	item: production_item,
 	amount: T,
 };
 
@@ -293,7 +98,19 @@ export type production_ingredients_request_result<
 export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request,
 	production_ingredients_request_result
-> {
+> implements
+	CanRequestToReceiveOutput<
+		| ProductionIngredientsRequest
+		| ProductionMerger
+		| AmountSplitter
+	>,
+	CanRequestOutputToBeSentSomewhere
+{
+	private input:production_set = {};
+	private outputs:{
+		[key in production_item]: CanRequestToReceiveOutput<this>
+	} = {};
+
 	constructor()
 	{
 		super(
@@ -303,6 +120,25 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		);
 	}
 
+	cancel_output_requests(): void {
+		this.outputs = {};
+	}
+
+	receive_output(
+		production_set: production_set
+	): void {
+		this.input = production_set;
+	}
+
+	request_output_to_be_sent(
+		items:[production_item, ...production_item[]],
+		somewhere:CanRequestToReceiveOutput<this>
+	) {
+		for (const item of items) {
+			this.outputs[item] = somewhere;
+		}
+	}
+
 	protected calculate_precisely(
 		data:production_ingredients_request,
 		surplus?:recipe_ingredients_request_output<BigNumber>[]
@@ -310,7 +146,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const ingredients:{
 			[key in keyof typeof items]: BigNumber;
 		} = {};
-		const input:{[key: string]: BigNumber} = {};
+		const input:{[key: string]: BigNumber} = {
+			...this.input,
+		};
 		for (const entry of (surplus || data.input || [])) {
 			if (!(entry.item in input)) {
 				input[entry.item] = BigNumber(0);
@@ -910,7 +748,79 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			result.surplus = require_non_empty_array(surplus_filtered);
 		}
 
+		this.fling_output(result);
+
 		return result;
+	}
+
+	protected fling_output(
+		result:production_ingredients_request_result
+	): void {
+		const fling_keys = Object.keys(this.outputs);
+
+		if (fling_keys.length < 1) {
+			return;
+		}
+
+		const destinations:CanRequestToReceiveOutput<this>[] = [];
+		const items_go_here:production_item[][] = [];
+
+		for (const item of fling_keys) {
+			let destination_index = destinations.indexOf(this.outputs[item]);
+
+			if (destination_index === -1) {
+				destinations.push(this.outputs[item]);
+				items_go_here.push([]);
+				destination_index = destinations.length - 1;
+			}
+
+			items_go_here[destination_index].push(item);
+		}
+
+		const flingable:production_set = Object.fromEntries(
+			fling_keys.map(e => [
+				e,
+				BigNumber(0),
+			])
+		);
+
+		for (const entry of [
+			...result.output,
+			...(result.surplus || []),
+		]) {
+			if (!fling_keys.includes(entry.item)) {
+				continue;
+			}
+
+			flingable[entry.item] = flingable[entry.item].plus(
+				entry.amount
+			);
+		}
+
+		const flingables:[
+			[production_set, CanRequestToReceiveOutput<this>],
+			...[production_set, CanRequestToReceiveOutput<this>][]
+		] = require_non_empty_array(destinations.map((
+			destination,
+			destination_index,
+		) => [
+			Object.fromEntries(
+				items_go_here[destination_index].map((item): [
+					production_item,
+					BigNumber,
+				] => [
+					item,
+					flingable[item],
+				])
+			),
+			destination,
+		]));
+
+		for (const entry of flingables) {
+			const [sub_result, destination] = entry;
+
+			destination.receive_output(sub_result, this);
+		}
 	}
 
 	static amend_ItemClass_amount(

@@ -97,7 +97,11 @@ void describe('Math', () => {
 				),
 				BigNumber(data_set[2]),
 				BigNumber(data_set[3]),
-				null === data_set[4] ? null : Numbers.amount_string(data_set[4]),
+				(
+					null === data_set[4]
+						? null
+						: Numbers.amount_string(data_set[4])
+				),
 			];
 		});
 

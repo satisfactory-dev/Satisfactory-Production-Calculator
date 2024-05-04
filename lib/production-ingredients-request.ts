@@ -11,8 +11,8 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
 	amount_string,
-	Numbers,
 	number_arg,
+	Numbers,
 } from './Numbers';
 import {
 	PlannerRequest,

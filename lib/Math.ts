@@ -14,9 +14,6 @@ import {
 import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
-import {
-	production_ingredients_request_result,
-} from './production-ingredients-request';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>

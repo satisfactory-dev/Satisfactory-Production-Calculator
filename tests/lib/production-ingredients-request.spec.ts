@@ -4,7 +4,6 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-	production_ingredients_request,
 	production_ingredients_request_result,
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';

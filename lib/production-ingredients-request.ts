@@ -354,7 +354,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			const divisor_pre_adjustment = divisor;
 
-			divisor = BigNumber(
+			divisor = Math.fraction_to_BigNumber(
 				(new Fraction(divisor_pre_adjustment.toString())).div(
 					(new Fraction(1)).div(
 						(
@@ -363,7 +363,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 							)
 						).div(divisor_pre_adjustment.toString())
 					)
-				).toString()
+				)
 			);
 
 			for (const ingredient of mIngredients) {
@@ -562,16 +562,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						production_items[check_deeper.item],
 						check_deeper.amount,
 					]).toString();
-					const a = (
+					const a = Math.fraction_to_BigNumber((
 						new Fraction(
 							production_items[check_deeper.item].toString()
 						)
-					).div(lcm).toString()
-					const b = (
+					).div(lcm))
+					const b = Math.fraction_to_BigNumber((
 						new Fraction(
 							check_deeper.amount.toString()
 						)
-					).div(lcm).toString();
+					).div(lcm));
 					recursive_multiplier = Math.sum_series(
 						BigNumber(a),
 						BigNumber(b)

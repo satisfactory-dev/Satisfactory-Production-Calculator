@@ -63,6 +63,15 @@ export class Math
 		return result;
 	}
 
+	static fraction_to_BigNumber(fraction:Fraction): BigNumber
+	{
+		return BigNumber(fraction.toString().replace(/(\(\d+\))/, (val:string) => {
+			const digits = val.substring(1, val.length - 1);
+
+			return digits.repeat(window.Math.ceil(6 / digits.length) + 1);
+		}));
+	}
+
 	static greatest_common_denominator(
 		a:number_arg|BigNumber,
 		b:number_arg|BigNumber
@@ -141,9 +150,12 @@ export class Math
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);
 
-		const divisor = parseFloat((
-			new Fraction(a.toString())
-		).div(b.toString()).toString());
+		const a_string = (a instanceof BigNumber) ? a.toFixed() : a.toString();
+		const b_string = (b instanceof BigNumber) ? b.toFixed() : b.toString();
+
+		const divisor = parseFloat(Math.fraction_to_BigNumber((
+			new Fraction(a_string)
+		).div(b_string)).toString());
 
 		function calculate(number:number_arg) {
 			let previous = parseFloat(number.toString());

@@ -11,9 +11,9 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
 	amount_string,
-	Math,
+	Numbers,
 	number_arg,
-} from './Math';
+} from './Numbers';
 import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
@@ -243,15 +243,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						ingredients[faux_ingredient] = BigNumber(0);
 					}
 
-					ingredients[faux_ingredient] = Math.append_multiply(
+					ingredients[faux_ingredient] = Numbers.append_multiply(
 						ingredients[faux_ingredient],
-						Math.amount_string(faux_amount),
+						Numbers.amount_string(faux_amount),
 						amount
 					);
 
 					output[
 						production as keyof typeof resources
-					] = Math.append_multiply(
+					] = Numbers.append_multiply(
 						output[production as keyof typeof resources],
 						1,
 						amount
@@ -287,7 +287,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				output[
 					production as keyof typeof resources
-				] = Math.append_multiply(
+				] = Numbers.append_multiply(
 					output[production as keyof typeof resources],
 					1,
 					amount
@@ -346,7 +346,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			);
 
-			let divisor = Math.least_common_multiple(
+			let divisor = Numbers.least_common_multiple(
 				[
 					...product_amounts,
 				] as [number_arg, number_arg, ...number_arg[]]
@@ -395,7 +395,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					ingredients[Desc_C] = BigNumber(0);
 				}
 
-				ingredients[Desc_C] = Math.append_multiply(
+				ingredients[Desc_C] = Numbers.append_multiply(
 					ingredients[Desc_C],
 					BigNumber(
 						ProductionIngredientsRequest.amend_ItemClass_amount(
@@ -441,7 +441,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					output[Desc_C] = BigNumber(0);
 				}
 
-				output[Desc_C] = Math.append_multiply(
+				output[Desc_C] = Numbers.append_multiply(
 					output[Desc_C],
 					BigNumber(
 						ProductionIngredientsRequest.amend_ItemClass_amount(
@@ -558,21 +558,21 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 					possibly_recursive = true;
 
-					const lcm = Math.least_common_multiple([
+					const lcm = Numbers.least_common_multiple([
 						production_items[check_deeper.item],
 						check_deeper.amount,
 					]).toString();
-					const a = Math.fraction_to_BigNumber((
+					const a = Numbers.fraction_to_BigNumber((
 						new Fraction(
 							production_items[check_deeper.item].toString()
 						)
 					).div(lcm))
-					const b = Math.fraction_to_BigNumber((
+					const b = Numbers.fraction_to_BigNumber((
 						new Fraction(
 							check_deeper.amount.toString()
 						)
 					).div(lcm));
-					recursive_multiplier = Math.sum_series(
+					recursive_multiplier = Numbers.sum_series(
 						BigNumber(a),
 						BigNumber(b)
 					);
@@ -722,7 +722,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
 					item: e[0],
-					amount: Math.round_off(e[1]),
+					amount: Numbers.round_off(e[1]),
 				}
 			}),
 			output: output_entries.filter(
@@ -730,7 +730,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			).map(e => {
 				return {
 					item: e[0],
-					amount: Math.round_off(e[1]),
+					amount: Numbers.round_off(e[1]),
 				}
 			}).filter(maybe => '0' !== maybe.amount),
 		};
@@ -740,7 +740,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		).map(e => {
 			return {
 				item: e[0],
-				amount: Math.round_off(e[1]),
+				amount: Numbers.round_off(e[1]),
 			};
 		});
 

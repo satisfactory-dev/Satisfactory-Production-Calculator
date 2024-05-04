@@ -5,9 +5,9 @@ import {
 import assert from 'node:assert/strict';
 import {
 	amount_string,
-	Math,
+	Numbers,
 	number_arg,
-} from '../../lib/Math';
+} from '../../lib/Numbers';
 import {
 	require_non_empty_array,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
@@ -15,6 +15,7 @@ import {
 	integer_string__type,
 } from '../../generated-types/update8/common/unassigned';
 import BigNumber from 'bignumber.js';
+import Fraction from 'fraction.js';
 
 void describe('Math', () => {
 	void describe('amount_string', () => {
@@ -43,7 +44,7 @@ void describe('Math', () => {
 					JSON.stringify(input)
 				}`,
 				() => {
-					const get_result = () => Math.amount_string(input);
+					const get_result = () => Numbers.amount_string(input);
 
 					if (true === expectation) {
 						assert.doesNotThrow(get_result);
@@ -96,7 +97,7 @@ void describe('Math', () => {
 				),
 				BigNumber(data_set[2]),
 				BigNumber(data_set[3]),
-				null === data_set[4] ? null : Math.amount_string(data_set[4]),
+				null === data_set[4] ? null : Numbers.amount_string(data_set[4]),
 			];
 		});
 
@@ -113,7 +114,7 @@ void describe('Math', () => {
 					expectation.toString()
 				}`,
 				() => {
-					const get_result = () => Math.append_multiply(
+					const get_result = () => Numbers.append_multiply(
 						append_to,
 						a,
 						b
@@ -128,10 +129,49 @@ void describe('Math', () => {
 					);
 					if (null !== rounded_off) {
 						assert.equal(
-							Math.round_off(result),
+							Numbers.round_off(result),
 							rounded_off
 						);
 					}
+				}
+			)
+		}
+	})
+
+	void describe('fraction_to_BigNumber', () => {
+		const data_sets:[number, number, string, string][] = [
+			[1, 3, '0.(3)', '0.3333333'],
+		];
+
+		for (const data_set of data_sets) {
+			const [
+				a,
+				b,
+				expected_fraction_string,
+				expected_bignumber_string,
+			] = data_set;
+
+			void it(
+				`Math.fraction_to_BigNumber(${
+					a
+				}/${
+					b
+				}).toString() returns ${
+					expected_bignumber_string
+				}`,
+				() => {
+					const fraction = (new Fraction(a)).div(b);
+
+					assert.equal(
+						fraction.toString(),
+						expected_fraction_string,
+					);
+					assert.equal(
+						Numbers.fraction_to_BigNumber(
+							fraction
+						).toString(),
+						expected_bignumber_string
+					);
 				}
 			)
 		}
@@ -157,7 +197,7 @@ void describe('Math', () => {
 				}`,
 				() => {
 					assert.equal(
-						Math.greatest_common_denominator(a, b).toString(),
+						Numbers.greatest_common_denominator(a, b).toString(),
 						expectation
 					);
 				}
@@ -193,7 +233,7 @@ void describe('Math', () => {
 				() => {
 					assert.equal(
 						BigNumber(expectation).comparedTo(
-							Math.least_common_multiple(numbers)
+							Numbers.least_common_multiple(numbers)
 						),
 						0
 					);
@@ -219,7 +259,7 @@ void describe('Math', () => {
 				}`,
 				() => {
 					assert.equal(
-						Math.round_off(BigNumber(input)),
+						Numbers.round_off(BigNumber(input)),
 						expectation
 					)
 				}

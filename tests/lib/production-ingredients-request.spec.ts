@@ -9,8 +9,8 @@ import {
 } from '../../lib/production-ingredients-request';
 import {
 	amount_string,
-	Math,
-} from '../../lib/Math';
+	Numbers,
+} from '../../lib/Numbers';
 import BigNumber from 'bignumber.js';
 import {
 	FGRecipe,
@@ -91,21 +91,21 @@ function flattened_production_ingredients_request_result(
 		calculating.surplus
 	).map((e): [string, amount_string] => [
 		e[0],
-		Math.round_off(e[1]),
+		Numbers.round_off(e[1]),
 	]);
 
 	const result:flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
 				calculating.ingredients
-			).map(e => [e[0], Math.round_off(e[1])])
+			).map(e => [e[0], Numbers.round_off(e[1])])
 		),
 		output: Object.fromEntries(
 			Object.entries(
 				calculating.output
 			).map(e => [
 				e[0],
-				Math.round_off(e[1]),
+				Numbers.round_off(e[1]),
 			])
 		),
 	};
@@ -195,73 +195,73 @@ void describe('ProductionIngredientsRequest', () => {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
-					amount: Math.amount_string('15'),
+					amount: Numbers.amount_string('15'),
 				},
 				{
 					item: 'Desc_Cable_C',
-					amount: Math.amount_string('25'),
+					amount: Numbers.amount_string('25'),
 				},
 				{
 					item: 'Desc_Cement_C',
-					amount: Math.amount_string('100'),
+					amount: Numbers.amount_string('100'),
 				},
 				{
 					item: 'Desc_SteelPlate_C',
-					amount: Math.amount_string('100'),
+					amount: Numbers.amount_string('100'),
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: Math.amount_string('22.5'),
+					amount: Numbers.amount_string('22.5'),
 				},
 				{
 					item: 'Desc_IronRod_C',
-					amount: Math.amount_string('157.5'),
+					amount: Numbers.amount_string('157.5'),
 				},
 				{
 					item: 'Desc_IronPlate_C',
-					amount: Math.amount_string('135'),
+					amount: Numbers.amount_string('135'),
 				},
 				{
 					item: 'Desc_IronScrew_C',
-					amount: Math.amount_string('270'),
+					amount: Numbers.amount_string('270'),
 				},
 				{
 					item: 'Desc_IronIngot_C',
-					amount: Math.amount_string('360'),
+					amount: Numbers.amount_string('360'),
 				},
 				{
 					item: 'Desc_OreIron_C',
-					amount: Math.amount_string('760'),
+					amount: Numbers.amount_string('760'),
 				},
 				{
 					item: 'Desc_Wire_C',
-					amount: Math.amount_string('50'),
+					amount: Numbers.amount_string('50'),
 				},
 				{
 					item: 'Desc_CopperIngot_C',
-					amount: Math.amount_string('25'),
+					amount: Numbers.amount_string('25'),
 				},
 				{
 					item: 'Desc_OreCopper_C',
-					amount: Math.amount_string('25'),
+					amount: Numbers.amount_string('25'),
 				},
 				{
 					item: 'Desc_Stone_C',
-					amount: Math.amount_string('300'),
+					amount: Numbers.amount_string('300'),
 				},
 				{
 					item: 'Desc_SteelIngot_C',
-					amount: Math.amount_string('400'),
+					amount: Numbers.amount_string('400'),
 				},
 				{
 					item: 'Desc_Coal_C',
-					amount: Math.amount_string('400'),
+					amount: Numbers.amount_string('400'),
 				},
 			],
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: Math.amount_string('1'),
+					amount: Numbers.amount_string('1'),
 				},
 			],
 		};
@@ -269,73 +269,73 @@ void describe('ProductionIngredientsRequest', () => {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
-					amount: Math.amount_string('15.000015'),
+					amount: Numbers.amount_string('15.000015'),
 				},
 				{
 					item: 'Desc_Cable_C',
-					amount: Math.amount_string('25.000025'),
+					amount: Numbers.amount_string('25.000025'),
 				},
 				{
 					item: 'Desc_Cement_C',
-					amount: Math.amount_string('100.0001'),
+					amount: Numbers.amount_string('100.0001'),
 				},
 				{
 					item: 'Desc_SteelPlate_C',
-					amount: Math.amount_string('100.0001'),
+					amount: Numbers.amount_string('100.0001'),
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: Math.amount_string('22.500023'),
+					amount: Numbers.amount_string('22.500023'),
 				},
 				{
 					item: 'Desc_IronRod_C',
-					amount: Math.amount_string('157.500158'),
+					amount: Numbers.amount_string('157.500158'),
 				},
 				{
 					item: 'Desc_IronPlate_C',
-					amount: Math.amount_string('135.000135'),
+					amount: Numbers.amount_string('135.000135'),
 				},
 				{
 					item: 'Desc_IronScrew_C',
-					amount: Math.amount_string('270.00027'),
+					amount: Numbers.amount_string('270.00027'),
 				},
 				{
 					item: 'Desc_IronIngot_C',
-					amount: Math.amount_string('360.00036'),
+					amount: Numbers.amount_string('360.00036'),
 				},
 				{
 					item: 'Desc_OreIron_C',
-					amount: Math.amount_string('760.00076'),
+					amount: Numbers.amount_string('760.00076'),
 				},
 				{
 					item: 'Desc_Wire_C',
-					amount: Math.amount_string('50.00005'),
+					amount: Numbers.amount_string('50.00005'),
 				},
 				{
 					item: 'Desc_CopperIngot_C',
-					amount: Math.amount_string('25.000025'),
+					amount: Numbers.amount_string('25.000025'),
 				},
 				{
 					item: 'Desc_OreCopper_C',
-					amount: Math.amount_string('25.000025'),
+					amount: Numbers.amount_string('25.000025'),
 				},
 				{
 					item: 'Desc_Stone_C',
-					amount: Math.amount_string('300.0003'),
+					amount: Numbers.amount_string('300.0003'),
 				},
 				{
 					item: 'Desc_SteelIngot_C',
-					amount: Math.amount_string('400.0004'),
+					amount: Numbers.amount_string('400.0004'),
 				},
 				{
 					item: 'Desc_Coal_C',
-					amount: Math.amount_string('400.0004'),
+					amount: Numbers.amount_string('400.0004'),
 				},
 			],
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: Math.amount_string('1.000001'),
+					amount: Numbers.amount_string('1.000001'),
 				},
 			],
 		};
@@ -358,13 +358,13 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -382,17 +382,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronRod_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -410,21 +410,21 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronRod_C',
-							amount: Math.amount_string('0.25'),
+							amount: Numbers.amount_string('0.25'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('0.25'),
+							amount: Numbers.amount_string('0.25'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('0.25'),
+							amount: Numbers.amount_string('0.25'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronScrew_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -442,17 +442,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -470,13 +470,13 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Stone_C',
-							amount: Math.amount_string('3'),
+							amount: Numbers.amount_string('3'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cement_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -494,17 +494,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -522,21 +522,21 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -554,13 +554,13 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -578,17 +578,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('0.5'),
+							amount: Numbers.amount_string('0.5'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('0.5'),
+							amount: Numbers.amount_string('0.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -606,21 +606,21 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('2'),
+							amount: Numbers.amount_string('2'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -638,29 +638,29 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('6'),
+							amount: Numbers.amount_string('6'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: Math.amount_string('12'),
+							amount: Numbers.amount_string('12'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('12'),
+							amount: Numbers.amount_string('12'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('12'),
+							amount: Numbers.amount_string('12'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: Math.amount_string('3'),
+							amount: Numbers.amount_string('3'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -678,33 +678,33 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: Math.amount_string('10.5'),
+							amount: Numbers.amount_string('10.5'),
 						},
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('9'),
+							amount: Numbers.amount_string('9'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: Math.amount_string('18'),
+							amount: Numbers.amount_string('18'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('24'),
+							amount: Numbers.amount_string('24'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('24'),
+							amount: Numbers.amount_string('24'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -750,17 +750,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							amount: Math.amount_string('0.5'),
+							amount: Numbers.amount_string('0.5'),
 						},
 					],
 				},
@@ -775,7 +775,7 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 					],
 				},
@@ -796,37 +796,37 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_PackagedWater_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('61.728'),
+							amount: Numbers.amount_string('61.728'),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: Math.amount_string('92.592'),
+							amount: Numbers.amount_string('92.592'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							amount: Math.amount_string('123.456'),
+							amount: Numbers.amount_string('123.456'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							amount: Math.amount_string('30.864'),
+							amount: Numbers.amount_string('30.864'),
 						},
 					],
 				},
@@ -844,21 +844,21 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('2'),
+							amount: Numbers.amount_string('2'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -868,7 +868,7 @@ void describe('ProductionIngredientsRequest', () => {
 					input: [
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('10'),
+							amount: Numbers.amount_string('10'),
 						},
 					],
 					pool: [
@@ -883,13 +883,13 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('8'),
+							amount: Numbers.amount_string('8'),
 						},
 					],
 				},
@@ -913,35 +913,35 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: Math.amount_string('10.5'),
+							amount: Numbers.amount_string('10.5'),
 						},
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('9'),
+							amount: Numbers.amount_string('9'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: Math.amount_string('18'),
+							amount: Numbers.amount_string('18'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('24'),
+							amount: Numbers.amount_string('24'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('6'),
+							amount: Numbers.amount_string('6'),
 						},
 					],
 				},
@@ -959,37 +959,37 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: Math.amount_string('0.6'),
+							amount: Numbers.amount_string('0.6'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: Math.amount_string('2'),
+							amount: Numbers.amount_string('2'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: Math.amount_string('1.8'),
+							amount: Numbers.amount_string('1.8'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('0.4'),
+							amount: Numbers.amount_string('0.4'),
 						},
 					],
 				},
@@ -1007,105 +1007,105 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: Math.amount_string('45'),
+							amount: Numbers.amount_string('45'),
 						},
 						{
 							item: 'Desc_CircuitBoardHighSpeed_C',
-							amount: Math.amount_string('5'),
+							amount: Numbers.amount_string('5'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('81.75'),
+							amount: Numbers.amount_string('81.75'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('80'),
+							amount: Numbers.amount_string('80'),
 						},
 						{
 							item: 'Desc_CopperSheet_C',
-							amount: Math.amount_string('25'),
+							amount: Numbers.amount_string('25'),
 						},
 						{
 							item: 'Desc_ElectromagneticControlRod_C',
-							amount: Math.amount_string('5'),
+							amount: Numbers.amount_string('5'),
 						},
 						{
 							item: 'Desc_GoldIngot_C',
-							amount: Math.amount_string('20'),
+							amount: Numbers.amount_string('20'),
 						},
 						{
 							item: 'Desc_HighSpeedWire_C',
-							amount: Math.amount_string('100'),
+							amount: Numbers.amount_string('100'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('80'),
+							amount: Numbers.amount_string('80'),
 						},
 						{
 							item: 'Desc_OreGold_C',
-							amount: Math.amount_string('60'),
+							amount: Numbers.amount_string('60'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('81.75'),
+							amount: Numbers.amount_string('81.75'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: Math.amount_string('100'),
+							amount: Numbers.amount_string('100'),
 						},
 						{
 							item: 'Desc_Stator_C',
-							amount: Math.amount_string('7.5'),
+							amount: Numbers.amount_string('7.5'),
 						},
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('81.75'),
+							amount: Numbers.amount_string('81.75'),
 						},
 						{
 							item: 'Desc_SteelPipe_C',
-							amount: Math.amount_string('22.5'),
+							amount: Numbers.amount_string('22.5'),
 						},
 						{
 							item: 'Desc_SteelPlateReinforced_C',
-							amount: Math.amount_string('3'),
+							amount: Numbers.amount_string('3'),
 						},
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('12'),
+							amount: Numbers.amount_string('12'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: Math.amount_string('135'),
+							amount: Numbers.amount_string('135'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: Math.amount_string('80'),
+							amount: Numbers.amount_string('80'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('80'),
+							amount: Numbers.amount_string('80'),
 						},
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: Math.amount_string('50'),
+							amount: Numbers.amount_string('50'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('80'),
+							amount: Numbers.amount_string('80'),
 						},
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('60'),
+							amount: Numbers.amount_string('60'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('20'),
+							amount: Numbers.amount_string('20'),
 						},
 					],
 				},
@@ -1123,109 +1123,109 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: Math.amount_string('0.9'),
+							amount: Numbers.amount_string('0.9'),
 						},
 						{
 							item: 'Desc_CircuitBoardHighSpeed_C',
-							amount: Math.amount_string('0.1'),
+							amount: Numbers.amount_string('0.1'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('1.635'),
+							amount: Numbers.amount_string('1.635'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_CopperSheet_C',
-							amount: Math.amount_string('0.5'),
+							amount: Numbers.amount_string('0.5'),
 						},
 						{
 							item: 'Desc_ElectromagneticControlRod_C',
-							amount: Math.amount_string('0.1'),
+							amount: Numbers.amount_string('0.1'),
 						},
 						{
 							item: 'Desc_GoldIngot_C',
-							amount: Math.amount_string('0.4'),
+							amount: Numbers.amount_string('0.4'),
 						},
 						{
 							item: 'Desc_HighSpeedWire_C',
-							amount: Math.amount_string('2'),
+							amount: Numbers.amount_string('2'),
 						},
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							amount: Math.amount_string('0.02'),
+							amount: Numbers.amount_string('0.02'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_OreGold_C',
-							amount: Math.amount_string('1.2'),
+							amount: Numbers.amount_string('1.2'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1.635'),
+							amount: Numbers.amount_string('1.635'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: Math.amount_string('2'),
+							amount: Numbers.amount_string('2'),
 						},
 						{
 							item: 'Desc_Stator_C',
-							amount: Math.amount_string('0.15'),
+							amount: Numbers.amount_string('0.15'),
 						},
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('1.635'),
+							amount: Numbers.amount_string('1.635'),
 						},
 						{
 							item: 'Desc_SteelPipe_C',
-							amount: Math.amount_string('0.45'),
+							amount: Numbers.amount_string('0.45'),
 						},
 						{
 							item: 'Desc_SteelPlateReinforced_C',
-							amount: Math.amount_string('0.06'),
+							amount: Numbers.amount_string('0.06'),
 						},
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('0.24'),
+							amount: Numbers.amount_string('0.24'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: Math.amount_string('2.7'),
+							amount: Numbers.amount_string('2.7'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: Math.amount_string('1.6'),
+							amount: Numbers.amount_string('1.6'),
 						},
 						{
 							item: 'Desc_Wire_C',
-							amount: Math.amount_string('1.2'),
+							amount: Numbers.amount_string('1.2'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_NuclearWaste_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: Math.amount_string('0.4'),
+							amount: Numbers.amount_string('0.4'),
 						},
 					],
 				},
@@ -1247,35 +1247,35 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: Math.amount_string('0.1'),
+							amount: Numbers.amount_string('0.1'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('0.333334'),
+							amount: Numbers.amount_string('0.333334'),
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: Math.amount_string('0.666667'),
+							amount: Numbers.amount_string('0.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							amount: Math.amount_string('0.75'),
+							amount: Numbers.amount_string('0.75'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('0.83334'),
+							amount: Numbers.amount_string('0.83334'),
 						},
 					],
 				},
@@ -1298,37 +1298,37 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('0.666667'),
+							amount: Numbers.amount_string('0.666667'),
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: Math.amount_string('0.133334'),
+							amount: Numbers.amount_string('0.133334'),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: Math.amount_string('0.2'),
+							amount: Numbers.amount_string('0.2'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('0.666667'),
+							amount: Numbers.amount_string('0.666667'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: Math.amount_string('0.177778'),
+							amount: Numbers.amount_string('0.177778'),
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: Math.amount_string('0.88889'),
+							amount: Numbers.amount_string('0.88889'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							amount: Math.amount_string('0.1'),
+							amount: Numbers.amount_string('0.1'),
 						},
 					],
 				},
@@ -1346,17 +1346,17 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -1381,13 +1381,13 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('1.5'),
+							amount: Numbers.amount_string('1.5'),
 						},
 					],
 				},
@@ -1405,21 +1405,21 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -1440,25 +1440,25 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('2.666667'),
+							amount: Numbers.amount_string('2.666667'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: Math.amount_string('2.666667'),
+							amount: Numbers.amount_string('2.666667'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('2.666667'),
+							amount: Numbers.amount_string('2.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 				},
@@ -1485,23 +1485,23 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: Math.amount_string('4'),
+							amount: Numbers.amount_string('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: Math.amount_string('2.666667'),
+							amount: Numbers.amount_string('2.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: Math.amount_string('1'),
+							amount: Numbers.amount_string('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: Math.amount_string('0.333334'),
+							amount: Numbers.amount_string('0.333334'),
 						},
 					],
 				},
@@ -1529,7 +1529,7 @@ void describe('ProductionIngredientsRequest', () => {
 							if (ingredient.item === 'Desc_OreIron_C') {
 								return {
 									item: 'Desc_OreIron_C',
-									amount: Math.amount_string('400'),
+									amount: Numbers.amount_string('400'),
 								};
 							}
 

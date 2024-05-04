@@ -24,7 +24,7 @@ export type number_arg =
 	| number
 	| amount_string;
 
-export class Math
+export class Numbers
 {
 	static amount_string(maybe:string): amount_string
 	{
@@ -65,11 +65,13 @@ export class Math
 
 	static fraction_to_BigNumber(fraction:Fraction): BigNumber
 	{
-		return BigNumber(fraction.toString().replace(/(\(\d+\))/, (val:string) => {
-			const digits = val.substring(1, val.length - 1);
+		return BigNumber(
+			fraction.toString().replace(/(\(\d+\))/, (val:string) => {
+				const digits = val.substring(1, val.length - 1);
 
-			return digits.repeat(window.Math.ceil(6 / digits.length) + 1);
-		}));
+				return digits.repeat(Math.ceil(6 / digits.length) + 1);
+			})
+		);
 	}
 
 	static greatest_common_denominator(
@@ -153,7 +155,7 @@ export class Math
 		const a_string = (a instanceof BigNumber) ? a.toFixed() : a.toString();
 		const b_string = (b instanceof BigNumber) ? b.toFixed() : b.toString();
 
-		const divisor = parseFloat(Math.fraction_to_BigNumber((
+		const divisor = parseFloat(Numbers.fraction_to_BigNumber((
 			new Fraction(a_string)
 		).div(b_string)).toString());
 

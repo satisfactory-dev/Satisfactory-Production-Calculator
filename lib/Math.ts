@@ -116,32 +116,6 @@ export class Math
 		);
 	}
 
-	static multiply_result(
-		result:production_ingredients_request_result,
-		by:number_arg
-	): production_ingredients_request_result<BigNumber> {
-		function perform_multiplication({item, amount}:{
-			item: string,
-			amount: number_arg,
-		}) : {
-			item: string,
-			amount: BigNumber,
-		} {
-			return {
-				item,
-				amount: BigNumber(amount).times(by),
-			};
-		}
-
-		const ingredients = result.ingredients.map(perform_multiplication);
-		const output = result.output.map(perform_multiplication);
-
-		return {
-			ingredients,
-			output,
-		};
-	}
-
 	static round_off(number:BigNumber): amount_string
 	{
 		this.configure();

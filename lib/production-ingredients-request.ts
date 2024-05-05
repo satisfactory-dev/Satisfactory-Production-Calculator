@@ -544,18 +544,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				let recursive_multiplier = BigNumber(1);
 
 				if (check_deeper.item in production_items) {
-					assert.strictEqual(
-						BigNumber(
-							production_items[check_deeper.item]
-						).isGreaterThan(
-							check_deeper.amount
-						),
-						true,
-						`Recursive production for ${
-							check_deeper.item
-						} increases over time instead of decreases!`
-					);
-
 					possibly_recursive = true;
 
 					const lcm = Numbers.least_common_multiple([

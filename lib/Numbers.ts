@@ -145,6 +145,12 @@ export class Numbers
 
 	static sum_series(a:number_arg, b:number_arg)
 	{
+		assert.strictEqual(
+			BigNumber(b).isLessThan(a),
+			true,
+			`Expecting ${b.toString()} to be less than ${a.toString()}`
+		);
+
 		const a_string = (a instanceof BigNumber) ? a.toFixed() : a.toString();
 		const b_string = (b instanceof BigNumber) ? b.toFixed() : b.toString();
 

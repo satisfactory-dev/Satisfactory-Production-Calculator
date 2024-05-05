@@ -92,6 +92,11 @@ export type production_ingredients_request_result<
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
+	combined: {
+		item: production_item,
+		output: T,
+		surplus: T,
+	}[],
 	surplus?: production_ingredients_request_result_surplus<T>,
 };
 
@@ -464,6 +469,55 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			};
 		}).filter(maybe => maybe.amount.isGreaterThan(0));
 
+		const output_entries = Object.entries(output).map(e => {
+			return {
+				item: e[0],
+				amount: e[1],
+			};
+		});
+
+		const combined = output_entries.reduce(
+			(was, is) => {
+				if (!(is.item in was)) {
+					was[is.item] = {
+						item: is.item,
+						output: BigNumber(0),
+						surplus: BigNumber(0),
+					}
+				}
+
+				was[is.item].output = was[is.item].output.plus(
+					is.amount
+				);
+
+				return was;
+			},
+			surplus_entries.reduce(
+				(was, is) => {
+					if (!(is.item in was)) {
+						was[is.item] = {
+							item: is.item,
+							output: BigNumber(0),
+							surplus: BigNumber(0),
+						}
+					}
+
+					was[is.item].surplus = was[is.item].surplus.plus(
+						is.amount
+					);
+
+					return was;
+				},
+				{} as {
+					[key in production_item]: {
+						item: production_item,
+						output: BigNumber,
+						surplus: BigNumber,
+					}
+				}
+			)
+		);
+
 		const result:production_ingredients_request_result<BigNumber> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
@@ -471,12 +525,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: BigNumber.max(0, e[1].minus(input[e[0]] || 0)),
 				};
 			}).filter(maybe => maybe.amount.isGreaterThan(0)),
-			output: Object.entries(output).map(e => {
-				return {
-					item: e[0],
-					amount: e[1],
-				};
-			}),
+			output: output_entries,
+			combined: Object.values(combined),
 		};
 
 		if (surplus_entries.length > 0) {
@@ -706,6 +756,66 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 		}
 
+		const output_entries_filtered = output_entries.filter(
+			maybe => maybe[1].isGreaterThan(0)
+		).map(e => {
+			return {
+				item: e[0],
+				amount: e[1],
+			};
+		});
+
+		const surplus_filtered = Object.entries(surplus_map).filter(
+			maybe => maybe[1].isGreaterThan(0)
+		).map(e => {
+			return {
+				item: e[0],
+				amount: e[1],
+			};
+		});
+
+		const combined = output_entries_filtered.reduce(
+			(was, is) => {
+				if (!(is.item in was)) {
+					was[is.item] = {
+						item: is.item,
+						output: BigNumber(0),
+						surplus: BigNumber(0),
+					}
+				}
+
+				was[is.item].output = was[is.item].output.plus(
+					is.amount
+				);
+
+				return was;
+			},
+			surplus_filtered.reduce(
+				(was, is) => {
+					if (!(is.item in was)) {
+						was[is.item] = {
+							item: is.item,
+							output: BigNumber(0),
+							surplus: BigNumber(0),
+						}
+					}
+
+					was[is.item].surplus = was[is.item].surplus.plus(
+						is.amount
+					);
+
+					return was;
+				},
+				{} as {
+					[key in production_item]: {
+						item: production_item,
+						output: BigNumber,
+						surplus: BigNumber,
+					}
+				}
+			)
+		);
+
 		const result:production_ingredients_request_result = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
@@ -713,27 +823,30 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount: Numbers.round_off(e[1]),
 				}
 			}),
-			output: output_entries.filter(
-				maybe => maybe[1].isGreaterThan(0)
-			).map(e => {
+			output: output_entries_filtered.map(e => {
 				return {
-					item: e[0],
-					amount: Numbers.round_off(e[1]),
+					item: e.item,
+					amount: Numbers.round_off(e.amount),
 				}
 			}).filter(maybe => '0' !== maybe.amount),
+			combined: Object.values(combined).map(e => {
+				return {
+					item: e.item,
+					output: Numbers.round_off(e.output),
+					surplus: Numbers.round_off(e.surplus),
+				}
+			}),
 		};
 
-		const surplus_filtered = Object.entries(surplus_map).filter(
-			maybe => maybe[1].isGreaterThan(0)
-		).map(e => {
-			return {
-				item: e[0],
-				amount: Numbers.round_off(e[1]),
-			};
-		});
-
 		if (surplus_filtered.length > 0) {
-			result.surplus = require_non_empty_array(surplus_filtered);
+			result.surplus = require_non_empty_array(
+				surplus_filtered.map(e => {
+					return {
+						item: e.item,
+						amount: Numbers.round_off(e.amount),
+					};
+				})
+			);
 		}
 
 		this.fling_output(result);

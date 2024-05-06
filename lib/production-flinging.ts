@@ -99,7 +99,7 @@ export class ProductionDestination implements
 		object,
 		production_set
 	> = new Map();
-	private readonly items:[production_item, ...production_item[]];
+	public readonly items:[production_item, ...production_item[]];
 
 	constructor(
 		items:[production_item, ...production_item[]]

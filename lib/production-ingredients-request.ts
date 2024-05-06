@@ -87,16 +87,20 @@ export type production_ingredients_request_result_surplus<
 	...recipe_ingredients_request_output<T>[],
 ];
 
+export type combined_production_entry<
+T extends amount_string|BigNumber = amount_string
+> = {
+	item: production_item,
+	output: T,
+	surplus: T,
+};
+
 export type production_ingredients_request_result<
 	T extends amount_string|BigNumber = amount_string
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
-	combined: {
-		item: production_item,
-		output: T,
-		surplus: T,
-	}[],
+	combined: combined_production_entry<T>[],
 	surplus?: production_ingredients_request_result_surplus<T>,
 };
 

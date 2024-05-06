@@ -48,19 +48,16 @@ import {
 	vehicles,
 } from './production-data'
 import {
-	AmountSplitter,
-	CanRequestOutputToBeSentSomewhere,
 	CanRequestToReceiveOutput,
 	production_item,
 	production_set,
-	ProductionMerger,
 } from './production-flinging';
+
+export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
 
 export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],
-	recipe_selection?: {
-		[key in `${'Desc'|'BP'|'Foundation'}_${string}_C`]: `${'Recipe'|'Build'}_${string}_C`
-	},
+	recipe_selection?: recipe_selection,
 	pool: {
 		item: keyof typeof recipe_selection_schema['properties'],
 		amount: number_arg,
@@ -88,7 +85,7 @@ export type production_ingredients_request_result_surplus<
 ];
 
 export type combined_production_entry<
-T extends amount_string|BigNumber = amount_string
+	T extends amount_string|BigNumber = amount_string
 > = {
 	item: production_item,
 	output: T,
@@ -107,14 +104,7 @@ export type production_ingredients_request_result<
 export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request,
 	production_ingredients_request_result
-> implements
-	CanRequestToReceiveOutput<
-		| ProductionIngredientsRequest
-		| ProductionMerger
-		| AmountSplitter
-	>,
-	CanRequestOutputToBeSentSomewhere
-{
+> {
 	private input:production_set = {};
 	private outputs:{
 		[key in production_item]: CanRequestToReceiveOutput<this>
@@ -127,25 +117,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				production_ingredients_request
 			>
 		);
-	}
-
-	cancel_output_requests(): void {
-		this.outputs = {};
-	}
-
-	receive_output(
-		production_set: production_set
-	): void {
-		this.input = production_set;
-	}
-
-	request_output_to_be_sent(
-		items:[production_item, ...production_item[]],
-		somewhere:CanRequestToReceiveOutput<this>
-	) {
-		for (const item of items) {
-			this.outputs[item] = somewhere;
-		}
 	}
 
 	protected calculate_precisely(

@@ -19,13 +19,11 @@ export interface HasProductionOutput
 	production_output(): production_set
 }
 
-export interface CanRequestOutputToBeSentSomewhere
+export interface CanRequestOutputToBeSentSomewhere<T extends CanRequestToReceiveOutput<object>>
 {
 	request_output_to_be_sent(
-		items:[production_item, ...production_item[]],
-		somewhere:CanRequestToReceiveOutput<
-			CanRequestOutputToBeSentSomewhere
-		>
+		amounts:production_set,
+		somewhere:T
 	): void;
 
 	/**
@@ -99,10 +97,10 @@ export class ProductionDestination implements
 		object,
 		production_set
 	> = new Map();
-	public readonly items:[production_item, ...production_item[]];
+	public readonly items:production_item[];
 
 	constructor(
-		items:[production_item, ...production_item[]]
+		items:production_item[]
 	) {
 		this.items = items;
 	}
@@ -145,7 +143,7 @@ export class ProductionMerger extends ProductionDestination
 	private readonly output:CanRequestToReceiveOutput<ProductionMerger>;
 
 	constructor(
-		items:[production_item, ...production_item[]],
+		items:production_item[],
 		output:CanRequestToReceiveOutput<ProductionMerger>
 	) {
 		super(items);

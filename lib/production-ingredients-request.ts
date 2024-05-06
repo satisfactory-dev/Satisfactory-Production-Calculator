@@ -46,12 +46,15 @@ import {
 	recipes,
 	resources,
 	vehicles,
-} from './production-data'
-import {
-	CanRequestToReceiveOutput,
-	production_item,
-	production_set,
-} from './production-flinging';
+} from './production-data';
+
+export type production_item = keyof (
+	| typeof buildings
+	| typeof items
+	| typeof resources
+);
+
+export type production_set = {[key in production_item]: BigNumber};
 
 export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
 
@@ -106,9 +109,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request_result
 > {
 	private input:production_set = {};
-	private outputs:{
-		[key in production_item]: CanRequestToReceiveOutput<this>
-	} = {};
 
 	constructor()
 	{
@@ -171,7 +171,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 
 			if (undefined === recipes[recipe]) {
-
 				if (
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
@@ -836,79 +835,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 		}
 
-		this.fling_output(result);
-
 		return result;
-	}
-
-	protected fling_output(
-		result:production_ingredients_request_result
-	): void {
-		const fling_keys = Object.keys(this.outputs);
-
-		if (fling_keys.length < 1) {
-			return;
-		}
-
-		const destinations:CanRequestToReceiveOutput<this>[] = [];
-		const items_go_here:production_item[][] = [];
-
-		for (const item of fling_keys) {
-			let destination_index = destinations.indexOf(this.outputs[item]);
-
-			if (destination_index === -1) {
-				destinations.push(this.outputs[item]);
-				items_go_here.push([]);
-				destination_index = destinations.length - 1;
-			}
-
-			items_go_here[destination_index].push(item);
-		}
-
-		const flingable:production_set = Object.fromEntries(
-			fling_keys.map(e => [
-				e,
-				BigNumber(0),
-			])
-		);
-
-		for (const entry of [
-			...result.output,
-			...(result.surplus || []),
-		]) {
-			if (!fling_keys.includes(entry.item)) {
-				continue;
-			}
-
-			flingable[entry.item] = flingable[entry.item].plus(
-				entry.amount
-			);
-		}
-
-		const flingables:[
-			[production_set, CanRequestToReceiveOutput<this>],
-			...[production_set, CanRequestToReceiveOutput<this>][]
-		] = require_non_empty_array(destinations.map((
-			destination,
-			destination_index,
-		) => [
-			Object.fromEntries(
-				items_go_here[destination_index].map((item): [
-					production_item,
-					BigNumber,
-				] => [
-					item,
-					flingable[item],
-				])
-			),
-			destination,
-		]));
-
-		for (const entry of flingables) {
-			const [sub_result, destination] = entry;
-
-			destination.receive_output(sub_result, this);
-		}
 	}
 
 	static amend_ItemClass_amount(

@@ -5,8 +5,8 @@ import {
 import assert from 'node:assert/strict';
 import {
 	amount_string,
-	Numbers,
 	number_arg,
+	Numbers,
 } from '../../lib/Numbers';
 import {
 	require_non_empty_array,

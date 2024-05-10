@@ -188,15 +188,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					for (const entry of Object.entries(faux_result)) {
 						const [faux_ingredient, faux_amount] = entry;
 
-					if (!(faux_ingredient in ingredients)) {
-						ingredients[faux_ingredient] = BigNumber(0);
-					}
+						if (!(faux_ingredient in ingredients)) {
+							ingredients[faux_ingredient] = BigNumber(0);
+						}
 
-					ingredients[faux_ingredient] = Numbers.append_multiply(
-						ingredients[faux_ingredient],
+						ingredients[faux_ingredient] = Numbers.append_multiply(
+							ingredients[faux_ingredient],
 							faux_amount,
-						amount
-					);
+							amount
+						);
 					}
 
 					output[

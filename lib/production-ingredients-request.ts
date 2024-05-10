@@ -18,12 +18,6 @@ import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
-import {
-	integer_string__type,
-} from '../generated-types/update8/common/unassigned';
-import {
-	UnrealEngineString,
-} from '../generated-types/update8/utils/validators';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import {
@@ -43,20 +37,19 @@ import {
 	known_byproduct,
 	known_not_sourced_from_recipe,
 	poles,
+	production_item,
+	production_set,
+	recipe_selection,
 	recipes,
 	resources,
 	vehicles,
 } from './production-data';
-
-export type production_item = keyof (
-	| typeof buildings
-	| typeof items
-	| typeof resources
-);
-
-export type production_set = {[key in production_item]: BigNumber};
-
-export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
+import {
+	faux_recipe,
+} from './faux-recipe';
+import {
+	amend_ItemClass_amount,
+} from './amend-itemclass-amount';
 
 export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],
@@ -175,33 +168,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
 				) {
-					const [
-						,
-						,
-						,
-						faux_ingredient,
-						faux_amount,
-					] = recipe.split('--');
-
-					assert.strictEqual(
-						(
-							faux_ingredient in ammo
-							|| faux_ingredient in biomass
-							|| faux_ingredient in consumable
-							|| faux_ingredient in equipment
-							|| faux_ingredient in fuel_nuclear
-							|| faux_ingredient in items
-							|| faux_ingredient in resources
-						),
-						true,
-						new NoMatchError(
-							{
-								recipe,
-								faux_ingredient,
-							},
-							`Supported faux-recipe found, but missing item (${faux_ingredient})!`
-						)
-					);
+					const faux_result = faux_recipe(recipe);
 
 					assert.strictEqual(
 						(
@@ -218,15 +185,19 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						)
 					);
 
+					for (const entry of Object.entries(faux_result)) {
+						const [faux_ingredient, faux_amount] = entry;
+
 					if (!(faux_ingredient in ingredients)) {
 						ingredients[faux_ingredient] = BigNumber(0);
 					}
 
 					ingredients[faux_ingredient] = Numbers.append_multiply(
 						ingredients[faux_ingredient],
-						Numbers.amount_string(faux_amount),
+							faux_amount,
 						amount
 					);
+					}
 
 					output[
 						production as keyof typeof resources
@@ -281,7 +252,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			} = recipes[recipe];
 
 			const ingredient_amounts = mIngredients.map(
-				e => ProductionIngredientsRequest.amend_ItemClass_amount(
+				e => amend_ItemClass_amount(
 					e
 				).Amount
 			);
@@ -289,7 +260,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			const mapped_product_amounts = Object.fromEntries(mProduct.map(
 				(e): [string, number_arg] => [
 					UnrealEngineString_right_x_C_suffix(e.ItemClass),
-					ProductionIngredientsRequest.amend_ItemClass_amount(
+					amend_ItemClass_amount(
 						e
 					).Amount,
 				]
@@ -377,7 +348,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				ingredients[Desc_C] = Numbers.append_multiply(
 					ingredients[Desc_C],
 					BigNumber(
-						ProductionIngredientsRequest.amend_ItemClass_amount(
+						amend_ItemClass_amount(
 							ingredient
 						).Amount
 					).dividedBy(
@@ -423,7 +394,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				output[Desc_C] = Numbers.append_multiply(
 					output[Desc_C],
 					BigNumber(
-						ProductionIngredientsRequest.amend_ItemClass_amount(
+						amend_ItemClass_amount(
 							product
 						).Amount
 					).dividedBy(
@@ -836,38 +807,5 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		return result;
-	}
-
-	static amend_ItemClass_amount(
-		ItemClass:{
-			ItemClass: UnrealEngineString;
-			Amount: integer_string__type;
-		}
-	): {
-		ItemClass: UnrealEngineString;
-		Amount: number_arg;
-	} {
-
-		const Desc_c = UnrealEngineString_right_x_C_suffix(
-			ItemClass.ItemClass
-		);
-
-		return {
-			ItemClass: ItemClass.ItemClass,
-			Amount: (
-				(
-					(
-						Desc_c in resources
-						&& 'RF_SOLID' !== resources[Desc_c].mForm
-					)
-					|| (
-						Desc_c in items
-						&& 'RF_SOLID' !== items[Desc_c].mForm
-					)
-				)
-					? BigNumber(ItemClass.Amount).dividedBy(1000)
-					: ItemClass.Amount
-			),
-		};
 	}
 }

@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import {
 	FGItemDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptor';
@@ -219,3 +221,13 @@ export const known_not_sourced_from_recipe:string[] = [
 		&& !known_byproduct.includes(maybe)
 	)
 );
+
+export type production_item = keyof (
+	| typeof buildings
+	| typeof items
+	| typeof resources
+);
+
+export type production_set = {[key in production_item]: BigNumber};
+
+export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};

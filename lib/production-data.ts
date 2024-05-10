@@ -206,9 +206,11 @@ export const products = (new Set(FGRecipe.Classes.flatMap(
 
 export const resource_keys = Object.keys(resources);
 
-export const known_byproduct:string[] = FGBuildableGeneratorNuclear.Classes.flatMap(
-	(e) => e.mFuel.map(
-		fuel => fuel.mByproduct
+export const known_byproduct:string[] = (
+	FGBuildableGeneratorNuclear.Classes.flatMap(
+		(e) => e.mFuel.map(
+			fuel => fuel.mByproduct
+		)
 	)
 );
 

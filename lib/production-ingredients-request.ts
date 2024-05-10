@@ -548,26 +548,26 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 
 					if (possibly_recursive) {
-					const lcm = Numbers.least_common_multiple([
-						production_items[check_deeper.item],
-						check_deeper.amount,
-					]).toString();
-					const a = Numbers.fraction_to_BigNumber((
-						new Fraction(
-							production_items[check_deeper.item].toString()
-						)
-					).div(lcm))
-					const b = Numbers.fraction_to_BigNumber((
-						new Fraction(
-							check_deeper.amount.toString()
-						)
-					).div(lcm));
-					recursive_multiplier = Numbers.sum_series(
-						BigNumber(a),
-						BigNumber(b)
-					);
+						const lcm = Numbers.least_common_multiple([
+							production_items[check_deeper.item],
+							check_deeper.amount,
+						]).toString();
+						const a = Numbers.fraction_to_BigNumber((
+							new Fraction(
+								production_items[check_deeper.item].toString()
+							)
+						).div(lcm))
+						const b = Numbers.fraction_to_BigNumber((
+							new Fraction(
+								check_deeper.amount.toString()
+							)
+						).div(lcm));
+						recursive_multiplier = Numbers.sum_series(
+							BigNumber(a),
+							BigNumber(b)
+						);
 
-					avoid_checking_further.add(check_deeper.item);
+						avoid_checking_further.add(check_deeper.item);
 					}
 				}
 

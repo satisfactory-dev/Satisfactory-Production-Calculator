@@ -36,6 +36,11 @@ void describe('Root', () => {
 				},
 				true,
 			],
+			[
+				'Desc_StingerParts_C',
+				{},
+				false,
+			],
 		];
 
 		for (const data_set of data_sets) {

@@ -1,13 +1,12 @@
 import assert from 'assert';
-import BigNumber from 'bignumber.js';
 import {
 	ammo,
 	biomass,
 	consumable,
 	equipment,
 	items,
+	known_not_sourced_from_recipe,
 	production_item,
-	production_set,
 	recipe_selection,
 	recipes,
 	resources,
@@ -35,7 +34,6 @@ import Fraction from 'fraction.js';
 
 class Item
 {
-	readonly amount:BigNumber;
 	readonly item:production_item;
 	readonly parents:production_item[];
 	readonly recipe_selection:recipe_selection;
@@ -43,11 +41,9 @@ class Item
 
 	constructor(
 		item:production_item,
-		amount:BigNumber,
 		recipe_selection:recipe_selection,
 		parents:production_item[]
 	) {
-		this.amount = amount;
 		this.item = item;
 		this.recipe_selection = recipe_selection;
 		this.parents = parents;
@@ -64,7 +60,11 @@ class Item
 
 	private calculate(): Item[]
 	{
-		const ingredients:production_set = {};
+		if (known_not_sourced_from_recipe.includes(this.item)) {
+			return [];
+		}
+
+		const ingredients:production_item[] = [];
 
 		const maybe_recipe = this.item in this.recipe_selection
 			? this.recipe_selection[this.item]
@@ -93,18 +93,10 @@ class Item
 			) {
 				const faux_result = faux_recipe(recipe);
 
-				for (const entry of Object.entries(faux_result)) {
-					const [faux_ingredient, faux_amount] = entry;
-
-					if (!(faux_ingredient in ingredients)) {
-						ingredients[faux_ingredient] = BigNumber(0);
+				for (const faux_ingredient of Object.keys(faux_result)) {
+					if (!ingredients.includes(faux_ingredient)) {
+						ingredients.push(faux_ingredient);
 					}
-
-					ingredients[faux_ingredient] = Numbers.append_multiply(
-						ingredients[faux_ingredient],
-						faux_amount,
-						this.amount
-					);
 				}
 			}
 		} else {
@@ -203,21 +195,9 @@ class Item
 					)
 				);
 
-				if (!(Desc_C in ingredients)) {
-					ingredients[Desc_C] = BigNumber(0);
+				if (!ingredients.includes(Desc_C)) {
+					ingredients.push(Desc_C);
 				}
-
-				ingredients[Desc_C] = Numbers.append_multiply(
-					ingredients[Desc_C],
-					BigNumber(
-						amend_ItemClass_amount(
-							ingredient
-						).Amount
-					).dividedBy(
-						divisor
-					),
-					this.amount
-				);
 			}
 		}
 
@@ -227,15 +207,12 @@ class Item
 			next_parents.push(this.item);
 		}
 
-		return Object.entries(ingredients).filter(
-			maybe => !(maybe[0] in resources)
-		).map(e => {
-			const [item, amount] = e;
-
+		return ingredients.filter(
+			maybe => !(maybe in resources)
+		).map(item => {
 			if (next_parents.includes(item)) {
 				return new Recursive(
 					item,
-					amount,
 					this.recipe_selection,
 					next_parents
 				);
@@ -243,7 +220,6 @@ class Item
 
 			return new Item(
 				item,
-				amount,
 				this.recipe_selection,
 				next_parents
 			);
@@ -261,10 +237,40 @@ class Recursive extends Item
 
 export class Root extends Item
 {
+	private static cache:WeakMap<
+		recipe_selection,
+		{[key: string]: boolean}
+	> = new WeakMap();
+
 	constructor(
 		item:production_item,
 		recipe_selection:recipe_selection,
 	) {
-		super(item, BigNumber(1), recipe_selection, []);
+		super(item, recipe_selection, []);
+	}
+
+	static is_recursive(
+		item:production_item,
+		recipe_selection:recipe_selection
+	): boolean {
+		if (!this.cache.has(recipe_selection)) {
+			this.cache.set(recipe_selection, {});
+		}
+
+		if (
+			! (item in (
+				this.cache.get(recipe_selection) as {[key: string]: boolean}
+			))
+		) {
+			(
+				this.cache.get(recipe_selection) as {[key: string]: boolean}
+			)[item] = (
+				new Root(item, recipe_selection)
+			).is_recursive;
+		}
+
+		return (
+			this.cache.get(recipe_selection) as {[key: string]: boolean}
+		)[item];
 	}
 }

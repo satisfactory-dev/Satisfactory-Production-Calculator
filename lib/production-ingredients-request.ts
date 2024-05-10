@@ -50,6 +50,9 @@ import {
 import {
 	amend_ItemClass_amount,
 } from './amend-itemclass-amount';
+import {
+	Root,
+} from './production-chain';
 
 export type production_ingredients_request = {
 	input?: recipe_ingredients_request_output<amount_string>[],
@@ -539,20 +542,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				let recursive_multiplier = BigNumber(1);
 
 				if (check_deeper.item in production_items) {
-					assert.strictEqual(
-						BigNumber(
-							production_items[check_deeper.item]
-						).isGreaterThan(
-							check_deeper.amount
-						),
-						true,
-						`Recursive production for ${
-							check_deeper.item
-						} increases over time instead of decreases!`
+					possibly_recursive = Root.is_recursive(
+						check_deeper.item,
+						data.recipe_selection || {}
 					);
 
-					possibly_recursive = true;
-
+					if (possibly_recursive) {
 					const lcm = Numbers.least_common_multiple([
 						production_items[check_deeper.item],
 						check_deeper.amount,
@@ -571,10 +566,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						BigNumber(a),
 						BigNumber(b)
 					);
-				}
 
-				if (possibly_recursive) {
 					avoid_checking_further.add(check_deeper.item);
+					}
 				}
 
 				const deeper_result = this.calculate_precisely(

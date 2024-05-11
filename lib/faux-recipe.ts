@@ -26,7 +26,6 @@ export function faux_recipe(recipe:string): production_set
 		return {};
 	}
 
-
 	const [
 		,
 		,

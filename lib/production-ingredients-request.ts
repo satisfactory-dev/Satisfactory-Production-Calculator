@@ -127,7 +127,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		};
 		for (const entry of (surplus || data.input || [])) {
 			if (!(entry.item in input)) {
-				input[entry.item] = BigNumber(0);
+				input[entry.item as keyof typeof input] = BigNumber(0);
 			}
 
 			input[entry.item] = input[entry.item].plus(entry.amount);

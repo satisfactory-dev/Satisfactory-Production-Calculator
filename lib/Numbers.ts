@@ -137,8 +137,13 @@ export class Numbers
 			}.${
 				'0' === after.substring(6, 7)
 					? after.substring(0, 6).replace(/0+$/, '')
-					: BigNumber(after.substring(0, 6)).plus(1).toString()
-			}` as amount_string;
+					: BigNumber(
+						after.substring(0, 6)
+					).plus(1).toString().padStart(
+						Math.min(6, after.length),
+						'0'
+					)
+			}`.replace(/\.$/, '') as amount_string;
 		}
 
 		return result as amount_string;

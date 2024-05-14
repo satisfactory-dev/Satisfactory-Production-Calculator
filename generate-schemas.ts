@@ -39,6 +39,12 @@ type recipe_selection_properties = {
 		enum: [string, ...string[]],
 	}
 };
+type recipe_selection_properties_with_default = (
+	& recipe_selection_properties
+	& {
+		default:string,
+	}
+);
 
 let recipe_selection_enums = FGRecipe.Classes.reduce(
 	(was:recipe_selection_properties, is): recipe_selection_properties => {
@@ -230,13 +236,46 @@ for (const entry of Object.entries(recipe_selection_enums)) {
 	}
 
 	(
-		value as unknown as (
-			& recipe_selection_properties
-			& {
-				default:string,
-			}
-		)
+		value as unknown as recipe_selection_properties_with_default
 	).default = default_value;
+
+	value.enum = value.enum.sort((a, b) => {
+		if (
+			a === (
+				value as unknown as recipe_selection_properties_with_default
+			).default
+		) {
+			return -1;
+		} else if (
+			b === (
+				value as unknown as recipe_selection_properties_with_default
+			).default
+		) {
+			return 1;
+		}
+
+		if (a.startsWith('Build_')) {
+			if (b.startsWith('Build_')) {
+				return 0;
+			}
+
+			return -1;
+		} else if (b.startsWith('Build_')) {
+			return 1;
+		} else if (
+			a.startsWith('Recipe_')
+			&& !a.startsWith('Recipe_Alternate_')
+		) {
+			if (
+				b.startsWith('Recipe_')
+				&& b.startsWith('Recipe_Alternate')
+			) {
+				return -1;
+			}
+		}
+
+		return 0;
+	});
 }
 
 const recipe_selection = {

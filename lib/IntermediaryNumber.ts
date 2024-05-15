@@ -549,22 +549,22 @@ export class IntermediaryCalculation implements CanDoMath
 				) {
 
 					try {
-					was.result = new IntermediaryCalculation(
+						was.result = new IntermediaryCalculation(
 							(
 								(undefined === was.result)
 									? IntermediaryNumber.create(
 										was.current_left_operand_buffer
 									)
 									: was.result
-						),
-						is,
-						IntermediaryNumber.create(
-							was.current_right_operand_buffer
-						)
-					);
+							),
+							is,
+							IntermediaryNumber.create(
+								was.current_right_operand_buffer
+							)
+						);
 						was.current_operation_buffer = '';
-					was.current_left_operand_buffer = '';
-					was.current_right_operand_buffer = '';
+						was.current_left_operand_buffer = '';
+						was.current_right_operand_buffer = '';
 					} catch (err) {
 						throw new IntermediaryCalculationTokenizerError(
 							'Unsupported operand buffers!',
@@ -1118,15 +1118,15 @@ export class IntermediaryCalculation implements CanDoMath
 						add_buffer = true;
 						was.mode = 'integer_or_decimal_left';
 					} else {
-					throw new IntermediaryCalculationTokenizerError(
-						'Expecting trailing space past this point!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						}
-					);
+						throw new IntermediaryCalculationTokenizerError(
+							'Expecting trailing space past this point!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							}
+						);
 					}
 				} else {
 					throw new IntermediaryCalculationTokenizerError(

@@ -271,7 +271,9 @@ void describe('IntermediaryCalculation', () => {
 				`${random_ignore_string()}${raw_input_string}${random_ignore_string()}`,
 			]) {
 				void it (
-					`IntermediaryCalculation.fromString(${input_string}) ${
+					`IntermediaryCalculation.fromString(${
+						JSON.stringify(input_string)
+					}) ${
 						undefined === expected_result_type
 							? 'throws'
 							: 'behaves'

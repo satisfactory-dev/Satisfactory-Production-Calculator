@@ -473,7 +473,10 @@ export class IntermediaryCalculation implements CanDoMath
 
 			if (next >= 1) {
 				was.skip_to_index = index + next;
-			} else {
+
+				return was;
+			}
+
 				throw new IntermediaryCalculationTokenizerError(
 					'Unsupported token when expecting skip to start of right operand!',
 					{
@@ -483,9 +486,6 @@ export class IntermediaryCalculation implements CanDoMath
 						all_tokens: array,
 					}
 				);
-			}
-
-			return was;
 		}
 
 		function tokenizer_found_operation(

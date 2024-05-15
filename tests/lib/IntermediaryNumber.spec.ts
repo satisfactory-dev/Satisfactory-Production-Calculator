@@ -147,34 +147,66 @@ void describe('IntermediaryCalculation', () => {
 			string|undefined,
 		];
 
+		function expand_whitespace(
+			input:data_set,
+		): [data_set, ...data_set[]] {
+			const result:[data_set, ...data_set[]] = [input];
+
+			const regex = /([\t ])/g;
+
+			if (regex.test(input[0])) {
+				result.push([
+					input[0].replace(regex, random_ignore_string),
+					input[1],
+					input[2],
+					input[3],
+				]);
+			} else {
+				result.push([
+					` ${input[0]}`.replace(regex, random_ignore_string),
+					input[1],
+					input[2],
+					input[3],
+				]);
+				result.push([
+					`${input[0]} `.replace(regex, random_ignore_string),
+					input[1],
+					input[2],
+					input[3],
+				]);
+			}
+
+			return result;
+		}
+
 		function expand_fraction_string(
 			fraction_string:`${number}.${number}(${number})`
 		): [data_set, ...data_set[]] {
 			return [
-				[
+				...expand_whitespace([
 					fraction_string,
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
-				],
-				[
+				]),
+				...expand_whitespace([
 					`${fraction_string}r`,
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
-				],
-				[
+				]),
+				...expand_whitespace([
 					fraction_string.replace('(', '[').replace(')', ']'),
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
-				],
-				[
+				]),
+				...expand_whitespace([
 					`${fraction_string.replace('(', '[').replace(')', ']')}r`,
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
-				],
+				]),
 			];
 		}
 
@@ -192,36 +224,36 @@ void describe('IntermediaryCalculation', () => {
 				'1.(2)',
 			],
 			...expand_fraction_string('1.1(23)'),
-			[
+			...expand_whitespace([
 				'1.1(23) + 1',
 				'IntermediaryCalculation',
 				'Fraction + amount_string',
 				'2.1(23)',
-			],
-			[
+			]),
+			...expand_whitespace([
 				'1.1(23) + 1 + 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation + amount_string',
 				'4.1(23)',
-			],
-			[
+			]),
+			...expand_whitespace([
 				'1.1(23) + 1 * 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation + amount_string',
 				'3.1(23)',
-			],
-			[
+			]),
+			...expand_whitespace([
 				'1.1(23) + (1 * 2)',
 				'IntermediaryCalculation',
 				'Fraction + IntermediaryCalculation',
 				'3.1(23)',
-			],
-			[
+			]),
+			...expand_whitespace([
 				'(1.1(23) + 1) * 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation * amount_string',
 				'4.2(46)',
-			],
+			]),
 		];
 
 		for (const data_set_raw of data_sets) {

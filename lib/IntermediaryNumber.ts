@@ -108,7 +108,7 @@ export class IntermediaryNumber implements CanDoMath
 
 	modulo(value:IntermediaryNumber_math_types)
 	{
-		return do_math(this, '-', value);
+		return do_math(this, '%', value);
 	}
 
 	plus(value:IntermediaryNumber_math_types)
@@ -324,7 +324,7 @@ export class IntermediaryCalculation implements CanDoMath
 
 	modulo(value:IntermediaryNumber_math_types)
 	{
-		return do_math(this, '-', value);
+		return do_math(this, '%', value);
 	}
 
 	plus(value:IntermediaryNumber_math_types)

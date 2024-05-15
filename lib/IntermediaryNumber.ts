@@ -523,15 +523,15 @@ export class IntermediaryCalculation implements CanDoMath
 					return was;
 				}
 
-					throw new IntermediaryCalculationTokenizerError(
-						'Cannot switch to new calculation!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						}
-					);
+				throw new IntermediaryCalculationTokenizerError(
+					'Cannot switch to new calculation!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				);
 			}
 
 			was.current_operation_buffer = is;

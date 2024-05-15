@@ -521,7 +521,8 @@ export class IntermediaryCalculation implements CanDoMath
 					skip_for_right_operand(was, is, index, array);
 
 					return was;
-				} else {
+				}
+
 					throw new IntermediaryCalculationTokenizerError(
 						'Cannot switch to new calculation!',
 						{
@@ -531,7 +532,6 @@ export class IntermediaryCalculation implements CanDoMath
 							all_tokens: array,
 						}
 					);
-				}
 			}
 
 			was.current_operation_buffer = is;

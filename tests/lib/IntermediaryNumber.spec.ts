@@ -170,14 +170,12 @@ void describe('IntermediaryCalculation', () => {
 			return result;
 		}
 
-		function expand_whitespace(
-			input:data_set,
-		): [data_set, ...data_set[]] {
-			const result:[data_set, ...data_set[]] = [
-				...expand_nesting(input),
-			];
+		function maybe_expand_whitspace(
+			input:data_set
+		): data_set[] {
+			const result:data_set[] = [];
 
-			const regex = /([\t ])/g;
+			const regex = /([\t ]+)/g;
 
 			if (regex.test(input[0])) {
 				result.push(...expand_nesting([
@@ -199,6 +197,42 @@ void describe('IntermediaryCalculation', () => {
 					input[2],
 					input[3],
 				]));
+			}
+
+			return result;
+		}
+
+		function expand_whitespace(
+			input:data_set,
+		): [data_set, ...data_set[]] {
+			const result:[data_set, ...data_set[]] = [
+				...expand_nesting(input),
+				...maybe_expand_whitspace(input),
+			];
+
+			const regex_has_recursives = /(\d+.(?:\d*(?:\(\d+\)|\[\d+\])r?))/;
+
+			if (regex_has_recursives.test(input[0])) {
+				result.push(
+					...maybe_expand_whitspace([
+						input[0].replace(regex_has_recursives, ' $1'),
+						input[1],
+						input[2],
+						input[3],
+					]),
+					...maybe_expand_whitspace([
+						input[0].replace(regex_has_recursives, ' $1 '),
+						input[1],
+						input[2],
+						input[3],
+					]),
+					...maybe_expand_whitspace([
+						input[0].replace(regex_has_recursives, '$1 '),
+						input[1],
+						input[2],
+						input[3],
+					]),
+				);
 			}
 
 			return result;

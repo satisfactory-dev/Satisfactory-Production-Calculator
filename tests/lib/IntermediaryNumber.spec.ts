@@ -203,7 +203,7 @@ void describe('IntermediaryCalculation', () => {
 			return result;
 		}
 
-		function expand_whitespace(
+		function expand_ignore_characters(
 			input:data_set,
 		): [data_set, ...data_set[]] {
 			const result:[data_set, ...data_set[]] = [
@@ -252,25 +252,25 @@ void describe('IntermediaryCalculation', () => {
 			fraction_string:`${number}.${number}(${number})`
 		): [data_set, ...data_set[]] {
 			return [
-				...expand_whitespace([
+				...expand_ignore_characters([
 					fraction_string,
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
 				]),
-				...expand_whitespace([
+				...expand_ignore_characters([
 					`${fraction_string}r`,
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
 				]),
-				...expand_whitespace([
+				...expand_ignore_characters([
 					fraction_string.replace('(', '[').replace(')', ']'),
 					'IntermediaryNumber',
 					'Fraction',
 					fraction_string,
 				]),
-				...expand_whitespace([
+				...expand_ignore_characters([
 					`${fraction_string.replace('(', '[').replace(')', ']')}r`,
 					'IntermediaryNumber',
 					'Fraction',
@@ -293,55 +293,55 @@ void describe('IntermediaryCalculation', () => {
 				'1.(2)',
 			],
 			...expand_fraction_string('1.1(23)'),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1.1(23) + 1',
 				'IntermediaryCalculation',
 				'Fraction + amount_string',
 				'2.1(23)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1.1(23) + 1 + 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation + amount_string',
 				'4.1(23)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1.1(23) + 1 * 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation * amount_string',
 				'4.2(46)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1.1(23) + (1 * 2)',
 				'IntermediaryCalculation',
 				'Fraction + IntermediaryCalculation',
 				'3.1(23)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'(1.1(23) + 1) * 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation * amount_string',
 				'4.2(46)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation / amount_string',
 				'2.(8)',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'.1 - .2 + .3 * .4 / .5',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation / amount_string',
 				'0.16',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'3 x 5 % 9',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation % amount_string',
 				'6',
 			]),
-			...expand_whitespace([
+			...expand_ignore_characters([
 				'1 + (2/3)',
 				'IntermediaryCalculation',
 				'amount_string + IntermediaryCalculation',

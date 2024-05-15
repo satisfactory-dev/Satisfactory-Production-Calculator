@@ -147,33 +147,58 @@ void describe('IntermediaryCalculation', () => {
 			string|undefined,
 		];
 
+		function expand_nesting(
+			input:data_set
+		): [data_set, ...data_set[]] {
+			const result:[data_set, ...data_set[]] = [input];
+
+			const additional_nesting = Math.ceil(Math.random() * 10);
+
+			result.push([
+				`${
+					'('.repeat(additional_nesting)
+				}${
+					input[0]
+				}${
+					')'.repeat(additional_nesting)
+				}`,
+				input[1],
+				input[2],
+				input[3],
+			]);
+
+			return result;
+		}
+
 		function expand_whitespace(
 			input:data_set,
 		): [data_set, ...data_set[]] {
-			const result:[data_set, ...data_set[]] = [input];
+			const result:[data_set, ...data_set[]] = [
+				...expand_nesting(input),
+			];
 
 			const regex = /([\t ])/g;
 
 			if (regex.test(input[0])) {
-				result.push([
+				result.push(...expand_nesting([
 					input[0].replace(regex, random_ignore_string),
 					input[1],
 					input[2],
 					input[3],
-				]);
+				]));
 			} else {
-				result.push([
+				result.push(...expand_nesting([
 					` ${input[0]}`.replace(regex, random_ignore_string),
 					input[1],
 					input[2],
 					input[3],
-				]);
-				result.push([
+				]));
+				result.push(...expand_nesting([
 					`${input[0]} `.replace(regex, random_ignore_string),
 					input[1],
 					input[2],
 					input[3],
-				]);
+				]));
 			}
 
 			return result;

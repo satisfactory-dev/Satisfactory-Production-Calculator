@@ -681,11 +681,17 @@ export class IntermediaryCalculation implements CanDoMath
 				} else if (
 					'nesting' === was.mode
 				) {
-					if ('(' === is) {
+					if ('(['.includes(is)) {
+						const corresponding = {
+							'(': ')',
+							'[': ']',
+						};
 						if (index >= 1) {
 							if ('0123456789.'.includes(array[index - 1])) {
 								const next = array.slice(index + 1).findIndex(
-									maybe => ')' === maybe
+									maybe => corresponding[
+										is as keyof typeof corresponding
+									] === maybe
 								);
 
 								if (next >= 0) {
@@ -693,6 +699,13 @@ export class IntermediaryCalculation implements CanDoMath
 
 									return was;
 								}
+							} else if (
+								'(\t '.includes(array[index - 1])
+								&& '(' === is
+							) {
+								++was.current_nesting;
+
+								return was;
 							}
 
 							throw new IntermediaryCalculationTokenizerError(
@@ -816,6 +829,13 @@ export class IntermediaryCalculation implements CanDoMath
 							was.nesting_end = -1;
 						}
 
+						return was;
+					} else if (
+						'r' === is
+						&& index >= 2
+						&& ')]'.includes(array[index - 1])
+						&& '0123456789'.includes(array[index - 2])
+					) {
 						return was;
 					} else {
 						throw new IntermediaryCalculationTokenizerError(

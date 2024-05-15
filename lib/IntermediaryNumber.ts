@@ -563,6 +563,8 @@ export class IntermediaryCalculation implements CanDoMath
 						err
 					);
 				}
+
+				return was;
 			} else if ('right' === was.operand_mode) {
 				if ('' === was.current_operation_buffer) {
 					throw new IntermediaryCalculationTokenizerError(
@@ -588,9 +590,6 @@ export class IntermediaryCalculation implements CanDoMath
 							was.current_right_operand_buffer
 						),
 					);
-					was.current_left_operand_buffer = '';
-					was.current_operation_buffer = '';
-					was.current_right_operand_buffer = '';
 				} catch (err) {
 					throw new IntermediaryCalculationTokenizerError(
 						'Unsupported operand buffers!',
@@ -603,6 +602,12 @@ export class IntermediaryCalculation implements CanDoMath
 						err
 					);
 				}
+
+				was.current_left_operand_buffer = '';
+				was.current_operation_buffer = '';
+				was.current_right_operand_buffer = '';
+
+				return was;
 			}
 
 			throw new IntermediaryCalculationTokenizerError(

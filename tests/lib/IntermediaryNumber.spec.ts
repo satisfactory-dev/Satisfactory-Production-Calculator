@@ -211,6 +211,12 @@ void describe('IntermediaryCalculation', () => {
 				'3.1(23)',
 			],
 			[
+				'1.1(23) + (1 * 2)',
+				'IntermediaryCalculation',
+				'Fraction + IntermediaryCalculation',
+				'3.1(23)',
+			],
+			[
 				'(1.1(23) + 1) * 2',
 				'IntermediaryCalculation',
 				'IntermediaryCalculation * amount_string',

@@ -763,7 +763,7 @@ export class IntermediaryCalculation implements CanDoMath
 								)
 							);
 
-							was.result = this.fromString(
+							const nested_result = this.fromString(
 								this.initial_tokenizer_state(
 									array.slice(
 										was.nesting_start + 1,
@@ -771,6 +771,42 @@ export class IntermediaryCalculation implements CanDoMath
 									)
 								)
 							);
+
+							if (
+								was.result
+								|| '' !== was.current_left_operand_buffer
+							) {
+								assert.notStrictEqual(
+									was.current_left_operand_buffer,
+									'',
+									new IntermediaryCalculationTokenizerError(
+										'Cannot use nested operation as right operand if no operator has been specified!',
+										{
+											tokenizer: was,
+											current_token: is,
+											current_index: index,
+											all_tokens: array,
+										}
+									)
+								);
+
+								was.result = new IntermediaryCalculation(
+									(
+										was.result
+											? was.result
+											: IntermediaryNumber.create(
+												was.current_left_operand_buffer
+											)
+									),
+									was.current_operation_buffer as Exclude<
+										typeof was.current_operation_buffer,
+										''
+									>,
+									nested_result
+								);
+							} else {
+								was.result = nested_result;
+							}
 
 							was.mode = 'trailing_ignore';
 							was.operand_mode = 'right';

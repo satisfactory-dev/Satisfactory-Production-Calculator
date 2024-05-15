@@ -1083,7 +1083,7 @@ export class IntermediaryCalculation implements CanDoMath
 							)
 						)
 
-							add_buffer = true;
+						add_buffer = true;
 					} else if (switch_to_trailing_ignore(is, index, array)) {
 						was.mode = 'trailing_ignore';
 					} else {

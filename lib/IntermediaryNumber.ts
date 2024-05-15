@@ -603,7 +603,8 @@ export class IntermediaryCalculation implements CanDoMath
 						err
 					);
 				}
-			} else {
+			}
+
 				throw new IntermediaryCalculationTokenizerError(
 					'Unsupported operation!',
 					{
@@ -613,9 +614,6 @@ export class IntermediaryCalculation implements CanDoMath
 						all_tokens: array,
 					}
 				);
-			}
-
-			return was;
 		}
 
 		const result = input.array.reduce(

@@ -471,21 +471,24 @@ export class IntermediaryCalculation implements CanDoMath
 				maybe => !'\t '.includes(maybe)
 			);
 
-			if (next >= 1) {
-				was.skip_to_index = index + next;
-
-				return was;
-			}
-
-			throw new IntermediaryCalculationTokenizerError(
+			assert.notStrictEqual(
+				next,
+				-1,
+			new IntermediaryCalculationTokenizerError(
 				'Unsupported token when expecting skip to start of right operand!',
 				{
 					tokenizer: was,
 					current_token: is,
 					current_index: index,
 					all_tokens: array,
-				}
+				},
+				next
+			)
 			);
+
+			was.skip_to_index = (next >= 1) ? (index + next) : -1;
+
+			return was;
 		}
 
 		function tokenizer_found_operation(

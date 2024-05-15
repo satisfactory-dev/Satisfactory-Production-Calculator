@@ -5,6 +5,7 @@ import {
 import assert from 'node:assert/strict';
 import {
 	IntermediaryCalculation,
+	IntermediaryCalculation_operation_types,
 	IntermediaryNumber,
 	IntermediaryNumber_input_types,
 	IntermediaryNumber_type_types,
@@ -235,6 +236,15 @@ void describe('IntermediaryCalculation', () => {
 				);
 			}
 
+			if (/[\t ]/.test(input[0])) {
+				result.push([
+					input[0].replace(/[\t ]+/g, ''),
+					input[1],
+					input[2],
+					input[3],
+				]);
+			}
+
 			return result;
 		}
 
@@ -325,6 +335,18 @@ void describe('IntermediaryCalculation', () => {
 				'IntermediaryCalculation / amount_string',
 				'0.16',
 			]),
+			...expand_whitespace([
+				'3 x 5 % 9',
+				'IntermediaryCalculation',
+				'IntermediaryCalculation % amount_string',
+				'6',
+			]),
+			...expand_whitespace([
+				'1 + (2/3)',
+				'IntermediaryCalculation',
+				'amount_string + IntermediaryCalculation',
+				'1.(6)',
+			]),
 		];
 
 		for (const data_set_raw of data_sets) {
@@ -405,3 +427,60 @@ void describe('IntermediaryCalculation', () => {
 		}
 	});
 })
+
+
+void describe('do_math', () => {
+	const data_sets:[
+		string,
+		'divide'|'minus'|'modulo'|'plus'|'times',
+		string,
+		string,
+	][] = [
+		[
+			'1',
+			'divide',
+			'3',
+			'0.(3)',
+		],
+		[
+			'1/3',
+			'divide',
+			'2',
+			'0.1(6)',
+		],
+		[
+			'1',
+			'plus',
+			'2',
+			'3',
+		],
+		[
+			'1 + 2',
+			'plus',
+			'2',
+			'5',
+		],
+	];
+
+	for (const data_set of data_sets) {
+		const [
+			left_operand_input,
+			operator_method,
+			right_operand_input,
+			expectation,
+		] = data_set;
+
+		const left_operand = IntermediaryCalculation.fromString(
+			left_operand_input
+		);
+
+		const right_operand = IntermediaryCalculation.fromString(
+			right_operand_input
+		);
+
+		assert.strictEqual(
+			left_operand[operator_method](right_operand).toString(),
+			expectation,
+		);
+	}
+});

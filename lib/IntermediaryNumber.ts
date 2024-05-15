@@ -207,14 +207,16 @@ export type IntermediaryCalculation_operand_type_types =
 
 const BigNumber_operation_map:{
 	[
-		key in IntermediaryCalculation_operation_types
+		key in Exclude<
+			IntermediaryCalculation_operation_types,
+			'/'
+		>
 	]: ((a: BigNumber, b:BigNumber) => BigNumber)
 } = {
 	'+': (a, b) => a.plus(b),
 	'-': (a, b) => a.minus(b),
 	'x': (a, b) => a.times(b),
 	'*': (a, b) => a.times(b),
-	'/': (a, b) => a.div(b),
 	'%': (a, b) => a.modulo(b),
 };
 
@@ -791,7 +793,11 @@ export class IntermediaryCalculation implements CanDoMath
 								all_tokens: array,
 							}
 						);
-					} else if (`0123456789.\t ${Object.keys(BigNumber_operation_map).join('')}`.includes(is)) {
+					} else if (
+						`0123456789.\t ${
+							Object.keys(Fraction_operation_map).join('')
+						}`.includes(is)
+					) {
 						return was;
 					} else if (')' === is) {
 						was.nesting_end = index;
@@ -956,11 +962,11 @@ export class IntermediaryCalculation implements CanDoMath
 								return was;
 							}
 						} else if (
-							is in BigNumber_operation_map
+							is in Fraction_operation_map
 						) {
 							return tokenizer_found_operation(
 								was,
-								is as keyof typeof BigNumber_operation_map,
+								is as keyof typeof Fraction_operation_map,
 								index,
 								array
 							);
@@ -1026,11 +1032,11 @@ export class IntermediaryCalculation implements CanDoMath
 								return was;
 							}
 						} else if (
-							is in BigNumber_operation_map
+							is in Fraction_operation_map
 						) {
 							return tokenizer_found_operation(
 								was,
-								is as keyof typeof BigNumber_operation_map,
+								is as keyof typeof Fraction_operation_map,
 								index,
 								array
 							);
@@ -1054,11 +1060,11 @@ export class IntermediaryCalculation implements CanDoMath
 					) {
 						add_buffer = false;
 					} else if (
-						is in BigNumber_operation_map
+						is in Fraction_operation_map
 					) {
 						return tokenizer_found_operation(
 							was,
-							is as keyof typeof BigNumber_operation_map,
+							is as keyof typeof Fraction_operation_map,
 							index,
 							array
 						);
@@ -1107,11 +1113,11 @@ export class IntermediaryCalculation implements CanDoMath
 							return was;
 						}
 					} else if (
-						is in BigNumber_operation_map
+						is in Fraction_operation_map
 					) {
 						return tokenizer_found_operation(
 							was,
-							is as keyof typeof BigNumber_operation_map,
+							is as keyof typeof Fraction_operation_map,
 							index,
 							array
 						);

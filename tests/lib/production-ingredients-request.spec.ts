@@ -1476,7 +1476,7 @@ void describe('ProductionIngredientsRequest', () => {
 					surplus: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: Numbers.amount_string('0.83334'),
+							amount: Numbers.amount_string('0.083334'),
 						},
 					],
 					combined: [
@@ -1493,7 +1493,7 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_Plastic_C',
 							output: Numbers.amount_string('0'),
-							surplus: Numbers.amount_string('0.83334'),
+							surplus: Numbers.amount_string('0.083334'),
 						},
 					],
 				},
@@ -1536,7 +1536,7 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: Numbers.amount_string('0.88889'),
+							amount: Numbers.amount_string('0.088889'),
 						},
 					],
 					output: [

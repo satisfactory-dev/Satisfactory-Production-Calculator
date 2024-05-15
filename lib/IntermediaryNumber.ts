@@ -605,15 +605,15 @@ export class IntermediaryCalculation implements CanDoMath
 				}
 			}
 
-				throw new IntermediaryCalculationTokenizerError(
-					'Unsupported operation!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				);
+			throw new IntermediaryCalculationTokenizerError(
+				'Unsupported operation!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			);
 		}
 
 		const result = input.array.reduce(

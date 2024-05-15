@@ -532,9 +532,22 @@ void describe('do_math', () => {
 			right_operand_input
 		);
 
+		void it(
+			`(${
+				left_operand_input
+			}) ${
+				operator_method
+			} (${
+				right_operand_input
+			}) returns ${
+				expectation
+			}`,
+			() => {
 		assert.strictEqual(
 			left_operand[operator_method](right_operand).toString(),
 			expectation,
 		);
+			}
+		)
 	}
 });

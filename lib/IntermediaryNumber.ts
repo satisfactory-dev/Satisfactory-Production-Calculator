@@ -994,6 +994,23 @@ export class IntermediaryCalculation implements CanDoMath
 					} else if (switch_to_trailing_ignore(is, index, array)) {
 						was.mode = 'trailing_ignore';
 					} else {
+						assert.strictEqual(
+							(
+								'\t '.includes(is)
+								|| (is in Fraction_operation_map)
+							),
+							true,
+							new IntermediaryCalculationTokenizerError(
+								'Unsupported token when expecting to be buffering a numeric string!',
+								{
+									tokenizer: was,
+									current_token: is,
+									current_index: index,
+									all_tokens: array,
+								}
+							)
+						);
+
 						if (
 							'\t '.includes(is)
 						) {
@@ -1030,16 +1047,6 @@ export class IntermediaryCalculation implements CanDoMath
 								array
 							);
 						}
-
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to be buffering a numeric string!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					}
 				} else if (
 					'decimal_right' === was.mode
@@ -1051,19 +1058,21 @@ export class IntermediaryCalculation implements CanDoMath
 					} else if (
 						'r()[]'.includes(is)
 					) {
-						if (
+						assert.strictEqual(
 							(
 								(
-									'only_numeric' === was.operand_mode
-									|| 'left' === was.operand_mode
+									(
+										'only_numeric' === was.operand_mode
+										|| 'left' === was.operand_mode
+									)
+									&& was.current_left_operand_buffer.includes(
+										is
+									)
 								)
-								&& was.current_left_operand_buffer.includes(
-									is
-								)
-							)
-							|| was.current_right_operand_buffer.includes(is)
-						) {
-							throw new IntermediaryCalculationTokenizerError(
+								|| was.current_right_operand_buffer.includes(is)
+							),
+							false,
+							new IntermediaryCalculationTokenizerError(
 								'Operand is already recursive!',
 								{
 									tokenizer: was,
@@ -1071,13 +1080,30 @@ export class IntermediaryCalculation implements CanDoMath
 									current_index: index,
 									all_tokens: array,
 								}
-							);
-						} else {
+							)
+						)
+
 							add_buffer = true;
-						}
 					} else if (switch_to_trailing_ignore(is, index, array)) {
 						was.mode = 'trailing_ignore';
 					} else {
+						assert.strictEqual(
+							(
+								'\t '.includes(is)
+								|| (is in Fraction_operation_map)
+							),
+							true,
+							new IntermediaryCalculationTokenizerError(
+								'Unsupported token when expecting to be buffering the decimal portion of a numeric string!',
+								{
+									tokenizer: was,
+									current_token: is,
+									current_index: index,
+									all_tokens: array,
+								}
+							)
+						);
+
 						if (
 							'\t '.includes(is)
 						) {
@@ -1100,16 +1126,6 @@ export class IntermediaryCalculation implements CanDoMath
 								array
 							);
 						}
-
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to be buffering the decimal portion of a numeric string!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					}
 				} else if (
 					'leading_ignore' === was.mode

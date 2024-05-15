@@ -1155,18 +1155,8 @@ export class IntermediaryCalculation implements CanDoMath
 						|| 'left' === was.operand_mode
 					) {
 						was.current_left_operand_buffer += is;
-					} else if ('right' === was.operand_mode) {
-						was.current_right_operand_buffer += is;
 					} else {
-						throw new IntermediaryCalculationTokenizerError(
-							'Expected to add to bufer, but unsupported operation!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
+						was.current_right_operand_buffer += is;
 					}
 				}
 

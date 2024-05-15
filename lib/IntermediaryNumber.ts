@@ -474,16 +474,16 @@ export class IntermediaryCalculation implements CanDoMath
 			assert.notStrictEqual(
 				next,
 				-1,
-			new IntermediaryCalculationTokenizerError(
-				'Unsupported token when expecting skip to start of right operand!',
-				{
-					tokenizer: was,
-					current_token: is,
-					current_index: index,
-					all_tokens: array,
-				},
-				next
-			)
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported token when expecting skip to start of right operand!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					},
+					next
+				)
 			);
 
 			was.skip_to_index = (next >= 1) ? (index + next) : -1;

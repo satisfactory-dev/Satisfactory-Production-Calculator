@@ -543,10 +543,10 @@ void describe('do_math', () => {
 				expectation
 			}`,
 			() => {
-		assert.strictEqual(
-			left_operand[operator_method](right_operand).toString(),
-			expectation,
-		);
+				assert.strictEqual(
+					left_operand[operator_method](right_operand).toString(),
+					expectation,
+				);
 			}
 		)
 	}

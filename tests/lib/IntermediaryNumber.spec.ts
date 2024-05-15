@@ -5,7 +5,6 @@ import {
 import assert from 'node:assert/strict';
 import {
 	IntermediaryCalculation,
-	IntermediaryCalculation_operation_types,
 	IntermediaryNumber,
 	IntermediaryNumber_input_types,
 	IntermediaryNumber_type_types,

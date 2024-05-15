@@ -319,6 +319,12 @@ void describe('IntermediaryCalculation', () => {
 				'IntermediaryCalculation / amount_string',
 				'2.(8)',
 			]),
+			...expand_whitespace([
+				'.1 - .2 + .3 * .4 / .5',
+				'IntermediaryCalculation',
+				'IntermediaryCalculation / amount_string',
+				'0.16',
+			]),
 		];
 
 		for (const data_set_raw of data_sets) {

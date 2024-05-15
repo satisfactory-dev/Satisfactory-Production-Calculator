@@ -99,6 +99,7 @@ export class Numbers
 			&& (
 				maybe === '0'
 				|| /^\d+(?:\.\d{1,6})?$/.test(maybe)
+				|| /^\d*(?:\.\d{1,6})$/.test(maybe)
 				|| /^\d+$/.test(maybe)
 			)
 		);

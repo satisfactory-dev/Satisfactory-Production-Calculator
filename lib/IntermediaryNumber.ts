@@ -168,7 +168,7 @@ export class IntermediaryNumber implements CanDoMath
 			return new this(BigNumber(input));
 		} else if (is_string(input) && regex_recurring_number.test(input)) {
 			let only_last_digit_recurring = false;
-			if (/^\d\.\d+r$/.test(input)) {
+			if (/^\d*\.\d+r$/.test(input)) {
 				only_last_digit_recurring = true;
 			}
 
@@ -711,7 +711,7 @@ export class IntermediaryCalculation implements CanDoMath
 					&& !'\t '.includes(is)
 				) {
 					if (
-						'0123456789'.includes(is)
+						'0123456789.'.includes(is)
 					) {
 						add_buffer = true;
 						was.mode = 'integer_or_decimal_left';
@@ -977,7 +977,7 @@ export class IntermediaryCalculation implements CanDoMath
 					'decimal_right' === was.mode
 				) {
 					if (
-						'0123456789'.includes(is)
+						'0123456789.'.includes(is)
 					) {
 						add_buffer = true;
 					} else if (

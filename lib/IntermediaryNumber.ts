@@ -9,6 +9,9 @@ import {
 	amount_string,
 	Numbers,
 } from './Numbers';
+import {
+	not_undefined,
+} from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 
 export type IntermediaryNumber_input_types =
 	| BigNumber
@@ -73,6 +76,22 @@ function do_math(
 		left_operand,
 		operator,
 		right_value
+	);
+}
+
+function assert_notStrictEqual<
+	T1 = unknown,
+	T2 = unknown,
+	T3 extends Exclude<T1, T2> = Exclude<T1, T2>
+>(
+	thing:T1,
+	maybe:T2,
+	message:Error|string
+): asserts thing is T3 {
+	assert.notStrictEqual(
+		thing,
+		maybe,
+		message
 	);
 }
 
@@ -393,8 +412,9 @@ export class IntermediaryCalculation implements CanDoMath
 				: input
 		);
 
-		if (undefined === result.result) {
-			throw new IntermediaryCalculationTokenizerError(
+		not_undefined(
+			result.result,
+			new IntermediaryCalculationTokenizerError(
 				'No result found after parsing input!',
 				is_string(input)
 					? {
@@ -409,8 +429,8 @@ export class IntermediaryCalculation implements CanDoMath
 						current_index: input.index,
 						all_tokens: input.array,
 					}
-			);
-		}
+			)
+		)
 
 		return result.result;
 	}
@@ -473,7 +493,7 @@ export class IntermediaryCalculation implements CanDoMath
 				maybe => !'\t '.includes(maybe)
 			);
 
-			assert.notStrictEqual(
+			assert_notStrictEqual(
 				next,
 				-1,
 				new IntermediaryCalculationTokenizerError(
@@ -531,8 +551,10 @@ export class IntermediaryCalculation implements CanDoMath
 
 			was.current_operation_buffer = is;
 
-			if ('left' === was.operand_mode) {
-				throw new IntermediaryCalculationTokenizerError(
+			assert_notStrictEqual(
+				was.operand_mode,
+				'left',
+				new IntermediaryCalculationTokenizerError(
 					'Expecting to switch to left operand mode, already there!',
 					{
 						tokenizer: was,
@@ -540,18 +562,34 @@ export class IntermediaryCalculation implements CanDoMath
 						current_index: index,
 						all_tokens: array,
 					}
-				);
-			} else if ('right' === was.operand_mode) {
+				)
+			)
+
+			if ('right' === was.operand_mode) {
 				if (
 					'' === was.current_right_operand_buffer
 				) {
 					return was;
 				}
 
-				if (
+				const maybe_process_buffers = (
 					undefined === was.result
 					|| '' === was.current_left_operand_buffer
-				) {
+				)
+
+				assert_notStrictEqual(
+					maybe_process_buffers,
+					false,
+					new IntermediaryCalculationTokenizerError(
+						'Cannot switch to new calculation!',
+						{
+							tokenizer: was,
+							current_token: is,
+							current_index: index,
+							all_tokens: array,
+						}
+					)
+				)
 
 					try {
 						was.result = new IntermediaryCalculation(
@@ -584,17 +622,6 @@ export class IntermediaryCalculation implements CanDoMath
 					}
 
 					return skip_for_right_operand(was, is, index, array);
-				}
-
-				throw new IntermediaryCalculationTokenizerError(
-					'Cannot switch to new calculation!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				);
 			}
 
 			return skip_for_right_operand(was, is, index, array);
@@ -606,6 +633,23 @@ export class IntermediaryCalculation implements CanDoMath
 			index: number,
 			array: string[],
 		): IntermediaryCalculation_tokenizer {
+			assert.strictEqual(
+				(
+					'only_numeric' === was.operand_mode,
+					'right' === was.operand_mode
+				),
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported operation!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			)
+
 			if ('only_numeric' === was.operand_mode) {
 				try {
 					was.result = IntermediaryNumber.create(
@@ -626,9 +670,11 @@ export class IntermediaryCalculation implements CanDoMath
 				}
 
 				return was;
-			} else if ('right' === was.operand_mode) {
-				if ('' === was.current_operation_buffer) {
-					throw new IntermediaryCalculationTokenizerError(
+			}
+				assert_notStrictEqual(
+					was.current_operation_buffer,
+					'',
+					new IntermediaryCalculationTokenizerError(
 						'Cannot resolve to calculation without an operator!',
 						{
 							tokenizer: was,
@@ -636,8 +682,8 @@ export class IntermediaryCalculation implements CanDoMath
 							current_index: index,
 							all_tokens: array,
 						},
-					);
-				}
+					)
+				)
 
 				try {
 					was.result = new IntermediaryCalculation(
@@ -669,17 +715,6 @@ export class IntermediaryCalculation implements CanDoMath
 				was.current_right_operand_buffer = '';
 
 				return was;
-			}
-
-			throw new IntermediaryCalculationTokenizerError(
-				'Unsupported operation!',
-				{
-					tokenizer: was,
-					current_token: is,
-					current_index: index,
-					all_tokens: array,
-				}
-			);
 		}
 
 		const result = input.array.reduce(
@@ -692,8 +727,10 @@ export class IntermediaryCalculation implements CanDoMath
 				was.index = index;
 
 				if (was.skip_to_index !== -1) {
-					if (was.skip_to_index < index) {
-						throw new IntermediaryCalculationTokenizerError(
+					assert.notStrictEqual(
+						was.skip_to_index < index,
+						true,
+						new IntermediaryCalculationTokenizerError(
 							'Cannot skip backwards!',
 							{
 								tokenizer: was,
@@ -701,8 +738,10 @@ export class IntermediaryCalculation implements CanDoMath
 								current_index: index,
 								all_tokens: array,
 							}
-						);
-					} else if (was.skip_to_index > index) {
+						)
+					)
+
+					if (was.skip_to_index > index) {
 						return was;
 					}
 
@@ -715,6 +754,20 @@ export class IntermediaryCalculation implements CanDoMath
 					'leading_ignore' === was.mode
 					&& !'\t '.includes(is)
 				) {
+					assert.strictEqual(
+						'0123456789('.includes(is),
+						true,
+						new IntermediaryCalculationTokenizerError(
+							'Unsupported token when expecting to switch away from ignoring leading characters!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							}
+						)
+					);
+
 					if (
 						'0123456789.'.includes(is)
 					) {
@@ -732,16 +785,6 @@ export class IntermediaryCalculation implements CanDoMath
 						++was.current_nesting;
 
 						return was;
-					} else {
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to switch away from ignoring leading characters!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					}
 				} else if (
 					'nesting' === was.mode
@@ -751,8 +794,45 @@ export class IntermediaryCalculation implements CanDoMath
 							'(': ')',
 							'[': ']',
 						};
-						if (index >= 1) {
-							if ('0123456789.'.includes(array[index - 1])) {
+
+						assert.strictEqual(
+							index >= 1,
+							true,
+							new IntermediaryCalculationTokenizerError(
+								'Unsupported left parenthetical!',
+								{
+									tokenizer: was,
+									current_token: is,
+									current_index: index,
+									all_tokens: array,
+								}
+							)
+						)
+
+							const maybe_was_decimal = '0123456789.'.includes(
+								array[index - 1]
+							);
+
+							const maybe_was_recursive = (
+								'(\t '.includes(array[index - 1])
+								&& '(' === is
+							);
+
+							assert.strictEqual(
+								maybe_was_decimal || maybe_was_recursive,
+								true,
+								new IntermediaryCalculationTokenizerError(
+									'Unsupported action within parenthetical!',
+									{
+										tokenizer: was,
+										current_token: is,
+										current_index: index,
+										all_tokens: array,
+									}
+								)
+							);
+
+							if (maybe_was_decimal) {
 								const next = array.slice(index + 1).findIndex(
 									maybe => corresponding[
 										is as keyof typeof corresponding
@@ -765,34 +845,12 @@ export class IntermediaryCalculation implements CanDoMath
 									return was;
 								}
 							} else if (
-								'(\t '.includes(array[index - 1])
-								&& '(' === is
+								maybe_was_recursive
 							) {
 								++was.current_nesting;
 
 								return was;
 							}
-
-							throw new IntermediaryCalculationTokenizerError(
-								'Unsupported action within parenthetical!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							);
-						}
-
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported left parenthetical!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					} else if (
 						`0123456789.\t ${
 							Object.keys(Fraction_operation_map).join('')
@@ -858,7 +916,7 @@ export class IntermediaryCalculation implements CanDoMath
 								was.result
 								|| '' !== was.current_left_operand_buffer
 							) {
-								assert.notStrictEqual(
+								assert_notStrictEqual(
 									was.current_left_operand_buffer,
 									'',
 									new IntermediaryCalculationTokenizerError(

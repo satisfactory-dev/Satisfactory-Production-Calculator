@@ -756,7 +756,7 @@ export class IntermediaryCalculation implements CanDoMath
 					&& !'\t '.includes(is)
 				) {
 					assert.strictEqual(
-						'0123456789('.includes(is),
+						'0123456789.('.includes(is),
 						true,
 						new IntermediaryCalculationTokenizerError(
 							'Unsupported token when expecting to switch away from ignoring leading characters!',

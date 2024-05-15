@@ -477,15 +477,15 @@ export class IntermediaryCalculation implements CanDoMath
 				return was;
 			}
 
-				throw new IntermediaryCalculationTokenizerError(
-					'Unsupported token when expecting skip to start of right operand!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				);
+			throw new IntermediaryCalculationTokenizerError(
+				'Unsupported token when expecting skip to start of right operand!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			);
 		}
 
 		function tokenizer_found_operation(

@@ -298,8 +298,8 @@ void describe('IntermediaryCalculation', () => {
 			...expand_whitespace([
 				'1.1(23) + 1 * 2',
 				'IntermediaryCalculation',
-				'IntermediaryCalculation + amount_string',
-				'3.1(23)',
+				'IntermediaryCalculation * amount_string',
+				'4.2(46)',
 			]),
 			...expand_whitespace([
 				'1.1(23) + (1 * 2)',
@@ -312,6 +312,12 @@ void describe('IntermediaryCalculation', () => {
 				'IntermediaryCalculation',
 				'IntermediaryCalculation * amount_string',
 				'4.2(46)',
+			]),
+			...expand_whitespace([
+				'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
+				'IntermediaryCalculation',
+				'IntermediaryCalculation / amount_string',
+				'2.(8)',
 			]),
 		];
 

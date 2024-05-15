@@ -494,6 +494,38 @@ export class IntermediaryCalculation implements CanDoMath
 			index: number,
 			array: string[],
 		) : IntermediaryCalculation_tokenizer {
+			if (
+				'' !== was.current_operation_buffer
+				&& (
+					undefined !== was.result
+					|| '' !== was.current_left_operand_buffer
+				)
+				&& was.current_right_operand_buffer
+			) {
+				was = determine_result(
+					was,
+					is,
+					index,
+					array
+				);
+			}
+
+			assert.strictEqual(
+				was.current_operation_buffer,
+				'',
+				new IntermediaryCalculationTokenizerError(
+					'Cannot have an operator following another operator',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			);
+
+			was.current_operation_buffer = is;
+
 			if ('left' === was.operand_mode) {
 				throw new IntermediaryCalculationTokenizerError(
 					'Expecting to switch to left operand mode, already there!',
@@ -505,22 +537,48 @@ export class IntermediaryCalculation implements CanDoMath
 					}
 				);
 			} else if ('right' === was.operand_mode) {
-				if (undefined === was.result) {
+				if (
+					'' === was.current_right_operand_buffer
+				) {
+					return was;
+				}
+
+				if (
+					undefined === was.result
+					|| '' === was.current_left_operand_buffer
+				) {
+
+					try {
 					was.result = new IntermediaryCalculation(
-						IntermediaryNumber.create(
-							was.current_left_operand_buffer
+							(
+								(undefined === was.result)
+									? IntermediaryNumber.create(
+										was.current_left_operand_buffer
+									)
+									: was.result
 						),
 						is,
 						IntermediaryNumber.create(
 							was.current_right_operand_buffer
 						)
 					);
+						was.current_operation_buffer = '';
 					was.current_left_operand_buffer = '';
 					was.current_right_operand_buffer = '';
+					} catch (err) {
+						throw new IntermediaryCalculationTokenizerError(
+							'Unsupported operand buffers!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							},
+							err
+						);
+					}
 
-					skip_for_right_operand(was, is, index, array);
-
-					return was;
+					return skip_for_right_operand(was, is, index, array);
 				}
 
 				throw new IntermediaryCalculationTokenizerError(
@@ -533,8 +591,6 @@ export class IntermediaryCalculation implements CanDoMath
 					}
 				);
 			}
-
-			was.current_operation_buffer = is;
 
 			return skip_for_right_operand(was, is, index, array);
 		}
@@ -657,6 +713,7 @@ export class IntermediaryCalculation implements CanDoMath
 					if (
 						'0123456789'.includes(is)
 					) {
+						add_buffer = true;
 						was.mode = 'integer_or_decimal_left';
 					} else if (
 						'(' === is
@@ -828,6 +885,7 @@ export class IntermediaryCalculation implements CanDoMath
 							was.operand_mode = 'right';
 							was.current_left_operand_buffer = '';
 							was.current_right_operand_buffer = '';
+							was.current_operation_buffer = '';
 							was.nesting_start = -1;
 							was.nesting_end = -1;
 						}
@@ -871,6 +929,20 @@ export class IntermediaryCalculation implements CanDoMath
 						if (
 							'\t '.includes(is)
 						) {
+							if (
+								undefined === was.result
+								&& '' !== was.current_left_operand_buffer
+								&& '' !== was.current_operation_buffer
+								&& '' !== was.current_right_operand_buffer
+							) {
+								return determine_result(
+									was,
+									is,
+									index,
+									array
+								);
+							}
+
 							const next = array.slice(index).findIndex(
 								maybe => !'\t '.includes(maybe)
 							);
@@ -979,6 +1051,15 @@ export class IntermediaryCalculation implements CanDoMath
 					) {
 						add_buffer = false;
 					} else if (
+						is in BigNumber_operation_map
+					) {
+						return tokenizer_found_operation(
+							was,
+							is as keyof typeof BigNumber_operation_map,
+							index,
+							array
+						);
+					} else if (
 						undefined !== array[index + 1]
 						&& !'\t '.includes(array[index + 1])
 					) {
@@ -1025,14 +1106,18 @@ export class IntermediaryCalculation implements CanDoMath
 					} else if (
 						is in BigNumber_operation_map
 					) {
-						was.current_operation_buffer = (
-							is as keyof typeof BigNumber_operation_map
+						return tokenizer_found_operation(
+							was,
+							is as keyof typeof BigNumber_operation_map,
+							index,
+							array
 						);
+					} else if (
+						'0123456789'.includes(is)
+					) {
+						add_buffer = true;
 						was.mode = 'integer_or_decimal_left';
-
-						return was;
-					}
-
+					} else {
 					throw new IntermediaryCalculationTokenizerError(
 						'Expecting trailing space past this point!',
 						{
@@ -1042,6 +1127,7 @@ export class IntermediaryCalculation implements CanDoMath
 							all_tokens: array,
 						}
 					);
+					}
 				} else {
 					throw new IntermediaryCalculationTokenizerError(
 						'Could not determine appropriate action!',

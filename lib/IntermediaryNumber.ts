@@ -635,8 +635,8 @@ export class IntermediaryCalculation implements CanDoMath
 		): IntermediaryCalculation_tokenizer {
 			assert.strictEqual(
 				(
-					'only_numeric' === was.operand_mode,
-					'right' === was.operand_mode
+					'only_numeric' === was.operand_mode
+					|| 'right' === was.operand_mode
 				),
 				true,
 				new IntermediaryCalculationTokenizerError(

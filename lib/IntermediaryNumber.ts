@@ -1069,7 +1069,9 @@ export class IntermediaryCalculation implements CanDoMath
 										is
 									)
 								)
-								|| was.current_right_operand_buffer.includes(is)
+								|| was.current_right_operand_buffer.includes(
+									is
+								)
 							),
 							false,
 							new IntermediaryCalculationTokenizerError(

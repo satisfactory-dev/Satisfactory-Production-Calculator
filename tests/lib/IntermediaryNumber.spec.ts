@@ -129,7 +129,15 @@ void describe('IntermediaryCalculation', () => {
 	void describe('fromString', () => {
 		function random_ignore_string()
 		{
-			const length = Math.max(1, Math.min(100, Math.round(Math.random() * 100)));
+			const length = Math.max(
+				1,
+				Math.min(
+					100,
+					Math.round(
+						Math.random() * 100
+					)
+				)
+			);
 
 			let result = '';
 

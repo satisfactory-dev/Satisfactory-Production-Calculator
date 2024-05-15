@@ -591,37 +591,37 @@ export class IntermediaryCalculation implements CanDoMath
 					)
 				)
 
-					try {
-						was.result = new IntermediaryCalculation(
-							(
-								(undefined === was.result)
-									? IntermediaryNumber.create(
-										was.current_left_operand_buffer
-									)
-									: was.result
-							),
-							is,
-							IntermediaryNumber.create(
-								was.current_right_operand_buffer
-							)
-						);
-						was.current_operation_buffer = '';
-						was.current_left_operand_buffer = '';
-						was.current_right_operand_buffer = '';
-					} catch (err) {
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported operand buffers!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							},
-							err
-						);
-					}
+				try {
+					was.result = new IntermediaryCalculation(
+						(
+							(undefined === was.result)
+								? IntermediaryNumber.create(
+									was.current_left_operand_buffer
+								)
+								: was.result
+						),
+						is,
+						IntermediaryNumber.create(
+							was.current_right_operand_buffer
+						)
+					);
+					was.current_operation_buffer = '';
+					was.current_left_operand_buffer = '';
+					was.current_right_operand_buffer = '';
+				} catch (err) {
+					throw new IntermediaryCalculationTokenizerError(
+						'Unsupported operand buffers!',
+						{
+							tokenizer: was,
+							current_token: is,
+							current_index: index,
+							all_tokens: array,
+						},
+						err
+					);
+				}
 
-					return skip_for_right_operand(was, is, index, array);
+				return skip_for_right_operand(was, is, index, array);
 			}
 
 			return skip_for_right_operand(was, is, index, array);
@@ -671,50 +671,51 @@ export class IntermediaryCalculation implements CanDoMath
 
 				return was;
 			}
-				assert_notStrictEqual(
-					was.current_operation_buffer,
-					'',
-					new IntermediaryCalculationTokenizerError(
-						'Cannot resolve to calculation without an operator!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						},
-					)
+
+			assert_notStrictEqual(
+				was.current_operation_buffer,
+				'',
+				new IntermediaryCalculationTokenizerError(
+					'Cannot resolve to calculation without an operator!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					},
 				)
+			)
 
-				try {
-					was.result = new IntermediaryCalculation(
-						undefined === was.result
-							? IntermediaryNumber.create(
-								was.current_left_operand_buffer
-							)
-							: was.result,
-						was.current_operation_buffer,
-						IntermediaryNumber.create(
-							was.current_right_operand_buffer
-						),
-					);
-				} catch (err) {
-					throw new IntermediaryCalculationTokenizerError(
-						'Unsupported operand buffers!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						},
-						err
-					);
-				}
+			try {
+				was.result = new IntermediaryCalculation(
+					undefined === was.result
+						? IntermediaryNumber.create(
+							was.current_left_operand_buffer
+						)
+						: was.result,
+					was.current_operation_buffer,
+					IntermediaryNumber.create(
+						was.current_right_operand_buffer
+					),
+				);
+			} catch (err) {
+				throw new IntermediaryCalculationTokenizerError(
+					'Unsupported operand buffers!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					},
+					err
+				);
+			}
 
-				was.current_left_operand_buffer = '';
-				was.current_operation_buffer = '';
-				was.current_right_operand_buffer = '';
+			was.current_left_operand_buffer = '';
+			was.current_operation_buffer = '';
+			was.current_right_operand_buffer = '';
 
-				return was;
+			return was;
 		}
 
 		const result = input.array.reduce(
@@ -809,48 +810,48 @@ export class IntermediaryCalculation implements CanDoMath
 							)
 						)
 
-							const maybe_was_decimal = '0123456789.'.includes(
-								array[index - 1]
-							);
+						const maybe_was_decimal = '0123456789.'.includes(
+							array[index - 1]
+						);
 
-							const maybe_was_recursive = (
-								'(\t '.includes(array[index - 1])
-								&& '(' === is
-							);
+						const maybe_was_recursive = (
+							'(\t '.includes(array[index - 1])
+							&& '(' === is
+						);
 
-							assert.strictEqual(
-								maybe_was_decimal || maybe_was_recursive,
-								true,
-								new IntermediaryCalculationTokenizerError(
-									'Unsupported action within parenthetical!',
-									{
-										tokenizer: was,
-										current_token: is,
-										current_index: index,
-										all_tokens: array,
-									}
-								)
-							);
-
-							if (maybe_was_decimal) {
-								const next = array.slice(index + 1).findIndex(
-									maybe => corresponding[
-										is as keyof typeof corresponding
-									] === maybe
-								);
-
-								if (next >= 0) {
-									was.skip_to_index = index + next + 2;
-
-									return was;
+						assert.strictEqual(
+							maybe_was_decimal || maybe_was_recursive,
+							true,
+							new IntermediaryCalculationTokenizerError(
+								'Unsupported action within parenthetical!',
+								{
+									tokenizer: was,
+									current_token: is,
+									current_index: index,
+									all_tokens: array,
 								}
-							} else if (
-								maybe_was_recursive
-							) {
-								++was.current_nesting;
+							)
+						);
+
+						if (maybe_was_decimal) {
+							const next = array.slice(index + 1).findIndex(
+								maybe => corresponding[
+									is as keyof typeof corresponding
+								] === maybe
+							);
+
+							if (next >= 0) {
+								was.skip_to_index = index + next + 2;
 
 								return was;
 							}
+						} else if (
+							maybe_was_recursive
+						) {
+							++was.current_nesting;
+
+							return was;
+						}
 					} else if (
 						`0123456789.\t ${
 							Object.keys(Fraction_operation_map).join('')

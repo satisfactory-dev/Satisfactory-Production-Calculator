@@ -493,7 +493,7 @@ export class IntermediaryCalculation implements CanDoMath
 				maybe => !'\t '.includes(maybe)
 			);
 
-			assert_notStrictEqual(
+			assert_notStrictEqual<number, -1, Exclude<number, -1>>(
 				next,
 				-1,
 				new IntermediaryCalculationTokenizerError(

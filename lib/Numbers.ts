@@ -18,7 +18,6 @@ import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
-import { not_undefined } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>

@@ -32,8 +32,7 @@ export type IntermediaryNumber_type_types =
 	| 'numeric_string';
 
 export type IntermediaryNumber_math_types =
-	| IntermediaryCalculation
-	| IntermediaryNumber
+	| IntermediaryCalculation_operand_types
 	| IntermediaryNumber_input_types;
 
 export const regex_recurring_number =
@@ -62,8 +61,7 @@ interface CanDoMath
 	): IntermediaryCalculation;
 
 	abs(): (
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	);
 }
 
@@ -97,8 +95,7 @@ function do_math(
 
 function abs(
 	value:
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 ) {
 	return value.toBigNumber().isLessThan(0)
 		? IntermediaryNumber.create('0').minus(

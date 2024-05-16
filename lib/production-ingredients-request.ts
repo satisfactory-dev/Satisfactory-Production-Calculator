@@ -55,19 +55,18 @@ import {
 } from './production-chain';
 import {
 	IntermediaryCalculation,
+	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
 
 export type production_ingredients_request<
 	T1 extends (
 		| amount_string
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string,
 	T2 extends (
 		| number_arg
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = number_arg
 > = {
 	input?: recipe_ingredients_request_output<T1>[],
@@ -82,8 +81,7 @@ export type recipe_ingredients_request_ingredient<
 	T extends (
 		| amount_string
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string
 > = {
 	item: keyof typeof items,
@@ -93,8 +91,7 @@ export type recipe_ingredients_request_output<
 	T extends (
 		| amount_string
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string
 > = {
 	item: production_item,
@@ -105,8 +102,7 @@ export type production_ingredients_request_result_surplus<
 	T extends (
 		| amount_string
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string
 > = [
 	recipe_ingredients_request_output<T>,
@@ -117,8 +113,7 @@ export type combined_production_entry<
 	T extends (
 		| amount_string
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string
 > = {
 	item: production_item,
@@ -130,8 +125,7 @@ export type production_ingredients_request_result<
 	T extends (
 		| amount_string
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = amount_string
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
@@ -145,8 +139,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request_result
 > {
 	private input:production_set<
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	> = {};
 
 	constructor()
@@ -162,33 +155,27 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		data:production_ingredients_request<
 			(
 				| amount_string
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)
 		>,
 		surplus?:recipe_ingredients_request_output<
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		>[]
 	): production_ingredients_request_result<
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	> {
 		const ingredients:{
 			[key in keyof typeof items]: (
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			);
 		} = {};
 		const input:{
 			[key: string]: (
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)
 		} = {
 			...this.input,
@@ -212,8 +199,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		for (const entry of data.pool) {
 			const {item: production, amount:output_amount} = entry;
 			let amount:(
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			) = (
 				(entry.amount instanceof IntermediaryCalculation)
 				|| (entry.amount instanceof IntermediaryNumber)
@@ -221,8 +207,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				? entry.amount
 				: IntermediaryNumber.create(entry.amount);
 			let amount_from_input:(
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			) = IntermediaryNumber.create('0');
 
 			if (production in input) {
@@ -358,8 +343,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			const mapped_product_amounts = Object.fromEntries(mProduct.map(
 				(e): [string, (
-					| IntermediaryCalculation
-					| IntermediaryNumber
+					| IntermediaryCalculation_operand_types
 				)] => [
 					UnrealEngineString_right_x_C_suffix(e.ItemClass),
 					amend_ItemClass_amount_deferred(
@@ -403,16 +387,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					...product_amounts,
 				] as [
 					(
-						| IntermediaryCalculation
-						| IntermediaryNumber
+						| IntermediaryCalculation_operand_types
 					),
 					(
-						| IntermediaryCalculation
-						| IntermediaryNumber
+						| IntermediaryCalculation_operand_types
 					),
 					...(
-						| IntermediaryCalculation
-						| IntermediaryNumber
+						| IntermediaryCalculation_operand_types
 					)[],
 				]
 			);
@@ -585,8 +566,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		);
 
 		const result:production_ingredients_request_result<
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				const left_over = e[1].minus(input[e[0]] || 0);
@@ -663,24 +643,20 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		data:production_ingredients_request<
 			(
 				| amount_string
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)
 		>
 	): production_ingredients_request_result<
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	> {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
 		let surplus:recipe_ingredients_request_output<
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		>[] = initial_result.surplus || [];
 
 		let checking_recursively = initial_result.ingredients.filter(
@@ -705,8 +681,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		while (checking_recursively.length > 0) {
 			const when_done:recipe_ingredients_request_ingredient<
 				(
-					| IntermediaryCalculation
-					| IntermediaryNumber
+					| IntermediaryCalculation_operand_types
 				)
 			>[] = [];
 
@@ -743,8 +718,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				let possibly_recursive = false;
 				let recursive_multiplier:(
-					| IntermediaryCalculation
-					| IntermediaryNumber
+					| IntermediaryCalculation_operand_types
 				) = IntermediaryNumber.create('1');
 
 				if (check_deeper.item in production_items) {
@@ -823,12 +797,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		const ingredients:{[key: string]: (
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)} = {};
 		const output:{[key: string]: (
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)} = {};
 		const surplus_map = surplus.reduce(
 			(was, is) => {
@@ -841,8 +813,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				return was;
 			},
 			{} as {[key: string]: (
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)}
 		);
 
@@ -883,8 +854,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				return was;
 			},
 			{} as {[key: string]: (
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)}
 		);
 
@@ -981,12 +951,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					[key in production_item]: {
 						item: production_item,
 						output: (
-							| IntermediaryCalculation
-							| IntermediaryNumber
+							| IntermediaryCalculation_operand_types
 						),
 						surplus: (
-							| IntermediaryCalculation
-							| IntermediaryNumber
+							| IntermediaryCalculation_operand_types
 						),
 					}
 				}
@@ -994,8 +962,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		);
 
 		const result:production_ingredients_request_result<
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {

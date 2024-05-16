@@ -16,6 +16,7 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 import {
 	IntermediaryCalculation,
+	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
 
@@ -67,30 +68,25 @@ export class Numbers
 	static append_multiply_deferred(
 		append_to: (
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		),
 		a:(
 			| number_arg
 			| [number_arg, ...number_arg[]]
 			| [amount_string, ...amount_string[]]
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 			| [
 				(
-					| IntermediaryCalculation
-					| IntermediaryNumber
+					IntermediaryCalculation_operand_types
 				),
 				...(
-					| IntermediaryCalculation
-					| IntermediaryNumber
+					IntermediaryCalculation_operand_types
 				)[],
 			]
 		),
 		b:(
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)
 	): IntermediaryCalculation {
 		this.configure();
@@ -145,16 +141,13 @@ export class Numbers
 
 	static greatest_common_denominator_deferred(
 		a:(
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		),
 		b:(
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)
 	): (
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) {
 		if (0 === b.toBigNumber().comparedTo(0)) {
 			return a;
@@ -196,18 +189,15 @@ export class Numbers
 		numbers:[
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			...(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)[]
 		]
 	): BigNumber {
@@ -220,23 +210,19 @@ export class Numbers
 		numbers:[
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			),
 			...(
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 			)[]
 		]
 	): (
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) {
 		return numbers.map(
 			e => (
@@ -283,13 +269,11 @@ export class Numbers
 	static sum_series(
 		a:(
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		),
 		b:(
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)
 	) {
 		return this.sum_series_deferred(a, b).toBigNumber();
@@ -298,13 +282,11 @@ export class Numbers
 	static sum_series_deferred(
 		a:(
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		),
 		b:(
 			| number_arg
-			| IntermediaryCalculation
-			| IntermediaryNumber
+			| IntermediaryCalculation_operand_types
 		)
 	) {
 		const a_deferred = (
@@ -335,8 +317,7 @@ export class Numbers
 		function calculate(
 			number:
 				| number_arg
-				| IntermediaryCalculation
-				| IntermediaryNumber
+				| IntermediaryCalculation_operand_types
 		) {
 			let previous = (
 				(

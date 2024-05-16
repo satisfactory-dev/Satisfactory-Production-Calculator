@@ -5,6 +5,7 @@ import {
 import assert from 'node:assert/strict';
 import {
 	IntermediaryCalculation,
+	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 	IntermediaryNumber_input_types,
 	IntermediaryNumber_type_types,
@@ -392,8 +393,7 @@ void describe('IntermediaryCalculation', () => {
 						);
 
 						let result:
-							| IntermediaryCalculation
-							| IntermediaryNumber
+							| IntermediaryCalculation_operand_types
 							| undefined;
 
 						const get_result = (

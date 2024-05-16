@@ -213,13 +213,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount_from_input = input[production].minus(0);
 					amount = amount.minus(amount_from_input);
 				} else {
-					amount_from_input = (
-						(output_amount instanceof IntermediaryCalculation)
-						|| (output_amount instanceof IntermediaryNumber)
-						|| (output_amount instanceof DeferredCalculation)
-					)
-						? output_amount
-						: IntermediaryNumber.create(output_amount);
+					amount_from_input = IntermediaryNumber.reuse_or_create(
+						output_amount
+					);
 					amount = IntermediaryNumber.create('0');
 				}
 			}

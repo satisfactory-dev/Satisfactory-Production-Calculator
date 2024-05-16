@@ -54,8 +54,6 @@ import {
 	Root,
 } from './production-chain';
 import {
-	DeferredCalculation,
-	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';

@@ -190,6 +190,52 @@ function is_less_than(
 	};
 }
 
+const conversion_cache = new class {
+	private toAmountString_cache:undefined|WeakMap<
+		CanConvertType,
+		amount_string
+	>;
+	private toBigNumber_cache:WeakMap<CanConvertType, BigNumber>|undefined;
+	private toFraction_cache:WeakMap<CanConvertType, Fraction>|undefined;
+	private toString_cache:WeakMap<CanConvertType, string>|undefined;
+
+	get AmountString(): WeakMap<CanConvertType, amount_string>
+	{
+		if (!this.toAmountString_cache) {
+			this.toAmountString_cache = new WeakMap();
+		}
+
+		return this.toAmountString_cache;
+	}
+
+	get BigNumber(): WeakMap<CanConvertType, BigNumber>
+	{
+		if (!this.toBigNumber_cache) {
+			this.toBigNumber_cache = new WeakMap();
+		}
+
+		return this.toBigNumber_cache;
+	}
+
+	get Fraction(): WeakMap<CanConvertType, Fraction>
+	{
+		if (!this.toFraction_cache) {
+			this.toFraction_cache = new WeakMap();
+		}
+
+		return this.toFraction_cache;
+	}
+
+	get String(): WeakMap<CanConvertType, string>
+	{
+		if (!this.toString_cache) {
+			this.toString_cache = new WeakMap();
+		}
+
+		return this.toString_cache;
+	}
+}
+
 export class IntermediaryNumber implements CanDoMath, CanConvertType
 {
 	private largest_is_less_than:BigNumber|number|undefined = undefined;
@@ -276,7 +322,16 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 			return Numbers.fraction_to_BigNumber(this.value);
 		}
 
-		return BigNumber(this.value);
+		const cache = conversion_cache.BigNumber;
+
+		if (cache.has(this)) {
+			return cache.get(this) as BigNumber;
+		}
+
+		const value = BigNumber(this.value);
+		cache.set(this, value);
+
+		return value;
 	}
 
 	toFraction(): Fraction
@@ -285,7 +340,16 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 			return this.value;
 		}
 
-		return new Fraction(this.toString());
+		const cache = conversion_cache.Fraction;
+
+		if (cache.has(this)) {
+			return cache.get(this) as Fraction;
+		}
+
+		const value = new Fraction(this.toString());
+		cache.set(this, value);
+
+		return value;
 	}
 
 	toString()
@@ -551,20 +615,55 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	}
 
 	toAmountString(): amount_string {
-		return this.resolve().toAmountString();
+		const cache = conversion_cache.AmountString;
+
+		if (cache.has(this)) {
+			return cache.get(this) as amount_string;
+		}
+
+		const value = this.resolve().toAmountString();
+		cache.set(this, value);
+
+		return value;
 	}
 
 	toBigNumber(): BigNumber {
-		return this.resolve().toBigNumber()
+		const cache = conversion_cache.BigNumber;
+
+		if (cache.has(this)) {
+			return cache.get(this) as BigNumber;
+		}
+
+		const value = this.resolve().toBigNumber()
+		cache.set(this, value);
+
+		return value;
 	}
 
 	toFraction(): Fraction {
-		return this.resolve().toFraction();
+		const cache = conversion_cache.Fraction;
+
+		if (cache.has(this)) {
+			return cache.get(this) as Fraction;
+		}
+
+		const value = this.resolve().toFraction();
+		cache.set(this, value);
+
+		return value;
 	}
 
-	toString()
-	{
-		return this.resolve().toString();
+	toString(): string {
+		const cache = conversion_cache.String;
+
+		if (cache.has(this)) {
+			return cache.get(this) as string;
+		}
+
+		const value = this.resolve().toString();
+		cache.set(this, value);
+
+		return value;
 	}
 
 	private operand_to_IntermediaryNumber(
@@ -1720,9 +1819,17 @@ export class DeferredCalculation implements
 		return this.parse().toFraction();
 	}
 
-	toString()
-	{
-		return this.resolve().toString();
+	toString(): string {
+		const cache = conversion_cache.String;
+
+		if (cache.has(this)) {
+			return cache.get(this) as string;
+		}
+
+		const value = this.resolve().toString();
+		cache.set(this, value);
+
+		return value;
 	}
 
 	private parse()

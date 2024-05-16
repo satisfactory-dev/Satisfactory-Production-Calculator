@@ -790,7 +790,39 @@ export class IntermediaryCalculation implements CanDoMath
 				} else if (
 					'nesting' === was.mode
 				) {
-					if ('(['.includes(is)) {
+					const maybe_is_recursive_open = '(['.includes(is);
+					const maybe_is_recursive_passthrough = (
+						`0123456789.\t ${
+							Object.keys(Fraction_operation_map).join('')
+						}`.includes(is)
+						|| (
+							'r' === is
+							&& index >= 2
+							&& ')]'.includes(array[index - 1])
+							&& '0123456789'.includes(array[index - 2])
+						)
+					);
+					const maybe_is_recursive_close = ')' === is;
+
+					assert.strictEqual(
+						(
+							maybe_is_recursive_open
+							|| maybe_is_recursive_passthrough
+							|| maybe_is_recursive_close
+						),
+						true,
+						new IntermediaryCalculationTokenizerError(
+							'Unsupported action within nesting!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							}
+						)
+					);
+
+					if (maybe_is_recursive_open) {
 						const corresponding = {
 							'(': ')',
 							'[': ']',
@@ -853,12 +885,10 @@ export class IntermediaryCalculation implements CanDoMath
 							return was;
 						}
 					} else if (
-						`0123456789.\t ${
-							Object.keys(Fraction_operation_map).join('')
-						}`.includes(is)
+						maybe_is_recursive_passthrough
 					) {
 						return was;
-					} else if (')' === is) {
+					} else if (maybe_is_recursive_close) {
 						was.nesting_end = index;
 						--was.current_nesting;
 
@@ -959,25 +989,27 @@ export class IntermediaryCalculation implements CanDoMath
 						}
 
 						return was;
-					} else if (
-						'r' === is
-						&& index >= 2
-						&& ')]'.includes(array[index - 1])
-						&& '0123456789'.includes(array[index - 2])
-					) {
-						return was;
-					} else {
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported action within nesting!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					}
 				}
+
+				assert.strictEqual(
+					(
+						'integer_or_decimal_left' === was.mode
+						|| 'decimal_right' === was.mode
+						|| 'leading_ignore' === was.mode
+						|| 'trailing_ignore' === was.mode
+					),
+					true,
+					new IntermediaryCalculationTokenizerError(
+						'Could not determine appropriate action!',
+						{
+							tokenizer: was,
+							current_token: is,
+							current_index: index,
+							all_tokens: array,
+						}
+					)
+				)
 
 				if (
 					'integer_or_decimal_left' === was.mode
@@ -1132,12 +1164,39 @@ export class IntermediaryCalculation implements CanDoMath
 				} else if (
 					'leading_ignore' === was.mode
 				) {
+					const maybe_is_ignore_characters = '\t '.includes(is);
+					const maybe_is_math_operation = (
+						is in Fraction_operation_map
+					);
+					const maybe_should_switch_to_integer_or_decimal_mode = (
+						undefined !== array[index + 1]
+						&& !'\t '.includes(array[index + 1])
+					);
+
+					assert.strictEqual(
+						(
+							maybe_is_ignore_characters
+							|| maybe_is_math_operation
+							|| maybe_should_switch_to_integer_or_decimal_mode
+						),
+						true,
+						new IntermediaryCalculationTokenizerError(
+							'Unsupported token when expecting to be ignoring leading characters!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							}
+						)
+					)
+
 					if (
-						'\t '.includes(is)
+						maybe_is_ignore_characters
 					) {
 						add_buffer = false;
 					} else if (
-						is in Fraction_operation_map
+						maybe_is_math_operation
 					) {
 						return tokenizer_found_operation(
 							was,
@@ -1146,26 +1205,39 @@ export class IntermediaryCalculation implements CanDoMath
 							array
 						);
 					} else if (
-						undefined !== array[index + 1]
-						&& !'\t '.includes(array[index + 1])
+						maybe_should_switch_to_integer_or_decimal_mode
 					) {
 						was.mode = 'integer_or_decimal_left';
-					} else {
-						throw new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to be ignoring leading characters!',
+					}
+				} else if (
+					'trailing_ignore' === was.mode
+				) {
+					const maybe_is_ignore_characters = '\t '.includes(is);
+					const maybe_is_math_operation = (
+						is in Fraction_operation_map
+					);
+					const maybe_is_digit = '0123456789'.includes(is);
+
+					assert.strictEqual(
+						(
+							maybe_is_ignore_characters
+							|| maybe_is_math_operation
+							|| maybe_is_digit
+						),
+						true,
+						new IntermediaryCalculationTokenizerError(
+							'Expecting trailing space past this point!',
 							{
 								tokenizer: was,
 								current_token: is,
 								current_index: index,
 								all_tokens: array,
 							}
-						);
-					}
-				} else if (
-					'trailing_ignore' === was.mode
-				) {
+						)
+					)
+
 					if (
-						'\t '.includes(is)
+						maybe_is_ignore_characters
 					) {
 						const next = array.slice(index).findIndex(
 							maybe => !'\t '.includes(maybe)
@@ -1190,7 +1262,7 @@ export class IntermediaryCalculation implements CanDoMath
 							return was;
 						}
 					} else if (
-						is in Fraction_operation_map
+						maybe_is_math_operation
 					) {
 						return tokenizer_found_operation(
 							was,
@@ -1199,31 +1271,11 @@ export class IntermediaryCalculation implements CanDoMath
 							array
 						);
 					} else if (
-						'0123456789'.includes(is)
+						maybe_is_digit
 					) {
 						add_buffer = true;
 						was.mode = 'integer_or_decimal_left';
-					} else {
-						throw new IntermediaryCalculationTokenizerError(
-							'Expecting trailing space past this point!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						);
 					}
-				} else {
-					throw new IntermediaryCalculationTokenizerError(
-						'Could not determine appropriate action!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						}
-					);
 				}
 
 				if (add_buffer) {

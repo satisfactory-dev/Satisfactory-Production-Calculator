@@ -95,6 +95,8 @@ interface CanConvertType
 	toFraction(): Fraction;
 
 	toString(): string;
+
+	isLessThan(value:number|BigNumber): boolean;
 }
 
 function do_math(
@@ -119,7 +121,7 @@ function abs(
 	IntermediaryCalculation_operand_types,
 	DeferredCalculation
 > {
-	return value.toBigNumber().isLessThan(0)
+	return value.isLessThan(0)
 		? IntermediaryNumber.create('0').minus(
 			value
 		)
@@ -142,8 +144,56 @@ function assert_notStrictEqual<
 	);
 }
 
+function is_less_than(
+	thing:CanConvertType,
+	value:number|BigNumber,
+	largest_is_less_than:number|BigNumber|undefined
+): {
+	result: boolean,
+	largest_is_less_than: number|BigNumber|undefined
+} {
+	let return_largest_is_less_than = largest_is_less_than;
+	let return_boolean:boolean;
+
+	if (undefined === return_largest_is_less_than) {
+		return_boolean = thing.toBigNumber().isLessThan(value);
+
+		if (return_boolean) {
+			return_largest_is_less_than = value;
+		}
+	} else if (value <= return_largest_is_less_than) {
+		return_boolean = true;
+	} else {
+		return_boolean = thing.toBigNumber().isLessThan(value);
+
+		if (return_boolean) {
+			if (
+				return_largest_is_less_than instanceof BigNumber
+				|| value instanceof BigNumber
+			) {
+				return_largest_is_less_than = BigNumber.max(
+					value,
+					return_largest_is_less_than
+				);
+			} else {
+				return_largest_is_less_than = Math.max(
+					value,
+					return_largest_is_less_than
+				);
+			}
+		}
+	}
+
+	return {
+		result: return_boolean,
+		largest_is_less_than: return_largest_is_less_than,
+	};
+}
+
 export class IntermediaryNumber implements CanDoMath, CanConvertType
 {
+	private largest_is_less_than:BigNumber|number|undefined = undefined;
+
 	private readonly value:IntermediaryNumber_value_types;
 
 	protected constructor(value:IntermediaryNumber_value_types)
@@ -176,6 +226,17 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	isLessThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			largest_is_less_than,
+		} = is_less_than(this, value, this.largest_is_less_than);
+
+		this.largest_is_less_than = largest_is_less_than;
+
+		return result;
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -379,6 +440,8 @@ export class IntermediaryCalculationTokenizerError extends Error
 
 export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 {
+	private largest_is_less_than:number|BigNumber|undefined = undefined;
+
 	readonly left_operand:IntermediaryCalculation_operand_types;
 	readonly operation:IntermediaryCalculation_operation_types;
 	readonly right_operand:IntermediaryCalculation_operand_types;
@@ -428,6 +491,17 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	isLessThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			largest_is_less_than,
+		} = is_less_than(this, value, this.largest_is_less_than);
+
+		this.largest_is_less_than = largest_is_less_than;
+
+		return result;
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -1513,6 +1587,7 @@ export class DeferredCalculation implements
 		DeferredCalculation_parts,
 		...DeferredCalculation_parts[],
 	];
+	private largest_is_less_than:number|BigNumber|undefined = undefined;
 
 	constructor(
 		value:DeferredCalculation_parts,
@@ -1570,6 +1645,17 @@ export class DeferredCalculation implements
 			IntermediaryNumber.reuse_or_create(value),
 			')',
 		);
+	}
+
+	isLessThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			largest_is_less_than,
+		} = is_less_than(this, value, this.largest_is_less_than);
+
+		this.largest_is_less_than = largest_is_less_than;
+
+		return result;
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {

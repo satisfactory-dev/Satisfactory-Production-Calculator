@@ -295,7 +295,7 @@ export class Numbers
 		);
 
 		assert.strictEqual(
-			b_deferred.toBigNumber().isLessThan(a_deferred.toBigNumber()),
+			b_deferred.isLessThan(a_deferred.toBigNumber()),
 			true,
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);

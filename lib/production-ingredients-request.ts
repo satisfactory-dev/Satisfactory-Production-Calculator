@@ -204,7 +204,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			if (production in input) {
 				if (
-					input[production].toBigNumber().isLessThan(
+					input[production].isLessThan(
 						amount.toBigNumber()
 					)
 				) {
@@ -220,7 +220,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			output[production] = amount_from_input;
 
-			if (amount.toBigNumber().isLessThan(0.0000001)) {
+			if (amount.isLessThan(0.0000001)) {
 				continue;
 			}
 
@@ -563,7 +563,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				return {
 					item: e[0],
 					amount: (
-						left_over.toBigNumber().isLessThan(0)
+						left_over.isLessThan(0)
 							? IntermediaryNumber.create('0')
 							: left_over
 					),
@@ -868,7 +868,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		const output_entries = Object.entries(output);
 		const negative_outputs = output_entries.filter(
-			maybe => maybe[1].toBigNumber().isLessThan(0)
+			maybe => maybe[1].isLessThan(0)
 		);
 
 		for (const entry of negative_outputs) {

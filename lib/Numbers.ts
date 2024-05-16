@@ -15,7 +15,6 @@ import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 import {
-	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,

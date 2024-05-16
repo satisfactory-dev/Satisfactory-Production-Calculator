@@ -93,17 +93,17 @@ export class Numbers
 		return new DeferredCalculation(
 			`(${
 				(append_to instanceof DeferredCalculation)
-					? append_to.toUnresolvedString()
+					? append_to.value
 					: append_to.toString()
 			}) + (${
 				(a instanceof Array ? a : [a]).map(
 					operand => `(${
 						(operand instanceof DeferredCalculation)
-							? operand.toUnresolvedString()
+							? operand.value
 							: operand.toString()
 					}) * (${
 						(b instanceof DeferredCalculation)
-							? b.toUnresolvedString()
+							? b.value
 							: b.toString()
 					})`
 				).join(') + (')

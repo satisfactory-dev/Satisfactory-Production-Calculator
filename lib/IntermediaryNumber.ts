@@ -1515,16 +1515,6 @@ export class DeferredCalculation implements
 		return this.internal_value;
 	}
 
-	set value(value:string)
-	{
-		if (this.internal_value !== value) {
-			this.cached_abs = undefined;
-			this.cached_intermediary = undefined;
-		}
-
-		this.internal_value = value;
-	}
-
 	abs() {
 		if (!this.cached_abs) {
 			this.cached_abs = this.parse().abs();
@@ -1539,7 +1529,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(
 			`(${this.internal_value}) / (${
 				(operand instanceof DeferredCalculation)
-					? operand.toUnresolvedString()
+					? operand.internal_value
 					: (
 						operand.toString()
 					)
@@ -1553,7 +1543,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(
 			`(${this.internal_value}) - (${
 				(operand instanceof DeferredCalculation)
-					? operand.toUnresolvedString()
+					? operand.internal_value
 					: (
 						operand.toString()
 					)
@@ -1567,7 +1557,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(
 			`(${this.internal_value}) % (${
 				(operand instanceof DeferredCalculation)
-					? operand.toUnresolvedString()
+					? operand.internal_value
 					: (
 						operand.toString()
 					)
@@ -1581,7 +1571,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(
 			`(${this.internal_value}) + (${
 				(operand instanceof DeferredCalculation)
-					? operand.toUnresolvedString()
+					? operand.internal_value
 					: (
 						operand.toString()
 					)
@@ -1605,7 +1595,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(
 			`(${this.internal_value}) x (${
 				(operand instanceof DeferredCalculation)
-					? operand.toUnresolvedString()
+					? operand.internal_value
 					: (
 						operand.toString()
 					)
@@ -1628,11 +1618,6 @@ export class DeferredCalculation implements
 	toString()
 	{
 		return this.resolve().toString();
-	}
-
-	toUnresolvedString(): string
-	{
-		return this.internal_value;
 	}
 
 	private parse()

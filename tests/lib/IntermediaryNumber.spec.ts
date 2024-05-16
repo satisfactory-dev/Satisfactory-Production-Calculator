@@ -4,6 +4,7 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
@@ -107,27 +108,6 @@ void describe('IntermediaryNumber', () => {
 	})
 });
 
-void describe('IntermediaryCalculation', () => {
-	void it ('does a better job of handling things than native', () => {
-		assert.notStrictEqual(
-			(0.8 - 0.1).toFixed(16),
-			'0.7'
-		);
-		assert.strictEqual(
-			IntermediaryNumber.create(0.8).minus(0.1).toString(),
-			'0.7'
-		);
-		assert.notStrictEqual(
-			BigNumber(Numbers.amount_string('0.333333')).times(3).toString(),
-			'1'
-		),
-		assert.strictEqual(
-			IntermediaryNumber.create('0.3r').times(3).toString(),
-			'1'
-		);
-	});
-
-	void describe('fromString', () => {
 		function random_ignore_string()
 		{
 			const length = Math.max(
@@ -149,7 +129,7 @@ void describe('IntermediaryCalculation', () => {
 			return result;
 		}
 
-		type data_set = [
+type from_string_data_set = [
 			string,
 			'IntermediaryNumber'|'IntermediaryCalculation'|undefined,
 			string|undefined,
@@ -157,9 +137,9 @@ void describe('IntermediaryCalculation', () => {
 		];
 
 		function expand_nesting(
-			input:data_set
-		): [data_set, ...data_set[]] {
-			const result:[data_set, ...data_set[]] = [input];
+	input:from_string_data_set
+): [from_string_data_set, ...from_string_data_set[]] {
+	const result:[from_string_data_set, ...from_string_data_set[]] = [input];
 
 			const additional_nesting = Math.ceil(Math.random() * 10);
 
@@ -180,9 +160,9 @@ void describe('IntermediaryCalculation', () => {
 		}
 
 		function maybe_expand_whitspace(
-			input:data_set
-		): data_set[] {
-			const result:data_set[] = [];
+	input:from_string_data_set
+): from_string_data_set[] {
+	const result:from_string_data_set[] = [];
 
 			const regex = /([\t ]+)/g;
 
@@ -211,15 +191,15 @@ void describe('IntermediaryCalculation', () => {
 			return result;
 		}
 
+const regex_has_recursives = /(\d+.(?:\d*(?:\(\d+\)|\[\d+\])r?)|(\d+)r)/;
+
 		function expand_ignore_characters(
-			input:data_set,
-		): [data_set, ...data_set[]] {
-			const result:[data_set, ...data_set[]] = [
+	input:from_string_data_set,
+): [from_string_data_set, ...from_string_data_set[]] {
+			const result:[from_string_data_set, ...from_string_data_set[]] = [
 				...expand_nesting(input),
 				...maybe_expand_whitspace(input),
 			];
-
-			const regex_has_recursives = /(\d+.(?:\d*(?:\(\d+\)|\[\d+\])r?))/;
 
 			if (regex_has_recursives.test(input[0])) {
 				result.push(
@@ -258,7 +238,7 @@ void describe('IntermediaryCalculation', () => {
 
 		function expand_fraction_string(
 			fraction_string:`${number}.${number}(${number})`
-		): [data_set, ...data_set[]] {
+): [from_string_data_set, ...from_string_data_set[]] {
 			return [
 				...expand_ignore_characters([
 					fraction_string,
@@ -287,7 +267,7 @@ void describe('IntermediaryCalculation', () => {
 			];
 		}
 
-		const data_sets:data_set[] = [
+const from_string_data_sets:from_string_data_set[] = [
 			[
 				'1',
 				'IntermediaryNumber',
@@ -357,7 +337,28 @@ void describe('IntermediaryCalculation', () => {
 			]),
 		];
 
-		for (const data_set_raw of data_sets) {
+void describe('IntermediaryCalculation', () => {
+	void it ('does a better job of handling things than native', () => {
+		assert.notStrictEqual(
+			(0.8 - 0.1).toFixed(16),
+			'0.7'
+		);
+		assert.strictEqual(
+			IntermediaryNumber.create(0.8).minus(0.1).toString(),
+			'0.7'
+		);
+		assert.notStrictEqual(
+			BigNumber(Numbers.amount_string('0.333333')).times(3).toString(),
+			'1'
+		),
+		assert.strictEqual(
+			IntermediaryNumber.create('0.3r').times(3).toString(),
+			'1'
+		);
+	});
+
+	void describe('fromString', () => {
+		for (const data_set_raw of from_string_data_sets) {
 			const [
 				raw_input_string,
 				expected_result_type,
@@ -428,6 +429,86 @@ void describe('IntermediaryCalculation', () => {
 			}
 		}
 	});
+})
+
+void describe('DeferredCalculation', () => {
+	void describe('resolve()', () => {
+		for (const data_set_raw of from_string_data_sets) {
+			const [
+				raw_input_string,
+				expected_result_type,
+				expected_type_info,
+				expected_result_string,
+			] = data_set_raw;
+
+			for (const input_string of [
+				raw_input_string,
+				`${random_ignore_string()}${raw_input_string}`,
+				`${raw_input_string}${random_ignore_string()}`,
+				`${random_ignore_string()}${raw_input_string}${random_ignore_string()}`,
+			]) {
+				void it (
+					`(new DeferredCalculation(${
+						JSON.stringify(input_string)
+					})).resolve() ${
+						undefined === expected_result_type
+							? 'throws'
+							: 'behaves'
+					}`,
+					() => {
+						let result:
+							| IntermediaryNumber
+							| IntermediaryCalculation
+							| undefined;
+
+						const get_result = (
+						) => {
+							result = (new DeferredCalculation(
+								input_string
+							)).resolve()
+						};
+
+						if (undefined === expected_result_type) {
+							assert.throws(get_result);
+						} else {
+							assert.doesNotThrow(get_result);
+							not_undefined(result);
+							not_undefined(expected_type_info);
+							assert.strictEqual(
+								result.constructor.name,
+								'IntermediaryNumber',
+								`expected result type to be IntermediaryNumber, got ${result.constructor.name}`
+							);
+
+							assert.strictEqual(
+								result.resolve_type,
+								(
+									expected_type_info.startsWith('Fraction ')
+									|| raw_input_string.includes('/')
+									|| regex_has_recursives.test(
+										raw_input_string
+									)
+								)
+									? 'Fraction'
+									: (
+										Numbers.is_amount_string(
+											raw_input_string
+										)
+											? 'amount_string'
+											: 'BigNumber'
+									)
+							);
+
+							assert.strictEqual(
+								result.toString(),
+								expected_result_string
+							);
+						}
+					}
+				)
+			}
+		}
+	})
 })
 
 
@@ -535,7 +616,7 @@ void describe('do_math', () => {
 		);
 
 		void it(
-			`(${
+			`IntermediaryCalculation: (${
 				left_operand_input
 			}) ${
 				operator_method
@@ -551,5 +632,102 @@ void describe('do_math', () => {
 				);
 			}
 		)
+
+		void it(
+			`DeferredCalculation: (${
+				left_operand_input
+			}) ${
+				operator_method
+			} (${
+				right_operand_input
+			}) returns ${
+				expectation
+			}`,
+			() => {
+				assert.strictEqual(
+					(
+						new DeferredCalculation(
+							left_operand_input
+						)
+					)[
+						operator_method
+					](
+						new DeferredCalculation(
+							right_operand_input
+						)
+					).resolve().toString(),
+					expectation
+				)
+			}
+		)
 	}
 });
+
+void describe('abs', () => {
+	const data_sets:[() => IntermediaryCalculation_operand_types, string][] = [
+		[
+			() => IntermediaryNumber.create('-1'),
+			'1',
+		],
+		[
+			() => IntermediaryNumber.create('1'),
+			'1',
+		],
+		[
+			() => IntermediaryCalculation.fromString('1 - 2'),
+			'1',
+		],
+		[
+			() => IntermediaryCalculation.fromString('1 + 2'),
+			'3',
+		],
+		[
+			() => new DeferredCalculation('1 - 2'),
+			'1',
+		],
+		[
+			() => new DeferredCalculation('1 + 2'),
+			'3',
+		],
+		[
+			() => (new DeferredCalculation('1')).minus(2),
+			'1',
+		],
+		[
+			() => (new DeferredCalculation('1')).plus(2),
+			'3',
+		],
+	];
+
+	for (let index = 0; index < data_sets.length; ++index) {
+		void it (`behaves with data set ${index}`, () => {
+			const [
+				get_value,
+				expectation,
+			] = data_sets[index];
+
+			let value:
+				| IntermediaryCalculation_operand_types
+				| undefined = undefined;
+
+			assert.doesNotThrow(() => {
+				value = get_value();
+			});
+
+			assert.strictEqual(
+				(
+					value as unknown as IntermediaryCalculation_operand_types
+				).abs().toString(),
+				expectation
+			);
+
+			// double-checking here because DeferredCalculation caches the result
+			assert.strictEqual(
+				(
+					value as unknown as IntermediaryCalculation_operand_types
+				).abs().toString(),
+				expectation
+			);
+		})
+	}
+})

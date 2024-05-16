@@ -742,7 +742,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				}
 
 				let possibly_recursive = false;
-				let recursive_multiplier = BigNumber(1);
+				let recursive_multiplier:(
+					| IntermediaryCalculation
+					| IntermediaryNumber
+				) = IntermediaryNumber.create('1');
 
 				if (check_deeper.item in production_items) {
 					possibly_recursive = Root.is_recursive(
@@ -763,9 +766,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 								check_deeper.amount
 							)
 						).divide(lcm));
-						recursive_multiplier = Numbers.sum_series(
-							a.toBigNumber(),
-							b.toBigNumber()
+						recursive_multiplier = Numbers.sum_series_deferred(
+							a,
+							b
 						);
 
 						avoid_checking_further.add(check_deeper.item);

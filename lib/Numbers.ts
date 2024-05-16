@@ -18,6 +18,7 @@ import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
+import { not_undefined } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
@@ -280,33 +281,82 @@ export class Numbers
 		return result as amount_string;
 	}
 
-	static sum_series(a:number_arg, b:number_arg)
-	{
+	static sum_series(
+		a:(
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		),
+		b:(
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)
+	) {
+		return this.sum_series_deferred(a, b).toBigNumber();
+	}
+
+	static sum_series_deferred(
+		a:(
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		),
+		b:(
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)
+	) {
+		const a_deferred = (
+			(
+				(a instanceof IntermediaryCalculation)
+				|| (a instanceof IntermediaryNumber)
+			)
+				? a
+				: IntermediaryNumber.create(a)
+		);
+		const b_deferred = (
+			(
+				(b instanceof IntermediaryCalculation)
+				|| (b instanceof IntermediaryNumber)
+			)
+				? b
+				: IntermediaryNumber.create(b)
+		);
+
 		assert.strictEqual(
-			BigNumber(b).isLessThan(a),
+			b_deferred.toBigNumber().isLessThan(a_deferred.toBigNumber()),
 			true,
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);
 
-		const a_string = (a instanceof BigNumber) ? a.toFixed() : a.toString();
-		const b_string = (b instanceof BigNumber) ? b.toFixed() : b.toString();
+		const divisor = a_deferred.divide(b_deferred);
 
-		const divisor = parseFloat(Numbers.fraction_to_BigNumber((
-			new Fraction(a_string)
-		).div(b_string)).toString());
-
-		function calculate(number:number_arg) {
-			let previous = parseFloat(number.toString());
+		function calculate(
+			number:
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+		) {
+			let previous = (
+				(
+					(number instanceof IntermediaryCalculation)
+					|| (number instanceof IntermediaryNumber)
+				)
+					? number
+					: IntermediaryNumber.create(number)
+			);
 
 			return () => {
-				const next = previous / divisor;
+				const next = previous.divide(divisor);
 				previous = next;
 
-				return next;
+				return parseFloat(next.toBigNumber().toString());
 			}
 		}
 
-		return BigNumber(a).plus(BigNumber(sum_series(calculate(a))));
+		return a_deferred.plus(sum_series(calculate(a_deferred)));
 	}
 
 	private static configure()

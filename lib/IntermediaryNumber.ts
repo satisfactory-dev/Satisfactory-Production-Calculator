@@ -8,6 +8,7 @@ import {
 import {
 	amount_string,
 	Numbers,
+	numeric_string,
 } from './Numbers';
 import {
 	not_undefined,
@@ -22,12 +23,13 @@ export type IntermediaryNumber_input_types =
 export type IntermediaryNumber_value_types =
 	| BigNumber
 	| Fraction
-	| amount_string;
+	| numeric_string;
 
 export type IntermediaryNumber_type_types =
 	| 'BigNumber'
 	| 'Fraction'
-	| 'amount_string';
+	| 'amount_string'
+	| 'numeric_string';
 
 export type IntermediaryNumber_math_types =
 	| IntermediaryCalculation
@@ -58,6 +60,20 @@ interface CanDoMath
 	times(
 		value:IntermediaryNumber_math_types
 	): IntermediaryCalculation;
+
+	abs(): (
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	);
+}
+
+interface CanConvertType
+{
+	toAmountString(): amount_string;
+
+	toBigNumber(): BigNumber;
+
+	toFraction(): Fraction;
 }
 
 function do_math(
@@ -79,6 +95,18 @@ function do_math(
 	);
 }
 
+function abs(
+	value:
+		| IntermediaryCalculation
+		| IntermediaryNumber
+) {
+	return value.toBigNumber().isLessThan(0)
+		? IntermediaryNumber.create('0').minus(
+			value
+		)
+		: value;
+}
+
 function assert_notStrictEqual<
 	T1 = unknown,
 	T2 = unknown,
@@ -95,7 +123,7 @@ function assert_notStrictEqual<
 	);
 }
 
-export class IntermediaryNumber implements CanDoMath
+export class IntermediaryNumber implements CanDoMath, CanConvertType
 {
 	private readonly value:IntermediaryNumber_value_types;
 
@@ -110,9 +138,16 @@ export class IntermediaryNumber implements CanDoMath
 			return 'BigNumber';
 		} else if (this.value instanceof Fraction) {
 			return 'Fraction';
+		} else if (Numbers.is_amount_string(this.value)) {
+		return 'amount_string';
 		}
 
-		return 'amount_string';
+		return 'numeric_string';
+	}
+
+	abs()
+	{
+		return abs(this);
 	}
 
 	divide(value:IntermediaryNumber_math_types)
@@ -142,7 +177,7 @@ export class IntermediaryNumber implements CanDoMath
 
 	toAmountString(): amount_string
 	{
-		if (is_string(this.value)) {
+		if (Numbers.is_amount_string(this.value)) {
 			return this.value;
 		}
 
@@ -180,7 +215,7 @@ export class IntermediaryNumber implements CanDoMath
 		if (
 			input instanceof BigNumber
 			|| input instanceof Fraction
-			|| Numbers.is_amount_string(input)
+			|| Numbers.is_numeric_string(input)
 		) {
 			return new this(input);
 		} else if ('number' === typeof input) {
@@ -297,7 +332,7 @@ export class IntermediaryCalculationTokenizerError extends Error
 	}
 }
 
-export class IntermediaryCalculation implements CanDoMath
+export class IntermediaryCalculation implements CanDoMath, CanConvertType
 {
 	readonly left_operand:IntermediaryCalculation_operand_types;
 	readonly operation:IntermediaryCalculation_operation_types;
@@ -329,6 +364,11 @@ export class IntermediaryCalculation implements CanDoMath
 		}
 
 		return this.right_operand.type;
+	}
+
+	abs()
+	{
+		return abs(this);
 	}
 
 	divide(value:IntermediaryNumber_math_types)
@@ -382,6 +422,18 @@ export class IntermediaryCalculation implements CanDoMath
 		return do_math(this, 'x', value);
 	}
 
+	toAmountString(): amount_string {
+		return this.resolve().toAmountString();
+	}
+
+	toBigNumber(): BigNumber {
+		return this.resolve().toBigNumber()
+	}
+
+	toFraction(): Fraction {
+		return this.resolve().toFraction();
+	}
+
 	toString()
 	{
 		return this.resolve().toString();
@@ -392,7 +444,10 @@ export class IntermediaryCalculation implements CanDoMath
 	) : IntermediaryNumber {
 		if (operand instanceof IntermediaryCalculation) {
 			return operand.resolve();
-		} else if ('amount_string' === operand.type) {
+		} else if (
+			'amount_string' === operand.type
+			|| 'numeric_string' === operand.type
+		) {
 			return IntermediaryNumber.create(
 				'/' === this.operation
 					? operand.toFraction()
@@ -686,13 +741,30 @@ export class IntermediaryCalculation implements CanDoMath
 				)
 			)
 
+			let left:IntermediaryCalculation|IntermediaryNumber;
+
+			try {
+				left = undefined === was.result
+					? IntermediaryNumber.create(
+						was.current_left_operand_buffer
+					)
+					: was.result;
+			} catch (err) {
+				throw new IntermediaryCalculationTokenizerError(
+					'Unsupported left operand buffer!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					},
+					err
+				);
+			}
+
 			try {
 				was.result = new IntermediaryCalculation(
-					undefined === was.result
-						? IntermediaryNumber.create(
-							was.current_left_operand_buffer
-						)
-						: was.result,
+					left,
 					was.current_operation_buffer,
 					IntermediaryNumber.create(
 						was.current_right_operand_buffer
@@ -921,8 +993,11 @@ export class IntermediaryCalculation implements CanDoMath
 								)
 							);
 							assert.strictEqual(
-								was.result,
-								undefined,
+								(
+									undefined === was.result
+									|| '' === was.current_right_operand_buffer
+								),
+								true,
 								new IntermediaryCalculationTokenizerError(
 									'Cannot de-nest if result already set!',
 									{
@@ -948,8 +1023,11 @@ export class IntermediaryCalculation implements CanDoMath
 								|| '' !== was.current_left_operand_buffer
 							) {
 								assert_notStrictEqual(
-									was.current_left_operand_buffer,
-									'',
+									(
+										undefined === was.result
+										&& '' === was.current_left_operand_buffer
+									),
+									true,
 									new IntermediaryCalculationTokenizerError(
 										'Cannot use nested operation as right operand if no operator has been specified!',
 										{
@@ -1025,6 +1103,8 @@ export class IntermediaryCalculation implements CanDoMath
 						was.mode = 'decimal_right';
 					} else if (switch_to_trailing_ignore(is, index, array)) {
 						was.mode = 'trailing_ignore';
+
+						return was;
 					} else {
 						assert.strictEqual(
 							(
@@ -1120,6 +1200,8 @@ export class IntermediaryCalculation implements CanDoMath
 						add_buffer = true;
 					} else if (switch_to_trailing_ignore(is, index, array)) {
 						was.mode = 'trailing_ignore';
+
+						return was;
 					} else {
 						assert.strictEqual(
 							(
@@ -1212,6 +1294,20 @@ export class IntermediaryCalculation implements CanDoMath
 				} else if (
 					'trailing_ignore' === was.mode
 				) {
+					if (
+						'(' === is
+					) {
+						was.mode = 'nesting';
+
+						if (0 === was.current_nesting) {
+							was.nesting_start = index;
+						}
+
+						++was.current_nesting;
+
+						return was;
+					}
+
 					const maybe_is_ignore_characters = '\t '.includes(is);
 					const maybe_is_math_operation = (
 						is in Fraction_operation_map

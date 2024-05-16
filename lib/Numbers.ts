@@ -14,6 +14,10 @@ import {
 import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
+import {
+	IntermediaryCalculation,
+	IntermediaryNumber,
+} from './IntermediaryNumber';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
@@ -23,6 +27,9 @@ export type number_arg =
 	| BigNumber
 	| number
 	| amount_string;
+export type numeric_string =
+	| amount_string
+	| StringPassedRegExp<'^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$'>
 
 export class Numbers
 {
@@ -49,18 +56,61 @@ export class Numbers
 		),
 		b:number_arg
 	): BigNumber {
+
+		return this.append_multiply_deferred(
+			append_to,
+			a,
+			b
+		).resolve().toBigNumber();
+	}
+
+	static append_multiply_deferred(
+		append_to: (
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		),
+		a:(
+			| number_arg
+			| [number_arg, ...number_arg[]]
+			| [amount_string, ...amount_string[]]
+			| IntermediaryCalculation
+			| IntermediaryNumber
+			| [
+				(
+					| IntermediaryCalculation
+					| IntermediaryNumber
+				),
+				...(
+					| IntermediaryCalculation
+					| IntermediaryNumber
+				)[],
+			]
+		),
+		b:(
+			| number_arg
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)
+	): IntermediaryCalculation {
 		this.configure();
 
-		let result = BigNumber(append_to);
-		const b_parsed = BigNumber(b);
-
-		for (const operand of (a instanceof Array ? a : [a])) {
-			result = result.plus(
-				BigNumber(operand).multipliedBy(b_parsed)
-			);
-		}
-
-		return result;
+		return new IntermediaryCalculation(
+			(
+				(
+					(append_to instanceof IntermediaryCalculation)
+					|| (append_to instanceof IntermediaryNumber)
+				)
+					? append_to
+					: IntermediaryNumber.create(append_to)
+			),
+			'+',
+			IntermediaryCalculation.fromString(`(${
+				(a instanceof Array ? a : [a]).map(
+					operand => `${operand.toString()} * ${b.toString()}`
+				).join(') + (')
+			})`)
+		);
 	}
 
 	static fraction_to_BigNumber(fraction:Fraction): BigNumber
@@ -93,6 +143,31 @@ export class Numbers
 		);
 	}
 
+	static greatest_common_denominator_deferred(
+		a:(
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		),
+		b:(
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)
+	): (
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) {
+		if (0 === b.toBigNumber().comparedTo(0)) {
+			return a;
+		}
+
+		this.configure();
+
+		return this.greatest_common_denominator_deferred(
+			b,
+			a.modulo(b)
+		);
+	}
+
 	static is_amount_string(maybe:unknown): maybe is amount_string {
 		return (
 			is_string(maybe)
@@ -105,21 +180,76 @@ export class Numbers
 		);
 	}
 
+	static is_numeric_string(
+		maybe:unknown
+	) : maybe is numeric_string {
+		return (
+			this.is_amount_string(maybe)
+			|| (
+				is_string(maybe)
+				&& /^-?(?:\d*\.\d+|\d+(?:\.\d+)?)$/.test(maybe)
+			)
+		);
+	}
+
 	static least_common_multiple(
 		numbers:[
-			number_arg,
-			number_arg,
-			...number_arg[]
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			...(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)[]
 		]
 	): BigNumber {
 		this.configure();
-		const as_BigNumber = numbers.map(e => BigNumber(e));
 
-		return as_BigNumber.reduce(
+		return this.least_common_multiple_deferred(numbers).toBigNumber();
+	}
+
+	static least_common_multiple_deferred(
+		numbers:[
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			...(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)[]
+		]
+	): (
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) {
+		return numbers.map(
+			e => (
+				(e instanceof IntermediaryCalculation)
+				|| (e instanceof IntermediaryNumber)
+			)
+				? e
+				: IntermediaryNumber.create(e)
+		).reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
 			(was, is) => {
-				return was.multipliedBy(is).absoluteValue().dividedBy(
-					this.greatest_common_denominator(was, is)
+				return was.times(is).abs().divide(
+					this.greatest_common_denominator_deferred(was, is)
 				);
 			}
 		);

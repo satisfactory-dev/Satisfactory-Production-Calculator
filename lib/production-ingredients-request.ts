@@ -19,7 +19,6 @@ import {
 	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
 import BigNumber from 'bignumber.js';
-import Fraction from 'fraction.js';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
@@ -49,42 +48,78 @@ import {
 } from './faux-recipe';
 import {
 	amend_ItemClass_amount,
+	amend_ItemClass_amount_deferred,
 } from './amend-itemclass-amount';
 import {
 	Root,
 } from './production-chain';
+import {
+	IntermediaryCalculation,
+	IntermediaryNumber,
+} from './IntermediaryNumber';
 
-export type production_ingredients_request = {
-	input?: recipe_ingredients_request_output<amount_string>[],
+export type production_ingredients_request<
+	T1 extends (
+		| amount_string
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string,
+	T2 extends (
+		| number_arg
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = number_arg
+> = {
+	input?: recipe_ingredients_request_output<T1>[],
 	recipe_selection?: recipe_selection,
 	pool: {
 		item: keyof typeof recipe_selection_schema['properties'],
-		amount: number_arg,
+		amount: T2,
 	}[],
 };
 
 export type recipe_ingredients_request_ingredient<
-T extends amount_string|BigNumber = amount_string
+	T extends (
+		| amount_string
+		| BigNumber
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string
 > = {
 	item: keyof typeof items,
 	amount: T,
 };
 export type recipe_ingredients_request_output<
-	T extends amount_string|BigNumber = amount_string
+	T extends (
+		| amount_string
+		| BigNumber
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string
 > = {
 	item: production_item,
 	amount: T,
 };
 
 export type production_ingredients_request_result_surplus<
-	T extends amount_string|BigNumber = amount_string
+	T extends (
+		| amount_string
+		| BigNumber
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string
 > = [
 	recipe_ingredients_request_output<T>,
 	...recipe_ingredients_request_output<T>[],
 ];
 
 export type combined_production_entry<
-	T extends amount_string|BigNumber = amount_string
+	T extends (
+		| amount_string
+		| BigNumber
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string
 > = {
 	item: production_item,
 	output: T,
@@ -92,7 +127,12 @@ export type combined_production_entry<
 };
 
 export type production_ingredients_request_result<
-	T extends amount_string|BigNumber = amount_string
+	T extends (
+		| amount_string
+		| BigNumber
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	) = amount_string
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
@@ -104,7 +144,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request,
 	production_ingredients_request_result
 > {
-	private input:production_set = {};
+	private input:production_set<
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	> = {};
 
 	constructor()
 	{
@@ -116,18 +159,45 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	}
 
 	protected calculate_precisely(
-		data:production_ingredients_request,
-		surplus?:recipe_ingredients_request_output<BigNumber>[]
-	): production_ingredients_request_result<BigNumber> {
+		data:production_ingredients_request<
+			(
+				| amount_string
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)
+		>,
+		surplus?:recipe_ingredients_request_output<
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		>[]
+	): production_ingredients_request_result<
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	> {
 		const ingredients:{
-			[key in keyof typeof items]: BigNumber;
+			[key in keyof typeof items]: (
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			);
 		} = {};
-		const input:{[key: string]: BigNumber} = {
+		const input:{
+			[key: string]: (
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)
+		} = {
 			...this.input,
 		};
 		for (const entry of (surplus || data.input || [])) {
 			if (!(entry.item in input)) {
-				input[entry.item as keyof typeof input] = BigNumber(0);
+				input[
+					entry.item as keyof typeof input
+				] = IntermediaryNumber.create('0');
 			}
 
 			input[entry.item] = input[entry.item].plus(entry.amount);
@@ -136,27 +206,47 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			[key in keyof (
 				| typeof buildings
 				| typeof resources
-			)]: BigNumber;
+			)]: IntermediaryCalculation|IntermediaryNumber;
 		} = {};
 
 		for (const entry of data.pool) {
 			const {item: production, amount:output_amount} = entry;
-			let {amount} = entry;
-			let amount_from_input = BigNumber(0);
+			let amount:(
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			) = (
+				(entry.amount instanceof IntermediaryCalculation)
+				|| (entry.amount instanceof IntermediaryNumber)
+			)
+				? entry.amount
+				: IntermediaryNumber.create(entry.amount);
+			let amount_from_input:(
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			) = IntermediaryNumber.create('0');
 
 			if (production in input) {
-				if (input[production].isLessThan(amount)) {
+				if (
+					input[production].toBigNumber().isLessThan(
+						amount.toBigNumber()
+					)
+				) {
 					amount_from_input = input[production].minus(0);
-					amount = BigNumber(amount).minus(amount_from_input);
+					amount = amount.minus(amount_from_input);
 				} else {
-					amount_from_input = BigNumber(output_amount);
-					amount = BigNumber(0);
+					amount_from_input = (
+						(output_amount instanceof IntermediaryCalculation)
+						|| (output_amount instanceof IntermediaryNumber)
+					)
+						? output_amount
+						: IntermediaryNumber.create(output_amount);
+					amount = IntermediaryNumber.create('0');
 				}
 			}
 
 			output[production] = amount_from_input;
 
-			if (BigNumber(amount).isLessThan(0.0000001)) {
+			if (amount.toBigNumber().isLessThan(0.0000001)) {
 				continue;
 			}
 
@@ -192,10 +282,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						const [faux_ingredient, faux_amount] = entry;
 
 						if (!(faux_ingredient in ingredients)) {
-							ingredients[faux_ingredient] = BigNumber(0);
+							ingredients[
+								faux_ingredient
+							] = IntermediaryNumber.create(
+								'0'
+							);
 						}
 
-						ingredients[faux_ingredient] = Numbers.append_multiply(
+						ingredients[
+							faux_ingredient
+						] = Numbers.append_multiply_deferred(
 							ingredients[faux_ingredient],
 							faux_amount,
 							amount
@@ -204,7 +300,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 					output[
 						production as keyof typeof resources
-					] = Numbers.append_multiply(
+					] = Numbers.append_multiply_deferred(
 						output[production as keyof typeof resources],
 						1,
 						amount
@@ -240,7 +336,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				output[
 					production as keyof typeof resources
-				] = Numbers.append_multiply(
+				] = Numbers.append_multiply_deferred(
 					output[production as keyof typeof resources],
 					1,
 					amount
@@ -261,9 +357,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 
 			const mapped_product_amounts = Object.fromEntries(mProduct.map(
-				(e): [string, number_arg] => [
+				(e): [string, (
+					| IntermediaryCalculation
+					| IntermediaryNumber
+				)] => [
 					UnrealEngineString_right_x_C_suffix(e.ItemClass),
-					amend_ItemClass_amount(
+					amend_ItemClass_amount_deferred(
 						e
 					).Amount,
 				]
@@ -299,22 +398,33 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			);
 
-			let divisor = Numbers.least_common_multiple(
+			let divisor = Numbers.least_common_multiple_deferred(
 				[
 					...product_amounts,
-				] as [number_arg, number_arg, ...number_arg[]]
+				] as [
+					(
+						| IntermediaryCalculation
+						| IntermediaryNumber
+					),
+					(
+						| IntermediaryCalculation
+						| IntermediaryNumber
+					),
+					...(
+						| IntermediaryCalculation
+						| IntermediaryNumber
+					)[],
+				]
 			);
 
 			const divisor_pre_adjustment = divisor;
 
-			divisor = Numbers.fraction_to_BigNumber(
-				(new Fraction(divisor_pre_adjustment.toString())).div(
-					(new Fraction(1)).div(
+			divisor = (
+				divisor_pre_adjustment.divide(
+					IntermediaryNumber.create('1').divide(
 						(
-							new Fraction(
-								mapped_product_amounts[production].toString()
-							)
-						).div(divisor_pre_adjustment.toString())
+							mapped_product_amounts[production]
+						).divide(divisor_pre_adjustment)
 					)
 				)
 			);
@@ -345,16 +455,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				if (!(Desc_C in ingredients)) {
-					ingredients[Desc_C] = BigNumber(0);
+					ingredients[Desc_C] = IntermediaryNumber.create('0');
 				}
 
-				ingredients[Desc_C] = Numbers.append_multiply(
+				ingredients[Desc_C] = Numbers.append_multiply_deferred(
 					ingredients[Desc_C],
-					BigNumber(
-						amend_ItemClass_amount(
+					(
+						amend_ItemClass_amount_deferred(
 							ingredient
 						).Amount
-					).dividedBy(
+					).divide(
 						divisor
 					),
 					amount
@@ -391,16 +501,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				if (!(Desc_C in output)) {
-					output[Desc_C] = BigNumber(0);
+					output[Desc_C] = IntermediaryNumber.create('0');
 				}
 
-				output[Desc_C] = Numbers.append_multiply(
+				output[Desc_C] = Numbers.append_multiply_deferred(
 					output[Desc_C],
-					BigNumber(
-						amend_ItemClass_amount(
+					(
+						amend_ItemClass_amount_deferred(
 							product
 						).Amount
-					).dividedBy(
+					).divide(
 						divisor
 					),
 					amount
@@ -412,10 +522,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			return {
 				item: e[0],
 				amount: e[1]
-					.minus(ingredients[e[0]] || 0)
+					.minus(
+						(e[0] in ingredients)
+							? (
+								ingredients[
+									e[0]
+								].toBigNumber()
+							)
+							: 0
+					)
 					.minus(output[e[0]] || 0),
 			};
-		}).filter(maybe => maybe.amount.isGreaterThan(0));
+		}).filter(maybe => maybe.amount.toBigNumber().isGreaterThan(0));
 
 		const output_entries = Object.entries(output).map(e => {
 			return {
@@ -429,8 +547,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = {
 						item: is.item,
-						output: BigNumber(0),
-						surplus: BigNumber(0),
+						output: IntermediaryNumber.create('0'),
+						surplus: IntermediaryNumber.create('0'),
 					}
 				}
 
@@ -445,8 +563,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					if (!(is.item in was)) {
 						was[is.item] = {
 							item: is.item,
-							output: BigNumber(0),
-							surplus: BigNumber(0),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('0'),
 						}
 					}
 
@@ -459,20 +577,29 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				{} as {
 					[key in production_item]: {
 						item: production_item,
-						output: BigNumber,
-						surplus: BigNumber,
+						output: IntermediaryCalculation|IntermediaryNumber,
+						surplus: IntermediaryCalculation|IntermediaryNumber,
 					}
 				}
 			)
 		);
 
-		const result:production_ingredients_request_result<BigNumber> = {
+		const result:production_ingredients_request_result<
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		> = {
 			ingredients: Object.entries(ingredients).map(e => {
+				const left_over = e[1].minus(input[e[0]] || 0);
+
 				return {
 					item: e[0],
-					amount: BigNumber.max(0, e[1].minus(input[e[0]] || 0)),
+					amount: (
+						left_over.toBigNumber().isLessThan(0)
+							? IntermediaryNumber.create('0')
+							: left_over
+					),
 				};
-			}).filter(maybe => maybe.amount.isGreaterThan(0)),
+			}).filter(maybe => maybe.amount.toBigNumber().isGreaterThan(0)),
 			output: output_entries,
 			combined: Object.values(combined),
 		};
@@ -487,10 +614,73 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	protected calculate_validated(
 		data:production_ingredients_request
 	): production_ingredients_request_result {
+		const deferred = this.calculate_validated_deferred(data);
+
+		const result:production_ingredients_request_result = {
+			ingredients: deferred.ingredients.map(
+				e => {
+					return {
+						item: e.item,
+						amount: e.amount.toAmountString(),
+					};
+				}
+			),
+			output: deferred.output.map(
+				e => {
+					return {
+						item: e.item,
+						amount: e.amount.toAmountString(),
+					};
+				}
+			),
+			combined: deferred.combined.map(
+				e => {
+					return {
+						item: e.item,
+						output: e.output.toAmountString(),
+						surplus: e.surplus.toAmountString(),
+					};
+				}
+			),
+		};
+
+		if ('surplus' in deferred) {
+			not_undefined(deferred.surplus);
+			result.surplus = require_non_empty_array(deferred.surplus.map(
+				e => {
+					return {
+						item: e.item,
+						amount: e.amount.toAmountString(),
+					};
+				}
+			))
+		}
+
+		return result;
+	}
+
+	protected calculate_validated_deferred(
+		data:production_ingredients_request<
+			(
+				| amount_string
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			),
+			(
+				| number_arg
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)
+		>
+	): production_ingredients_request_result<
+		| IntermediaryCalculation
+		| IntermediaryNumber
+	> {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
 		let surplus:recipe_ingredients_request_output<
-			BigNumber
+			| IntermediaryCalculation
+			| IntermediaryNumber
 		>[] = initial_result.surplus || [];
 
 		let checking_recursively = initial_result.ingredients.filter(
@@ -499,12 +689,25 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const avoid_checking_further = new Set<string>();
 
 		const production_items = Object.fromEntries(
-			data.pool.map(e => [e.item, e.amount])
+			data.pool.map(e => [
+				e.item,
+				(
+					(
+						(e.amount instanceof IntermediaryCalculation)
+						|| (e.amount instanceof IntermediaryNumber)
+					)
+						? e.amount
+						: IntermediaryNumber.create(e.amount)
+				),
+			])
 		);
 
 		while (checking_recursively.length > 0) {
 			const when_done:recipe_ingredients_request_ingredient<
-				BigNumber
+				(
+					| IntermediaryCalculation
+					| IntermediaryNumber
+				)
 			>[] = [];
 
 			for (const check_deeper of checking_recursively) {
@@ -548,23 +751,21 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 
 					if (possibly_recursive) {
-						const lcm = Numbers.least_common_multiple([
+						const lcm = Numbers.least_common_multiple_deferred([
 							production_items[check_deeper.item],
-							check_deeper.amount,
-						]).toString();
-						const a = Numbers.fraction_to_BigNumber((
-							new Fraction(
-								production_items[check_deeper.item].toString()
+							check_deeper.amount.toBigNumber(),
+						]);
+						const a = production_items[
+							check_deeper.item
+						].divide(lcm)
+						const b = ((
+							(
+								check_deeper.amount
 							)
-						).div(lcm))
-						const b = Numbers.fraction_to_BigNumber((
-							new Fraction(
-								check_deeper.amount.toString()
-							)
-						).div(lcm));
+						).divide(lcm));
 						recursive_multiplier = Numbers.sum_series(
-							BigNumber(a),
-							BigNumber(b)
+							a.toBigNumber(),
+							b.toBigNumber()
 						);
 
 						avoid_checking_further.add(check_deeper.item);
@@ -618,19 +819,28 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			checking_recursively = when_done;
 		}
 
-		const ingredients:{[key: string]: BigNumber} = {};
-		const output:{[key: string]: BigNumber} = {};
+		const ingredients:{[key: string]: (
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)} = {};
+		const output:{[key: string]: (
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		)} = {};
 		const surplus_map = surplus.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = BigNumber(0);
+					was[is.item] = IntermediaryNumber.create('0');
 				}
 
 				was[is.item] = was[is.item].plus(is.amount);
 
 				return was;
 			},
-			{} as {[key: string]: BigNumber}
+			{} as {[key: string]: (
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)}
 		);
 
 		for (const entry of results) {
@@ -662,14 +872,17 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const production_map = data.pool.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = BigNumber(0);
+					was[is.item] = IntermediaryNumber.create('0');
 				}
 
 				was[is.item] = was[is.item].plus(is.amount);
 
 				return was;
 			},
-			{} as {[key: string]: BigNumber}
+			{} as {[key: string]: (
+				| IntermediaryCalculation
+				| IntermediaryNumber
+			)}
 		);
 
 		for (const entry of Object.entries(production_map)) {
@@ -679,9 +892,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				`${entry[0]} not on output map!`
 			);
 
-			if (output[entry[0]].isGreaterThan(entry[1])) {
+			if (
+				output[entry[0]].toBigNumber().isGreaterThan(
+					entry[1].toBigNumber()
+				)
+			) {
 				if (!(entry[0] in surplus_map)) {
-					surplus_map[entry[0]] = BigNumber(0);
+					surplus_map[entry[0]] = IntermediaryNumber.create('0');
 				}
 
 				surplus_map[entry[0]] = surplus_map[entry[0]].plus(
@@ -694,12 +911,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		const output_entries = Object.entries(output);
 		const negative_outputs = output_entries.filter(
-			maybe => maybe[1].isLessThan(0)
+			maybe => maybe[1].toBigNumber().isLessThan(0)
 		);
 
 		for (const entry of negative_outputs) {
 			if (!(entry[0] in ingredients)) {
-				ingredients[entry[0]] = BigNumber(0);
+				ingredients[entry[0]] = IntermediaryNumber.create('0');
 			}
 
 			ingredients[entry[0]] = ingredients[entry[0]].plus(
@@ -708,7 +925,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		const output_entries_filtered = output_entries.filter(
-			maybe => maybe[1].isGreaterThan(0)
+			maybe => maybe[1].toBigNumber().isGreaterThan(0)
 		).map(e => {
 			return {
 				item: e[0],
@@ -717,7 +934,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		});
 
 		const surplus_filtered = Object.entries(surplus_map).filter(
-			maybe => maybe[1].isGreaterThan(0)
+			maybe => maybe[1].toBigNumber().isGreaterThan(0)
 		).map(e => {
 			return {
 				item: e[0],
@@ -730,8 +947,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = {
 						item: is.item,
-						output: BigNumber(0),
-						surplus: BigNumber(0),
+						output: IntermediaryNumber.create('0'),
+						surplus: IntermediaryNumber.create('0'),
 					}
 				}
 
@@ -746,8 +963,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					if (!(is.item in was)) {
 						was[is.item] = {
 							item: is.item,
-							output: BigNumber(0),
-							surplus: BigNumber(0),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('0'),
 						}
 					}
 
@@ -760,43 +977,38 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				{} as {
 					[key in production_item]: {
 						item: production_item,
-						output: BigNumber,
-						surplus: BigNumber,
+						output: (
+							| IntermediaryCalculation
+							| IntermediaryNumber
+						),
+						surplus: (
+							| IntermediaryCalculation
+							| IntermediaryNumber
+						),
 					}
 				}
 			)
 		);
 
-		const result:production_ingredients_request_result = {
+		const result:production_ingredients_request_result<
+			| IntermediaryCalculation
+			| IntermediaryNumber
+		> = {
 			ingredients: Object.entries(ingredients).map(e => {
 				return {
 					item: e[0],
-					amount: Numbers.round_off(e[1]),
+					amount: e[1],
 				}
 			}),
-			output: output_entries_filtered.map(e => {
-				return {
-					item: e.item,
-					amount: Numbers.round_off(e.amount),
-				}
-			}).filter(maybe => '0' !== maybe.amount),
-			combined: Object.values(combined).map(e => {
-				return {
-					item: e.item,
-					output: Numbers.round_off(e.output),
-					surplus: Numbers.round_off(e.surplus),
-				}
-			}),
+			output: output_entries_filtered.filter(
+				maybe => '0' !== maybe.amount.toBigNumber().toString()
+			),
+			combined: Object.values(combined),
 		};
 
 		if (surplus_filtered.length > 0) {
 			result.surplus = require_non_empty_array(
-				surplus_filtered.map(e => {
-					return {
-						item: e.item,
-						amount: Numbers.round_off(e.amount),
-					};
-				})
+				surplus_filtered
 			);
 		}
 

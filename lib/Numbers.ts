@@ -16,7 +16,7 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 import {
 	DeferredCalculation,
-	IntermediaryCalculation,
+	DeferredCalculation_parts,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
@@ -91,23 +91,24 @@ export class Numbers
 		)
 	): DeferredCalculation {
 		return new DeferredCalculation(
-			`(${
-				(append_to instanceof DeferredCalculation)
-					? append_to.value
-					: append_to.toString()
-			}) + (${
-				(a instanceof Array ? a : [a]).map(
-					operand => `(${
-						(operand instanceof DeferredCalculation)
-							? operand.value
-							: operand.toString()
-					}) * (${
-						(b instanceof DeferredCalculation)
-							? b.value
-							: b.toString()
-					})`
-				).join(') + (')
-			})`
+			'(',
+			append_to,
+			')',
+			...(a instanceof Array ? a : [a]).reduce(
+				(was, is) => {
+					was.push(
+						'+',
+						'(',
+						is,
+						'*',
+						b,
+						')'
+					);
+
+					return was;
+				},
+				[] as DeferredCalculation_parts[]
+			),
 		);
 	}
 

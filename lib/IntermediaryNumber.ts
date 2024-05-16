@@ -224,11 +224,15 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 			return this.value;
 		}
 
-		return new Fraction(this.value.toString());
+		return new Fraction(this.toString());
 	}
 
 	toString()
 	{
+		if (this.value instanceof BigNumber) {
+			return this.value.toFixed();
+		}
+
 		return this.value.toString();
 	}
 
@@ -879,7 +883,13 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 				if (
 					'leading_ignore' === was.mode
 					&& 'only_numeric' === was.operand_mode
-					&& 0 === index
+					&& (
+						0 === index
+						|| (
+							undefined === was.result
+							&& '' === was.current_left_operand_buffer
+						)
+					)
 					&& '-' === is
 				) {
 					add_buffer = true;
@@ -1157,7 +1167,13 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 						'0123456789'.includes(is)
 						|| (
 							'-' === is
-							&& 0 === index
+							&& (
+								0 === index
+								|| (
+									undefined === was.result
+									&& '' === was.current_left_operand_buffer
+								)
+							)
 							&& add_buffer
 						)
 					) {
@@ -1475,6 +1491,10 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	}
 }
 
+export type DeferredCalculation_parts =
+	| string
+	| IntermediaryNumber_math_types;
+
 export class DeferredCalculation implements
 	CanConvertType,
 	CanResolveMath<
@@ -1489,12 +1509,16 @@ export class DeferredCalculation implements
 		| IntermediaryNumber
 		| IntermediaryCalculation
 		| undefined;
-	private internal_value:string;
+	private internal_value:[
+		DeferredCalculation_parts,
+		...DeferredCalculation_parts[],
+	];
 
 	constructor(
-		value:string,
+		value:DeferredCalculation_parts,
+		...additional_parts:DeferredCalculation_parts[]
 	) {
-		this.internal_value = value;
+		this.internal_value = [value, ...additional_parts];
 	}
 
 	get resolve_type(): string {
@@ -1502,7 +1526,7 @@ export class DeferredCalculation implements
 			return this.cached_intermediary.resolve_type;
 		}
 
-		return this.internal_value;
+		return this.value;
 	}
 
 	get type(): IntermediaryCalculation_operand_type_types
@@ -1512,7 +1536,22 @@ export class DeferredCalculation implements
 
 	get value(): string
 	{
-		return this.internal_value;
+		return this.internal_value.reduce(
+			(was, is) => {
+				if (is_string(is)) {
+					was.push(is);
+				} else {
+					was.push(
+						(is instanceof BigNumber)
+							? is.toFixed()
+							: is.toString()
+					);
+				}
+
+				return was;
+			},
+			[] as string[]
+		).join(' ').replace(/\s+/g, ' ').trim();
 	}
 
 	abs() {
@@ -1524,58 +1563,42 @@ export class DeferredCalculation implements
 	}
 
 	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
-		const operand = IntermediaryNumber.reuse_or_create(value);
-
 		return new DeferredCalculation(
-			`(${this.internal_value}) / (${
-				(operand instanceof DeferredCalculation)
-					? operand.internal_value
-					: (
-						operand.toString()
-					)
-			})`
+			'(',
+			...this.internal_value,
+			') / (',
+			IntermediaryNumber.reuse_or_create(value),
+			')',
 		);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
-		const operand = IntermediaryNumber.reuse_or_create(value);
-
 		return new DeferredCalculation(
-			`(${this.internal_value}) - (${
-				(operand instanceof DeferredCalculation)
-					? operand.internal_value
-					: (
-						operand.toString()
-					)
-			})`
+			'(',
+			...this.internal_value,
+			') - (',
+			IntermediaryNumber.reuse_or_create(value),
+			')',
 		);
 	}
 
 	modulo(value: IntermediaryNumber_math_types): DeferredCalculation {
-		const operand = IntermediaryNumber.reuse_or_create(value);
-
 		return new DeferredCalculation(
-			`(${this.internal_value}) % (${
-				(operand instanceof DeferredCalculation)
-					? operand.internal_value
-					: (
-						operand.toString()
-					)
-			})`
+			'(',
+			...this.internal_value,
+			') % (',
+			IntermediaryNumber.reuse_or_create(value),
+			')',
 		);
 	}
 
 	plus(value: IntermediaryNumber_math_types): DeferredCalculation {
-		const operand = IntermediaryNumber.reuse_or_create(value);
-
 		return new DeferredCalculation(
-			`(${this.internal_value}) + (${
-				(operand instanceof DeferredCalculation)
-					? operand.internal_value
-					: (
-						operand.toString()
-					)
-			})`
+			'(',
+			...this.internal_value,
+			') + (',
+			IntermediaryNumber.reuse_or_create(value),
+			')',
 		);
 	}
 
@@ -1590,16 +1613,12 @@ export class DeferredCalculation implements
 	}
 
 	times(value: IntermediaryNumber_math_types): DeferredCalculation {
-		const operand = IntermediaryNumber.reuse_or_create(value);
-
 		return new DeferredCalculation(
-			`(${this.internal_value}) x (${
-				(operand instanceof DeferredCalculation)
-					? operand.internal_value
-					: (
-						operand.toString()
-					)
-			})`
+			'(',
+			...this.internal_value,
+			') x (',
+			IntermediaryNumber.reuse_or_create(value),
+			')',
 		);
 	}
 
@@ -1624,7 +1643,7 @@ export class DeferredCalculation implements
 	{
 		if (!this.cached_intermediary) {
 			this.cached_intermediary = IntermediaryCalculation.fromString(
-				this.internal_value
+				this.value
 			);
 		}
 

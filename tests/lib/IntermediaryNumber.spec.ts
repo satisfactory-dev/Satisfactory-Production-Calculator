@@ -108,234 +108,234 @@ void describe('IntermediaryNumber', () => {
 	})
 });
 
-		function random_ignore_string()
-		{
-			const length = Math.max(
-				1,
-				Math.min(
-					100,
-					Math.round(
-						Math.random() * 100
-					)
-				)
-			);
+function random_ignore_string()
+{
+	const length = Math.max(
+		1,
+		Math.min(
+			100,
+			Math.round(
+				Math.random() * 100
+			)
+		)
+	);
 
-			let result = '';
+	let result = '';
 
-			for (let index = 0; index < length; ++index) {
-				result += Math.random() > .5 ? '\t': ' ';
-			}
+	for (let index = 0; index < length; ++index) {
+		result += Math.random() > .5 ? '\t': ' ';
+	}
 
-			return result;
-		}
+	return result;
+}
 
 type from_string_data_set = [
-			string,
-			'IntermediaryNumber'|'IntermediaryCalculation'|undefined,
-			string|undefined,
-			string|undefined,
-		];
+	string,
+	'IntermediaryNumber'|'IntermediaryCalculation'|undefined,
+	string|undefined,
+	string|undefined,
+];
 
-		function expand_nesting(
+function expand_nesting(
 	input:from_string_data_set
 ): [from_string_data_set, ...from_string_data_set[]] {
 	const result:[from_string_data_set, ...from_string_data_set[]] = [input];
 
-			const additional_nesting = Math.ceil(Math.random() * 10);
+	const additional_nesting = Math.ceil(Math.random() * 10);
 
-			result.push([
-				`${
-					'('.repeat(additional_nesting)
-				}${
-					input[0]
-				}${
-					')'.repeat(additional_nesting)
-				}`,
-				input[1],
-				input[2],
-				input[3],
-			]);
+	result.push([
+		`${
+			'('.repeat(additional_nesting)
+		}${
+			input[0]
+		}${
+			')'.repeat(additional_nesting)
+		}`,
+		input[1],
+		input[2],
+		input[3],
+	]);
 
-			return result;
-		}
+	return result;
+}
 
-		function maybe_expand_whitspace(
+function maybe_expand_whitspace(
 	input:from_string_data_set
 ): from_string_data_set[] {
 	const result:from_string_data_set[] = [];
 
-			const regex = /([\t ]+)/g;
+	const regex = /([\t ]+)/g;
 
-			if (regex.test(input[0])) {
-				result.push(...expand_nesting([
-					input[0].replace(regex, random_ignore_string),
-					input[1],
-					input[2],
-					input[3],
-				]));
-			} else {
-				result.push(...expand_nesting([
-					` ${input[0]}`.replace(regex, random_ignore_string),
-					input[1],
-					input[2],
-					input[3],
-				]));
-				result.push(...expand_nesting([
-					`${input[0]} `.replace(regex, random_ignore_string),
-					input[1],
-					input[2],
-					input[3],
-				]));
-			}
+	if (regex.test(input[0])) {
+		result.push(...expand_nesting([
+			input[0].replace(regex, random_ignore_string),
+			input[1],
+			input[2],
+			input[3],
+		]));
+	} else {
+		result.push(...expand_nesting([
+			` ${input[0]}`.replace(regex, random_ignore_string),
+			input[1],
+			input[2],
+			input[3],
+		]));
+		result.push(...expand_nesting([
+			`${input[0]} `.replace(regex, random_ignore_string),
+			input[1],
+			input[2],
+			input[3],
+		]));
+	}
 
-			return result;
-		}
+	return result;
+}
 
 const regex_has_recursives = /(\d+.(?:\d*(?:\(\d+\)|\[\d+\])r?)|(\d+)r)/;
 
-		function expand_ignore_characters(
+function expand_ignore_characters(
 	input:from_string_data_set,
 ): [from_string_data_set, ...from_string_data_set[]] {
-			const result:[from_string_data_set, ...from_string_data_set[]] = [
-				...expand_nesting(input),
-				...maybe_expand_whitspace(input),
-			];
+	const result:[from_string_data_set, ...from_string_data_set[]] = [
+		...expand_nesting(input),
+		...maybe_expand_whitspace(input),
+	];
 
-			if (regex_has_recursives.test(input[0])) {
-				result.push(
-					...maybe_expand_whitspace([
-						input[0].replace(regex_has_recursives, ' $1'),
-						input[1],
-						input[2],
-						input[3],
-					]),
-					...maybe_expand_whitspace([
-						input[0].replace(regex_has_recursives, ' $1 '),
-						input[1],
-						input[2],
-						input[3],
-					]),
-					...maybe_expand_whitspace([
-						input[0].replace(regex_has_recursives, '$1 '),
-						input[1],
-						input[2],
-						input[3],
-					]),
-				);
-			}
+	if (regex_has_recursives.test(input[0])) {
+		result.push(
+			...maybe_expand_whitspace([
+				input[0].replace(regex_has_recursives, ' $1'),
+				input[1],
+				input[2],
+				input[3],
+			]),
+			...maybe_expand_whitspace([
+				input[0].replace(regex_has_recursives, ' $1 '),
+				input[1],
+				input[2],
+				input[3],
+			]),
+			...maybe_expand_whitspace([
+				input[0].replace(regex_has_recursives, '$1 '),
+				input[1],
+				input[2],
+				input[3],
+			]),
+		);
+	}
 
-			if (/[\t ]/.test(input[0])) {
-				result.push([
-					input[0].replace(/[\t ]+/g, ''),
-					input[1],
-					input[2],
-					input[3],
-				]);
-			}
+	if (/[\t ]/.test(input[0])) {
+		result.push([
+			input[0].replace(/[\t ]+/g, ''),
+			input[1],
+			input[2],
+			input[3],
+		]);
+	}
 
-			return result;
-		}
+	return result;
+}
 
-		function expand_fraction_string(
-			fraction_string:`${number}.${number}(${number})`
+function expand_fraction_string(
+	fraction_string:`${number}.${number}(${number})`
 ): [from_string_data_set, ...from_string_data_set[]] {
-			return [
-				...expand_ignore_characters([
-					fraction_string,
-					'IntermediaryNumber',
-					'Fraction',
-					fraction_string,
-				]),
-				...expand_ignore_characters([
-					`${fraction_string}r`,
-					'IntermediaryNumber',
-					'Fraction',
-					fraction_string,
-				]),
-				...expand_ignore_characters([
-					fraction_string.replace('(', '[').replace(')', ']'),
-					'IntermediaryNumber',
-					'Fraction',
-					fraction_string,
-				]),
-				...expand_ignore_characters([
-					`${fraction_string.replace('(', '[').replace(')', ']')}r`,
-					'IntermediaryNumber',
-					'Fraction',
-					fraction_string,
-				]),
-			];
-		}
+	return [
+		...expand_ignore_characters([
+			fraction_string,
+			'IntermediaryNumber',
+			'Fraction',
+			fraction_string,
+		]),
+		...expand_ignore_characters([
+			`${fraction_string}r`,
+			'IntermediaryNumber',
+			'Fraction',
+			fraction_string,
+		]),
+		...expand_ignore_characters([
+			fraction_string.replace('(', '[').replace(')', ']'),
+			'IntermediaryNumber',
+			'Fraction',
+			fraction_string,
+		]),
+		...expand_ignore_characters([
+			`${fraction_string.replace('(', '[').replace(')', ']')}r`,
+			'IntermediaryNumber',
+			'Fraction',
+			fraction_string,
+		]),
+	];
+}
 
 const from_string_data_sets:from_string_data_set[] = [
-			[
-				'1',
-				'IntermediaryNumber',
-				'amount_string',
-				'1',
-			],
-			[
-				'1.2r',
-				'IntermediaryNumber',
-				'Fraction',
-				'1.(2)',
-			],
-			...expand_fraction_string('1.1(23)'),
-			...expand_ignore_characters([
-				'1.1(23) + 1',
-				'IntermediaryCalculation',
-				'Fraction + amount_string',
-				'2.1(23)',
-			]),
-			...expand_ignore_characters([
-				'1.1(23) + 1 + 2',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation + amount_string',
-				'4.1(23)',
-			]),
-			...expand_ignore_characters([
-				'1.1(23) + 1 * 2',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation * amount_string',
-				'4.2(46)',
-			]),
-			...expand_ignore_characters([
-				'1.1(23) + (1 * 2)',
-				'IntermediaryCalculation',
-				'Fraction + IntermediaryCalculation',
-				'3.1(23)',
-			]),
-			...expand_ignore_characters([
-				'(1.1(23) + 1) * 2',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation * amount_string',
-				'4.2(46)',
-			]),
-			...expand_ignore_characters([
-				'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation / amount_string',
-				'2.(8)',
-			]),
-			...expand_ignore_characters([
-				'.1 - .2 + .3 * .4 / .5',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation / amount_string',
-				'0.16',
-			]),
-			...expand_ignore_characters([
-				'3 x 5 % 9',
-				'IntermediaryCalculation',
-				'IntermediaryCalculation % amount_string',
-				'6',
-			]),
-			...expand_ignore_characters([
-				'1 + (2/3)',
-				'IntermediaryCalculation',
-				'amount_string + IntermediaryCalculation',
-				'1.(6)',
-			]),
-		];
+	[
+		'1',
+		'IntermediaryNumber',
+		'amount_string',
+		'1',
+	],
+	[
+		'1.2r',
+		'IntermediaryNumber',
+		'Fraction',
+		'1.(2)',
+	],
+	...expand_fraction_string('1.1(23)'),
+	...expand_ignore_characters([
+		'1.1(23) + 1',
+		'IntermediaryCalculation',
+		'Fraction + amount_string',
+		'2.1(23)',
+	]),
+	...expand_ignore_characters([
+		'1.1(23) + 1 + 2',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation + amount_string',
+		'4.1(23)',
+	]),
+	...expand_ignore_characters([
+		'1.1(23) + 1 * 2',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation * amount_string',
+		'4.2(46)',
+	]),
+	...expand_ignore_characters([
+		'1.1(23) + (1 * 2)',
+		'IntermediaryCalculation',
+		'Fraction + IntermediaryCalculation',
+		'3.1(23)',
+	]),
+	...expand_ignore_characters([
+		'(1.1(23) + 1) * 2',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation * amount_string',
+		'4.2(46)',
+	]),
+	...expand_ignore_characters([
+		'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation / amount_string',
+		'2.(8)',
+	]),
+	...expand_ignore_characters([
+		'.1 - .2 + .3 * .4 / .5',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation / amount_string',
+		'0.16',
+	]),
+	...expand_ignore_characters([
+		'3 x 5 % 9',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation % amount_string',
+		'6',
+	]),
+	...expand_ignore_characters([
+		'1 + (2/3)',
+		'IntermediaryCalculation',
+		'amount_string + IntermediaryCalculation',
+		'1.(6)',
+	]),
+];
 
 void describe('IntermediaryCalculation', () => {
 	void it ('does a better job of handling things than native', () => {

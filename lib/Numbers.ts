@@ -15,6 +15,7 @@ import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 import {
+	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
@@ -65,9 +66,6 @@ export class Numbers
 		).resolve().toBigNumber();
 	}
 
-	/**
-	 * @todo possible issue with previous DeferredCalculation implementation
-	 */
 	static append_multiply_deferred(
 		append_to: (
 			| number_arg
@@ -91,17 +89,25 @@ export class Numbers
 			| number_arg
 			| IntermediaryCalculation_operand_types
 		)
-	): IntermediaryCalculation {
-		this.configure();
-
-		return new IntermediaryCalculation(
-			IntermediaryNumber.reuse_or_create(append_to),
-			'+',
-			IntermediaryCalculation.fromString(`(${
+	): DeferredCalculation {
+		return new DeferredCalculation(
+			`(${
+				(append_to instanceof DeferredCalculation)
+					? append_to.toUnresolvedString()
+					: append_to.toString()
+			}) + (${
 				(a instanceof Array ? a : [a]).map(
-					operand => `${operand.toString()} * ${b.toString()}`
+					operand => `(${
+						(operand instanceof DeferredCalculation)
+							? operand.toUnresolvedString()
+							: operand.toString()
+					}) * (${
+						(b instanceof DeferredCalculation)
+							? b.toUnresolvedString()
+							: b.toString()
+					})`
 				).join(') + (')
-			})`)
+			})`
 		);
 	}
 

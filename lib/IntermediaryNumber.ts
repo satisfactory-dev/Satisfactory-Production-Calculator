@@ -37,7 +37,7 @@ export type IntermediaryNumber_math_types =
 	| DeferredCalculation;
 
 export const regex_recurring_number =
-	/^(\d+\.)(\d+r|\d*\[\d+\]r?|\d*\(\d+\)r?)$/;
+	/^-?(\d+\.)(\d+r|\d*\[\d+\]r?|\d*\(\d+\)r?)$/;
 
 export type CanDoMath_result_types =
 	| IntermediaryCalculation
@@ -878,10 +878,18 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 
 				if (
 					'leading_ignore' === was.mode
+					&& 'only_numeric' === was.operand_mode
+					&& 0 === index
+					&& '-' === is
+				) {
+					add_buffer = true;
+					was.mode = 'integer_or_decimal_left';
+				} else if (
+					'leading_ignore' === was.mode
 					&& !'\t '.includes(is)
 				) {
 					assert.strictEqual(
-						'0123456789.('.includes(is),
+						'0123456789.(-'.includes(is),
 						true,
 						new IntermediaryCalculationTokenizerError(
 							'Unsupported token when expecting to switch away from ignoring leading characters!',
@@ -1147,6 +1155,11 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 				) {
 					if (
 						'0123456789'.includes(is)
+						|| (
+							'-' === is
+							&& 0 === index
+							&& add_buffer
+						)
 					) {
 						add_buffer = true;
 					} else if (
@@ -1462,11 +1475,6 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	}
 }
 
-type DeferredCalculation_with_operands = {
-	operator: IntermediaryCalculation_operation_types,
-	right_operand: IntermediaryCalculation_operand_types
-};
-
 export class DeferredCalculation implements
 	CanConvertType,
 	CanResolveMath<
@@ -1482,14 +1490,11 @@ export class DeferredCalculation implements
 		| IntermediaryCalculation
 		| undefined;
 	private internal_value:string;
-	private with_operands?:DeferredCalculation_with_operands;
 
 	constructor(
 		value:string,
-		with_operands?: DeferredCalculation_with_operands
 	) {
 		this.internal_value = value;
-		this.with_operands = with_operands;
 	}
 
 	get resolve_type(): string {
@@ -1497,18 +1502,7 @@ export class DeferredCalculation implements
 			return this.cached_intermediary.resolve_type;
 		}
 
-		const result = this.value;
-
-		return (
-			this.with_operands
-				? `(${
-					result
-				}) ${
-					this.with_operands.operator
-				} (${
-					this.with_operands.right_operand.resolve_type
-				})`
-				: result);
+		return this.internal_value;
 	}
 
 	get type(): IntermediaryCalculation_operand_type_types
@@ -1540,42 +1534,58 @@ export class DeferredCalculation implements
 	}
 
 	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
+		const operand = IntermediaryNumber.reuse_or_create(value);
+
 		return new DeferredCalculation(
-			this.value,
-			{
-				operator: '/',
-				right_operand: IntermediaryNumber.reuse_or_create(value),
-			}
+			`(${this.internal_value}) / (${
+				(operand instanceof DeferredCalculation)
+					? operand.toUnresolvedString()
+					: (
+						operand.toString()
+					)
+			})`
 		);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
+		const operand = IntermediaryNumber.reuse_or_create(value);
+
 		return new DeferredCalculation(
-			this.value,
-			{
-				operator: '-',
-				right_operand: IntermediaryNumber.reuse_or_create(value),
-			}
+			`(${this.internal_value}) - (${
+				(operand instanceof DeferredCalculation)
+					? operand.toUnresolvedString()
+					: (
+						operand.toString()
+					)
+			})`
 		);
 	}
 
 	modulo(value: IntermediaryNumber_math_types): DeferredCalculation {
+		const operand = IntermediaryNumber.reuse_or_create(value);
+
 		return new DeferredCalculation(
-			this.value,
-			{
-				operator: '%',
-				right_operand: IntermediaryNumber.reuse_or_create(value),
-			}
+			`(${this.internal_value}) % (${
+				(operand instanceof DeferredCalculation)
+					? operand.toUnresolvedString()
+					: (
+						operand.toString()
+					)
+			})`
 		);
 	}
 
 	plus(value: IntermediaryNumber_math_types): DeferredCalculation {
+		const operand = IntermediaryNumber.reuse_or_create(value);
+
 		return new DeferredCalculation(
-			this.value,
-			{
-				operator: '+',
-				right_operand: IntermediaryNumber.reuse_or_create(value),
-			}
+			`(${this.internal_value}) + (${
+				(operand instanceof DeferredCalculation)
+					? operand.toUnresolvedString()
+					: (
+						operand.toString()
+					)
+			})`
 		);
 	}
 
@@ -1590,12 +1600,16 @@ export class DeferredCalculation implements
 	}
 
 	times(value: IntermediaryNumber_math_types): DeferredCalculation {
+		const operand = IntermediaryNumber.reuse_or_create(value);
+
 		return new DeferredCalculation(
-			this.value,
-			{
-				operator: '*',
-				right_operand: IntermediaryNumber.reuse_or_create(value),
-			}
+			`(${this.internal_value}) x (${
+				(operand instanceof DeferredCalculation)
+					? operand.toUnresolvedString()
+					: (
+						operand.toString()
+					)
+			})`
 		);
 	}
 
@@ -1616,20 +1630,17 @@ export class DeferredCalculation implements
 		return this.resolve().toString();
 	}
 
+	toUnresolvedString(): string
+	{
+		return this.internal_value;
+	}
+
 	private parse()
 	{
 		if (!this.cached_intermediary) {
 			this.cached_intermediary = IntermediaryCalculation.fromString(
 				this.internal_value
 			);
-
-			if (this.with_operands) {
-				this.cached_intermediary = new IntermediaryCalculation(
-					this.cached_intermediary,
-					this.with_operands.operator,
-					this.with_operands.right_operand
-				);
-			}
 		}
 
 		return this.cached_intermediary;

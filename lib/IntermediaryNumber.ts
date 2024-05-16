@@ -33,36 +33,57 @@ export type IntermediaryNumber_type_types =
 
 export type IntermediaryNumber_math_types =
 	| IntermediaryCalculation_operand_types
-	| IntermediaryNumber_input_types;
+	| IntermediaryNumber_input_types
+	| DeferredCalculation;
 
 export const regex_recurring_number =
 	/^(\d+\.)(\d+r|\d*\[\d+\]r?|\d*\(\d+\)r?)$/;
 
-interface CanDoMath
-{
+export type CanDoMath_result_types =
+	| IntermediaryCalculation
+	| DeferredCalculation;
+
+interface CanDoMath<
+	ResultType extends CanDoMath_result_types = CanDoMath_result_types,
+	ResolveString extends string = IntermediaryNumber_type_types
+> {
+	get type(): IntermediaryCalculation_operand_type_types;
+
+	get resolve_type(): ResolveString;
+
 	divide(
 		value:IntermediaryNumber_math_types
-	): IntermediaryCalculation;
+	): ResultType;
 
 	minus(
 		value:IntermediaryNumber_math_types
-	): IntermediaryCalculation;
+	): ResultType;
 
 	modulo(
 		value:IntermediaryNumber_math_types
-	): IntermediaryCalculation;
+	): ResultType;
 
 	plus(
 		value:IntermediaryNumber_math_types
-	): IntermediaryCalculation;
+	): ResultType;
 
 	times(
 		value:IntermediaryNumber_math_types
-	): IntermediaryCalculation;
+	): ResultType;
 
 	abs(): (
-		| IntermediaryCalculation_operand_types
+		| IntermediaryCalculation
+		| IntermediaryNumber
 	);
+}
+
+interface CanResolveMath<
+	T extends CanDoMath_result_types = CanDoMath_result_types
+> extends CanDoMath<
+	T,
+	string
+> {
+	resolve(): IntermediaryNumber;
 }
 
 interface CanConvertType
@@ -72,6 +93,8 @@ interface CanConvertType
 	toBigNumber(): BigNumber;
 
 	toFraction(): Fraction;
+
+	toString(): string;
 }
 
 function do_math(
@@ -79,24 +102,23 @@ function do_math(
 	operator: IntermediaryCalculation_operation_types,
 	right_operand: IntermediaryNumber_math_types
 ) : IntermediaryCalculation {
-	const right_value =  (
-		(right_operand instanceof IntermediaryNumber)
-		|| (right_operand instanceof IntermediaryCalculation)
-	)
-		? right_operand
-		: IntermediaryNumber.create(right_operand);
-
 	return new IntermediaryCalculation(
 		left_operand,
 		operator,
-		right_value
+		IntermediaryNumber.reuse_or_create(right_operand)
 	);
 }
 
 function abs(
 	value:
-		| IntermediaryCalculation_operand_types
-) {
+		| Exclude<
+			IntermediaryCalculation_operand_types,
+			DeferredCalculation
+		>
+): Exclude<
+	IntermediaryCalculation_operand_types,
+	DeferredCalculation
+> {
 	return value.toBigNumber().isLessThan(0)
 		? IntermediaryNumber.create('0').minus(
 			value
@@ -127,6 +149,10 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 	protected constructor(value:IntermediaryNumber_value_types)
 	{
 		this.value = value;
+	}
+
+	get resolve_type(): IntermediaryNumber_type_types {
+		return this.type;
 	}
 
 	get type(): IntermediaryNumber_type_types
@@ -238,11 +264,28 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 
 		throw new Error('Unsupported argument specified!');
 	}
+
+	static reuse_or_create(
+		input:
+			| IntermediaryCalculation_operand_types
+			| IntermediaryNumber_input_types
+	): IntermediaryCalculation_operand_types {
+		return (
+			(
+				(input instanceof IntermediaryNumber)
+				|| (input instanceof IntermediaryCalculation)
+				|| (input instanceof DeferredCalculation)
+			)
+				? input
+				: this.create(input)
+		);
+	}
 }
 
 export type IntermediaryCalculation_operand_types =
 	| IntermediaryNumber
-	| IntermediaryCalculation;
+	| IntermediaryCalculation
+	| DeferredCalculation;
 
 export type IntermediaryCalculation_operation_types =
 	| '+'
@@ -254,7 +297,8 @@ export type IntermediaryCalculation_operation_types =
 
 export type IntermediaryCalculation_operand_type_types =
 	| IntermediaryNumber_type_types
-	| 'IntermediaryCalculation';
+	| 'IntermediaryCalculation'
+	| 'DeferredCalculation';
 
 const BigNumber_operation_map:{
 	[
@@ -329,7 +373,7 @@ export class IntermediaryCalculationTokenizerError extends Error
 	}
 }
 
-export class IntermediaryCalculation implements CanDoMath, CanConvertType
+export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 {
 	readonly left_operand:IntermediaryCalculation_operand_types;
 	readonly operation:IntermediaryCalculation_operation_types;
@@ -354,6 +398,10 @@ export class IntermediaryCalculation implements CanDoMath, CanConvertType
 		return this.left_operand.type;
 	}
 
+	get resolve_type(): string {
+		return `${this.left_type} ${this.operation} ${this.right_type}`;
+	}
+
 	get right_type(): IntermediaryCalculation_operand_type_types
 	{
 		if (this.right_operand instanceof IntermediaryCalculation) {
@@ -361,6 +409,11 @@ export class IntermediaryCalculation implements CanDoMath, CanConvertType
 		}
 
 		return this.right_operand.type;
+	}
+
+	get type(): IntermediaryCalculation_operand_type_types
+	{
+		return 'IntermediaryCalculation';
 	}
 
 	abs()
@@ -439,7 +492,10 @@ export class IntermediaryCalculation implements CanDoMath, CanConvertType
 	private operand_to_IntermediaryNumber(
 		operand:IntermediaryCalculation_operand_types
 	) : IntermediaryNumber {
-		if (operand instanceof IntermediaryCalculation) {
+		if (
+			(operand instanceof IntermediaryCalculation)
+			|| (operand instanceof DeferredCalculation)
+		) {
 			return operand.resolve();
 		} else if (
 			'amount_string' === operand.type
@@ -1403,5 +1459,179 @@ export class IntermediaryCalculation implements CanDoMath, CanConvertType
 		}
 
 		return result;
+	}
+}
+
+type DeferredCalculation_with_operands = {
+	operator: IntermediaryCalculation_operation_types,
+	right_operand: IntermediaryCalculation_operand_types
+};
+
+export class DeferredCalculation implements
+	CanConvertType,
+	CanResolveMath<
+		DeferredCalculation
+	>
+{
+	private cached_abs:
+		| IntermediaryNumber
+		| IntermediaryCalculation
+		| undefined;
+	private cached_intermediary:
+		| IntermediaryNumber
+		| IntermediaryCalculation
+		| undefined;
+	private internal_value:string;
+	private with_operands?:DeferredCalculation_with_operands;
+
+	constructor(
+		value:string,
+		with_operands?: DeferredCalculation_with_operands
+	) {
+		this.internal_value = value;
+		this.with_operands = with_operands;
+	}
+
+	get resolve_type(): string {
+		if (this.cached_intermediary) {
+			return this.cached_intermediary.resolve_type;
+		}
+
+		const result = this.value;
+
+		return (
+			this.with_operands
+				? `(${
+					result
+				}) ${
+					this.with_operands.operator
+				} (${
+					this.with_operands.right_operand.resolve_type
+				})`
+				: result);
+	}
+
+	get type(): IntermediaryCalculation_operand_type_types
+	{
+		return 'DeferredCalculation';
+	}
+
+	get value(): string
+	{
+		return this.internal_value;
+	}
+
+	set value(value:string)
+	{
+		if (this.internal_value !== value) {
+			this.cached_abs = undefined;
+			this.cached_intermediary = undefined;
+		}
+
+		this.internal_value = value;
+	}
+
+	abs() {
+		if (!this.cached_abs) {
+			this.cached_abs = this.parse().abs();
+		}
+
+		return this.cached_abs;
+	}
+
+	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
+		return new DeferredCalculation(
+			this.value,
+			{
+				operator: '/',
+				right_operand: IntermediaryNumber.reuse_or_create(value),
+			}
+		);
+	}
+
+	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
+		return new DeferredCalculation(
+			this.value,
+			{
+				operator: '-',
+				right_operand: IntermediaryNumber.reuse_or_create(value),
+			}
+		);
+	}
+
+	modulo(value: IntermediaryNumber_math_types): DeferredCalculation {
+		return new DeferredCalculation(
+			this.value,
+			{
+				operator: '%',
+				right_operand: IntermediaryNumber.reuse_or_create(value),
+			}
+		);
+	}
+
+	plus(value: IntermediaryNumber_math_types): DeferredCalculation {
+		return new DeferredCalculation(
+			this.value,
+			{
+				operator: '+',
+				right_operand: IntermediaryNumber.reuse_or_create(value),
+			}
+		);
+	}
+
+	resolve(): IntermediaryNumber {
+		const result = this.parse();
+
+		return (
+			(result instanceof IntermediaryNumber)
+				? result
+				: result.resolve()
+		);
+	}
+
+	times(value: IntermediaryNumber_math_types): DeferredCalculation {
+		return new DeferredCalculation(
+			this.value,
+			{
+				operator: '*',
+				right_operand: IntermediaryNumber.reuse_or_create(value),
+			}
+		);
+	}
+
+	toAmountString(): amount_string {
+		return this.parse().toAmountString();
+	}
+
+	toBigNumber(): BigNumber {
+		return this.parse().toBigNumber();
+	}
+
+	toFraction(): Fraction {
+		return this.parse().toFraction();
+	}
+
+	toString()
+	{
+		return this.resolve().toString();
+	}
+
+	private parse()
+	{
+		if (!this.cached_intermediary) {
+			this.cached_intermediary = IntermediaryCalculation.fromString(
+				this.internal_value
+			);
+
+			if (this.with_operands) {
+				this.cached_intermediary = new IntermediaryCalculation(
+					this.cached_intermediary,
+					this.with_operands.operator,
+					this.with_operands.right_operand
+				);
+			}
+		}
+
+		return this.cached_intermediary;
 	}
 }

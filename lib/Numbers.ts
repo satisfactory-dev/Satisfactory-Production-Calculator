@@ -15,7 +15,7 @@ import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 import {
-	IntermediaryCalculation,
+	DeferredCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
@@ -88,24 +88,17 @@ export class Numbers
 			| number_arg
 			| IntermediaryCalculation_operand_types
 		)
-	): IntermediaryCalculation {
-		this.configure();
-
-		return new IntermediaryCalculation(
-			(
-				(
-					(append_to instanceof IntermediaryCalculation)
-					|| (append_to instanceof IntermediaryNumber)
-				)
-					? append_to
-					: IntermediaryNumber.create(append_to)
-			),
-			'+',
-			IntermediaryCalculation.fromString(`(${
+	): DeferredCalculation {
+		return new DeferredCalculation(
+			`(${
 				(a instanceof Array ? a : [a]).map(
 					operand => `${operand.toString()} * ${b.toString()}`
 				).join(') + (')
-			})`)
+			})`,
+			{
+				operator: '+',
+				right_operand: IntermediaryNumber.reuse_or_create(append_to),
+			}
 		);
 	}
 
@@ -225,12 +218,7 @@ export class Numbers
 		| IntermediaryCalculation_operand_types
 	) {
 		return numbers.map(
-			e => (
-				(e instanceof IntermediaryCalculation)
-				|| (e instanceof IntermediaryNumber)
-			)
-				? e
-				: IntermediaryNumber.create(e)
+			e => IntermediaryNumber.reuse_or_create(e)
 		).reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
 			(was, is) => {
@@ -290,20 +278,10 @@ export class Numbers
 		)
 	) {
 		const a_deferred = (
-			(
-				(a instanceof IntermediaryCalculation)
-				|| (a instanceof IntermediaryNumber)
-			)
-				? a
-				: IntermediaryNumber.create(a)
+			IntermediaryNumber.reuse_or_create(a)
 		);
 		const b_deferred = (
-			(
-				(b instanceof IntermediaryCalculation)
-				|| (b instanceof IntermediaryNumber)
-			)
-				? b
-				: IntermediaryNumber.create(b)
+			IntermediaryNumber.reuse_or_create(b)
 		);
 
 		assert.strictEqual(
@@ -320,12 +298,7 @@ export class Numbers
 				| IntermediaryCalculation_operand_types
 		) {
 			let previous = (
-				(
-					(number instanceof IntermediaryCalculation)
-					|| (number instanceof IntermediaryNumber)
-				)
-					? number
-					: IntermediaryNumber.create(number)
+				IntermediaryNumber.reuse_or_create(number)
 			);
 
 			return () => {

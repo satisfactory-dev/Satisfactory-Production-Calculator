@@ -78,8 +78,7 @@ import {
 	FGBuildableGeneratorNuclear,
 } from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import {
-	IntermediaryCalculation,
-	IntermediaryNumber,
+	IntermediaryCalculation_operand_types,
 } from './IntermediaryNumber';
 
 export const ammo = Object.fromEntries(
@@ -237,8 +236,7 @@ export type production_item = keyof (
 export type production_set<
 	T extends (
 		| BigNumber
-		| IntermediaryCalculation
-		| IntermediaryNumber
+		| IntermediaryCalculation_operand_types
 	) = BigNumber
 > = {[key in production_item]: T};
 

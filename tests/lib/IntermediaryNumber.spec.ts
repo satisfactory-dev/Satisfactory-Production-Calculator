@@ -412,14 +412,9 @@ void describe('IntermediaryCalculation', () => {
 								result.constructor.name,
 								expected_result_type
 							);
-							const actual_type_info = (
-								result instanceof IntermediaryNumber
-									? result.type
-									: `${result.left_type} ${result.operation} ${result.right_type}`
-							);
 
 							assert.strictEqual(
-								actual_type_info,
+								result.resolve_type,
 								expected_type_info
 							);
 

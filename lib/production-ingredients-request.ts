@@ -54,6 +54,7 @@ import {
 	Root,
 } from './production-chain';
 import {
+	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
@@ -193,19 +194,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			[key in keyof (
 				| typeof buildings
 				| typeof resources
-			)]: IntermediaryCalculation|IntermediaryNumber;
+			)]: IntermediaryCalculation_operand_types;
 		} = {};
 
 		for (const entry of data.pool) {
 			const {item: production, amount:output_amount} = entry;
-			let amount:(
-				| IntermediaryCalculation_operand_types
-			) = (
-				(entry.amount instanceof IntermediaryCalculation)
-				|| (entry.amount instanceof IntermediaryNumber)
-			)
-				? entry.amount
-				: IntermediaryNumber.create(entry.amount);
+			let amount = IntermediaryNumber.reuse_or_create(entry.amount);
 			let amount_from_input:(
 				| IntermediaryCalculation_operand_types
 			) = IntermediaryNumber.create('0');
@@ -222,6 +216,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount_from_input = (
 						(output_amount instanceof IntermediaryCalculation)
 						|| (output_amount instanceof IntermediaryNumber)
+						|| (output_amount instanceof DeferredCalculation)
 					)
 						? output_amount
 						: IntermediaryNumber.create(output_amount);
@@ -558,8 +553,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				{} as {
 					[key in production_item]: {
 						item: production_item,
-						output: IntermediaryCalculation|IntermediaryNumber,
-						surplus: IntermediaryCalculation|IntermediaryNumber,
+						output: IntermediaryCalculation_operand_types,
+						surplus: IntermediaryCalculation_operand_types,
 					}
 				}
 			)
@@ -668,12 +663,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			data.pool.map(e => [
 				e.item,
 				(
-					(
-						(e.amount instanceof IntermediaryCalculation)
-						|| (e.amount instanceof IntermediaryNumber)
-					)
-						? e.amount
-						: IntermediaryNumber.create(e.amount)
+					IntermediaryNumber.reuse_or_create(e.amount)
 				),
 			])
 		);

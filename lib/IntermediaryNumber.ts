@@ -139,7 +139,7 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 		} else if (this.value instanceof Fraction) {
 			return 'Fraction';
 		} else if (Numbers.is_amount_string(this.value)) {
-		return 'amount_string';
+			return 'amount_string';
 		}
 
 		return 'numeric_string';

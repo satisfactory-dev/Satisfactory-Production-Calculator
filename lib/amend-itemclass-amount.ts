@@ -15,7 +15,10 @@ import {
 	items,
 	resources,
 } from "./production-data";
-import { IntermediaryCalculation, IntermediaryNumber } from "./IntermediaryNumber";
+import {
+	IntermediaryCalculation,
+	IntermediaryNumber,
+} from './IntermediaryNumber';
 
 export function amend_ItemClass_amount(
 	ItemClass:{

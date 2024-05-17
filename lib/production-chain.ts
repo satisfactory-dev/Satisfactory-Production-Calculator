@@ -19,7 +19,6 @@ import {
 } from './faux-recipe';
 import {
 	number_arg,
-	Numbers,
 } from './Numbers';
 import {
 	amend_ItemClass_amount,
@@ -30,7 +29,6 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
-import Fraction from 'fraction.js';
 
 class Item
 {

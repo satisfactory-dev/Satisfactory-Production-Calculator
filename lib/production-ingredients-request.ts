@@ -503,7 +503,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					)
 					.minus(output[e[0]] || 0),
 			};
-		}).filter(maybe => maybe.amount.toBigNumber().isGreaterThan(0));
+		}).filter(maybe => maybe.amount.isGreaterThan(0));
 
 		const output_entries = Object.entries(output).map(e => {
 			return {
@@ -568,7 +568,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 							: left_over
 					),
 				};
-			}).filter(maybe => maybe.amount.toBigNumber().isGreaterThan(0)),
+			}).filter(maybe => maybe.amount.isGreaterThan(0)),
 			output: output_entries,
 			combined: Object.values(combined),
 		};
@@ -850,7 +850,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			);
 
 			if (
-				output[entry[0]].toBigNumber().isGreaterThan(
+				output[entry[0]].isGreaterThan(
 					entry[1].toBigNumber()
 				)
 			) {
@@ -882,7 +882,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		const output_entries_filtered = output_entries.filter(
-			maybe => maybe[1].toBigNumber().isGreaterThan(0)
+			maybe => maybe[1].isGreaterThan(0)
 		).map(e => {
 			return {
 				item: e[0],
@@ -891,7 +891,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		});
 
 		const surplus_filtered = Object.entries(surplus_map).filter(
-			maybe => maybe[1].toBigNumber().isGreaterThan(0)
+			maybe => maybe[1].isGreaterThan(0)
 		).map(e => {
 			return {
 				item: e[0],

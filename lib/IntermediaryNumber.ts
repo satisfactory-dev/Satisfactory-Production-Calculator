@@ -97,6 +97,8 @@ interface CanConvertType
 	toString(): string;
 
 	isLessThan(value:number|BigNumber): boolean;
+
+	isGreaterThan(value:number|BigNumber): boolean;
 }
 
 function do_math(
@@ -164,7 +166,24 @@ function is_less_than(
 	} else if (value <= return_largest_is_less_than) {
 		return_boolean = true;
 	} else {
-		return_boolean = thing.toBigNumber().isLessThan(value);
+		if (
+			(value instanceof BigNumber)
+			|| (return_largest_is_less_than instanceof BigNumber)
+		) {
+			const maybe = BigNumber(value).isLessThanOrEqualTo(
+				return_largest_is_less_than
+			);
+
+			if (maybe) {
+				return_boolean = true;
+			} else {
+				return_boolean = thing.toBigNumber().isLessThan(value);
+			}
+		} else if (value <= return_largest_is_less_than) {
+			return_boolean = true;
+		} else {
+			return_boolean = thing.toBigNumber().isLessThan(value);
+		}
 
 		if (return_boolean) {
 			if (
@@ -187,6 +206,69 @@ function is_less_than(
 	return {
 		result: return_boolean,
 		largest_is_less_than: return_largest_is_less_than,
+	};
+}
+
+function is_greater_than(
+	thing:CanConvertType,
+	value:number|BigNumber,
+	smallest_is_greater_than:number|BigNumber|undefined
+): {
+	result: boolean,
+	smallest_is_greater_than: number|BigNumber|undefined
+} {
+	let return_smallest_is_greater_than = smallest_is_greater_than;
+	let return_boolean:boolean;
+
+	if (undefined === return_smallest_is_greater_than) {
+		return_boolean = thing.toBigNumber().isGreaterThan(value);
+
+		if (return_boolean) {
+			return_smallest_is_greater_than = value;
+		}
+	} else if (value <= return_smallest_is_greater_than) {
+		return_boolean = true;
+	} else {
+		if (
+			(value instanceof BigNumber)
+			|| (return_smallest_is_greater_than instanceof BigNumber)
+		) {
+			const maybe = BigNumber(value).isGreaterThanOrEqualTo(
+				return_smallest_is_greater_than
+			);
+
+			if (maybe) {
+				return_boolean = true;
+			} else {
+				return_boolean = thing.toBigNumber().isGreaterThan(value);
+			}
+		} else if (value >= return_smallest_is_greater_than) {
+			return_boolean = true;
+		} else {
+			return_boolean = thing.toBigNumber().isGreaterThan(value);
+		}
+
+		if (return_boolean) {
+			if (
+				return_smallest_is_greater_than instanceof BigNumber
+				|| value instanceof BigNumber
+			) {
+				return_smallest_is_greater_than = BigNumber.min(
+					value,
+					return_smallest_is_greater_than
+				);
+			} else {
+				return_smallest_is_greater_than = Math.min(
+					value,
+					return_smallest_is_greater_than
+				);
+			}
+		}
+	}
+
+	return {
+		result: return_boolean,
+		smallest_is_greater_than: return_smallest_is_greater_than,
 	};
 }
 
@@ -239,6 +321,7 @@ const conversion_cache = new class {
 export class IntermediaryNumber implements CanDoMath, CanConvertType
 {
 	private largest_is_less_than:BigNumber|number|undefined = undefined;
+	private smallest_is_greater_than:BigNumber|number|undefined = undefined;
 
 	private readonly value:IntermediaryNumber_value_types;
 
@@ -272,6 +355,17 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	isGreaterThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			smallest_is_greater_than,
+		} = is_greater_than(this, value, this.smallest_is_greater_than);
+
+		this.smallest_is_greater_than = smallest_is_greater_than;
+
+		return result;
 	}
 
 	isLessThan(value: number|BigNumber): boolean {
@@ -505,6 +599,7 @@ export class IntermediaryCalculationTokenizerError extends Error
 export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 {
 	private largest_is_less_than:number|BigNumber|undefined = undefined;
+	private smallest_is_greater_than:number|BigNumber|undefined = undefined;
 
 	readonly left_operand:IntermediaryCalculation_operand_types;
 	readonly operation:IntermediaryCalculation_operation_types;
@@ -555,6 +650,17 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	isGreaterThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			smallest_is_greater_than,
+		} = is_greater_than(this, value, this.smallest_is_greater_than);
+
+		this.smallest_is_greater_than = smallest_is_greater_than;
+
+		return result;
 	}
 
 	isLessThan(value: number|BigNumber): boolean {
@@ -1687,6 +1793,7 @@ export class DeferredCalculation implements
 		...DeferredCalculation_parts[],
 	];
 	private largest_is_less_than:number|BigNumber|undefined = undefined;
+	private smallest_is_greater_than:number|BigNumber|undefined = undefined;
 
 	constructor(
 		value:DeferredCalculation_parts,
@@ -1744,6 +1851,17 @@ export class DeferredCalculation implements
 			IntermediaryNumber.reuse_or_create(value),
 			')',
 		);
+	}
+
+	isGreaterThan(value: number|BigNumber): boolean {
+		const {
+			result,
+			smallest_is_greater_than,
+		} = is_greater_than(this, value, this.smallest_is_greater_than);
+
+		this.smallest_is_greater_than = smallest_is_greater_than;
+
+		return result;
 	}
 
 	isLessThan(value: number|BigNumber): boolean {

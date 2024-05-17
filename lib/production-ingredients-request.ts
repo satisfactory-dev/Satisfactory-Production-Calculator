@@ -209,7 +209,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			if (production in input) {
 				if (
 					input[production].isLessThan(
-						amount.toBigNumber()
+						amount
 					)
 				) {
 					amount_from_input = input[production];
@@ -892,7 +892,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			if (
 				output[entry[0]].isGreaterThan(
-					entry[1].toBigNumber()
+					entry[1]
 				)
 			) {
 				if (!(entry[0] in surplus_map)) {

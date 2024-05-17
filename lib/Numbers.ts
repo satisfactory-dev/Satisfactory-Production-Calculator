@@ -126,7 +126,11 @@ export class Numbers
 	static greatest_common_denominator(
 		a:number_arg|BigNumber,
 		b:number_arg|BigNumber
-	): BigNumber {
+	): BigNumber|Fraction {
+		if (is_string(a) && is_string(b)) {
+			return (new Fraction(a)).gcd(new Fraction(b));
+		}
+
 		const a_Bignumber = BigNumber(a);
 		const b_Bignumber = BigNumber(b);
 
@@ -234,16 +238,16 @@ export class Numbers
 			);
 		}
 
-		return numbers.map(
-			e => IntermediaryNumber.reuse_or_create(e)
+		return IntermediaryNumber.reuse_or_create(numbers.map(
+			e => IntermediaryNumber.reuse_or_create(e).toFraction()
 		).reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
 			(was, is) => {
-				return was.times(is).abs().divide(
-					this.greatest_common_denominator_deferred(was, is)
+				return was.mul(is).abs().div(
+					was.gcd(is)
 				);
 			}
-		);
+		));
 	}
 
 	static round_off(number:BigNumber): amount_string

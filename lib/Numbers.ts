@@ -156,9 +156,8 @@ export class Numbers
 			return a;
 		}
 
-		return this.greatest_common_denominator_deferred(
-			b,
-			a.modulo(b)
+		return IntermediaryNumber.create(
+			a.toFraction().gcd(b.toFraction())
 		);
 	}
 
@@ -225,6 +224,16 @@ export class Numbers
 	): (
 		| IntermediaryCalculation_operand_types
 	) {
+		if (2 === numbers.length) {
+			return IntermediaryNumber.create(
+				IntermediaryNumber.reuse_or_create(
+					numbers[0]
+				).toFraction().lcm(
+					IntermediaryNumber.reuse_or_create(numbers[1]).toFraction()
+				)
+			);
+		}
+
 		return numbers.map(
 			e => IntermediaryNumber.reuse_or_create(e)
 		).reduce(

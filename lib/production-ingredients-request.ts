@@ -262,24 +262,20 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					for (const entry of Object.entries(faux_result)) {
 						const [faux_ingredient, faux_amount] = entry;
 
+						const multiplied = amount.times(faux_amount);
+
 						if (!(faux_ingredient in ingredients)) {
 							ingredients[
 								faux_ingredient
-							] = IntermediaryNumber.create(
-								'0'
-							);
-						}
-
+							] = multiplied;
+						} else {
 						ingredients[
 							faux_ingredient
-						] = ingredients[faux_ingredient].do_math_then_dispose(
-							'plus',
-							Numbers.append_multiply_deferred(
-								0,
-								faux_amount,
-								amount
-							)
+							] = ingredients[faux_ingredient].do_math_then_dispose(
+								'plus',
+								multiplied
 						);
+						}
 					}
 
 					output[
@@ -288,11 +284,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						production as keyof typeof resources
 					].do_math_then_dispose(
 						'plus',
-						Numbers.append_multiply_deferred(
-							0,
-							1,
-							amount
-						)
+						amount
 					);
 
 					continue;
@@ -329,11 +321,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					production as keyof typeof resources
 				].do_math_then_dispose(
 					'plus',
-					Numbers.append_multiply_deferred(
-						0,
-						1,
-						amount
-					)
+					amount
 				);
 
 				continue;
@@ -444,24 +432,26 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					)
 				);
 
-				if (!(Desc_C in ingredients)) {
-					ingredients[Desc_C] = IntermediaryNumber.Zero;
-				}
-
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					ingredient
 				).Amount;
 
-				ingredients[Desc_C] = ingredients[Desc_C].do_math_then_dispose(
-					'plus',
-					Numbers.append_multiply_deferred(
-						0,
-						0 === divisor.compare(1)
-							? ammended_amount
-							: ammended_amount.divide(divisor),
-						amount
-					)
+				const multiplied = amount.times(
+					0 === divisor.compare(1)
+						? ammended_amount
+						: ammended_amount.divide(divisor)
 				);
+
+				if (!(Desc_C in ingredients)) {
+					ingredients[Desc_C] = multiplied;
+				} else {
+					ingredients[Desc_C] = ingredients[
+						Desc_C
+					].do_math_then_dispose(
+						'plus',
+						multiplied
+					);
+				}
 			}
 
 			for (const product of mProduct) {
@@ -493,21 +483,24 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					)
 				);
 
-				if (!(Desc_C in output)) {
-					output[Desc_C] = IntermediaryNumber.Zero;
-				}
-
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					product
 				).Amount;
 
-				output[Desc_C] = Numbers.append_multiply_deferred(
-					output[Desc_C],
+				const multiplied = amount.times(
 					0 === divisor.compare(1)
 						? ammended_amount
-						: ammended_amount.divide(divisor),
-					amount
+						: ammended_amount.divide(divisor)
 				);
+
+				if (!(Desc_C in output)) {
+					output[Desc_C] = multiplied;
+				} else {
+					output[Desc_C] = output[Desc_C].do_math_then_dispose(
+						'plus',
+						multiplied
+					);
+				}
 			}
 		}
 

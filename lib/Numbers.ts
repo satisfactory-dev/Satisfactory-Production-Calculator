@@ -50,52 +50,6 @@ export class Numbers
 		return maybe;
 	}
 
-	static append_multiply_deferred(
-		append_to: (
-			| number_arg
-			| IntermediaryCalculation_operand_types
-		),
-		a:(
-			| number_arg
-			| [number_arg, ...number_arg[]]
-			| [amount_string, ...amount_string[]]
-			| IntermediaryCalculation_operand_types
-			| [
-				(
-					IntermediaryCalculation_operand_types
-				),
-				...(
-					IntermediaryCalculation_operand_types
-				)[],
-			]
-		),
-		b:(
-			| number_arg
-			| IntermediaryCalculation_operand_types
-		)
-	): DeferredCalculation {
-		return new DeferredCalculation(
-			'(',
-			append_to,
-			')',
-			...(a instanceof Array ? a : [a]).reduce(
-				(was, is) => {
-					was.push(
-						'+',
-						'(',
-						is,
-						'*',
-						b,
-						')'
-					);
-
-					return was;
-				},
-				[] as DeferredCalculation_parts[]
-			),
-		);
-	}
-
 	static fraction_to_BigNumber(fraction:Fraction): BigNumber
 	{
 		return BigNumber(

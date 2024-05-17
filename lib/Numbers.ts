@@ -17,6 +17,7 @@ import {
 import {
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
+	IntermediaryNumber_math_types,
 } from './IntermediaryNumber';
 
 export type amount_string =
@@ -45,6 +46,34 @@ export class Numbers
 		}
 
 		return maybe;
+	}
+
+	static divide_if_not_one(
+		left:IntermediaryNumber_math_types,
+		right:Fraction,
+		require_fraction:true
+	): Fraction;
+	static divide_if_not_one(
+		left:IntermediaryNumber_math_types,
+		right:Fraction,
+		require_fraction:false
+	): Fraction|IntermediaryNumber_math_types;
+	static divide_if_not_one(
+		left:IntermediaryNumber_math_types,
+		right:Fraction,
+		require_fraction:boolean
+	): Fraction|IntermediaryNumber_math_types {
+		const result = (0 === right.compare(1))
+			? left
+			: IntermediaryNumber.reuse_or_create(left).divide(right);
+
+		return require_fraction
+			? (
+				(result instanceof Fraction)
+					? result
+					: IntermediaryNumber.reuse_or_create(result).toFraction()
+			)
+			: result;
 	}
 
 	static fraction_to_BigNumber(fraction:Fraction): BigNumber

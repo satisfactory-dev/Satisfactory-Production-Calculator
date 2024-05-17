@@ -54,6 +54,10 @@ interface CanDoMath<
 > extends HasType {
 	get resolve_type(): ResolveString;
 
+	compare(
+		value:IntermediaryNumber_math_types
+	): -1|0|1;
+
 	divide(
 		value:IntermediaryNumber_math_types
 	): ResultType;
@@ -343,6 +347,35 @@ function is_greater_than(
 	};
 }
 
+function compare(
+	value: IntermediaryNumber_math_types,
+	to: CanConvertType
+): 0|1|-1 {
+	const comparable = IntermediaryNumber.reuse_or_create(
+		value
+	).toBigNumberOrFraction();
+
+	let result:number|null;
+
+	if (comparable instanceof BigNumber) {
+		result = to.toBigNumber().comparedTo(comparable);
+	} else {
+		result = to.toFraction().compare(comparable);
+	}
+
+	assert.strictEqual(
+		(
+			-1 === result
+			|| 0 === result
+			|| 1 === result
+		),
+		true,
+		`Expecting -1, 0, or 1, receieved ${JSON.stringify(result)}`
+	);
+
+	return result as -1|0|1;
+}
+
 const conversion_cache = new class {
 	private deferred_abs_cache:undefined|WeakMap<DeferredCalculation, (
 		| IntermediaryNumber
@@ -460,6 +493,10 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return abs(this);
 	}
 
+	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+		return compare(value, this);
+	}
+
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
@@ -499,11 +536,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	isZero(): boolean {
-		if (this.value instanceof Fraction) {
-			return 0 === this.value.compare(0);
-		}
-
-		return 0 === this.toBigNumber().comparedTo(0);
+		return 0 === this.compare(0);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -780,6 +813,10 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return abs(this);
 	}
 
+	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+		return compare(value, this);
+	}
+
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
@@ -819,7 +856,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	isZero(): boolean {
-		return 0 === this.toBigNumber().comparedTo(0);
+		return 0 === this.compare(0);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -2021,6 +2058,10 @@ export class DeferredCalculation implements
 		return cache.get(this) as IntermediaryNumber|IntermediaryCalculation;
 	}
 
+	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+		return compare(value, this);
+	}
+
 	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
@@ -2073,13 +2114,7 @@ export class DeferredCalculation implements
 			return true;
 		}
 
-		const resolved = this.toBigNumberOrFraction();
-
-		if (resolved instanceof Fraction) {
-			return 0 === resolved.compare(0);
-		}
-
-		return 0 === resolved.comparedTo(0);
+		return 0 === this.compare(0);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {

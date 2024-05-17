@@ -399,14 +399,20 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			const divisor_pre_adjustment = divisor;
 
-			divisor = (
-				divisor_pre_adjustment.div(
-					(new Fraction(1)).div(
+			divisor = Numbers.divide_if_not_one(
+				divisor_pre_adjustment,
+				Numbers.divide_if_not_one(
+					new Fraction(1),
+					Numbers.divide_if_not_one(
 						(
 							mapped_product_amounts[production]
-						).toFraction().div(divisor_pre_adjustment)
-					)
-				)
+						),
+						divisor_pre_adjustment,
+						true
+					),
+					true
+				),
+				true
 			);
 
 			for (const ingredient of mIngredients) {
@@ -439,9 +445,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				).Amount;
 
 				const multiplied = amount.times(
-					0 === divisor.compare(1)
-						? ammended_amount
-						: ammended_amount.divide(divisor)
+					Numbers.divide_if_not_one(
+						ammended_amount,
+						divisor,
+						false
+					)
 				);
 
 				if (!(Desc_C in ingredients)) {
@@ -490,9 +498,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				).Amount;
 
 				const multiplied = amount.times(
-					0 === divisor.compare(1)
-						? ammended_amount
-						: ammended_amount.divide(divisor)
+					Numbers.divide_if_not_one(
+						ammended_amount,
+						divisor,
+						false
+					)
 				);
 
 				if (!(Desc_C in output)) {
@@ -737,17 +747,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						].toFraction().lcm(
 							check_deeper.amount.toFraction()
 						);
+
 						const a = production_items[
 							check_deeper.item
-						].toFraction().div(lcm)
-						const b = ((
+						].toFraction()
+						const b = (
 							(
 								check_deeper.amount
 							)
-						).toFraction().div(lcm));
+						).toFraction();
 						recursive_multiplier = Numbers.sum_series_fraction(
-							a,
-							b
+							Numbers.divide_if_not_one(a, lcm, true),
+							Numbers.divide_if_not_one(b, lcm, true),
 						);
 
 						avoid_checking_further.add(check_deeper.item);

@@ -103,6 +103,34 @@ interface CanConvertType
 	isZero(): boolean;
 }
 
+type CanDoMathWithDispose_operator_types =
+	| 'divide'
+	| 'minus'
+	| 'modulo'
+	| 'plus'
+	| 'times';
+
+interface CanDoMathWithDispose<
+	ResultType extends CanDoMath_result_types = CanDoMath_result_types,
+	ResolveString extends string = IntermediaryNumber_type_types
+> extends CanConvertType, CanDoMath<
+	ResultType,
+	ResolveString
+> {
+	do_math_then_dispose(
+		operator: CanDoMathWithDispose_operator_types,
+		right_operand: IntermediaryNumber_math_types
+	): ResultType;
+}
+
+interface CanResolveMathWithDispose<
+	T extends CanDoMath_result_types = CanDoMath_result_types
+> extends
+	CanResolveMath<T>,
+	CanDoMathWithDispose<T, string>
+{
+}
+
 function do_math(
 	left_operand: IntermediaryNumber|IntermediaryCalculation,
 	operator: IntermediaryCalculation_operation_types,
@@ -369,9 +397,27 @@ const conversion_cache = new class {
 
 		return this.toString_cache;
 	}
+
+	dispose(of:CanConvertType)
+	{
+		if (of instanceof DeferredCalculation && this.deferred_abs_cache) {
+			this.deferred_abs_cache.delete(of);
+		}
+
+		for (const cache of [
+			this.toAmountString_cache,
+			this.toBigNumber_cache,
+			this.toFraction_cache,
+			this.toString_cache,
+		]) {
+			if (cache) {
+				cache.delete(of);
+			}
+		}
+	}
 }
 
-export class IntermediaryNumber implements CanDoMath, CanConvertType
+export class IntermediaryNumber implements CanDoMathWithDispose
 {
 	private largest_is_less_than:BigNumber|number|undefined = undefined;
 	private smallest_is_greater_than:BigNumber|number|undefined = undefined;
@@ -412,6 +458,17 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	do_math_then_dispose(
+		operator: CanDoMathWithDispose_operator_types,
+		right_operand: IntermediaryNumber_math_types
+	): CanDoMath_result_types {
+		const result = this[operator](right_operand);
+
+		conversion_cache.dispose(this);
+
+		return result;
 	}
 
 	isGreaterThan(value: number|BigNumber): boolean {
@@ -657,7 +714,7 @@ export class IntermediaryCalculationTokenizerError extends Error
 	}
 }
 
-export class IntermediaryCalculation implements CanResolveMath, CanConvertType
+export class IntermediaryCalculation implements CanResolveMathWithDispose
 {
 	private largest_is_less_than:number|BigNumber|undefined = undefined;
 	private smallest_is_greater_than:number|BigNumber|undefined = undefined;
@@ -711,6 +768,17 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 	divide(value:IntermediaryNumber_math_types)
 	{
 		return do_math(this, '/', value);
+	}
+
+	do_math_then_dispose(
+		operator: CanDoMathWithDispose_operator_types,
+		right_operand: IntermediaryNumber_math_types
+	): CanDoMath_result_types {
+		const result = this[operator](right_operand);
+
+		conversion_cache.dispose(this);
+
+		return result;
 	}
 
 	isGreaterThan(value: number|BigNumber): boolean {
@@ -1840,8 +1908,7 @@ export type DeferredCalculation_parts =
 	| IntermediaryNumber_math_types;
 
 export class DeferredCalculation implements
-	CanConvertType,
-	CanResolveMath<
+	CanResolveMathWithDispose<
 		DeferredCalculation
 	>
 {
@@ -1929,6 +1996,17 @@ export class DeferredCalculation implements
 			IntermediaryNumber.reuse_or_create(value),
 			')',
 		);
+	}
+
+	do_math_then_dispose(
+		operator: CanDoMathWithDispose_operator_types,
+		right_operand: IntermediaryNumber_math_types
+	): DeferredCalculation {
+		const result = this[operator](right_operand);
+
+		conversion_cache.dispose(this);
+
+		return result;
 	}
 
 	isGreaterThan(value: number|BigNumber): boolean {

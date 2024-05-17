@@ -187,7 +187,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				] = IntermediaryNumber.Zero;
 			}
 
-			input[entry.item] = input[entry.item].plus(entry.amount);
+			input[entry.item] = input[entry.item].do_math_then_dispose(
+				'plus',
+				entry.amount
+			);
 		}
 		const output:{
 			[key in keyof (
@@ -209,8 +212,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						amount.toBigNumber()
 					)
 				) {
-					amount_from_input = input[production].minus(0);
-					amount = amount.minus(amount_from_input);
+					amount_from_input = input[production];
+					amount = amount.do_math_then_dispose(
+						'minus',
+						amount_from_input
+					);
 				} else {
 					amount_from_input = IntermediaryNumber.reuse_or_create(
 						output_amount
@@ -523,7 +529,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					}
 				}
 
-				was[is.item].output = was[is.item].output.plus(
+				was[is.item].output = was[is.item].output.do_math_then_dispose(
+					'plus',
 					is.amount
 				);
 
@@ -539,7 +546,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						}
 					}
 
-					was[is.item].surplus = was[is.item].surplus.plus(
+					was[is.item].surplus = was[
+						is.item
+					].surplus.do_math_then_dispose(
+						'plus',
 						is.amount
 					);
 
@@ -759,7 +769,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				not_undefined(self_output);
 
-				self_output.amount = self_output.amount.minus(
+				self_output.amount = self_output.amount.do_math_then_dispose(
+					'minus',
 					check_deeper.amount
 				);
 
@@ -792,7 +803,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					was[is.item] = IntermediaryNumber.Zero;
 				}
 
-				was[is.item] = was[is.item].plus(is.amount);
+				was[is.item] = was[is.item].do_math_then_dispose(
+					'plus',
+					is.amount
+				);
 
 				return was;
 			},
@@ -808,7 +822,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				} else {
 					ingredients[
 						ingredient.item
-					] = ingredients[ingredient.item].plus(
+					] = ingredients[ingredient.item].do_math_then_dispose(
+						'plus',
 						ingredient.amount
 					);
 				}
@@ -820,7 +835,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				} else {
 					output[
 						output_entry.item
-					] = output[output_entry.item].plus(
+					] = output[output_entry.item].do_math_then_dispose(
+						'plus',
 						output_entry.amount
 					);
 				}
@@ -833,7 +849,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					was[is.item] = IntermediaryNumber.Zero;
 				}
 
-				was[is.item] = was[is.item].plus(is.amount);
+				was[is.item] = was[is.item].do_math_then_dispose(
+					'plus',
+					is.amount
+				);
 
 				return was;
 			},
@@ -858,7 +877,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					surplus_map[entry[0]] = IntermediaryNumber.Zero;
 				}
 
-				surplus_map[entry[0]] = surplus_map[entry[0]].plus(
+				surplus_map[entry[0]] = surplus_map[
+					entry[0]
+				].do_math_then_dispose(
+					'plus',
 					output[entry[0]].minus(entry[1])
 				);
 
@@ -876,7 +898,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				ingredients[entry[0]] = IntermediaryNumber.Zero;
 			}
 
-			ingredients[entry[0]] = ingredients[entry[0]].plus(
+			ingredients[entry[0]] = ingredients[entry[0]].do_math_then_dispose(
+				'plus',
 				entry[1].abs()
 			);
 		}
@@ -909,7 +932,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					}
 				}
 
-				was[is.item].output = was[is.item].output.plus(
+				was[is.item].output = was[is.item].output.do_math_then_dispose(
+					'plus',
 					is.amount
 				);
 
@@ -925,7 +949,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						}
 					}
 
-					was[is.item].surplus = was[is.item].surplus.plus(
+					was[is.item].surplus = was[
+						is.item
+					].surplus.do_math_then_dispose(
+						'plus',
 						is.amount
 					);
 

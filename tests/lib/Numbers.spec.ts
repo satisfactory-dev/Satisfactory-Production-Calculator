@@ -93,35 +93,7 @@ void describe('Math', () => {
 		}
 	})
 
-	void describe('greatest_common_denominator', () => {
-		const data_set:[number_arg, number_arg, amount_string][] = [
-			[1, 2, '1' as integer_string__type],
-			[2, 3, '1' as integer_string__type],
-			[7, 14, '7' as integer_string__type],
-		];
-
-		for (const entry of data_set) {
-			const [a, b, expectation] = entry;
-
-			void it(
-				`Numbers.greatest_common_denominator(${
-					a.toString()
-				}, ${
-					b.toString()
-				}) returns ${
-					expectation
-				}`,
-				() => {
-					assert.equal(
-						Numbers.greatest_common_denominator(a, b).toString(),
-						expectation
-					);
-				}
-			)
-		}
-	})
-
-	void describe('least_common_multiple', () => {
+	void describe('least_common_multiple_deferred', () => {
 		const data_set:[
 			[number_arg, number_arg, ...number_arg[]],
 			string,
@@ -143,13 +115,13 @@ void describe('Math', () => {
 		for (const entry of data_set) {
 			const [numbers, expectation] = entry;
 			void it(
-				`Numbers.least_common_multiple(${
+				`Numbers.least_common_multiple_deferred(${
 					JSON.stringify(numbers)
 				}) returns ${expectation}`,
 				() => {
 					assert.equal(
-						BigNumber(expectation).comparedTo(
-							Numbers.least_common_multiple(numbers)
+						(new Fraction(expectation)).compare(
+							Numbers.least_common_multiple_deferred(numbers)
 						),
 						0
 					);

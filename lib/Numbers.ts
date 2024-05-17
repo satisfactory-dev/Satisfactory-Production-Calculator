@@ -54,48 +54,6 @@ export class Numbers
 		);
 	}
 
-	static greatest_common_denominator(
-		a:number_arg|BigNumber,
-		b:number_arg|BigNumber
-	): BigNumber|Fraction {
-		if (is_string(a) && is_string(b)) {
-			return (new Fraction(a)).gcd(new Fraction(b));
-		}
-
-		const a_Bignumber = BigNumber(a);
-		const b_Bignumber = BigNumber(b);
-
-		if (0 === b_Bignumber.comparedTo(0)) {
-			return a_Bignumber;
-		}
-
-		this.configure();
-
-		return this.greatest_common_denominator(
-			b_Bignumber,
-			a_Bignumber.modulo(b_Bignumber)
-		);
-	}
-
-	static greatest_common_denominator_deferred(
-		a:(
-			| IntermediaryCalculation_operand_types
-		),
-		b:(
-			| IntermediaryCalculation_operand_types
-		)
-	): (
-		| IntermediaryCalculation_operand_types
-	) {
-		if (b.isZero()) {
-			return a;
-		}
-
-		return IntermediaryNumber.create(
-			a.toFraction().gcd(b.toFraction())
-		);
-	}
-
 	static is_amount_string(maybe:unknown): maybe is amount_string {
 		return (
 			is_string(maybe)
@@ -117,29 +75,6 @@ export class Numbers
 				is_string(maybe)
 				&& /^-?(?:\d*\.\d+|\d+(?:\.\d+)?)$/.test(maybe)
 			)
-		);
-	}
-
-	static least_common_multiple(
-		numbers:[
-			(
-				| number_arg
-				| IntermediaryCalculation_operand_types
-			),
-			(
-				| number_arg
-				| IntermediaryCalculation_operand_types
-			),
-			...(
-				| number_arg
-				| IntermediaryCalculation_operand_types
-			)[]
-		]
-	): BigNumber {
-		this.configure();
-
-		return Numbers.fraction_to_BigNumber(
-			this.least_common_multiple_deferred(numbers)
 		);
 	}
 
@@ -206,47 +141,6 @@ export class Numbers
 		}
 
 		return result as amount_string;
-	}
-
-	static sum_series(
-		a:(
-			| number_arg
-			| IntermediaryCalculation_operand_types
-		),
-		b:(
-			| number_arg
-			| IntermediaryCalculation_operand_types
-		)
-	) {
-		return this.sum_series_deferred(a, b);
-	}
-
-	static sum_series_deferred(
-		a:(
-			| number_arg
-			| BigNumber
-			| Fraction
-			| IntermediaryCalculation_operand_types
-		),
-		b:(
-			| number_arg
-			| BigNumber
-			| Fraction
-			| IntermediaryCalculation_operand_types
-		)
-	) {
-		return this.sum_series_fraction(
-			(
-				(a instanceof Fraction)
-					? a
-					: IntermediaryNumber.reuse_or_create(a).toFraction()
-			),
-			(
-				(b instanceof Fraction)
-					? b
-					: IntermediaryNumber.reuse_or_create(b).toFraction()
-			),
-		)
 	}
 
 	static sum_series_fraction(

@@ -4,13 +4,9 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-	amount_string,
 	number_arg,
 	Numbers,
 } from '../../lib/Numbers';
-import {
-	integer_string__type,
-} from '../../generated-types/update8/common/unassigned';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 

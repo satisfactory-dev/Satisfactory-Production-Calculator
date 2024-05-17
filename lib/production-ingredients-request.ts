@@ -711,10 +711,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 
 					if (possibly_recursive) {
-						const lcm = Numbers.least_common_multiple_deferred([
-							production_items[check_deeper.item],
-							check_deeper.amount.toBigNumber(),
-						]);
+						const lcm = production_items[
+							check_deeper.item
+						].toFraction().lcm(
+							check_deeper.amount.toFraction()
+						);
 						const a = production_items[
 							check_deeper.item
 						].toFraction().div(lcm)

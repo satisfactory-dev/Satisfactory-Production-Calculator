@@ -156,8 +156,6 @@ export class Numbers
 			return a;
 		}
 
-		this.configure();
-
 		return this.greatest_common_denominator_deferred(
 			b,
 			a.modulo(b)

@@ -307,6 +307,10 @@ function is_greater_than(
 }
 
 const conversion_cache = new class {
+	private deferred_abs_cache:undefined|WeakMap<DeferredCalculation, (
+		| IntermediaryNumber
+		| IntermediaryCalculation
+	)>;
 	private toAmountString_cache:undefined|WeakMap<
 		CanConvertType,
 		amount_string
@@ -331,6 +335,17 @@ const conversion_cache = new class {
 		}
 
 		return this.toBigNumber_cache;
+	}
+
+	get DeferredCalculation_abs(): WeakMap<DeferredCalculation, (
+		| IntermediaryNumber
+		| IntermediaryCalculation
+	)> {
+		if (!this.deferred_abs_cache) {
+			this.deferred_abs_cache = new WeakMap();
+		}
+
+		return this.deferred_abs_cache;
 	}
 
 	get Fraction(): WeakMap<CanConvertType, Fraction>
@@ -1822,20 +1837,20 @@ export class DeferredCalculation implements
 		DeferredCalculation
 	>
 {
-	private cached_abs:
-		| IntermediaryNumber
-		| IntermediaryCalculation
-		| undefined;
-	private cached_intermediary:
-		| IntermediaryNumber
-		| IntermediaryCalculation
-		| undefined;
 	private internal_value:[
 		DeferredCalculation_parts,
 		...DeferredCalculation_parts[],
 	];
 	private largest_is_less_than:number|BigNumber|undefined = undefined;
 	private smallest_is_greater_than:number|BigNumber|undefined = undefined;
+
+	private static cached_intermediary = new WeakMap<
+		DeferredCalculation,
+		(
+			| IntermediaryNumber
+			| IntermediaryCalculation
+		)
+	>();
 
 	constructor(
 		value:DeferredCalculation_parts,
@@ -1845,8 +1860,15 @@ export class DeferredCalculation implements
 	}
 
 	get resolve_type(): string {
-		if (this.cached_intermediary) {
-			return this.cached_intermediary.resolve_type;
+		if (DeferredCalculation.cached_intermediary.has(this)) {
+			return (
+				DeferredCalculation.cached_intermediary.get(
+					this
+				) as (
+					| IntermediaryNumber
+					| IntermediaryCalculation
+				)
+			).resolve_type;
 		}
 
 		return this.value;
@@ -1878,11 +1900,13 @@ export class DeferredCalculation implements
 	}
 
 	abs() {
-		if (!this.cached_abs) {
-			this.cached_abs = this.parse().abs();
+		const cache = conversion_cache.DeferredCalculation_abs;
+
+		if (!cache.has(this)) {
+			cache.set(this, this.parse().abs());
 		}
 
-		return this.cached_abs;
+		return cache.get(this) as IntermediaryNumber|IntermediaryCalculation;
 	}
 
 	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
@@ -2005,12 +2029,15 @@ export class DeferredCalculation implements
 
 	private parse()
 	{
-		if (!this.cached_intermediary) {
-			this.cached_intermediary = IntermediaryCalculation.fromString(
+		if (!DeferredCalculation.cached_intermediary.has(this)) {
+			DeferredCalculation.cached_intermediary.set(this, IntermediaryCalculation.fromString(
 				this.value
-			);
+			));
 		}
 
-		return this.cached_intermediary;
+		return DeferredCalculation.cached_intermediary.get(this) as (
+			| IntermediaryNumber
+			| IntermediaryCalculation
+		);
 	}
 }

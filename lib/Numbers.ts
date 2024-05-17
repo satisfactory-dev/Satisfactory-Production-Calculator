@@ -17,6 +17,7 @@ import {
 import {
 	DeferredCalculation,
 	DeferredCalculation_parts,
+	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';

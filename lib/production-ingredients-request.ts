@@ -272,19 +272,27 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 						ingredients[
 							faux_ingredient
-						] = Numbers.append_multiply_deferred(
-							ingredients[faux_ingredient],
-							faux_amount,
-							amount
+						] = ingredients[faux_ingredient].do_math_then_dispose(
+							'plus',
+							Numbers.append_multiply_deferred(
+								0,
+								faux_amount,
+								amount
+							)
 						);
 					}
 
 					output[
 						production as keyof typeof resources
-					] = Numbers.append_multiply_deferred(
-						output[production as keyof typeof resources],
-						1,
-						amount
+					] = output[
+						production as keyof typeof resources
+					].do_math_then_dispose(
+						'plus',
+						Numbers.append_multiply_deferred(
+							0,
+							1,
+							amount
+						)
 					);
 
 					continue;
@@ -317,10 +325,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 				output[
 					production as keyof typeof resources
-				] = Numbers.append_multiply_deferred(
-					output[production as keyof typeof resources],
-					1,
-					amount
+				] = output[
+					production as keyof typeof resources
+				].do_math_then_dispose(
+					'plus',
+					Numbers.append_multiply_deferred(
+						0,
+						1,
+						amount
+					)
 				);
 
 				continue;
@@ -435,16 +448,19 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					ingredients[Desc_C] = IntermediaryNumber.Zero;
 				}
 
-				ingredients[Desc_C] = Numbers.append_multiply_deferred(
-					ingredients[Desc_C],
-					(
-						amend_ItemClass_amount_deferred(
-							ingredient
-						).Amount
-					).divide(
-						divisor
-					),
-					amount
+				const ammended_amount = amend_ItemClass_amount_deferred(
+					ingredient
+				).Amount;
+
+				ingredients[Desc_C] = ingredients[Desc_C].do_math_then_dispose(
+					'plus',
+					Numbers.append_multiply_deferred(
+						0,
+						0 === divisor.compare(1)
+							? ammended_amount
+							: ammended_amount.divide(divisor),
+						amount
+					)
 				);
 			}
 
@@ -481,15 +497,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					output[Desc_C] = IntermediaryNumber.Zero;
 				}
 
+				const ammended_amount = amend_ItemClass_amount_deferred(
+					product
+				).Amount;
+
 				output[Desc_C] = Numbers.append_multiply_deferred(
 					output[Desc_C],
-					(
-						amend_ItemClass_amount_deferred(
-							product
-						).Amount
-					).divide(
-						divisor
-					),
+					0 === divisor.compare(1)
+						? ammended_amount
+						: ammended_amount.divide(divisor),
 					amount
 				);
 			}

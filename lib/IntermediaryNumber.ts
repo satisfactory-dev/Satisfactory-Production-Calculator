@@ -2047,7 +2047,13 @@ export class DeferredCalculation implements
 			return true;
 		}
 
-		return 0 === this.toBigNumber().comparedTo(0);
+		const resolved = this.toBigNumberOrFraction();
+
+		if (resolved instanceof Fraction) {
+			return 0 === resolved.compare(0);
+		}
+
+		return 0 === resolved.comparedTo(0);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
@@ -2106,6 +2112,17 @@ export class DeferredCalculation implements
 
 	toBigNumber(): BigNumber {
 		return this.parse().toBigNumber();
+	}
+
+	toBigNumberOrFraction() : BigNumber|Fraction
+	{
+		const resolved = this.resolve();
+
+		if ('Fraction' === resolved.type) {
+			return resolved.toFraction();
+		}
+
+		return resolved.toBigNumber();
 	}
 
 	toFraction(): Fraction {

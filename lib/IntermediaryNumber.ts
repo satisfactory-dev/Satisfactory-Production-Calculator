@@ -2005,6 +2005,7 @@ export class DeferredCalculation implements
 		const result = this[operator](right_operand);
 
 		conversion_cache.dispose(this);
+		DeferredCalculation.cached_intermediary.delete(this);
 
 		return result;
 	}

@@ -670,7 +670,7 @@ void describe('abs', () => {
 			'1',
 		],
 		[
-			() => IntermediaryNumber.create('1'),
+			() => IntermediaryNumber.One,
 			'1',
 		],
 		[

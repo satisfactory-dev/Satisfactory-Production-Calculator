@@ -183,7 +183,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			if (!(entry.item in input)) {
 				input[
 					entry.item as keyof typeof input
-				] = IntermediaryNumber.create('0');
+				] = IntermediaryNumber.Zero;
 			}
 
 			input[entry.item] = input[entry.item].plus(entry.amount);
@@ -200,7 +200,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			let amount = IntermediaryNumber.reuse_or_create(entry.amount);
 			let amount_from_input:(
 				| IntermediaryCalculation_operand_types
-			) = IntermediaryNumber.create('0');
+			) = IntermediaryNumber.Zero;
 
 			if (production in input) {
 				if (
@@ -214,7 +214,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					amount_from_input = IntermediaryNumber.reuse_or_create(
 						output_amount
 					);
-					amount = IntermediaryNumber.create('0');
+					amount = IntermediaryNumber.Zero;
 				}
 			}
 
@@ -391,7 +391,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 			divisor = (
 				divisor_pre_adjustment.divide(
-					IntermediaryNumber.create('1').divide(
+					IntermediaryNumber.One.divide(
 						(
 							mapped_product_amounts[production]
 						).divide(divisor_pre_adjustment)
@@ -425,7 +425,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				if (!(Desc_C in ingredients)) {
-					ingredients[Desc_C] = IntermediaryNumber.create('0');
+					ingredients[Desc_C] = IntermediaryNumber.Zero;
 				}
 
 				ingredients[Desc_C] = Numbers.append_multiply_deferred(
@@ -471,7 +471,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				if (!(Desc_C in output)) {
-					output[Desc_C] = IntermediaryNumber.create('0');
+					output[Desc_C] = IntermediaryNumber.Zero;
 				}
 
 				output[Desc_C] = Numbers.append_multiply_deferred(
@@ -517,8 +517,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = {
 						item: is.item,
-						output: IntermediaryNumber.create('0'),
-						surplus: IntermediaryNumber.create('0'),
+						output: IntermediaryNumber.Zero,
+						surplus: IntermediaryNumber.Zero,
 					}
 				}
 
@@ -533,8 +533,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					if (!(is.item in was)) {
 						was[is.item] = {
 							item: is.item,
-							output: IntermediaryNumber.create('0'),
-							surplus: IntermediaryNumber.create('0'),
+							output: IntermediaryNumber.Zero,
+							surplus: IntermediaryNumber.Zero,
 						}
 					}
 
@@ -564,7 +564,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					item: e[0],
 					amount: (
 						left_over.isLessThan(0)
-							? IntermediaryNumber.create('0')
+							? IntermediaryNumber.Zero
 							: left_over
 					),
 				};
@@ -703,7 +703,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				let possibly_recursive = false;
 				let recursive_multiplier:(
 					| IntermediaryCalculation_operand_types
-				) = IntermediaryNumber.create('1');
+				) = IntermediaryNumber.One;
 
 				if (check_deeper.item in production_items) {
 					possibly_recursive = Root.is_recursive(
@@ -789,7 +789,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const surplus_map = surplus.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.create('0');
+					was[is.item] = IntermediaryNumber.Zero;
 				}
 
 				was[is.item] = was[is.item].plus(is.amount);
@@ -830,7 +830,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const production_map = data.pool.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.create('0');
+					was[is.item] = IntermediaryNumber.Zero;
 				}
 
 				was[is.item] = was[is.item].plus(is.amount);
@@ -855,7 +855,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			) {
 				if (!(entry[0] in surplus_map)) {
-					surplus_map[entry[0]] = IntermediaryNumber.create('0');
+					surplus_map[entry[0]] = IntermediaryNumber.Zero;
 				}
 
 				surplus_map[entry[0]] = surplus_map[entry[0]].plus(
@@ -873,7 +873,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		for (const entry of negative_outputs) {
 			if (!(entry[0] in ingredients)) {
-				ingredients[entry[0]] = IntermediaryNumber.create('0');
+				ingredients[entry[0]] = IntermediaryNumber.Zero;
 			}
 
 			ingredients[entry[0]] = ingredients[entry[0]].plus(
@@ -904,8 +904,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = {
 						item: is.item,
-						output: IntermediaryNumber.create('0'),
-						surplus: IntermediaryNumber.create('0'),
+						output: IntermediaryNumber.Zero,
+						surplus: IntermediaryNumber.Zero,
 					}
 				}
 
@@ -920,8 +920,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					if (!(is.item in was)) {
 						was[is.item] = {
 							item: is.item,
-							output: IntermediaryNumber.create('0'),
-							surplus: IntermediaryNumber.create('0'),
+							output: IntermediaryNumber.Zero,
+							surplus: IntermediaryNumber.Zero,
 						}
 					}
 

@@ -130,7 +130,7 @@ function abs(
 	}
 
 	return value.isLessThan(0)
-		? IntermediaryNumber.create('0').minus(
+		? IntermediaryNumber.Zero.minus(
 			value
 		)
 		: value;
@@ -377,6 +377,10 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 	private smallest_is_greater_than:BigNumber|number|undefined = undefined;
 
 	private readonly value:IntermediaryNumber_value_types;
+
+	static readonly One = new this(BigNumber(1));
+
+	static readonly Zero = new this('0');
 
 	protected constructor(value:IntermediaryNumber_value_types)
 	{
@@ -1905,7 +1909,7 @@ export class DeferredCalculation implements
 
 	abs() {
 		if (this.isZero()) {
-			return IntermediaryNumber.create(0);
+			return IntermediaryNumber.Zero;
 		}
 
 		const cache = conversion_cache.DeferredCalculation_abs;

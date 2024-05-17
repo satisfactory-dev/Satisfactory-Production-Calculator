@@ -207,7 +207,9 @@ export class Numbers
 	): BigNumber {
 		this.configure();
 
-		return this.least_common_multiple_deferred(numbers).toBigNumber();
+		return Numbers.fraction_to_BigNumber(
+			this.least_common_multiple_deferred(numbers)
+		);
 	}
 
 	static least_common_multiple_deferred(
@@ -226,10 +228,10 @@ export class Numbers
 			)[]
 		]
 	): (
-		| IntermediaryCalculation_operand_types
+		| Fraction
 	) {
 		if (2 === numbers.length) {
-			return IntermediaryNumber.create(
+			return (
 				IntermediaryNumber.reuse_or_create(
 					numbers[0]
 				).toFraction().lcm(
@@ -238,7 +240,7 @@ export class Numbers
 			);
 		}
 
-		return IntermediaryNumber.reuse_or_create(numbers.map(
+		return (numbers.map(
 			e => IntermediaryNumber.reuse_or_create(e).toFraction()
 		).reduce(
 			// based on https://www.npmjs.com/package/mlcm?activeTab=code
@@ -333,6 +335,40 @@ export class Numbers
 
 		return a_deferred.plus(
 			sum_series(calculate(parseFloat(a_string)), {
+				tolerance: 0.000001,
+			})
+		);
+	}
+
+	static sum_series_fraction(
+		a:Fraction,
+		b:Fraction
+	) : Fraction {
+		assert.strictEqual(
+			b.compare(a),
+			-1,
+			`Expecting ${b.toString()} to be less than ${a.toString()}`
+		);
+
+		const divisor = parseFloat(
+			Numbers.fraction_to_BigNumber(a.div(b)).toString()
+		);
+
+		function calculate(number:number) {
+			let previous = number;
+
+			return () => {
+				const next = previous / divisor;
+				previous = next;
+
+				return next;
+			}
+		}
+
+		return a.add(
+			sum_series(calculate(parseFloat(
+				Numbers.fraction_to_BigNumber(a).toString()
+			)), {
 				tolerance: 0.000001,
 			})
 		);

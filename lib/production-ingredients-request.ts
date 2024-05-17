@@ -57,6 +57,7 @@ import {
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
+import Fraction from 'fraction.js';
 
 export type production_ingredients_request<
 	T1 extends (
@@ -390,11 +391,11 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			const divisor_pre_adjustment = divisor;
 
 			divisor = (
-				divisor_pre_adjustment.divide(
-					IntermediaryNumber.One.divide(
+				divisor_pre_adjustment.div(
+					(new Fraction(1)).div(
 						(
 							mapped_product_amounts[production]
-						).divide(divisor_pre_adjustment)
+						).toFraction().div(divisor_pre_adjustment)
 					)
 				)
 			);
@@ -701,9 +702,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				}
 
 				let possibly_recursive = false;
-				let recursive_multiplier:(
-					| IntermediaryCalculation_operand_types
-				) = IntermediaryNumber.One;
+				let recursive_multiplier = new Fraction(1);
 
 				if (check_deeper.item in production_items) {
 					possibly_recursive = Root.is_recursive(
@@ -718,13 +717,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 						]);
 						const a = production_items[
 							check_deeper.item
-						].divide(lcm)
+						].toFraction().div(lcm)
 						const b = ((
 							(
 								check_deeper.amount
 							)
-						).divide(lcm));
-						recursive_multiplier = Numbers.sum_series_deferred(
+						).toFraction().div(lcm));
+						recursive_multiplier = Numbers.sum_series_fraction(
 							a,
 							b
 						);

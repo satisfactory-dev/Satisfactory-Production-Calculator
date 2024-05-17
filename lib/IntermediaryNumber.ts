@@ -125,6 +125,10 @@ function abs(
 	IntermediaryCalculation_operand_types,
 	DeferredCalculation
 > {
+	if (value.isZero()) {
+		return value;
+	}
+
 	return value.isLessThan(0)
 		? IntermediaryNumber.create('0').minus(
 			value
@@ -1900,6 +1904,10 @@ export class DeferredCalculation implements
 	}
 
 	abs() {
+		if (this.isZero()) {
+			return IntermediaryNumber.create(0);
+		}
+
 		const cache = conversion_cache.DeferredCalculation_abs;
 
 		if (!cache.has(this)) {

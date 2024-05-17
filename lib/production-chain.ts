@@ -150,26 +150,6 @@ class Item
 				)
 			);
 
-			let divisor = Numbers.least_common_multiple(
-				[
-					...product_amounts,
-				] as [number_arg, number_arg, ...number_arg[]]
-			);
-
-			const divisor_pre_adjustment = divisor;
-
-			divisor = Numbers.fraction_to_BigNumber(
-				(new Fraction(divisor_pre_adjustment.toString())).div(
-					(new Fraction(1)).div(
-						(
-							new Fraction(
-								mapped_product_amounts[this.item].toString()
-							)
-						).div(divisor_pre_adjustment.toString())
-					)
-				)
-			);
-
 			for (const ingredient of mIngredients) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass

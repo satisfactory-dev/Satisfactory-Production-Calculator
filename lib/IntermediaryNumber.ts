@@ -99,6 +99,8 @@ interface CanConvertType
 	isLessThan(value:number|BigNumber): boolean;
 
 	isGreaterThan(value:number|BigNumber): boolean;
+
+	isZero(): boolean;
 }
 
 function do_math(
@@ -377,6 +379,10 @@ export class IntermediaryNumber implements CanDoMath, CanConvertType
 		this.largest_is_less_than = largest_is_less_than;
 
 		return result;
+	}
+
+	isZero(): boolean {
+		return 0 === this.toBigNumber().comparedTo(0);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -672,6 +678,10 @@ export class IntermediaryCalculation implements CanResolveMath, CanConvertType
 		this.largest_is_less_than = largest_is_less_than;
 
 		return result;
+	}
+
+	isZero(): boolean {
+		return 0 === this.toBigNumber().comparedTo(0);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -1873,6 +1883,10 @@ export class DeferredCalculation implements
 		this.largest_is_less_than = largest_is_less_than;
 
 		return result;
+	}
+
+	isZero(): boolean {
+		return 0 === this.toBigNumber().comparedTo(0);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {

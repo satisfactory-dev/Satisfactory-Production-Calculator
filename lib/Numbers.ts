@@ -152,7 +152,7 @@ export class Numbers
 	): (
 		| IntermediaryCalculation_operand_types
 	) {
-		if (0 === b.toBigNumber().comparedTo(0)) {
+		if (b.isZero()) {
 			return a;
 		}
 

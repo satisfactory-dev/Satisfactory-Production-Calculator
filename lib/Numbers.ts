@@ -272,52 +272,57 @@ export class Numbers
 			| IntermediaryCalculation_operand_types
 		)
 	) {
-		return this.sum_series_deferred(a, b).toBigNumber();
+		return this.sum_series_deferred(a, b);
 	}
 
 	static sum_series_deferred(
 		a:(
 			| number_arg
+			| BigNumber
+			| Fraction
 			| IntermediaryCalculation_operand_types
 		),
 		b:(
 			| number_arg
+			| BigNumber
+			| Fraction
 			| IntermediaryCalculation_operand_types
 		)
 	) {
-		const a_deferred = (
-			IntermediaryNumber.reuse_or_create(a)
-		);
-		const b_deferred = (
-			IntermediaryNumber.reuse_or_create(b)
-		);
+		const a_deferred = IntermediaryNumber.reuse_or_create(a);
+		const b_deferred = IntermediaryNumber.reuse_or_create(b);
+		const a_fraction = a_deferred.toFraction();
+		const a_Bignumber = a_deferred.toBigNumber();
+		const b_fraction = b_deferred.toFraction();
 
 		assert.strictEqual(
-			b_deferred.isLessThan(a_deferred.toBigNumber()),
+			b_deferred.isLessThan(a_Bignumber),
 			true,
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);
 
-		const divisor = a_deferred.divide(b_deferred);
+		const a_string = a_Bignumber.toFixed();
 
-		function calculate(
-			number:
-				| number_arg
-				| IntermediaryCalculation_operand_types
-		) {
-			let previous = (
-				IntermediaryNumber.reuse_or_create(number)
-			);
+		const divisor = parseFloat(Numbers.fraction_to_BigNumber((
+			a_fraction
+		).div(b_fraction)).toString());
+
+		function calculate(number:number) {
+			let previous = number;
 
 			return () => {
-				const next = previous.divide(divisor);
+				const next = previous / divisor;
 				previous = next;
 
-				return parseFloat(next.toBigNumber().toString());
+				return next;
 			}
 		}
 
-		return a_deferred.plus(sum_series(calculate(a_deferred)));
+		return a_deferred.plus(
+			sum_series(calculate(parseFloat(a_string)), {
+				tolerance: 0.000001,
+			})
+		);
 	}
 
 	private static configure()

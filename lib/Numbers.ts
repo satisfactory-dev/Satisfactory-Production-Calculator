@@ -118,10 +118,16 @@ export class Numbers
 		));
 	}
 
-	static round_off(number:BigNumber): amount_string
+	static round_off(number:BigNumber|Fraction): amount_string
 	{
-		this.configure();
-		const result = number.toString();
+		let result:string;
+
+		if (number instanceof BigNumber) {
+			this.configure();
+			result = number.toString();
+		} else {
+			result = number.valueOf().toString();
+		}
 
 		if (/\.\d{7,}$/.test(result)) {
 			const [before, after] = result.split('.');
@@ -131,9 +137,9 @@ export class Numbers
 			}.${
 				'0' === after.substring(6, 7)
 					? after.substring(0, 6).replace(/0+$/, '')
-					: BigNumber(
-						after.substring(0, 6)
-					).plus(1).toString().padStart(
+					: (
+						parseInt(after.substring(0, 6), 10) + 1
+					).toString().padStart(
 						Math.min(6, after.length),
 						'0'
 					)

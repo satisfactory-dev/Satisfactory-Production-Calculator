@@ -95,6 +95,8 @@ interface CanConvertType extends HasType
 
 	toBigNumber(): BigNumber;
 
+	toBigNumberOrFraction(): BigNumber|Fraction;
+
 	toFraction(): Fraction;
 
 	toString(): string;
@@ -530,7 +532,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			return this.value;
 		}
 
-		return Numbers.round_off(this.toBigNumber());
+		return Numbers.round_off(this.toBigNumberOrFraction());
 	}
 
 	toBigNumber(): BigNumber
@@ -551,6 +553,12 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		cache.set(this, value);
 
 		return value;
+	}
+
+	toBigNumberOrFraction(): BigNumber | Fraction {
+		return ('Fraction' === this.type)
+			? this.toFraction()
+			: this.toBigNumber();
 	}
 
 	toFraction(): Fraction
@@ -831,26 +839,40 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	resolve(): IntermediaryNumber
 	{
-		const left = this.operand_to_IntermediaryNumber(this.left_operand);
-		const right = this.operand_to_IntermediaryNumber(this.right_operand);
+		const left_operand = this.operand_to_IntermediaryNumber(
+			this.left_operand
+		);
+		const right_operand = this.operand_to_IntermediaryNumber(
+			this.right_operand
+		);
+		const left = left_operand.toBigNumberOrFraction();
+		const right = right_operand.toBigNumberOrFraction();
 
 		if (
 			'/' === this.operation
-			|| 'Fraction' === left.type
-			|| 'Fraction' === right.type
+			|| left instanceof Fraction
+			|| right instanceof Fraction
 		) {
 			return IntermediaryNumber.create(
 				Fraction_operation_map[this.operation](
-					left.toFraction(),
-					right.toFraction()
+					(
+						(left instanceof BigNumber)
+							? left_operand.toFraction()
+							: left
+					),
+					(
+						(right instanceof BigNumber)
+							? right_operand.toFraction()
+							: right
+					)
 				)
 			);
 		}
 
 		return IntermediaryNumber.create(
 			BigNumber_operation_map[this.operation](
-				left.toBigNumber(),
-				right.toBigNumber()
+				left,
+				right
 			)
 		);
 	}
@@ -884,6 +906,10 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		cache.set(this, value);
 
 		return value;
+	}
+
+	toBigNumberOrFraction(): BigNumber | Fraction {
+		return this.resolve().toBigNumberOrFraction();
 	}
 
 	toFraction(): Fraction {
@@ -2116,13 +2142,7 @@ export class DeferredCalculation implements
 
 	toBigNumberOrFraction() : BigNumber|Fraction
 	{
-		const resolved = this.resolve();
-
-		if ('Fraction' === resolved.type) {
-			return resolved.toFraction();
-		}
-
-		return resolved.toBigNumber();
+		return this.resolve().toBigNumberOrFraction();
 	}
 
 	toFraction(): Fraction {

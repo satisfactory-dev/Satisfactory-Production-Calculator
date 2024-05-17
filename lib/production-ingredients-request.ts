@@ -504,7 +504,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 							? (
 								ingredients[
 									e[0]
-								].toBigNumber()
+								]
 							)
 							: 0
 					)

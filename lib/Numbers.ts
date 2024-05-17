@@ -115,11 +115,7 @@ export class Numbers
 	static fraction_to_BigNumber(fraction:Fraction): BigNumber
 	{
 		return BigNumber(
-			fraction.toString().replace(/(\(\d+\))/, (val:string) => {
-				const digits = val.substring(1, val.length - 1);
-
-				return digits.repeat(Math.ceil(6 / digits.length) + 1);
-			})
+			fraction.valueOf()
 		);
 	}
 
@@ -350,9 +346,7 @@ export class Numbers
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);
 
-		const divisor = parseFloat(
-			Numbers.fraction_to_BigNumber(a.div(b)).toString()
-		);
+		const divisor = a.div(b).valueOf();
 
 		function calculate(number:number) {
 			let previous = number;
@@ -366,9 +360,7 @@ export class Numbers
 		}
 
 		return a.add(
-			sum_series(calculate(parseFloat(
-				Numbers.fraction_to_BigNumber(a).toString()
-			)), {
+			sum_series(calculate(a.valueOf()), {
 				tolerance: 0.000001,
 			})
 		);

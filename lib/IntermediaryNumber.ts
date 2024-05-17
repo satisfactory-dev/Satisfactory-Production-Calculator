@@ -156,6 +156,22 @@ function is_less_than(
 	result: boolean,
 	largest_is_less_than: number|BigNumber|undefined
 } {
+	if (
+		(
+			0 === value
+			|| (
+				(value instanceof BigNumber)
+				&& 0 === value.comparedTo(0)
+			)
+		)
+		&& thing.isZero()
+	) {
+		return {
+			result: false,
+			largest_is_less_than: largest_is_less_than,
+		};
+	}
+
 	let return_largest_is_less_than = largest_is_less_than;
 	let return_boolean:boolean;
 
@@ -219,6 +235,22 @@ function is_greater_than(
 	result: boolean,
 	smallest_is_greater_than: number|BigNumber|undefined
 } {
+	if (
+		(
+			0 === value
+			|| (
+				(value instanceof BigNumber)
+				&& 0 === value.comparedTo(0)
+			)
+		)
+		&& thing.isZero()
+	) {
+		return {
+			result: false,
+			smallest_is_greater_than: smallest_is_greater_than,
+		};
+	}
+
 	let return_smallest_is_greater_than = smallest_is_greater_than;
 	let return_boolean:boolean;
 
@@ -1886,6 +1918,13 @@ export class DeferredCalculation implements
 	}
 
 	isZero(): boolean {
+		if (
+			1 === this.internal_value.length
+			&& '0' === this.internal_value[0]
+		) {
+			return true;
+		}
+
 		return 0 === this.toBigNumber().comparedTo(0);
 	}
 

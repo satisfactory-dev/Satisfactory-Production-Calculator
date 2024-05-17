@@ -497,6 +497,10 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	isZero(): boolean {
+		if (this.value instanceof Fraction) {
+			return 0 === this.value.compare(0);
+		}
+
 		return 0 === this.toBigNumber().comparedTo(0);
 	}
 

@@ -49,23 +49,6 @@ export class Numbers
 		return maybe;
 	}
 
-	static append_multiply(
-		append_to: number_arg,
-		a:(
-			| number_arg
-			| [number_arg, ...number_arg[]]
-			| [amount_string, ...amount_string[]]
-		),
-		b:number_arg
-	): BigNumber {
-
-		return this.append_multiply_deferred(
-			append_to,
-			a,
-			b
-		).resolve().toBigNumber();
-	}
-
 	static append_multiply_deferred(
 		append_to: (
 			| number_arg

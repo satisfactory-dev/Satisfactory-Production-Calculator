@@ -108,38 +108,6 @@ void describe('Math', () => {
 		for (const entry of expectations) {
 			const [append_to, a, b, expectation, rounded_off] = entry;
 			void it (
-				`Numbers.append_multiply(${
-					append_to.toString()
-				}, ${
-					a instanceof Array ? JSON.stringify(a) : a.toString()
-				}, ${
-					b.toString()
-				}) returns ${
-					expectation.toString()
-				}`,
-				() => {
-					const get_result = () => Numbers.append_multiply(
-						append_to,
-						a,
-						b
-					);
-
-					assert.doesNotThrow(get_result);
-					const result = get_result();
-					assert.equal(
-						BigNumber(expectation).comparedTo(result),
-						0,
-						`Expecting ${expectation.toString()}, receieved ${result.toString()}`
-					);
-					if (null !== rounded_off) {
-						assert.equal(
-							Numbers.round_off(result),
-							rounded_off
-						);
-					}
-				}
-			)
-			void it (
 				`Numbers.append_multiply_deferred(${
 					append_to.toString()
 				}, ${

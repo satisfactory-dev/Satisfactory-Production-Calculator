@@ -43,12 +43,15 @@ export type CanDoMath_result_types =
 	| IntermediaryCalculation
 	| DeferredCalculation;
 
+interface HasType
+{
+	get type(): IntermediaryCalculation_operand_type_types;
+}
+
 interface CanDoMath<
 	ResultType extends CanDoMath_result_types = CanDoMath_result_types,
 	ResolveString extends string = IntermediaryNumber_type_types
-> {
-	get type(): IntermediaryCalculation_operand_type_types;
-
+> extends HasType {
 	get resolve_type(): ResolveString;
 
 	divide(
@@ -86,7 +89,7 @@ interface CanResolveMath<
 	resolve(): IntermediaryNumber;
 }
 
-interface CanConvertType
+interface CanConvertType extends HasType
 {
 	toAmountString(): amount_string;
 

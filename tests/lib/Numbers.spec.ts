@@ -182,7 +182,7 @@ void describe('Math', () => {
 
 	void describe('fraction_to_BigNumber', () => {
 		const data_sets:[number, number, string, string][] = [
-			[1, 3, '0.(3)', '0.3333333'],
+			[1, 3, '0.(3)', '0.3333333333333333'],
 		];
 
 		for (const data_set of data_sets) {

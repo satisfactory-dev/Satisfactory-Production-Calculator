@@ -9,9 +9,6 @@ import {
 	Numbers,
 } from '../../lib/Numbers';
 import {
-	require_non_empty_array,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
-import {
 	integer_string__type,
 } from '../../generated-types/update8/common/unassigned';
 import BigNumber from 'bignumber.js';

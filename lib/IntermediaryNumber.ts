@@ -2145,9 +2145,12 @@ export class DeferredCalculation implements
 	private parse()
 	{
 		if (!DeferredCalculation.cached_intermediary.has(this)) {
-			DeferredCalculation.cached_intermediary.set(this, IntermediaryCalculation.fromString(
-				this.value
-			));
+			DeferredCalculation.cached_intermediary.set(
+				this,
+				IntermediaryCalculation.fromString(
+					this.value
+				)
+			);
 		}
 
 		return DeferredCalculation.cached_intermediary.get(this) as (

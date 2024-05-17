@@ -269,12 +269,14 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 								faux_ingredient
 							] = multiplied;
 						} else {
-						ingredients[
-							faux_ingredient
-							] = ingredients[faux_ingredient].do_math_then_dispose(
+							ingredients[
+								faux_ingredient
+							] = ingredients[
+								faux_ingredient
+							].do_math_then_dispose(
 								'plus',
 								multiplied
-						);
+							);
 						}
 					}
 

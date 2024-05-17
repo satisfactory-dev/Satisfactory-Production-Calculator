@@ -955,7 +955,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				}
 			}),
 			output: output_entries_filtered.filter(
-				maybe => '0' !== maybe.amount.toBigNumber().toString()
+				maybe => 0 !== maybe.amount.toBigNumber().comparedTo(0)
 			),
 			combined: Object.values(combined),
 		};

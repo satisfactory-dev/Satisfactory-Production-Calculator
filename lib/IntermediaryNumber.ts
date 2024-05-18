@@ -1832,7 +1832,7 @@ export class DeferredCalculation implements
 
 	get value(): string
 	{
-		return this.internal_value.reduce(
+		return this.normalise_string(this.internal_value.reduce(
 			(was, is) => {
 				if (is_string(is)) {
 					was.push(is);
@@ -1847,7 +1847,18 @@ export class DeferredCalculation implements
 				return was;
 			},
 			[] as string[]
-		).join(' ').replace(/\s+/g, ' ').trim();
+		).join(' '));
+	}
+
+	private dispose()
+	{
+		conversion_cache.dispose(this);
+		DeferredCalculation.cached_intermediary.delete(this);
+	}
+
+	private normalise_string(value:string): string
+	{
+		return value.replace(/\s+/g, ' ').trim();
 	}
 
 	abs() {
@@ -1884,8 +1895,7 @@ export class DeferredCalculation implements
 	): DeferredCalculation {
 		const result = this[operator](right_operand);
 
-		conversion_cache.dispose(this);
-		DeferredCalculation.cached_intermediary.delete(this);
+		this.dispose();
 
 		return result;
 	}
@@ -1947,6 +1957,19 @@ export class DeferredCalculation implements
 				? result
 				: result.resolve()
 		);
+	}
+
+	reuse_or_dispose(compared_to:string): DeferredCalculation
+	{
+		compared_to = this.normalise_string(compared_to);
+
+		if (compared_to === this.value) {
+			return this;
+		}
+
+		this.dispose();
+
+		return new DeferredCalculation(compared_to);
 	}
 
 	times(value: IntermediaryNumber_math_types): DeferredCalculation {

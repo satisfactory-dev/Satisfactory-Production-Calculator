@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import {
 	FGItemDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptor';
@@ -235,9 +233,8 @@ export type production_item = keyof (
 
 export type production_set<
 	T extends (
-		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = BigNumber
+	) = IntermediaryCalculation_operand_types
 > = {[key in production_item]: T};
 
 export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};

@@ -1,5 +1,4 @@
 import assert from 'assert';
-import BigNumber from 'bignumber.js';
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
@@ -14,8 +13,8 @@ import {
 	resources,
 } from './production-data';
 import {
-	Numbers,
-} from './Numbers';
+	IntermediaryNumber,
+} from './IntermediaryNumber';
 
 export function faux_recipe(recipe:string): production_set
 {
@@ -55,6 +54,6 @@ export function faux_recipe(recipe:string): production_set
 	);
 
 	return {
-		[faux_ingredient]: BigNumber(Numbers.amount_string(faux_amount)),
+		[faux_ingredient]: IntermediaryNumber.create(faux_amount),
 	};
 }

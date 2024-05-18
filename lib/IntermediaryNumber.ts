@@ -82,6 +82,12 @@ interface CanDoMath<
 		| IntermediaryCalculation
 		| IntermediaryNumber
 	);
+
+	max(
+		first: IntermediaryNumber_math_types,
+		second: IntermediaryNumber_math_types,
+		...remaining: IntermediaryNumber_math_types[]
+	): IntermediaryNumber_math_types;
 }
 
 interface CanResolveMath<
@@ -297,6 +303,32 @@ const conversion_cache = new class {
 	}
 }
 
+export function dispose(value:IntermediaryCalculation_operand_types)
+{
+	conversion_cache.dispose(value);
+
+	if (value instanceof DeferredCalculation) {
+		value.dispose();
+	}
+}
+
+function max(
+	first: IntermediaryNumber_math_types,
+	second: IntermediaryNumber_math_types,
+	...remaining: IntermediaryNumber_math_types[]
+): IntermediaryNumber_math_types {
+	let max = IntermediaryNumber.reuse_or_create(first);
+
+	for (const entry of [second, ...remaining]) {
+		const maybe = IntermediaryNumber.reuse_or_create(entry);
+		if (-1 === max.compare(maybe)) {
+			max = maybe;
+		}
+	}
+
+	return IntermediaryNumber.reuse_or_create(max);
+}
+
 export class IntermediaryNumber implements CanDoMathWithDispose
 {
 	private readonly value:IntermediaryNumber_value_types;
@@ -347,7 +379,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
-		conversion_cache.dispose(this);
+		dispose(this);
 
 		return result;
 	}
@@ -362,6 +394,14 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	isZero(): boolean {
 		return 0 === this.compare(0);
+	}
+
+	max(
+		first: IntermediaryNumber_math_types,
+		second: IntermediaryNumber_math_types,
+		...remaining: IntermediaryNumber_math_types[]
+	): IntermediaryNumber_math_types {
+		return max(first, second, ...remaining);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -650,7 +690,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
-		conversion_cache.dispose(this);
+		dispose(this);
 
 		return result;
 	}
@@ -665,6 +705,14 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	isZero(): boolean {
 		return 0 === this.compare(0);
+	}
+
+	max(
+		first: IntermediaryNumber_math_types,
+		second: IntermediaryNumber_math_types,
+		...remaining: IntermediaryNumber_math_types[]
+	): IntermediaryNumber_math_types {
+		return max(first, second, ...remaining);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -1850,17 +1898,6 @@ export class DeferredCalculation implements
 		).join(' '));
 	}
 
-	private dispose()
-	{
-		conversion_cache.dispose(this);
-		DeferredCalculation.cached_intermediary.delete(this);
-	}
-
-	private normalise_string(value:string): string
-	{
-		return value.replace(/\s+/g, ' ').trim();
-	}
-
 	abs() {
 		if (this.isZero()) {
 			return IntermediaryNumber.Zero;
@@ -1877,6 +1914,12 @@ export class DeferredCalculation implements
 
 	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
 		return compare(value, this);
+	}
+
+	dispose()
+	{
+		conversion_cache.dispose(this);
+		DeferredCalculation.cached_intermediary.delete(this);
 	}
 
 	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
@@ -1917,6 +1960,14 @@ export class DeferredCalculation implements
 		}
 
 		return 0 === this.compare(0);
+	}
+
+	max(
+		first: IntermediaryNumber_math_types,
+		second: IntermediaryNumber_math_types,
+		...remaining: IntermediaryNumber_math_types[]
+	): IntermediaryNumber_math_types {
+		return max(first, second, ...remaining);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
@@ -2010,6 +2061,11 @@ export class DeferredCalculation implements
 		cache.set(this, value);
 
 		return value;
+	}
+
+	private normalise_string(value:string): string
+	{
+		return value.replace(/\s+/g, ' ').trim();
 	}
 
 	private parse()

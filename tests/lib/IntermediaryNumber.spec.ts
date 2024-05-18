@@ -9,6 +9,7 @@ import {
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 	IntermediaryNumber_input_types,
+	IntermediaryNumber_math_types,
 	IntermediaryNumber_type_types,
 } from '../../lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
@@ -729,5 +730,106 @@ void describe('abs', () => {
 				expectation
 			);
 		})
+	}
+})
+
+void describe('max', () => {
+	const data_sets:[
+		[
+			IntermediaryNumber_math_types,
+			IntermediaryNumber_math_types,
+			...IntermediaryNumber_math_types[],
+		],
+		string,
+	][] = [
+		[
+			[
+				1,
+				BigNumber(2),
+				new Fraction(3/4),
+				IntermediaryNumber.create('5.6r'),
+				IntermediaryCalculation.fromString('7 - 8 * 9'),
+				new DeferredCalculation('10 + 11', '/ 12'),
+			],
+			'5.(6)',
+		],
+	];
+
+	for (const data_set of data_sets) {
+		const [[...max_args], expectation] = data_set;
+
+		void it(
+			`IntermediaryNumber max with ${
+				max_args.map(e => e.toString()).join(', ')
+			} returns ${
+				expectation
+			}`,
+			() => {
+				const index = Math.min(
+					max_args.length - 1,
+					Math.floor(Math.random() * max_args.length)
+				);
+
+				const initial_arg = IntermediaryNumber.reuse_or_create(
+					max_args[index]
+				);
+
+				assert.strictEqual(
+					initial_arg.max(...max_args).toString(),
+					expectation
+				);
+			}
+		)
+
+		void it(
+			`IntermediaryCalculation max with ${
+				max_args.map(e => e.toString()).join(', ')
+			} returns ${
+				expectation
+			}`,
+			() => {
+				const index = Math.min(
+					max_args.length - 1,
+					Math.floor(Math.random() * max_args.length)
+				);
+
+				const initial_arg = IntermediaryCalculation.fromString(
+					IntermediaryNumber.reuse_or_create(
+						max_args[index]
+					).toString()
+				);
+
+				assert.strictEqual(
+					initial_arg.max(...max_args).toString(),
+					expectation
+				);
+			}
+		)
+
+		void it(
+			`DeferredCalculation max with ${
+				max_args.map(e => e.toString()).join(', ')
+			} returns ${
+				expectation
+			}`,
+			() => {
+				const index = Math.min(
+					max_args.length - 1,
+					Math.floor(Math.random() * max_args.length)
+				);
+
+				const initial_arg = new DeferredCalculation(
+					IntermediaryNumber.reuse_or_create(
+						max_args[index]
+					).toString(),
+					' + 0',
+				);
+
+				assert.strictEqual(
+					initial_arg.max(...max_args).toString(),
+					expectation
+				);
+			}
+		)
 	}
 })

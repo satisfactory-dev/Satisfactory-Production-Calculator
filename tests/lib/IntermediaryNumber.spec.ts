@@ -675,12 +675,20 @@ void describe('abs', () => {
 			'1',
 		],
 		[
+			() => IntermediaryNumber.Zero,
+			'0',
+		],
+		[
 			() => IntermediaryCalculation.fromString('1 - 2'),
 			'1',
 		],
 		[
 			() => IntermediaryCalculation.fromString('1 + 2'),
 			'3',
+		],
+		[
+			() => IntermediaryCalculation.fromString('1 - 1'),
+			'0',
 		],
 		[
 			() => new DeferredCalculation('1 - 2'),
@@ -697,6 +705,14 @@ void describe('abs', () => {
 		[
 			() => (new DeferredCalculation('1')).plus(2),
 			'3',
+		],
+		[
+			() => (new DeferredCalculation('2 + 3')).minus(5),
+			'0',
+		],
+		[
+			() => new DeferredCalculation('0'),
+			'0',
 		],
 	];
 

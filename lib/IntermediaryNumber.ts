@@ -625,6 +625,39 @@ export class IntermediaryCalculationTokenizerError extends Error
 	}
 }
 
+function skip_for_right_operand(
+	was: IntermediaryCalculation_tokenizer,
+	is:''|IntermediaryCalculation_operation_types,
+	index: number,
+	array: string[],
+) {
+	was.operand_mode = 'right';
+	was.mode = 'leading_ignore';
+
+	const next = array.slice(index + 1).findIndex(
+		maybe => !'\t '.includes(maybe)
+	);
+
+	assert_notStrictEqual<number, -1, Exclude<number, -1>>(
+		next,
+		-1,
+		new IntermediaryCalculationTokenizerError(
+			'Unsupported token when expecting skip to start of right operand!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			},
+			next
+		)
+	);
+
+	was.skip_to_index = (next >= 1) ? (index + next) : -1;
+
+	return was;
+}
+
 export class IntermediaryCalculation implements CanResolveMathWithDispose
 {
 	readonly left_operand:IntermediaryCalculation_operand_types;
@@ -925,39 +958,6 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 					maybe => !'\t '.includes(maybe)
 				)
 			);
-		}
-
-		function skip_for_right_operand(
-			was: IntermediaryCalculation_tokenizer,
-			is:''|IntermediaryCalculation_operation_types,
-			index: number,
-			array: string[],
-		) {
-			was.operand_mode = 'right';
-			was.mode = 'leading_ignore';
-
-			const next = array.slice(index + 1).findIndex(
-				maybe => !'\t '.includes(maybe)
-			);
-
-			assert_notStrictEqual<number, -1, Exclude<number, -1>>(
-				next,
-				-1,
-				new IntermediaryCalculationTokenizerError(
-					'Unsupported token when expecting skip to start of right operand!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					},
-					next
-				)
-			);
-
-			was.skip_to_index = (next >= 1) ? (index + next) : -1;
-
-			return was;
 		}
 
 		function tokenizer_found_operation(

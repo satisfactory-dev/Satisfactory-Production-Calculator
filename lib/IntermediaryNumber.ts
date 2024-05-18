@@ -85,7 +85,6 @@ interface CanDoMath<
 
 	max(
 		first: IntermediaryNumber_math_types,
-		second: IntermediaryNumber_math_types,
 		...remaining: IntermediaryNumber_math_types[]
 	): IntermediaryNumber_math_types;
 }
@@ -398,10 +397,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	max(
 		first: IntermediaryNumber_math_types,
-		second: IntermediaryNumber_math_types,
 		...remaining: IntermediaryNumber_math_types[]
 	): IntermediaryNumber_math_types {
-		return max(first, second, ...remaining);
+		return max(this, first, ...remaining);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -709,10 +707,9 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	max(
 		first: IntermediaryNumber_math_types,
-		second: IntermediaryNumber_math_types,
 		...remaining: IntermediaryNumber_math_types[]
 	): IntermediaryNumber_math_types {
-		return max(first, second, ...remaining);
+		return max(this, first, ...remaining);
 	}
 
 	minus(value:IntermediaryNumber_math_types)
@@ -1964,10 +1961,9 @@ export class DeferredCalculation implements
 
 	max(
 		first: IntermediaryNumber_math_types,
-		second: IntermediaryNumber_math_types,
 		...remaining: IntermediaryNumber_math_types[]
 	): IntermediaryNumber_math_types {
-		return max(first, second, ...remaining);
+		return max(this, first, ...remaining);
 	}
 
 	minus(value: IntermediaryNumber_math_types): DeferredCalculation {

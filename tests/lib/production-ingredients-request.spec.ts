@@ -17,6 +17,7 @@ import {
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe';
 import {
 	FGBuildableFrackingActivator,
+// eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
@@ -30,6 +31,7 @@ import {
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
 import {
 	FGBuildableResourceExtractor,
+// eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 
 type flattened_result = {

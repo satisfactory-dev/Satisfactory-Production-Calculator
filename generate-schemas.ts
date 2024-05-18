@@ -6,6 +6,7 @@ import {
 } from './generated-types/update8/data/CoreUObject/FGRecipe';
 import {
 	FGBuildableFrackingActivator,
+// eslint-disable-next-line max-len
 } from './generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
 import {
 	FGBuildableWaterPump,
@@ -19,6 +20,7 @@ import {
 } from './lib/planner-request';
 import {
 	FGBuildableResourceExtractor,
+// eslint-disable-next-line max-len
 } from './generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 import {
 	FGResourceDescriptor,
@@ -28,6 +30,7 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
 import {
 	FGBuildableGeneratorNuclear,
+// eslint-disable-next-line max-len
 } from './generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import BigNumber from 'bignumber.js';
 

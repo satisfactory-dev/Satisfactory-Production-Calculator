@@ -55,45 +55,6 @@ void describe('Math', () => {
 		}
 	})
 
-	void describe('fraction_to_BigNumber', () => {
-		const data_sets:[number, number, string, string][] = [
-			[1, 3, '0.(3)', '0.3333333333333333'],
-		];
-
-		for (const data_set of data_sets) {
-			const [
-				a,
-				b,
-				expected_fraction_string,
-				expected_bignumber_string,
-			] = data_set;
-
-			void it(
-				`Numbers.fraction_to_BigNumber(${
-					a
-				}/${
-					b
-				}).toString() returns ${
-					expected_bignumber_string
-				}`,
-				() => {
-					const fraction = (new Fraction(a)).div(b);
-
-					assert.equal(
-						fraction.toString(),
-						expected_fraction_string,
-					);
-					assert.equal(
-						Numbers.fraction_to_BigNumber(
-							fraction
-						).toString(),
-						expected_bignumber_string
-					);
-				}
-			)
-		}
-	})
-
 	void describe('least_common_multiple_deferred', () => {
 		const data_set:[
 			[number_arg, number_arg, ...number_arg[]],

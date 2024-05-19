@@ -4,10 +4,6 @@ import Fraction from 'fraction.js';
 import {
 	is_string,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith';
-
-import {
-	Numbers,
-} from './Numbers';
 import {
 	amount_string,
 	NumberStrings,
@@ -439,7 +435,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		if (this.value instanceof BigNumber) {
 			return this.value;
 		} else if (this.value instanceof Fraction) {
-			return Numbers.fraction_to_BigNumber(this.value);
+			return BigNumber(this.value.valueOf());
 		}
 
 		const cache = conversion_cache.BigNumber;

@@ -46,13 +46,6 @@ export class Numbers
 			: result;
 	}
 
-	static fraction_to_BigNumber(fraction:Fraction): BigNumber
-	{
-		return BigNumber(
-			fraction.valueOf()
-		);
-	}
-
 	static least_common_multiple_deferred(
 		numbers:[
 			(

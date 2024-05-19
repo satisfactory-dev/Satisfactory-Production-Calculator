@@ -10,10 +10,12 @@ import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
-	amount_string,
 	number_arg,
 	Numbers,
 } from './Numbers';
+import {
+	amount_string,
+} from './NumberStrings';
 import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,

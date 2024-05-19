@@ -1,0 +1,63 @@
+import {
+	is_string,
+} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith';
+import {
+	NoMatchError,
+} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
+
+import {
+	StringPassedRegExp,
+} from '../generated-types/update8/utils/validators';
+import {
+	integer_string__type,
+} from '../generated-types/update8/common/unassigned';
+
+export type amount_string =
+	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
+	| integer_string__type
+	| '0';
+
+export type numeric_string =
+	| amount_string
+	| StringPassedRegExp<'^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$'>
+
+export class NumberStrings
+{
+	static amount_string(maybe:string): amount_string
+	{
+		if (
+			!this.is_amount_string(maybe)
+		) {
+			throw new NoMatchError(
+				maybe,
+				'Not a supported amount string!'
+			);
+		}
+
+		return maybe;
+	}
+
+	static is_amount_string(maybe:unknown): maybe is amount_string {
+		return (
+			is_string(maybe)
+			&& (
+				maybe === '0'
+				|| /^\d+(?:\.\d{1,6})?$/.test(maybe)
+				|| /^\d*(?:\.\d{1,6})$/.test(maybe)
+				|| /^\d+$/.test(maybe)
+			)
+		);
+	}
+
+	static is_numeric_string(
+		maybe:unknown
+	) : maybe is numeric_string {
+		return (
+			this.is_amount_string(maybe)
+			|| (
+				is_string(maybe)
+				&& /^-?(?:\d*\.\d+|\d+(?:\.\d+)?)$/.test(maybe)
+			)
+		);
+	}
+}

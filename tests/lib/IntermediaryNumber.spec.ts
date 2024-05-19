@@ -15,8 +15,8 @@ import {
 import Fraction from 'fraction.js';
 import BigNumber from 'bignumber.js';
 import {
-	Numbers,
-} from '../../lib/Numbers';
+	NumberStrings,
+} from '../../lib/NumberStrings';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
@@ -349,7 +349,9 @@ void describe('IntermediaryCalculation', () => {
 			'0.7'
 		);
 		assert.notStrictEqual(
-			BigNumber(Numbers.amount_string('0.333333')).times(3).toString(),
+			BigNumber(
+				NumberStrings.amount_string('0.333333')
+			).times(3).toString(),
 			'1'
 		),
 		assert.strictEqual(
@@ -492,7 +494,7 @@ void describe('DeferredCalculation', () => {
 								)
 									? 'Fraction'
 									: (
-										Numbers.is_amount_string(
+										NumberStrings.is_amount_string(
 											raw_input_string
 										)
 											? 'amount_string'

@@ -3,51 +3,21 @@ import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import sum_series from '@stdlib/math-base-tools-sum-series';
 import {
-	StringPassedRegExp,
-} from '../generated-types/update8/utils/validators';
-import {
-	integer_string__type,
-} from '../generated-types/update8/common/unassigned';
-import {
-	NoMatchError,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
-import {
-	is_string,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
-import {
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 	IntermediaryNumber_math_types,
 } from './IntermediaryNumber';
+import {
+	amount_string,
+} from './NumberStrings';
 
-export type amount_string =
-	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
-	| integer_string__type
-	| '0';
 export type number_arg =
 	| BigNumber
 	| number
 	| amount_string;
-export type numeric_string =
-	| amount_string
-	| StringPassedRegExp<'^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$'>
 
 export class Numbers
 {
-	static amount_string(maybe:string): amount_string
-	{
-		if (
-			!this.is_amount_string(maybe)
-		) {
-			throw new NoMatchError(
-				maybe,
-				'Not a supported amount string!'
-			);
-		}
-
-		return maybe;
-	}
-
 	static divide_if_not_one(
 		left:IntermediaryNumber_math_types,
 		right:Fraction,
@@ -80,30 +50,6 @@ export class Numbers
 	{
 		return BigNumber(
 			fraction.valueOf()
-		);
-	}
-
-	static is_amount_string(maybe:unknown): maybe is amount_string {
-		return (
-			is_string(maybe)
-			&& (
-				maybe === '0'
-				|| /^\d+(?:\.\d{1,6})?$/.test(maybe)
-				|| /^\d*(?:\.\d{1,6})$/.test(maybe)
-				|| /^\d+$/.test(maybe)
-			)
-		);
-	}
-
-	static is_numeric_string(
-		maybe:unknown
-	) : maybe is numeric_string {
-		return (
-			this.is_amount_string(maybe)
-			|| (
-				is_string(maybe)
-				&& /^-?(?:\d*\.\d+|\d+(?:\.\d+)?)$/.test(maybe)
-			)
 		);
 	}
 

@@ -6,10 +6,13 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith';
 
 import {
-	amount_string,
 	Numbers,
-	numeric_string,
 } from './Numbers';
+import {
+	amount_string,
+	NumberStrings,
+	numeric_string,
+} from './NumberStrings';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
@@ -351,7 +354,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			return 'BigNumber';
 		} else if (this.value instanceof Fraction) {
 			return 'Fraction';
-		} else if (Numbers.is_amount_string(this.value)) {
+		} else if (NumberStrings.is_amount_string(this.value)) {
 			return 'amount_string';
 		}
 
@@ -424,7 +427,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	toAmountString(): amount_string
 	{
-		if (Numbers.is_amount_string(this.value)) {
+		if (NumberStrings.is_amount_string(this.value)) {
 			return this.value;
 		}
 
@@ -490,7 +493,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		if (
 			input instanceof BigNumber
 			|| input instanceof Fraction
-			|| Numbers.is_numeric_string(input)
+			|| NumberStrings.is_numeric_string(input)
 		) {
 			return new this(input);
 		} else if ('number' === typeof input) {

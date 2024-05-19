@@ -7,6 +7,9 @@ import {
 	number_arg,
 	Numbers,
 } from '../../lib/Numbers';
+import {
+	NumberStrings,
+} from '../../lib/NumberStrings';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 
@@ -37,7 +40,9 @@ void describe('Math', () => {
 					JSON.stringify(input)
 				}`,
 				() => {
-					const get_result = () => Numbers.amount_string(input);
+					const get_result = () => NumberStrings.amount_string(
+						input
+					);
 
 					if (true === expectation) {
 						assert.doesNotThrow(get_result);

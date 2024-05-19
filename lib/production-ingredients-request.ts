@@ -65,11 +65,11 @@ export type production_ingredients_request<
 	T1 extends (
 		| amount_string
 		| IntermediaryCalculation_operand_types
-	) = amount_string,
+	) = IntermediaryCalculation_operand_types,
 	T2 extends (
 		| number_arg
 		| IntermediaryCalculation_operand_types
-	) = number_arg
+	) = IntermediaryCalculation_operand_types
 > = {
 	input?: recipe_ingredients_request_output<T1>[],
 	recipe_selection?: recipe_selection,

@@ -88,6 +88,22 @@ interface CanResolveMath<
 	resolve(): IntermediaryNumber;
 }
 
+export type CanConvertTypeJson =
+	| {
+		type: 'IntermediaryNumber',
+		value: string,
+	}
+	| {
+		type: 'IntermediaryCalculation',
+		left: CanConvertTypeJson,
+		operation: IntermediaryCalculation_operation_types,
+		right: CanConvertTypeJson,
+	}
+	| {
+		type: 'DeferredCalculation',
+		value: [string|CanConvertTypeJson, ...(string|CanConvertTypeJson)[]],
+	}
+
 interface CanConvertType extends HasType
 {
 	toAmountString(): amount_string;
@@ -109,6 +125,8 @@ interface CanConvertType extends HasType
 	isOne(): boolean;
 
 	isZero(): boolean;
+
+	toJSON(): CanConvertTypeJson;
 }
 
 type CanDoMathWithDispose_operator_types =
@@ -484,6 +502,47 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return value;
 	}
 
+	toJSON(): CanConvertTypeJson {
+		if (this.isOne()) {
+			return {
+				type: 'IntermediaryNumber',
+				value: '1',
+			};
+		} else if (this.isZero()) {
+			return {
+				type: 'IntermediaryNumber',
+				value: '0',
+			};
+		}
+
+		if (this.value instanceof Fraction) {
+			const [left, right] = this.value.toFraction().split('/');
+
+			return {
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: left,
+				},
+				operation: '/',
+				right: {
+					type: 'IntermediaryNumber',
+					value: right,
+				},
+			};
+		} else if (this.value instanceof BigNumber) {
+			return {
+				type: 'IntermediaryNumber',
+				value: this.value.toFixed(),
+			};
+		}
+
+		return {
+			type: 'IntermediaryNumber',
+			value: this.value,
+		};
+	}
+
 	toNumericString(): string {
 		return NumberStrings.numeric_string(
 			IntermediaryNumber.reuse_or_create(this)
@@ -579,6 +638,22 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		} catch (err) {
 			return new NotValid(maybe, err);
 		}
+	}
+
+	static fromJson(json:CanConvertTypeJson): CanDoMath_result_types {
+		if ('IntermediaryNumber' === json.type) {
+			return this.create(json.value);
+		} else if ('IntermediaryCalculation' === json.type) {
+			return new IntermediaryCalculation(
+				this.fromJson(json.left),
+				json.operation,
+				this.fromJson(json.right)
+			);
+		}
+
+		return new DeferredCalculation(require_non_empty_array(json.value.map(
+			e => is_string(e) ? e : this.fromJson(e)
+		)));
 	}
 
 	static reuse_or_create(
@@ -934,6 +1009,27 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		cache.set(this, value);
 
 		return value;
+	}
+
+	toJSON(): CanConvertTypeJson {
+		return {
+			type: 'IntermediaryCalculation',
+			left: (
+				(this.left_operand instanceof DeferredCalculation)
+					? this.left_operand.toJSON()
+					: this.operand_to_IntermediaryNumber(
+						this.left_operand
+					).toJSON()
+			),
+			operation: this.operation,
+			right: (
+				(this.right_operand instanceof DeferredCalculation)
+					? this.right_operand.toJSON()
+					: this.operand_to_IntermediaryNumber(
+						this.right_operand
+					).toJSON()
+			),
+		}
 	}
 
 	toNumericString(): string {
@@ -2230,6 +2326,21 @@ export class DeferredCalculation implements
 
 	toFraction(): Fraction {
 		return this.parse().toFraction();
+	}
+
+	toJSON(): CanConvertTypeJson {
+		const value = require_non_empty_array(this.internal_value.map(
+			e => (
+				is_string(e)
+					? e
+					: IntermediaryNumber.reuse_or_create(e).toJSON()
+			)
+		));
+
+		return {
+			type: 'DeferredCalculation',
+			value,
+		};
 	}
 
 	toNumericString(): string {

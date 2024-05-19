@@ -8,9 +8,7 @@ import {
 	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
-	IntermediaryNumber_input_types,
 	IntermediaryNumber_math_types,
-	IntermediaryNumber_type_types,
 	NotValid,
 } from '../../lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
@@ -22,6 +20,10 @@ import {
 	is_instanceof,
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
+import {
+	IntermediaryNumber_input_types,
+	IntermediaryNumber_type_types,
+} from '../../lib/IntermediaryNumberTypes';
 
 void describe('IntermediaryNumber', () => {
 	void describe('create', () => {

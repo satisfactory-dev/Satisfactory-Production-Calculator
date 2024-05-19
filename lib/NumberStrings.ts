@@ -13,9 +13,8 @@ import {
 } from '../generated-types/update8/common/unassigned';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
-import {
+import type {
 	IntermediaryCalculation_operand_types,
-	IntermediaryNumber,
 } from './IntermediaryNumber';
 
 export type amount_string =
@@ -70,12 +69,8 @@ export class NumberStrings
 
 	static numeric_string(
 		value:
-			| numeric_string
-			| Fraction
 			| IntermediaryCalculation_operand_types
 	): string {
-		value = IntermediaryNumber.reuse_or_create(value);
-
 		const string = value.toFraction().toString();
 
 		if (/^\d+\.\d*\(\d\)$/.test(string)) {

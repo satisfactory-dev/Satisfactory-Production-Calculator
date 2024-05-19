@@ -7,28 +7,18 @@ import {
 import {
 	amount_string,
 	NumberStrings,
-	numeric_string,
 } from './NumberStrings';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
-
-export type IntermediaryNumber_input_types =
-	| BigNumber
-	| Fraction
-	| number
-	| string;
-
-export type IntermediaryNumber_value_types =
-	| BigNumber
-	| Fraction
-	| numeric_string;
-
-export type IntermediaryNumber_type_types =
-	| 'BigNumber'
-	| 'Fraction'
-	| 'amount_string'
-	| 'numeric_string';
+import {
+	require_non_empty_array,
+} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
+import type {
+	IntermediaryNumber_input_types,
+	IntermediaryNumber_type_types,
+	IntermediaryNumber_value_types,
+} from './IntermediaryNumberTypes';
 
 export type IntermediaryNumber_math_types =
 	| IntermediaryCalculation_operand_types
@@ -495,7 +485,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	toNumericString(): string {
-		return NumberStrings.numeric_string(this);
+		return NumberStrings.numeric_string(
+			IntermediaryNumber.reuse_or_create(this)
+		);
 	}
 
 	toString()

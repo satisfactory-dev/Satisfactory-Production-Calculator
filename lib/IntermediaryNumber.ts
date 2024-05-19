@@ -331,7 +331,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 {
 	private readonly value:IntermediaryNumber_value_types;
 
-	static readonly One = new this(BigNumber(1));
+	static readonly One = new this('1');
 
 	static readonly Zero = new this('0');
 

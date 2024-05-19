@@ -17,6 +17,7 @@ import Fraction from 'fraction.js';
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
 	| integer_string__type
+	| '1'
 	| '0';
 
 export type numeric_string =

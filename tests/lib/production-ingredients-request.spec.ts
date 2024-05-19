@@ -57,11 +57,11 @@ function flattened_production_ingredients_request_result(
 		if (!(entry.item in calculating.ingredients)) {
 			calculating.ingredients[entry.item] = entry.amount;
 		} else {
-		calculating.ingredients[
-			entry.item
-		] = calculating.ingredients[
-			entry.item
-		].plus(entry.amount);
+			calculating.ingredients[
+				entry.item
+			] = calculating.ingredients[
+				entry.item
+			].plus(entry.amount);
 		}
 	}
 

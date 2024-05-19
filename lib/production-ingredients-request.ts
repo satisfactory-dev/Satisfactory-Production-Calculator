@@ -188,10 +188,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					entry.item as keyof typeof input
 				] = IntermediaryNumber.reuse_or_create(entry.amount);
 			} else {
-			input[entry.item] = input[entry.item].do_math_then_dispose(
-				'plus',
-				entry.amount
-			);
+				input[entry.item] = input[entry.item].do_math_then_dispose(
+					'plus',
+					entry.amount
+				);
 			}
 		}
 		const output:{
@@ -828,10 +828,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = is.amount;
 				} else {
-				was[is.item] = was[is.item].do_math_then_dispose(
-					'plus',
-					is.amount
-				);
+					was[is.item] = was[is.item].do_math_then_dispose(
+						'plus',
+						is.amount
+					);
 				}
 
 				return was;
@@ -874,10 +874,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(is.item in was)) {
 					was[is.item] = IntermediaryNumber.reuse_or_create(is.amount);
 				} else {
-				was[is.item] = was[is.item].do_math_then_dispose(
-					'plus',
-					is.amount
-				);
+					was[is.item] = was[is.item].do_math_then_dispose(
+						'plus',
+						is.amount
+					);
 				}
 
 
@@ -903,12 +903,12 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				if (!(entry[0] in surplus_map)) {
 					surplus_map[entry[0]] = output[entry[0]].minus(entry[1]);
 				} else {
-				surplus_map[entry[0]] = surplus_map[
-					entry[0]
-				].do_math_then_dispose(
-					'plus',
-					output[entry[0]].minus(entry[1])
-				);
+					surplus_map[entry[0]] = surplus_map[
+						entry[0]
+					].do_math_then_dispose(
+						'plus',
+						output[entry[0]].minus(entry[1])
+					);
 				}
 
 				output[entry[0]] = entry[1];
@@ -924,10 +924,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			if (!(entry[0] in ingredients)) {
 				ingredients[entry[0]] = entry[1].abs();
 			} else {
-			ingredients[entry[0]] = ingredients[entry[0]].do_math_then_dispose(
-				'plus',
-				entry[1].abs()
-			);
+				ingredients[entry[0]] = ingredients[entry[0]].do_math_then_dispose(
+					'plus',
+					entry[1].abs()
+				);
 			}
 		}
 

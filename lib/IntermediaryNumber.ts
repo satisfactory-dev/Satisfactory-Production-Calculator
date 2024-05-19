@@ -387,7 +387,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		const result = this[operator](right_operand);
 
 		if (result !== this) {
-		dispose(this);
+			dispose(this);
 		}
 
 		return result;
@@ -808,7 +808,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		const result = this[operator](right_operand);
 
 		if (result !== this) {
-		dispose(this);
+			dispose(this);
 		}
 
 		return result;
@@ -2117,7 +2117,7 @@ export class DeferredCalculation implements
 		const result = this[operator](right_operand);
 
 		if (result !== this) {
-		this.dispose();
+			this.dispose();
 		}
 
 		return result;

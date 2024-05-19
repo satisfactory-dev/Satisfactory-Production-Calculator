@@ -1,7 +1,6 @@
 import assert from 'assert';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
-import sum_series from '@stdlib/math-base-tools-sum-series';
 import {
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
@@ -9,7 +8,6 @@ import {
 } from './IntermediaryNumber';
 import {
 	amount_string,
-	NumberStrings,
 } from './NumberStrings';
 
 export type number_arg =

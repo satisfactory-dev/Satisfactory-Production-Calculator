@@ -486,6 +486,10 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	static create(
 		input: IntermediaryNumber_input_types
 	): IntermediaryNumber {
+		if ('' === input) {
+			return IntermediaryNumber.Zero;
+		}
+
 		if (
 			input instanceof BigNumber
 			|| input instanceof Fraction

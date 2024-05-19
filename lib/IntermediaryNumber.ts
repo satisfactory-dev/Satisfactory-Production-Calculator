@@ -1997,6 +1997,22 @@ export class DeferredCalculation implements
 	}
 
 	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+		if (value instanceof DeferredCalculation) {
+			const a = this.value;
+			const b = value.value;
+
+			if (a === b) {
+				return 0;
+			} else if (
+				NumberStrings.is_numeric_string(a)
+				&& NumberStrings.is_numeric_string(b)
+			) {
+				return IntermediaryNumber.create(a).compare(
+					IntermediaryNumber.create(b)
+				);
+			}
+		}
+
 		return compare(value, this);
 	}
 

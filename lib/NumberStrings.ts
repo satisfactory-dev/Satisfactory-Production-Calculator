@@ -13,6 +13,9 @@ import {
 } from '../generated-types/update8/common/unassigned';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
+import {
+	IntermediaryCalculation_operand_types,
+} from './IntermediaryNumber';
 
 export type amount_string =
 	| StringPassedRegExp<'^\\d+(?:\\.\\d{1,6})?$'>
@@ -64,9 +67,20 @@ export class NumberStrings
 		);
 	}
 
-	static round_off(number:BigNumber|Fraction): amount_string
-	{
+	static round_off(
+		number:
+			| BigNumber
+			| Fraction
+			| IntermediaryCalculation_operand_types
+	): amount_string {
 		let result:string;
+
+		number = (
+			(number instanceof BigNumber)
+			|| (number instanceof Fraction)
+		)
+			? number
+			: number.toBigNumberOrFraction();
 
 		if (number instanceof BigNumber) {
 			this.configure();

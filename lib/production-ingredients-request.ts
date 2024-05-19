@@ -84,7 +84,7 @@ export type recipe_ingredients_request_ingredient<
 		| amount_string
 		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = amount_string
+	) = IntermediaryCalculation_operand_types
 > = {
 	item: keyof typeof items,
 	amount: T,
@@ -94,7 +94,7 @@ export type recipe_ingredients_request_output<
 		| amount_string
 		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = amount_string
+	) = IntermediaryCalculation_operand_types
 > = {
 	item: production_item,
 	amount: T,
@@ -105,7 +105,7 @@ export type production_ingredients_request_result_surplus<
 		| amount_string
 		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = amount_string
+	) = IntermediaryCalculation_operand_types
 > = [
 	recipe_ingredients_request_output<T>,
 	...recipe_ingredients_request_output<T>[],
@@ -116,7 +116,7 @@ export type combined_production_entry<
 		| amount_string
 		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = amount_string
+	) = IntermediaryCalculation_operand_types
 > = {
 	item: production_item,
 	output: T,
@@ -128,7 +128,7 @@ export type production_ingredients_request_result<
 		| amount_string
 		| BigNumber
 		| IntermediaryCalculation_operand_types
-	) = amount_string
+	) = IntermediaryCalculation_operand_types
 > = {
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
@@ -624,7 +624,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				e => {
 					return {
 						item: e.item,
-						amount: e.amount.toAmountString(),
+						amount: e.amount,
 					};
 				}
 			),
@@ -632,7 +632,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				e => {
 					return {
 						item: e.item,
-						amount: e.amount.toAmountString(),
+						amount: e.amount,
 					};
 				}
 			),
@@ -640,8 +640,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				e => {
 					return {
 						item: e.item,
-						output: e.output.toAmountString(),
-						surplus: e.surplus.toAmountString(),
+						output: e.output,
+						surplus: e.surplus,
 					};
 				}
 			),
@@ -653,7 +653,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				e => {
 					return {
 						item: e.item,
-						amount: e.amount.toAmountString(),
+						amount: e.amount,
 					};
 				}
 			))

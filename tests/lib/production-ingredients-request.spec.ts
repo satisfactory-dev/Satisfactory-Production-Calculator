@@ -11,7 +11,6 @@ import {
 	amount_string,
 	NumberStrings,
 } from '../../lib/NumberStrings';
-import BigNumber from 'bignumber.js';
 import {
 	FGRecipe,
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe';
@@ -33,6 +32,10 @@ import {
 	FGBuildableResourceExtractor,
 // eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
+import {
+	IntermediaryCalculation_operand_types,
+	IntermediaryNumber,
+} from '../../lib/IntermediaryNumber';
 
 type flattened_result = {
 	ingredients: {[key: string]: amount_string},
@@ -44,9 +47,9 @@ function flattened_production_ingredients_request_result(
 	input:production_ingredients_request_result
 ) : flattened_result {
 	const calculating:{
-		ingredients: {[key: string]: BigNumber},
-		output: {[key: string]: BigNumber},
-		surplus: {[key: string]: BigNumber},
+		ingredients: {[key: string]: IntermediaryCalculation_operand_types},
+		output: {[key: string]: IntermediaryCalculation_operand_types},
+		surplus: {[key: string]: IntermediaryCalculation_operand_types},
 	} = {
 		ingredients: {},
 		output: {},
@@ -55,7 +58,7 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.ingredients) {
 		if (!(entry.item in calculating.ingredients)) {
-			calculating.ingredients[entry.item] = BigNumber(0);
+			calculating.ingredients[entry.item] = IntermediaryNumber.Zero;
 		}
 
 		calculating.ingredients[
@@ -67,7 +70,7 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.output) {
 		if (!(entry.item in calculating.output)) {
-			calculating.output[entry.item] = BigNumber(0);
+			calculating.output[entry.item] = IntermediaryNumber.Zero;
 		}
 
 		calculating.output[
@@ -79,7 +82,7 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.surplus || []) {
 		if (!(entry.item in calculating.surplus)) {
-			calculating.surplus[entry.item] = BigNumber(0);
+			calculating.surplus[entry.item] = IntermediaryNumber.Zero;
 		}
 
 		calculating.surplus[
@@ -197,80 +200,80 @@ void describe('ProductionIngredientsRequest', () => {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
-					amount: NumberStrings.amount_string('15'),
+					amount: IntermediaryNumber.create('15'),
 				},
 				{
 					item: 'Desc_Cable_C',
-					amount: NumberStrings.amount_string('25'),
+					amount: IntermediaryNumber.create('25'),
 				},
 				{
 					item: 'Desc_Cement_C',
-					amount: NumberStrings.amount_string('100'),
+					amount: IntermediaryNumber.create('100'),
 				},
 				{
 					item: 'Desc_SteelPlate_C',
-					amount: NumberStrings.amount_string('100'),
+					amount: IntermediaryNumber.create('100'),
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: NumberStrings.amount_string('22.5'),
+					amount: IntermediaryNumber.create('22.5'),
 				},
 				{
 					item: 'Desc_IronRod_C',
-					amount: NumberStrings.amount_string('157.5'),
+					amount: IntermediaryNumber.create('157.5'),
 				},
 				{
 					item: 'Desc_IronPlate_C',
-					amount: NumberStrings.amount_string('135'),
+					amount: IntermediaryNumber.create('135'),
 				},
 				{
 					item: 'Desc_IronScrew_C',
-					amount: NumberStrings.amount_string('270'),
+					amount: IntermediaryNumber.create('270'),
 				},
 				{
 					item: 'Desc_IronIngot_C',
-					amount: NumberStrings.amount_string('360'),
+					amount: IntermediaryNumber.create('360'),
 				},
 				{
 					item: 'Desc_OreIron_C',
-					amount: NumberStrings.amount_string('760'),
+					amount: IntermediaryNumber.create('760'),
 				},
 				{
 					item: 'Desc_Wire_C',
-					amount: NumberStrings.amount_string('50'),
+					amount: IntermediaryNumber.create('50'),
 				},
 				{
 					item: 'Desc_CopperIngot_C',
-					amount: NumberStrings.amount_string('25'),
+					amount: IntermediaryNumber.create('25'),
 				},
 				{
 					item: 'Desc_OreCopper_C',
-					amount: NumberStrings.amount_string('25'),
+					amount: IntermediaryNumber.create('25'),
 				},
 				{
 					item: 'Desc_Stone_C',
-					amount: NumberStrings.amount_string('300'),
+					amount: IntermediaryNumber.create('300'),
 				},
 				{
 					item: 'Desc_SteelIngot_C',
-					amount: NumberStrings.amount_string('400'),
+					amount: IntermediaryNumber.create('400'),
 				},
 				{
 					item: 'Desc_Coal_C',
-					amount: NumberStrings.amount_string('400'),
+					amount: IntermediaryNumber.create('400'),
 				},
 			],
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: NumberStrings.amount_string('1'),
+					amount: IntermediaryNumber.create('1'),
 				},
 			],
 			combined: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					output: NumberStrings.amount_string('1'),
-					surplus: NumberStrings.amount_string('0'),
+					output: IntermediaryNumber.create('1'),
+					surplus: IntermediaryNumber.create('0'),
 				},
 			],
 		};
@@ -278,80 +281,80 @@ void describe('ProductionIngredientsRequest', () => {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
-					amount: NumberStrings.amount_string('15.000015'),
+					amount: IntermediaryNumber.create('15.000015'),
 				},
 				{
 					item: 'Desc_Cable_C',
-					amount: NumberStrings.amount_string('25.000025'),
+					amount: IntermediaryNumber.create('25.000025'),
 				},
 				{
 					item: 'Desc_Cement_C',
-					amount: NumberStrings.amount_string('100.0001'),
+					amount: IntermediaryNumber.create('100.0001'),
 				},
 				{
 					item: 'Desc_SteelPlate_C',
-					amount: NumberStrings.amount_string('100.0001'),
+					amount: IntermediaryNumber.create('100.0001'),
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: NumberStrings.amount_string('22.500023'),
+					amount: IntermediaryNumber.create('22.500023'),
 				},
 				{
 					item: 'Desc_IronRod_C',
-					amount: NumberStrings.amount_string('157.500158'),
+					amount: IntermediaryNumber.create('157.500158'),
 				},
 				{
 					item: 'Desc_IronPlate_C',
-					amount: NumberStrings.amount_string('135.000135'),
+					amount: IntermediaryNumber.create('135.000135'),
 				},
 				{
 					item: 'Desc_IronScrew_C',
-					amount: NumberStrings.amount_string('270.00027'),
+					amount: IntermediaryNumber.create('270.00027'),
 				},
 				{
 					item: 'Desc_IronIngot_C',
-					amount: NumberStrings.amount_string('360.00036'),
+					amount: IntermediaryNumber.create('360.00036'),
 				},
 				{
 					item: 'Desc_OreIron_C',
-					amount: NumberStrings.amount_string('760.00076'),
+					amount: IntermediaryNumber.create('760.00076'),
 				},
 				{
 					item: 'Desc_Wire_C',
-					amount: NumberStrings.amount_string('50.00005'),
+					amount: IntermediaryNumber.create('50.00005'),
 				},
 				{
 					item: 'Desc_CopperIngot_C',
-					amount: NumberStrings.amount_string('25.000025'),
+					amount: IntermediaryNumber.create('25.000025'),
 				},
 				{
 					item: 'Desc_OreCopper_C',
-					amount: NumberStrings.amount_string('25.000025'),
+					amount: IntermediaryNumber.create('25.000025'),
 				},
 				{
 					item: 'Desc_Stone_C',
-					amount: NumberStrings.amount_string('300.0003'),
+					amount: IntermediaryNumber.create('300.0003'),
 				},
 				{
 					item: 'Desc_SteelIngot_C',
-					amount: NumberStrings.amount_string('400.0004'),
+					amount: IntermediaryNumber.create('400.0004'),
 				},
 				{
 					item: 'Desc_Coal_C',
-					amount: NumberStrings.amount_string('400.0004'),
+					amount: IntermediaryNumber.create('400.0004'),
 				},
 			],
 			output: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: NumberStrings.amount_string('1.000001'),
+					amount: IntermediaryNumber.create('1.000001'),
 				},
 			],
 			combined: [
 				{
 					item: 'Desc_BlueprintDesigner_C',
-					output: NumberStrings.amount_string('1.000001'),
-					surplus: NumberStrings.amount_string('0'),
+					output: IntermediaryNumber.create('1.000001'),
+					surplus: IntermediaryNumber.create('0'),
 				},
 			],
 		};
@@ -374,20 +377,20 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronIngot_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -405,24 +408,24 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronRod_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronRod_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -440,28 +443,28 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronRod_C',
-							amount: NumberStrings.amount_string('0.25'),
+							amount: IntermediaryNumber.create('0.25'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('0.25'),
+							amount: IntermediaryNumber.create('0.25'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('0.25'),
+							amount: IntermediaryNumber.create('0.25'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronScrew_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronScrew_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -479,24 +482,24 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -514,20 +517,20 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Stone_C',
-							amount: NumberStrings.amount_string('3'),
+							amount: IntermediaryNumber.create('3'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cement_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Cement_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -545,24 +548,24 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_SteelIngot_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -580,28 +583,28 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -619,20 +622,20 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_CopperIngot_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -650,24 +653,24 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('0.5'),
+							amount: IntermediaryNumber.create('0.5'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('0.5'),
+							amount: IntermediaryNumber.create('0.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Wire_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -685,28 +688,28 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('2'),
+							amount: IntermediaryNumber.create('2'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Cable_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -724,36 +727,36 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('6'),
+							amount: IntermediaryNumber.create('6'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: NumberStrings.amount_string('12'),
+							amount: IntermediaryNumber.create('12'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('12'),
+							amount: IntermediaryNumber.create('12'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('12'),
+							amount: IntermediaryNumber.create('12'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: NumberStrings.amount_string('3'),
+							amount: IntermediaryNumber.create('3'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -771,40 +774,40 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: NumberStrings.amount_string('10.5'),
+							amount: IntermediaryNumber.create('10.5'),
 						},
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('9'),
+							amount: IntermediaryNumber.create('9'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: NumberStrings.amount_string('18'),
+							amount: IntermediaryNumber.create('18'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('24'),
+							amount: IntermediaryNumber.create('24'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('24'),
+							amount: IntermediaryNumber.create('24'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_ModularFrame_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -850,29 +853,29 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							amount: NumberStrings.amount_string('0.5'),
+							amount: IntermediaryNumber.create('0.5'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Plastic_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							output: NumberStrings.amount_string('0.5'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('0.5'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -887,14 +890,14 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Water_C',
-							output: NumberStrings.amount_string('123.456'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('123.456'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -915,54 +918,54 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_PackagedWater_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('61.728'),
+							amount: IntermediaryNumber.create('61.728'),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: NumberStrings.amount_string('92.592'),
+							amount: IntermediaryNumber.create('92.592'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							amount: NumberStrings.amount_string('123.456'),
+							amount: IntermediaryNumber.create('123.456'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							amount: NumberStrings.amount_string('30.864'),
+							amount: IntermediaryNumber.create('30.864'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Water_C',
-							output: NumberStrings.amount_string('123.456'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('123.456'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_FluidCanister_C',
-							output: NumberStrings.amount_string('123.456'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('123.456'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_HeavyOilResidue_C',
-							output: NumberStrings.amount_string('30.864'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('30.864'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -980,28 +983,28 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('2'),
+							amount: IntermediaryNumber.create('2'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Cable_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1011,7 +1014,7 @@ void describe('ProductionIngredientsRequest', () => {
 					input: [
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('10'),
+							amount: IntermediaryNumber.create('10'),
 						},
 					],
 					pool: [
@@ -1026,25 +1029,25 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_Cable_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('8'),
+							amount: IntermediaryNumber.create('8'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Cable_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_Wire_C',
-							output: NumberStrings.amount_string('0'),
-							surplus: NumberStrings.amount_string('1'),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('1'),
 						},
 					],
 				},
@@ -1068,47 +1071,47 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 						{
 							item: 'Desc_IronRod_C',
-							amount: NumberStrings.amount_string('10.5'),
+							amount: IntermediaryNumber.create('10.5'),
 						},
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('9'),
+							amount: IntermediaryNumber.create('9'),
 						},
 						{
 							item: 'Desc_IronScrew_C',
-							amount: NumberStrings.amount_string('18'),
+							amount: IntermediaryNumber.create('18'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('24'),
+							amount: IntermediaryNumber.create('24'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('6'),
+							amount: IntermediaryNumber.create('6'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_ModularFrame_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							output: NumberStrings.amount_string('0'),
-							surplus: NumberStrings.amount_string('6'),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('6'),
 						},
 					],
 				},
@@ -1126,49 +1129,49 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: NumberStrings.amount_string('0.6'),
+							amount: IntermediaryNumber.create('0.6'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: NumberStrings.amount_string('2'),
+							amount: IntermediaryNumber.create('2'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: NumberStrings.amount_string('1.8'),
+							amount: IntermediaryNumber.create('1.8'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('0.4'),
+							amount: IntermediaryNumber.create('0.4'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_UraniumCell_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							output: NumberStrings.amount_string('0.4'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('0.4'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1186,117 +1189,117 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: NumberStrings.amount_string('45'),
+							amount: IntermediaryNumber.create('45'),
 						},
 						{
 							item: 'Desc_CircuitBoardHighSpeed_C',
-							amount: NumberStrings.amount_string('5'),
+							amount: IntermediaryNumber.create('5'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('81.75'),
+							amount: IntermediaryNumber.create('81.75'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('80'),
+							amount: IntermediaryNumber.create('80'),
 						},
 						{
 							item: 'Desc_CopperSheet_C',
-							amount: NumberStrings.amount_string('25'),
+							amount: IntermediaryNumber.create('25'),
 						},
 						{
 							item: 'Desc_ElectromagneticControlRod_C',
-							amount: NumberStrings.amount_string('5'),
+							amount: IntermediaryNumber.create('5'),
 						},
 						{
 							item: 'Desc_GoldIngot_C',
-							amount: NumberStrings.amount_string('20'),
+							amount: IntermediaryNumber.create('20'),
 						},
 						{
 							item: 'Desc_HighSpeedWire_C',
-							amount: NumberStrings.amount_string('100'),
+							amount: IntermediaryNumber.create('100'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('80'),
+							amount: IntermediaryNumber.create('80'),
 						},
 						{
 							item: 'Desc_OreGold_C',
-							amount: NumberStrings.amount_string('60'),
+							amount: IntermediaryNumber.create('60'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('81.75'),
+							amount: IntermediaryNumber.create('81.75'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: NumberStrings.amount_string('100'),
+							amount: IntermediaryNumber.create('100'),
 						},
 						{
 							item: 'Desc_Stator_C',
-							amount: NumberStrings.amount_string('7.5'),
+							amount: IntermediaryNumber.create('7.5'),
 						},
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('81.75'),
+							amount: IntermediaryNumber.create('81.75'),
 						},
 						{
 							item: 'Desc_SteelPipe_C',
-							amount: NumberStrings.amount_string('22.5'),
+							amount: IntermediaryNumber.create('22.5'),
 						},
 						{
 							item: 'Desc_SteelPlateReinforced_C',
-							amount: NumberStrings.amount_string('3'),
+							amount: IntermediaryNumber.create('3'),
 						},
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('12'),
+							amount: IntermediaryNumber.create('12'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: NumberStrings.amount_string('135'),
+							amount: IntermediaryNumber.create('135'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: NumberStrings.amount_string('80'),
+							amount: IntermediaryNumber.create('80'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('80'),
+							amount: IntermediaryNumber.create('80'),
 						},
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: NumberStrings.amount_string('50'),
+							amount: IntermediaryNumber.create('50'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('80'),
+							amount: IntermediaryNumber.create('80'),
 						},
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('60'),
+							amount: IntermediaryNumber.create('60'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('20'),
+							amount: IntermediaryNumber.create('20'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							output: NumberStrings.amount_string('20'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('20'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1314,121 +1317,121 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_Cement_C',
-							amount: NumberStrings.amount_string('0.9'),
+							amount: IntermediaryNumber.create('0.9'),
 						},
 						{
 							item: 'Desc_CircuitBoardHighSpeed_C',
-							amount: NumberStrings.amount_string('0.1'),
+							amount: IntermediaryNumber.create('0.1'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('1.635'),
+							amount: IntermediaryNumber.create('1.635'),
 						},
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_CopperSheet_C',
-							amount: NumberStrings.amount_string('0.5'),
+							amount: IntermediaryNumber.create('0.5'),
 						},
 						{
 							item: 'Desc_ElectromagneticControlRod_C',
-							amount: NumberStrings.amount_string('0.1'),
+							amount: IntermediaryNumber.create('0.1'),
 						},
 						{
 							item: 'Desc_GoldIngot_C',
-							amount: NumberStrings.amount_string('0.4'),
+							amount: IntermediaryNumber.create('0.4'),
 						},
 						{
 							item: 'Desc_HighSpeedWire_C',
-							amount: NumberStrings.amount_string('2'),
+							amount: IntermediaryNumber.create('2'),
 						},
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							amount: NumberStrings.amount_string('0.02'),
+							amount: IntermediaryNumber.create('0.02'),
 						},
 						{
 							item: 'Desc_OreCopper_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_OreGold_C',
-							amount: NumberStrings.amount_string('1.2'),
+							amount: IntermediaryNumber.create('1.2'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1.635'),
+							amount: IntermediaryNumber.create('1.635'),
 						},
 						{
 							item: 'Desc_OreUranium_C',
-							amount: NumberStrings.amount_string('2'),
+							amount: IntermediaryNumber.create('2'),
 						},
 						{
 							item: 'Desc_Stator_C',
-							amount: NumberStrings.amount_string('0.15'),
+							amount: IntermediaryNumber.create('0.15'),
 						},
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('1.635'),
+							amount: IntermediaryNumber.create('1.635'),
 						},
 						{
 							item: 'Desc_SteelPipe_C',
-							amount: NumberStrings.amount_string('0.45'),
+							amount: IntermediaryNumber.create('0.45'),
 						},
 						{
 							item: 'Desc_SteelPlateReinforced_C',
-							amount: NumberStrings.amount_string('0.06'),
+							amount: IntermediaryNumber.create('0.06'),
 						},
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('0.24'),
+							amount: IntermediaryNumber.create('0.24'),
 						},
 						{
 							item: 'Desc_Stone_C',
-							amount: NumberStrings.amount_string('2.7'),
+							amount: IntermediaryNumber.create('2.7'),
 						},
 						{
 							item: 'Desc_Sulfur_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_Water_C',
-							amount: NumberStrings.amount_string('1.6'),
+							amount: IntermediaryNumber.create('1.6'),
 						},
 						{
 							item: 'Desc_Wire_C',
-							amount: NumberStrings.amount_string('1.2'),
+							amount: IntermediaryNumber.create('1.2'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_NuclearWaste_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							amount: NumberStrings.amount_string('0.4'),
+							amount: IntermediaryNumber.create('0.4'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_NuclearWaste_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_SulfuricAcid_C',
-							output: NumberStrings.amount_string('0.4'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('0.4'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1450,52 +1453,52 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: NumberStrings.amount_string('0.1'),
+							amount: IntermediaryNumber.create('0.1'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('0.333334'),
+							amount: IntermediaryNumber.create('0.333334'),
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: NumberStrings.amount_string('0.666667'),
+							amount: IntermediaryNumber.create('0.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							amount: NumberStrings.amount_string('0.75'),
+							amount: IntermediaryNumber.create('0.75'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('0.083334'),
+							amount: IntermediaryNumber.create('0.083334'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_Plastic_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							output: NumberStrings.amount_string('0.75'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('0.75'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							output: NumberStrings.amount_string('0'),
-							surplus: NumberStrings.amount_string('0.083334'),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('0.083334'),
 						},
 					],
 				},
@@ -1518,49 +1521,49 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('0.666667'),
+							amount: IntermediaryNumber.create('0.666667'),
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: NumberStrings.amount_string('0.133334'),
+							amount: IntermediaryNumber.create('0.133334'),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
-							amount: NumberStrings.amount_string('0.2'),
+							amount: IntermediaryNumber.create('0.2'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('0.666667'),
+							amount: IntermediaryNumber.create('0.666667'),
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: NumberStrings.amount_string('0.177778'),
+							amount: IntermediaryNumber.create('0.177778'),
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: NumberStrings.amount_string('0.088889'),
+							amount: IntermediaryNumber.create('0.088889'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							amount: NumberStrings.amount_string('0.1'),
+							amount: IntermediaryNumber.create('0.1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_PolymerResin_C',
-							output: NumberStrings.amount_string('0.1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('0.1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1578,24 +1581,24 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1620,25 +1623,25 @@ void describe('ProductionIngredientsRequest', () => {
 					output: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('1.5'),
+							amount: IntermediaryNumber.create('1.5'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							output: NumberStrings.amount_string('0'),
-							surplus: NumberStrings.amount_string('1.5'),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('1.5'),
 						},
 					],
 				},
@@ -1656,28 +1659,28 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1698,32 +1701,32 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('2.666667'),
+							amount: IntermediaryNumber.create('2.666667'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: NumberStrings.amount_string('2.666667'),
+							amount: IntermediaryNumber.create('2.666667'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('2.666667'),
+							amount: IntermediaryNumber.create('2.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 					],
 				},
@@ -1750,35 +1753,35 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: NumberStrings.amount_string('4'),
+							amount: IntermediaryNumber.create('4'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: NumberStrings.amount_string('2.666667'),
+							amount: IntermediaryNumber.create('2.666667'),
 						},
 					],
 					output: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: NumberStrings.amount_string('1'),
+							amount: IntermediaryNumber.create('1'),
 						},
 					],
 					surplus: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: NumberStrings.amount_string('0.333334'),
+							amount: IntermediaryNumber.create('0.333334'),
 						},
 					],
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',
-							output: NumberStrings.amount_string('1'),
-							surplus: NumberStrings.amount_string('0'),
+							output: IntermediaryNumber.create('1'),
+							surplus: IntermediaryNumber.create('0'),
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							output: NumberStrings.amount_string('0'),
-							surplus: NumberStrings.amount_string('0.333334'),
+							output: IntermediaryNumber.create('0'),
+							surplus: IntermediaryNumber.create('0.333334'),
 						},
 					],
 				},
@@ -1806,7 +1809,7 @@ void describe('ProductionIngredientsRequest', () => {
 							if (ingredient.item === 'Desc_OreIron_C') {
 								return {
 									item: 'Desc_OreIron_C',
-									amount: NumberStrings.amount_string('400'),
+									amount: IntermediaryNumber.create('400'),
 								};
 							}
 
@@ -1818,7 +1821,7 @@ void describe('ProductionIngredientsRequest', () => {
 						return {
 							item: e.item,
 							output: e.amount,
-							surplus: '0',
+							surplus: IntermediaryNumber.Zero,
 						};
 					}),
 				},

@@ -431,7 +431,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			return this.value;
 		}
 
-		return Numbers.round_off(this.toBigNumberOrFraction());
+		return NumberStrings.round_off(this.toBigNumberOrFraction());
 	}
 
 	toBigNumber(): BigNumber

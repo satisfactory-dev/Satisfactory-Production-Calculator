@@ -93,37 +93,6 @@ export class Numbers
 		));
 	}
 
-	static round_off(number:BigNumber|Fraction): amount_string
-	{
-		let result:string;
-
-		if (number instanceof BigNumber) {
-			this.configure();
-			result = number.toString();
-		} else {
-			result = number.valueOf().toString();
-		}
-
-		if (/\.\d{7,}$/.test(result)) {
-			const [before, after] = result.split('.');
-
-			return `${
-				before
-			}.${
-				'0' === after.substring(6, 7)
-					? after.substring(0, 6).replace(/0+$/, '')
-					: (
-						parseInt(after.substring(0, 6), 10) + 1
-					).toString().padStart(
-						Math.min(6, after.length),
-						'0'
-					)
-			}`.replace(/\.$/, '') as amount_string;
-		}
-
-		return result as amount_string;
-	}
-
 	static sum_series_fraction(
 		a:Fraction,
 		b:Fraction
@@ -152,13 +121,5 @@ export class Numbers
 				tolerance: 0.000001,
 			})
 		);
-	}
-
-	private static configure()
-	{
-		BigNumber.set({
-			DECIMAL_PLACES: 7,
-			ROUNDING_MODE: BigNumber.ROUND_HALF_CEIL,
-		});
 	}
 }

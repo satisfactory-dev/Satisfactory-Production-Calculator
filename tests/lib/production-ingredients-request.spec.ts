@@ -8,9 +8,6 @@ import {
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';
 import {
-	Numbers,
-} from '../../lib/Numbers';
-import {
 	amount_string,
 	NumberStrings,
 } from '../../lib/NumberStrings';
@@ -96,21 +93,21 @@ function flattened_production_ingredients_request_result(
 		calculating.surplus
 	).map((e): [string, amount_string] => [
 		e[0],
-		Numbers.round_off(e[1]),
+		NumberStrings.round_off(e[1]),
 	]);
 
 	const result:flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
 				calculating.ingredients
-			).map(e => [e[0], Numbers.round_off(e[1])])
+			).map(e => [e[0], NumberStrings.round_off(e[1])])
 		),
 		output: Object.fromEntries(
 			Object.entries(
 				calculating.output
 			).map(e => [
 				e[0],
-				Numbers.round_off(e[1]),
+				NumberStrings.round_off(e[1]),
 			])
 		),
 	};

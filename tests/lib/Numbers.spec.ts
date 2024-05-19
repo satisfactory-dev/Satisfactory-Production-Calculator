@@ -150,14 +150,14 @@ void describe('Math', () => {
 			const [input, expectation] = entry;
 
 			void it(
-				`Numbers.round_off(${
+				`NumberStrings.round_off(${
 					input.toString()
 				}) returns ${
 					expectation
 				}`,
 				() => {
 					assert.equal(
-						Numbers.round_off(BigNumber(input)),
+						NumberStrings.round_off(BigNumber(input)),
 						expectation
 					)
 				}

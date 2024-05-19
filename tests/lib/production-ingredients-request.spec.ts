@@ -8,10 +8,6 @@ import {
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';
 import {
-	amount_string,
-	NumberStrings,
-} from '../../lib/NumberStrings';
-import {
 	FGRecipe,
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe';
 import {
@@ -33,14 +29,15 @@ import {
 // eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 import {
+	IntermediaryCalculation,
 	IntermediaryCalculation_operand_types,
 	IntermediaryNumber,
 } from '../../lib/IntermediaryNumber';
 
 type flattened_result = {
-	ingredients: {[key: string]: amount_string},
-	output: {[key: string]: amount_string},
-	surplus?: {[key: string]: amount_string},
+	ingredients: {[key: string]: string},
+	output: {[key: string]: string},
+	surplus?: {[key: string]: string},
 };
 
 function flattened_production_ingredients_request_result(
@@ -58,59 +55,60 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.ingredients) {
 		if (!(entry.item in calculating.ingredients)) {
-			calculating.ingredients[entry.item] = IntermediaryNumber.Zero;
-		}
-
+			calculating.ingredients[entry.item] = entry.amount;
+		} else {
 		calculating.ingredients[
 			entry.item
 		] = calculating.ingredients[
 			entry.item
 		].plus(entry.amount);
+		}
 	}
 
 	for (const entry of input.output) {
 		if (!(entry.item in calculating.output)) {
-			calculating.output[entry.item] = IntermediaryNumber.Zero;
+			calculating.output[entry.item] = entry.amount;
+		} else {
+			calculating.output[
+				entry.item
+			] = calculating.output[
+				entry.item
+			].plus(entry.amount);
 		}
-
-		calculating.output[
-			entry.item
-		] = calculating.output[
-			entry.item
-		].plus(entry.amount);
 	}
 
 	for (const entry of input.surplus || []) {
 		if (!(entry.item in calculating.surplus)) {
-			calculating.surplus[entry.item] = IntermediaryNumber.Zero;
-		}
+			calculating.surplus[entry.item] = entry.amount;
+		} else {
 
-		calculating.surplus[
-			entry.item
-		] = calculating.surplus[
-			entry.item
-		].plus(entry.amount);
+			calculating.surplus[
+				entry.item
+			] = calculating.surplus[
+				entry.item
+			].plus(entry.amount);
+		}
 	}
 
 	const surplus_entries = Object.entries(
 		calculating.surplus
-	).map((e): [string, amount_string] => [
+	).map((e): [string, string] => [
 		e[0],
-		NumberStrings.round_off(e[1]),
+		parseFloat(e[1].toAmountString()).toString(),
 	]);
 
 	const result:flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
 				calculating.ingredients
-			).map(e => [e[0], NumberStrings.round_off(e[1])])
+			).map(e => [e[0], parseFloat(e[1].toAmountString()).toString()])
 		),
 		output: Object.fromEntries(
 			Object.entries(
 				calculating.output
 			).map(e => [
 				e[0],
-				NumberStrings.round_off(e[1]),
+				parseFloat(e[1].toAmountString()).toString(),
 			])
 		),
 	};
@@ -297,11 +295,11 @@ void describe('ProductionIngredientsRequest', () => {
 				},
 				{
 					item: 'Desc_IronPlateReinforced_C',
-					amount: IntermediaryNumber.create('22.500023'),
+					amount: IntermediaryNumber.create('22.5000225'),
 				},
 				{
 					item: 'Desc_IronRod_C',
-					amount: IntermediaryNumber.create('157.500158'),
+					amount: IntermediaryNumber.create('157.5001575'),
 				},
 				{
 					item: 'Desc_IronPlate_C',
@@ -1014,7 +1012,7 @@ void describe('ProductionIngredientsRequest', () => {
 					input: [
 						{
 							item: 'Desc_Wire_C',
-							amount: IntermediaryNumber.create('10'),
+							amount: '10',
 						},
 					],
 					pool: [
@@ -1457,15 +1455,15 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: IntermediaryNumber.create('0.1'),
+							amount: IntermediaryNumber.One,
 						},
 						{
 							item: 'Desc_Plastic_C',
-							amount: IntermediaryNumber.create('0.333334'),
+							amount: IntermediaryCalculation.fromString('1/3'),
 						},
 						{
 							item: 'Desc_Rubber_C',
-							amount: IntermediaryNumber.create('0.666667'),
+							amount: IntermediaryCalculation.fromString('2/3'),
 						},
 					],
 					output: [
@@ -1481,7 +1479,7 @@ void describe('ProductionIngredientsRequest', () => {
 					surplus: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: IntermediaryNumber.create('0.083334'),
+							amount: IntermediaryCalculation.fromString('(8 + (1/3)) / 100'),
 						},
 					],
 					combined: [
@@ -1521,11 +1519,11 @@ void describe('ProductionIngredientsRequest', () => {
 					ingredients: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: IntermediaryNumber.create('0.666667'),
+							amount: IntermediaryCalculation.fromString('2/3'),
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: IntermediaryNumber.create('0.133334'),
+							amount: IntermediaryCalculation.fromString('(1 + (1/3))/10'),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
@@ -1533,7 +1531,7 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: IntermediaryNumber.create('0.666667'),
+							amount: IntermediaryCalculation.fromString('2/3'),
 						},
 						{
 							item: 'Desc_Plastic_C',
@@ -1705,15 +1703,15 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: IntermediaryNumber.create('2.666667'),
+							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: IntermediaryNumber.create('2.666667'),
+							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: IntermediaryNumber.create('2.666667'),
+							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
 						},
 					],
 					output: [
@@ -1757,7 +1755,7 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: IntermediaryNumber.create('2.666667'),
+							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
 						},
 					],
 					output: [
@@ -1769,7 +1767,7 @@ void describe('ProductionIngredientsRequest', () => {
 					surplus: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: IntermediaryNumber.create('0.333334'),
+							amount: IntermediaryCalculation.fromString('1/3'),
 						},
 					],
 					combined: [
@@ -1781,7 +1779,7 @@ void describe('ProductionIngredientsRequest', () => {
 						{
 							item: 'Desc_IronIngot_C',
 							output: IntermediaryNumber.create('0'),
-							surplus: IntermediaryNumber.create('0.333334'),
+							surplus: IntermediaryCalculation.fromString('1/3'),
 						},
 					],
 				},

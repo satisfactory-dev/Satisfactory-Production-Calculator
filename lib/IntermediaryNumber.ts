@@ -39,6 +39,7 @@ export const regex_recurring_number =
 	/^-?(\d+\.)(\d+r|\d*\[\d+\]r?|\d*\(\d+\)r?)$/;
 
 export type CanDoMath_result_types =
+	| IntermediaryNumber
 	| IntermediaryCalculation
 	| DeferredCalculation;
 
@@ -107,11 +108,15 @@ interface CanConvertType extends HasType
 
 	toFraction(): Fraction;
 
+	toNumericString(): string;
+
 	toString(): string;
 
 	isLessThan(value:IntermediaryNumber_math_types): boolean;
 
 	isGreaterThan(value:IntermediaryNumber_math_types): boolean;
+
+	isOne(): boolean;
 
 	isZero(): boolean;
 }
@@ -148,8 +153,8 @@ function do_math(
 	left_operand: IntermediaryNumber|IntermediaryCalculation,
 	operator: IntermediaryCalculation_operation_types,
 	right_operand: IntermediaryNumber_math_types
-) : IntermediaryCalculation {
-	return new IntermediaryCalculation(
+) : IntermediaryCalculation_operand_types {
+	return IntermediaryCalculation.maybe_short_circuit(
 		left_operand,
 		operator,
 		IntermediaryNumber.reuse_or_create(right_operand)
@@ -170,11 +175,15 @@ function abs(
 		return value;
 	}
 
-	return value.isLessThan(0)
+	return (value.isLessThan(0)
 		? IntermediaryNumber.Zero.minus(
 			value
 		)
-		: value;
+		: value
+	) as Exclude<
+		IntermediaryCalculation_operand_types,
+		DeferredCalculation
+	>;
 }
 
 function assert_notStrictEqual<
@@ -377,7 +386,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
+		if (result !== this) {
 		dispose(this);
+		}
 
 		return result;
 	}
@@ -388,6 +399,11 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	isLessThan(value: IntermediaryNumber_math_types): boolean {
 		return -1 === this.compare(value);
+	}
+
+	isOne(): boolean
+	{
+		return 0 === this.compare(1);
 	}
 
 	isZero(): boolean {
@@ -413,6 +429,10 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	plus(value:IntermediaryNumber_math_types)
 	{
+		if (this.isZero()) {
+			return IntermediaryNumber.reuse_or_create(value);
+		}
+
 		return do_math(this, '+', value);
 	}
 
@@ -474,6 +494,10 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return value;
 	}
 
+	toNumericString(): string {
+		return NumberStrings.numeric_string(this);
+	}
+
 	toString()
 	{
 		if (this.value instanceof BigNumber) {
@@ -490,9 +514,11 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			return IntermediaryNumber.Zero;
 		}
 
+		if (input instanceof Fraction) {
+			return new this(input.simplify(1 / (2 ** 52)));
+		}
 		if (
 			input instanceof BigNumber
-			|| input instanceof Fraction
 			|| NumberStrings.is_numeric_string(input)
 		) {
 			return new this(input);
@@ -781,7 +807,9 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
+		if (result !== this) {
 		dispose(this);
+		}
 
 		return result;
 	}
@@ -792,6 +820,10 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	isLessThan(value: IntermediaryNumber_math_types): boolean {
 		return -1 === this.compare(value);
+	}
+
+	isOne(): boolean {
+		return 0 === this.compare(1);
 	}
 
 	isZero(): boolean {
@@ -817,6 +849,10 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	plus(value:IntermediaryNumber_math_types)
 	{
+		if (this.isZero()) {
+			return IntermediaryNumber.reuse_or_create(value);
+		}
+
 		return do_math(this, '+', value);
 	}
 
@@ -908,6 +944,12 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return value;
 	}
 
+	toNumericString(): string {
+		return NumberStrings.numeric_string(
+			this
+		);
+	}
+
 	toString(): string {
 		const cache = conversion_cache.String;
 
@@ -936,7 +978,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 			return IntermediaryNumber.create(
 				'/' === this.operation
 					? operand.toFraction()
-					: operand.toBigNumber()
+					: operand.toBigNumberOrFraction()
 			);
 		}
 
@@ -973,6 +1015,42 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		)
 
 		return result.result;
+	}
+
+	static maybe_short_circuit(
+		left:IntermediaryCalculation_operand_types,
+		operation:IntermediaryCalculation_operation_types,
+		right:IntermediaryCalculation_operand_types
+	) {
+		let value:IntermediaryCalculation_operand_types|undefined = undefined;
+
+		if ('+' === operation) {
+			if (left.isZero()) {
+				value = right;
+			} else if (right.isZero()) {
+				value = left;
+			}
+		} else if ('-' === operation && right.isZero()) {
+			value = left;
+		} else if ('*x'.includes(operation)) {
+			if (left.isZero() || right.isOne()) {
+				value = left;
+			} else if (right.isZero() || left.isOne()) {
+				value = right;
+			}
+		} else if ('/' === operation && right.isOne()) {
+			value = left;
+		}
+
+		if (undefined === value) {
+			value = new IntermediaryCalculation(left, operation, right);
+		}
+
+		if (value instanceof IntermediaryCalculation) {
+			return value.resolve();
+		}
+
+		return value;
 	}
 
 	static parseString(input:string): IntermediaryCalculation_tokenizer
@@ -2038,7 +2116,9 @@ export class DeferredCalculation implements
 	): DeferredCalculation {
 		const result = this[operator](right_operand);
 
+		if (result !== this) {
 		this.dispose();
+		}
 
 		return result;
 	}
@@ -2049,6 +2129,17 @@ export class DeferredCalculation implements
 
 	isLessThan(value: IntermediaryNumber_math_types): boolean {
 		return -1 === this.compare(value);
+	}
+
+	isOne(): boolean {
+		if (
+			1 === this.internal_value.length
+			&& '1' === this.internal_value[0]
+		) {
+			return true;
+		}
+
+		return 0 === this.compare(1);
 	}
 
 	isZero(): boolean {
@@ -2147,6 +2238,23 @@ export class DeferredCalculation implements
 
 	toFraction(): Fraction {
 		return this.parse().toFraction();
+	}
+
+	toNumericString(): string {
+		if (
+			this.internal_value.length === 1
+		) {
+			if (NumberStrings.is_numeric_string(this.internal_value[0])) {
+				return this.internal_value[0];
+			} else if (
+				(this.internal_value[0] instanceof IntermediaryNumber)
+				|| (this.internal_value[0] instanceof IntermediaryCalculation)
+			) {
+				return this.internal_value[0].toNumericString();
+			}
+		}
+
+		return this.parse().toNumericString();
 	}
 
 	toString(): string {

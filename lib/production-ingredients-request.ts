@@ -186,13 +186,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			if (!(entry.item in input)) {
 				input[
 					entry.item as keyof typeof input
-				] = IntermediaryNumber.Zero;
-			}
-
+				] = IntermediaryNumber.reuse_or_create(entry.amount);
+			} else {
 			input[entry.item] = input[entry.item].do_math_then_dispose(
 				'plus',
 				entry.amount
 			);
+			}
 		}
 		const output:{
 			[key in keyof (
@@ -206,7 +206,7 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			let amount = IntermediaryNumber.reuse_or_create(entry.amount);
 			let amount_from_input:(
 				| IntermediaryCalculation_operand_types
-			) = IntermediaryNumber.Zero;
+			);
 
 			if (production in input) {
 				if (
@@ -225,6 +225,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 					amount = IntermediaryNumber.Zero;
 				}
+			} else {
+				amount_from_input = IntermediaryNumber.Zero;
 			}
 
 			output[production] = amount_from_input;
@@ -824,13 +826,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const surplus_map = surplus.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.Zero;
-				}
-
+					was[is.item] = is.amount;
+				} else {
 				was[is.item] = was[is.item].do_math_then_dispose(
 					'plus',
 					is.amount
 				);
+				}
 
 				return was;
 			},
@@ -870,13 +872,14 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const production_map = data.pool.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.Zero;
-				}
-
+					was[is.item] = IntermediaryNumber.reuse_or_create(is.amount);
+				} else {
 				was[is.item] = was[is.item].do_math_then_dispose(
 					'plus',
 					is.amount
 				);
+				}
+
 
 				return was;
 			},
@@ -898,15 +901,15 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				)
 			) {
 				if (!(entry[0] in surplus_map)) {
-					surplus_map[entry[0]] = IntermediaryNumber.Zero;
-				}
-
+					surplus_map[entry[0]] = output[entry[0]].minus(entry[1]);
+				} else {
 				surplus_map[entry[0]] = surplus_map[
 					entry[0]
 				].do_math_then_dispose(
 					'plus',
 					output[entry[0]].minus(entry[1])
 				);
+				}
 
 				output[entry[0]] = entry[1];
 			}
@@ -919,13 +922,13 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		for (const entry of negative_outputs) {
 			if (!(entry[0] in ingredients)) {
-				ingredients[entry[0]] = IntermediaryNumber.Zero;
-			}
-
+				ingredients[entry[0]] = entry[1].abs();
+			} else {
 			ingredients[entry[0]] = ingredients[entry[0]].do_math_then_dispose(
 				'plus',
 				entry[1].abs()
 			);
+			}
 		}
 
 		const output_entries_filtered = output_entries.filter(

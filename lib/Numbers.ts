@@ -9,6 +9,7 @@ import {
 } from './IntermediaryNumber';
 import {
 	amount_string,
+	NumberStrings,
 } from './NumberStrings';
 
 export type number_arg =
@@ -96,23 +97,38 @@ export class Numbers
 			`Expecting ${b.toString()} to be less than ${a.toString()}`
 		);
 
-		const divisor = a.div(b).valueOf();
+		// adapted from @stdlib/math-base-tools-sum-series
+		const tolerance = (new Fraction(1)).div((new Fraction(2)).pow(52));
+		let counter = 10000000;
 
-		function calculate(number:number) {
+		const divisor = a.div(b);
+
+		function calculate(number:Fraction) {
 			let previous = number;
 
 			return () => {
-				const next = previous / divisor;
+				const next = previous.div(divisor);
 				previous = next;
 
 				return next;
 			}
 		}
 
-		return a.add(
-			sum_series(calculate(a.valueOf()), {
-				tolerance: 0.000001,
-			})
-		);
+		const generator = calculate(a);
+
+		let next_term:Fraction;
+		let result = a;
+
+		do {
+			next_term = generator();
+			result = result.add(next_term.simplify(tolerance.valueOf()));
+		} while (
+			(
+				-1 === tolerance.mul(result).abs().compare(next_term.abs())
+			)
+			&& --counter
+		)
+
+		return result;
 	}
 }

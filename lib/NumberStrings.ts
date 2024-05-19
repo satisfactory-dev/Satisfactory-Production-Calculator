@@ -15,6 +15,7 @@ import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import {
 	IntermediaryCalculation_operand_types,
+	IntermediaryNumber,
 } from './IntermediaryNumber';
 
 export type amount_string =
@@ -67,11 +68,46 @@ export class NumberStrings
 		);
 	}
 
+	static numeric_string(
+		value:
+			| numeric_string
+			| Fraction
+			| IntermediaryCalculation_operand_types
+	): string {
+		value = IntermediaryNumber.reuse_or_create(value);
+
+		const string = value.toFraction().toString();
+
+		if (/^\d+\.\d*\(\d\)$/.test(string)) {
+			return string.replace(
+				/\(\d+\)$/,
+				(match) => {
+					const chunk_length = match.length - 2;
+					const initial_length = (
+						string.split('.')[1].length - match.length
+					);
+
+					return match.substring(
+						1,
+						match.length - 1
+					).repeat(
+						Math.max(
+							1,
+							Math.floor((16 - initial_length) / chunk_length)
+						)
+					)
+				}
+			);
+		}
+
+		return value.toString();
+	}
+
 	static round_off(
 		number:
 			| BigNumber
 			| Fraction
-			| IntermediaryCalculation_operand_types
+			| IntermediaryCalculation_operand_types,
 	): amount_string {
 		let result:string;
 

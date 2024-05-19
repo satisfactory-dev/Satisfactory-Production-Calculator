@@ -516,6 +516,49 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		throw new Error('Unsupported argument specified!');
 	}
 
+	static create_if_valid(
+		maybe:string
+	): IntermediaryCalculation_operand_types|NotValid {
+		maybe = maybe.trim();
+
+		if (
+			NumberStrings.is_amount_string(maybe)
+			|| NumberStrings.is_numeric_string(maybe)
+		) {
+			return IntermediaryNumber.create(maybe)
+		} else if (
+			/^(\d+|\d*\.\d+)\s*[+/*x%-]\s*(\d+|\d*\.\d+)$/.test(maybe)
+		) {
+			return new DeferredCalculation(maybe);
+		}
+
+		const scientific = /^(-?\d+(?:\.\d+))e([+-])(\d+)$/.exec(maybe);
+
+		if (scientific) {
+			try {
+				const calc = new IntermediaryCalculation(
+					IntermediaryNumber.Zero,
+					scientific[2] as '+'|'-',
+					IntermediaryNumber.create(scientific[3]),
+				).toBigNumberOrFraction();
+
+				return IntermediaryNumber.create(scientific[1]).times(
+					(calc instanceof BigNumber)
+						? BigNumber(10).pow(calc)
+						: (new Fraction(10)).pow(calc)
+				);
+			} catch (err) {
+				return new NotValid(maybe, err);
+			}
+		}
+
+		try {
+			return IntermediaryCalculation.fromString(maybe);
+		} catch (err) {
+			return new NotValid(maybe, err);
+		}
+	}
+
 	static reuse_or_create(
 		input:
 			| IntermediaryCalculation_operand_types
@@ -530,6 +573,20 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 				? input
 				: this.create(input)
 		);
+	}
+}
+
+export class NotValid extends Error
+{
+	readonly reason: unknown;
+	readonly value:string;
+
+	constructor(not_valid:string, reason:unknown)
+	{
+		super('Value given was not valid!');
+
+		this.value = not_valid;
+		this.reason = reason;
 	}
 }
 
@@ -1872,6 +1929,33 @@ export class DeferredCalculation implements
 	get type(): IntermediaryCalculation_operand_type_types
 	{
 		return 'DeferredCalculation';
+	}
+
+	get valid(): boolean
+	{
+		if (DeferredCalculation.cached_intermediary.has(this)) {
+			return true;
+		}
+
+		const maybe = IntermediaryNumber.create_if_valid(this.value);
+
+		if (!(maybe instanceof NotValid)) {
+			DeferredCalculation.cached_intermediary.set(
+				this,
+				(maybe instanceof DeferredCalculation)
+					? maybe.resolve()
+					: (IntermediaryNumber.reuse_or_create(
+						maybe
+					) as Exclude<
+						IntermediaryCalculation_operand_types,
+						DeferredCalculation
+					>)
+			);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	get value(): string

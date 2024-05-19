@@ -11,6 +11,7 @@ import {
 	IntermediaryNumber_input_types,
 	IntermediaryNumber_math_types,
 	IntermediaryNumber_type_types,
+	NotValid,
 } from '../../lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
 import BigNumber from 'bignumber.js';
@@ -18,6 +19,7 @@ import {
 	NumberStrings,
 } from '../../lib/NumberStrings';
 import {
+	is_instanceof,
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 
@@ -95,12 +97,23 @@ void describe('IntermediaryNumber', () => {
 				() => {
 					const get_value = () => IntermediaryNumber.create(input);
 
+					const maybe = IntermediaryNumber.create_if_valid(
+						input.toString()
+					);
+
 					if (undefined === expectation) {
 						assert.throws(get_value);
+						is_instanceof(maybe, NotValid);
 					} else {
 						assert.strictEqual(
 							get_value().type,
 							expectation
+						);
+
+						assert.strictEqual(
+							(maybe instanceof NotValid),
+							false,
+							`Expecting "${input.toString()}" to be valid`
 						);
 					}
 				}
@@ -336,6 +349,12 @@ const from_string_data_sets:from_string_data_set[] = [
 		'amount_string + IntermediaryCalculation',
 		'1.(6)',
 	]),
+	...expand_ignore_characters([
+		'1 + 2',
+		'IntermediaryCalculation',
+		'amount_string + amount_string',
+		'3',
+	]),
 ];
 
 void describe('IntermediaryCalculation', () => {
@@ -471,8 +490,18 @@ void describe('DeferredCalculation', () => {
 							)).resolve()
 						};
 
+						const maybe = IntermediaryNumber.create_if_valid(
+							input_string
+						);
+
+						assert.strictEqual(
+							(new DeferredCalculation(input_string)).valid,
+							(undefined !== expected_result_type)
+						);
+
 						if (undefined === expected_result_type) {
 							assert.throws(get_result);
+							is_instanceof(maybe, NotValid);
 						} else {
 							assert.doesNotThrow(get_result);
 							not_undefined(result);
@@ -505,6 +534,19 @@ void describe('DeferredCalculation', () => {
 							assert.strictEqual(
 								result.toString(),
 								expected_result_string
+							);
+
+							assert.strictEqual(
+								(maybe instanceof NotValid),
+								false,
+								`Expected "${input_string}" to be valid`
+							);
+
+							assert.strictEqual(
+								(
+									maybe as Exclude<typeof maybe, NotValid>
+								).toString(),
+								expected_result_string,
 							);
 						}
 					}

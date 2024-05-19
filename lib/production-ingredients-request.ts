@@ -153,6 +153,16 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		);
 	}
 
+	validate(
+		data: unknown
+	) {
+		if (data instanceof ProductionIngredientsRequestTyped) {
+			return data.toData();
+		}
+
+		return super.validate(data);
+	}
+
 	protected calculate_precisely(
 		data:production_ingredients_request<
 			(
@@ -1021,5 +1031,26 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		}
 
 		return result;
+	}
+}
+
+export class ProductionIngredientsRequestTyped
+{
+	input?: recipe_ingredients_request_output<
+		IntermediaryCalculation_operand_types
+	>[];
+	recipe_selection?: recipe_selection;
+	pool: {
+		item: keyof typeof recipe_selection_schema['properties'],
+		amount: IntermediaryCalculation_operand_types,
+	}[] = [];
+
+	toData(): production_ingredients_request<IntermediaryCalculation_operand_types>
+	{
+		return {
+			input: this.input,
+			recipe_selection: this.recipe_selection,
+			pool: this.pool,
+		};
 	}
 }

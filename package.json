@@ -21,7 +21,6 @@
 	},
 	"dependencies": {
 		"@satisfactory-clips-archive/docs.json.ts": "^0.4.1",
-		"@stdlib/math-base-tools-sum-series": "^0.2.1",
 		"bignumber.js": "^9.1.2",
 		"fraction.js": "^4.3.7"
 	}

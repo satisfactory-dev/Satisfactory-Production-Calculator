@@ -383,7 +383,6 @@ const production_ingredients_request = {
 				type: {type: 'string', const: 'DeferredCalculation'},
 				value: {
 					type: 'array',
-					additionalItems: false,
 					minItems: 1,
 					items: {
 						oneOf: [

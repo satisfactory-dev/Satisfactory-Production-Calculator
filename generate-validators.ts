@@ -4,6 +4,7 @@ import {
 	writeFile,
 } from 'node:fs/promises';
 import production_ingredients_request_schema from
+	// eslint-disable-next-line max-len
 	'./generated-schemas/production-ingredients-request.json' with {type: 'json'};
 import recipe_selection_schema from
 	'./generated-schemas/recipe-selection.json' with {type: 'json'};

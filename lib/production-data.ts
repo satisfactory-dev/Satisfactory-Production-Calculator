@@ -27,6 +27,7 @@ import {
 } from '../generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
 import {
 	FGItemDescriptorBiomass__type,
+// eslint-disable-next-line max-len
 } from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorBiomass';
 import {
 	FGItemDescriptorBiomass,
@@ -56,9 +57,11 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGVehicleDescriptor';
 import {
 	FGItemDescriptorNuclearFuel__type,
+// eslint-disable-next-line max-len
 } from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorNuclearFuel';
 import {
 	FGItemDescriptorNuclearFuel,
+// eslint-disable-next-line max-len
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel';
 import {
 	FGConsumableDescriptor__type,
@@ -74,6 +77,7 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot';
 import {
 	FGBuildableGeneratorNuclear,
+// eslint-disable-next-line max-len
 } from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import {
 	operand_types,

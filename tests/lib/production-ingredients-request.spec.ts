@@ -1479,7 +1479,9 @@ void describe('ProductionIngredientsRequest', () => {
 					surplus: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: IntermediaryCalculation.fromString('(8 + (1/3)) / 100'),
+							amount: IntermediaryCalculation.fromString(
+								'(8 + (1/3)) / 100'
+							),
 						},
 					],
 					combined: [
@@ -1523,7 +1525,9 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_LiquidFuel_C',
-							amount: IntermediaryCalculation.fromString('(1 + (1/3))/10'),
+							amount: IntermediaryCalculation.fromString(
+								'(1 + (1/3))/10'
+							),
 						},
 						{
 							item: 'Desc_LiquidOil_C',
@@ -1703,15 +1707,21 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_IronIngot_C',
-							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
+							amount: IntermediaryCalculation.fromString(
+								'2 + (2/3)'
+							),
 						},
 						{
 							item: 'Desc_OreIron_C',
-							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
+							amount: IntermediaryCalculation.fromString(
+								'2 + (2/3)'
+							),
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
+							amount: IntermediaryCalculation.fromString(
+								'2 + (2/3)'
+							),
 						},
 					],
 					output: [
@@ -1755,7 +1765,9 @@ void describe('ProductionIngredientsRequest', () => {
 						},
 						{
 							item: 'Desc_Coal_C',
-							amount: IntermediaryCalculation.fromString('2 + (2/3)'),
+							amount: IntermediaryCalculation.fromString(
+								'2 + (2/3)'
+							),
 						},
 					],
 					output: [

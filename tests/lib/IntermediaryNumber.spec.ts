@@ -784,7 +784,8 @@ void describe('abs', () => {
 				expectation
 			);
 
-			// double-checking here because DeferredCalculation caches the result
+			// double-checking here because
+			// DeferredCalculation caches the result
 			assert.strictEqual(
 				(
 					value as unknown as operand_types

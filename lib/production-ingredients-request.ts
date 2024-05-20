@@ -882,7 +882,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const production_map = data.pool.reduce(
 			(was, is) => {
 				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.reuse_or_create(is.amount);
+					was[is.item] = IntermediaryNumber.reuse_or_create(
+						is.amount
+					);
 				} else {
 					was[is.item] = was[is.item].do_math_then_dispose(
 						'plus',
@@ -934,7 +936,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			if (!(entry[0] in ingredients)) {
 				ingredients[entry[0]] = entry[1].abs();
 			} else {
-				ingredients[entry[0]] = ingredients[entry[0]].do_math_then_dispose(
+				ingredients[entry[0]] = ingredients[
+					entry[0]
+				].do_math_then_dispose(
 					'plus',
 					entry[1].abs()
 				);

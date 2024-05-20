@@ -292,13 +292,32 @@ const production_ingredients_request = {
 	required: ['pool'],
 	additionalProperties: false,
 	$defs: {
+		amount_string: {
+			type: 'string',
+			pattern: '^\\d+(?:\\.\\d{1,6})?$',
+		},
+		amount_string_flexible: {
+			oneOf: [
+				{$ref: '#/$defs/amount_string'},
+				{
+					type: 'string',
+					pattern: '^\\d*(?:\\.\\d{1,6})$',
+				},
+				{
+					type: 'string',
+					pattern: '^\\d+$',
+				},
+			],
+		},
+		numeric_string: {
+			type: 'string',
+			pattern: '^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$',
+		},
 		number_arg: {
 			oneOf: [
 				{type: 'number', minimum: 0, multipleOf: 0.000001},
-				{
-					type: 'string',
-					pattern: '^\\d+(?:\\.\\d{1,6})?$',
-				},
+				{$ref: '#/$defs/amount_string'},
+				{$ref: '#/$defs/CanConvertTypeJson'},
 			],
 		},
 		item_amount_object: {
@@ -316,6 +335,71 @@ const production_ingredients_request = {
 					$ref: '#/$defs/number_arg',
 				},
 			},
+		},
+		IntermediaryNumber: {
+			type: 'object',
+			required: ['type', 'value'],
+			additionalProperties: false,
+			properties: {
+				type: {type: 'string', const: 'IntermediaryNumber'},
+				value: {
+					oneOf: [
+						{$ref: '#/$defs/amount_string_flexible'},
+						{$ref: '#/$defs/numeric_string'},
+						{
+							type: 'string',
+							pattern: '^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$',
+						},
+					],
+				},
+			},
+		},
+		IntermediaryCalculation: {
+			type: 'object',
+			required: ['type', 'left', 'operation', 'right'],
+			additionalProperties: false,
+			properties: {
+				type: {type: 'string', const: 'IntermediaryCalculation'},
+				left: {$ref: '#/$defs/CanConvertTypeJson'},
+				operation: {
+					type: 'string',
+					enum: [
+						'+',
+						'-',
+						'*',
+						'x',
+						'/',
+						'%',
+					],
+				},
+				right: {$ref: '#/$defs/CanConvertTypeJson'},
+			},
+		},
+		DeferredCalculation: {
+			type: 'object',
+			required: ['type', 'value'],
+			additionalProperties: false,
+			properties: {
+				type: {type: 'string', const: 'DeferredCalculation'},
+				value: {
+					type: 'array',
+					additionalItems: false,
+					minItems: 1,
+					items: {
+						oneOf: [
+							{type: 'string'},
+							{$ref: '#/$defs/CanConvertTypeJson'},
+						],
+					},
+				},
+			},
+		},
+		CanConvertTypeJson: {
+			oneOf: [
+				{$ref: '#/$defs/IntermediaryNumber'},
+				{$ref: '#/$defs/IntermediaryCalculation'},
+				{$ref: '#/$defs/DeferredCalculation'},
+			],
 		},
 	},
 	properties: {

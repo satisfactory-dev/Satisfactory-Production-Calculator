@@ -1077,6 +1077,30 @@ function initial_tokenizer_state(
 	};
 }
 
+function backtrack(
+	index: number,
+	array: string[],
+	match: (maybe:string, at_index:number) => boolean,
+	halt: (maybe:string) => boolean,
+) {
+	let checking = index;
+
+	let result = -1;
+
+	while (checking >= 0 && checking < array.length) {
+		if (match(array[checking], checking)) {
+			result = checking;
+			break;
+		} else if (halt(array[checking])) {
+			break;
+		}
+
+		--checking;
+	}
+
+	return result;
+}
+
 function tokenizer_reduce(
 	was: IntermediaryCalculation_tokenizer,
 	is: string,
@@ -1170,8 +1194,31 @@ function tokenizer_reduce(
 			|| (
 				'r' === is
 				&& index >= 2
-				&& ')]'.includes(array[index - 1])
-				&& '0123456789'.includes(array[index - 2])
+				&& -1 !== backtrack(
+					index - 1,
+					array,
+					(maybe:string, at_index) => {
+						return (
+							(
+								')]'.includes(maybe)
+								&& -1 !== backtrack(
+									at_index - 1,
+									array,
+									(other_maybe) => '0123456789'.includes(
+										other_maybe
+									),
+									(
+										other_halt_maybe
+									) => !'0123456789'.includes(
+										other_halt_maybe
+									),
+								)
+							)
+							|| '0123456789'.includes(maybe)
+						)
+					},
+					(maybe_halt) => '(.' === maybe_halt
+				)
 			)
 		);
 		const maybe_is_recursive_close = ')' === is;
@@ -1223,8 +1270,16 @@ function tokenizer_reduce(
 				&& '(' === is
 			);
 
+			const maybe_was_operation = (
+				array[index - 1] in Fraction_operation_map
+			);
+
 			assert.strictEqual(
-				maybe_was_decimal || maybe_was_recursive,
+				(
+					maybe_was_decimal
+					|| maybe_was_recursive
+					|| maybe_was_operation
+				),
 				true,
 				new IntermediaryCalculationTokenizerError(
 					'Unsupported action within parenthetical!',
@@ -1237,7 +1292,7 @@ function tokenizer_reduce(
 				)
 			);
 
-			if (maybe_was_decimal) {
+			if (maybe_was_decimal || maybe_was_operation) {
 				const next = array.slice(index + 1).findIndex(
 					maybe => corresponding[
 						is as keyof typeof corresponding

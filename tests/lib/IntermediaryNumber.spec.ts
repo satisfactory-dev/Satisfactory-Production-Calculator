@@ -359,6 +359,12 @@ const from_string_data_sets:from_string_data_set[] = [
 		'amount_string + amount_string',
 		'3',
 	]),
+	...expand_ignore_characters([
+		'( ( 46.53r ) x ( 3 ) ) - ( 0 )',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation - amount_string',
+		'139.6',
+	]),
 ];
 
 void describe('IntermediaryCalculation', () => {

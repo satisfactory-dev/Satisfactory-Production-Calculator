@@ -30,8 +30,8 @@ import {
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 import {
 	IntermediaryCalculation,
-	operand_types,
 	IntermediaryNumber,
+	operand_types,
 } from '../../lib/IntermediaryNumber';
 
 type flattened_result = {

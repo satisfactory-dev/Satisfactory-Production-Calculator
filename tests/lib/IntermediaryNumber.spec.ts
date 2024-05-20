@@ -6,10 +6,10 @@ import assert from 'node:assert/strict';
 import {
 	DeferredCalculation,
 	IntermediaryCalculation,
-	operand_types,
 	IntermediaryNumber,
 	math_types,
 	NotValid,
+	operand_types,
 } from '../../lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
 import BigNumber from 'bignumber.js';

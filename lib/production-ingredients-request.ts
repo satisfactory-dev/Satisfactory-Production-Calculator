@@ -56,8 +56,8 @@ import {
 	Root,
 } from './production-chain';
 import {
-	operand_types,
 	IntermediaryNumber,
+	operand_types,
 } from './IntermediaryNumber';
 import Fraction from 'fraction.js';
 

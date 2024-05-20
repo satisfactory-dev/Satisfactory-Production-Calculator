@@ -2,9 +2,9 @@ import assert from 'assert';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import {
-	operand_types,
 	IntermediaryNumber,
 	math_types,
+	operand_types,
 } from './IntermediaryNumber';
 import {
 	amount_string,

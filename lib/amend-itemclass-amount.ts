@@ -16,8 +16,8 @@ import {
 	resources,
 } from "./production-data";
 import {
-	operand_types,
 	IntermediaryNumber,
+	operand_types,
 } from './IntermediaryNumber';
 
 export function amend_ItemClass_amount(

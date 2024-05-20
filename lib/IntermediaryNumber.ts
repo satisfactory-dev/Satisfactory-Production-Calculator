@@ -811,6 +811,241 @@ function skip_for_right_operand(
 	return was;
 }
 
+function determine_result(
+	was: IntermediaryCalculation_tokenizer,
+	is:string,
+	index: number,
+	array: string[],
+): IntermediaryCalculation_tokenizer {
+	assert.strictEqual(
+		(
+			'only_numeric' === was.operand_mode
+			|| 'right' === was.operand_mode
+		),
+		true,
+		new IntermediaryCalculationTokenizerError(
+			'Unsupported operation!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			}
+		)
+	)
+
+	if ('only_numeric' === was.operand_mode) {
+		try {
+			was.result = IntermediaryNumber.create(
+				was.current_left_operand_buffer
+			);
+			was.current_left_operand_buffer = '';
+		} catch (err) {
+			throw new IntermediaryCalculationTokenizerError(
+				'Unsupported left operand buffer!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				},
+				err
+			);
+		}
+
+		return was;
+	}
+
+	assert_notStrictEqual(
+		was.current_operation_buffer,
+		'',
+		new IntermediaryCalculationTokenizerError(
+			'Cannot resolve to calculation without an operator!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			},
+		)
+	)
+
+	let left:IntermediaryCalculation|IntermediaryNumber;
+
+	try {
+		left = undefined === was.result
+			? IntermediaryNumber.create(
+				was.current_left_operand_buffer
+			)
+			: was.result;
+	} catch (err) {
+		throw new IntermediaryCalculationTokenizerError(
+			'Unsupported left operand buffer!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			},
+			err
+		);
+	}
+
+	try {
+		was.result = new IntermediaryCalculation(
+			left,
+			was.current_operation_buffer,
+			IntermediaryNumber.create(
+				was.current_right_operand_buffer
+			),
+		);
+	} catch (err) {
+		throw new IntermediaryCalculationTokenizerError(
+			'Unsupported operand buffers!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			},
+			err
+		);
+	}
+
+	was.current_left_operand_buffer = '';
+	was.current_operation_buffer = '';
+	was.current_right_operand_buffer = '';
+
+	return was;
+}
+
+function switch_to_trailing_ignore(
+	is:string,
+	index:number,
+	array:string[]
+) {
+	return (
+		'\t '.includes(is)
+		&& undefined === array.slice(index).find(
+			maybe => !'\t '.includes(maybe)
+		)
+	);
+}
+
+function tokenizer_found_operation(
+	was: IntermediaryCalculation_tokenizer,
+	is:operation_types,
+	index: number,
+	array: string[],
+) : IntermediaryCalculation_tokenizer {
+	if (
+		'' !== was.current_operation_buffer
+		&& (
+			undefined !== was.result
+			|| '' !== was.current_left_operand_buffer
+		)
+		&& was.current_right_operand_buffer
+	) {
+		was = determine_result(
+			was,
+			is,
+			index,
+			array
+		);
+	}
+
+	assert.strictEqual(
+		was.current_operation_buffer,
+		'',
+		new IntermediaryCalculationTokenizerError(
+			'Cannot have an operator following another operator',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			}
+		)
+	);
+
+	was.current_operation_buffer = is;
+
+	assert_notStrictEqual(
+		was.operand_mode,
+		'left',
+		new IntermediaryCalculationTokenizerError(
+			'Expecting to switch to left operand mode, already there!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			}
+		)
+	)
+
+	if ('right' === was.operand_mode) {
+		if (
+			'' === was.current_right_operand_buffer
+		) {
+			return was;
+		}
+
+		const maybe_process_buffers = (
+			undefined === was.result
+			|| '' === was.current_left_operand_buffer
+		)
+
+		assert_notStrictEqual(
+			maybe_process_buffers,
+			false,
+			new IntermediaryCalculationTokenizerError(
+				'Cannot switch to new calculation!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		)
+
+		try {
+			was.result = new IntermediaryCalculation(
+				(
+					(undefined === was.result)
+						? IntermediaryNumber.create(
+							was.current_left_operand_buffer
+						)
+						: was.result
+				),
+				is,
+				IntermediaryNumber.create(
+					was.current_right_operand_buffer
+				)
+			);
+			was.current_operation_buffer = '';
+			was.current_left_operand_buffer = '';
+			was.current_right_operand_buffer = '';
+		} catch (err) {
+			throw new IntermediaryCalculationTokenizerError(
+				'Unsupported operand buffers!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				},
+				err
+			);
+		}
+
+		return skip_for_right_operand(was, is, index, array);
+	}
+
+	return skip_for_right_operand(was, is, index, array);
+}
+
 export class IntermediaryCalculation implements CanResolveMathWithDispose
 {
 	readonly left_operand:operand_types;
@@ -1172,242 +1407,6 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	private static parseState(
 		input:IntermediaryCalculation_tokenizer
 	): IntermediaryCalculation_tokenizer {
-
-		function switch_to_trailing_ignore(
-			is:string,
-			index:number,
-			array:string[]
-		) {
-			return (
-				'\t '.includes(is)
-				&& undefined === array.slice(index).find(
-					maybe => !'\t '.includes(maybe)
-				)
-			);
-		}
-
-		function tokenizer_found_operation(
-			was: IntermediaryCalculation_tokenizer,
-			is:operation_types,
-			index: number,
-			array: string[],
-		) : IntermediaryCalculation_tokenizer {
-			if (
-				'' !== was.current_operation_buffer
-				&& (
-					undefined !== was.result
-					|| '' !== was.current_left_operand_buffer
-				)
-				&& was.current_right_operand_buffer
-			) {
-				was = determine_result(
-					was,
-					is,
-					index,
-					array
-				);
-			}
-
-			assert.strictEqual(
-				was.current_operation_buffer,
-				'',
-				new IntermediaryCalculationTokenizerError(
-					'Cannot have an operator following another operator',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				)
-			);
-
-			was.current_operation_buffer = is;
-
-			assert_notStrictEqual(
-				was.operand_mode,
-				'left',
-				new IntermediaryCalculationTokenizerError(
-					'Expecting to switch to left operand mode, already there!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				)
-			)
-
-			if ('right' === was.operand_mode) {
-				if (
-					'' === was.current_right_operand_buffer
-				) {
-					return was;
-				}
-
-				const maybe_process_buffers = (
-					undefined === was.result
-					|| '' === was.current_left_operand_buffer
-				)
-
-				assert_notStrictEqual(
-					maybe_process_buffers,
-					false,
-					new IntermediaryCalculationTokenizerError(
-						'Cannot switch to new calculation!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						}
-					)
-				)
-
-				try {
-					was.result = new IntermediaryCalculation(
-						(
-							(undefined === was.result)
-								? IntermediaryNumber.create(
-									was.current_left_operand_buffer
-								)
-								: was.result
-						),
-						is,
-						IntermediaryNumber.create(
-							was.current_right_operand_buffer
-						)
-					);
-					was.current_operation_buffer = '';
-					was.current_left_operand_buffer = '';
-					was.current_right_operand_buffer = '';
-				} catch (err) {
-					throw new IntermediaryCalculationTokenizerError(
-						'Unsupported operand buffers!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						},
-						err
-					);
-				}
-
-				return skip_for_right_operand(was, is, index, array);
-			}
-
-			return skip_for_right_operand(was, is, index, array);
-		}
-
-		function determine_result(
-			was: IntermediaryCalculation_tokenizer,
-			is:string,
-			index: number,
-			array: string[],
-		): IntermediaryCalculation_tokenizer {
-			assert.strictEqual(
-				(
-					'only_numeric' === was.operand_mode
-					|| 'right' === was.operand_mode
-				),
-				true,
-				new IntermediaryCalculationTokenizerError(
-					'Unsupported operation!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					}
-				)
-			)
-
-			if ('only_numeric' === was.operand_mode) {
-				try {
-					was.result = IntermediaryNumber.create(
-						was.current_left_operand_buffer
-					);
-					was.current_left_operand_buffer = '';
-				} catch (err) {
-					throw new IntermediaryCalculationTokenizerError(
-						'Unsupported left operand buffer!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						},
-						err
-					);
-				}
-
-				return was;
-			}
-
-			assert_notStrictEqual(
-				was.current_operation_buffer,
-				'',
-				new IntermediaryCalculationTokenizerError(
-					'Cannot resolve to calculation without an operator!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					},
-				)
-			)
-
-			let left:IntermediaryCalculation|IntermediaryNumber;
-
-			try {
-				left = undefined === was.result
-					? IntermediaryNumber.create(
-						was.current_left_operand_buffer
-					)
-					: was.result;
-			} catch (err) {
-				throw new IntermediaryCalculationTokenizerError(
-					'Unsupported left operand buffer!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					},
-					err
-				);
-			}
-
-			try {
-				was.result = new IntermediaryCalculation(
-					left,
-					was.current_operation_buffer,
-					IntermediaryNumber.create(
-						was.current_right_operand_buffer
-					),
-				);
-			} catch (err) {
-				throw new IntermediaryCalculationTokenizerError(
-					'Unsupported operand buffers!',
-					{
-						tokenizer: was,
-						current_token: is,
-						current_index: index,
-						all_tokens: array,
-					},
-					err
-				);
-			}
-
-			was.current_left_operand_buffer = '';
-			was.current_operation_buffer = '';
-			was.current_right_operand_buffer = '';
-
-			return was;
-		}
-
 		const result = input.array.reduce(
 			(
 				was: IntermediaryCalculation_tokenizer,

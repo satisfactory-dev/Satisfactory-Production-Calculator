@@ -516,6 +516,13 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		if (this.value instanceof Fraction) {
 			const [left, right] = this.value.toFraction().split('/');
 
+			if (undefined === right) {
+				return {
+					type: 'IntermediaryNumber',
+					value: left,
+				};
+			}
+
 			return {
 				type: 'IntermediaryCalculation',
 				left: {

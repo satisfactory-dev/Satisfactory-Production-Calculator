@@ -643,7 +643,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			);
 		}
 
-		return new DeferredCalculation(require_non_empty_array(json.value.map(
+		return new DeferredCalculation(
+			...require_non_empty_array(
+				json.value.map(
 			e => is_string(e) ? e : this.fromJson(e)
 		)));
 	}

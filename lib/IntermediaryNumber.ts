@@ -114,8 +114,6 @@ interface CanConvertType extends HasType
 
 	toFraction(): Fraction;
 
-	toNumericString(): string;
-
 	toString(): string;
 
 	isLessThan(value:math_types): boolean;
@@ -541,12 +539,6 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			type: 'IntermediaryNumber',
 			value: this.value,
 		};
-	}
-
-	toNumericString(): string {
-		return NumberStrings.numeric_string(
-			IntermediaryNumber.reuse_or_create(this)
-		);
 	}
 
 	toString()
@@ -1924,12 +1916,6 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		}
 	}
 
-	toNumericString(): string {
-		return NumberStrings.numeric_string(
-			this
-		);
-	}
-
 	toString(): string {
 		const cache = conversion_cache.String;
 
@@ -2358,23 +2344,6 @@ export class DeferredCalculation implements
 			type: 'DeferredCalculation',
 			value,
 		};
-	}
-
-	toNumericString(): string {
-		if (
-			this.internal_value.length === 1
-		) {
-			if (NumberStrings.is_numeric_string(this.internal_value[0])) {
-				return this.internal_value[0];
-			} else if (
-				(this.internal_value[0] instanceof IntermediaryNumber)
-				|| (this.internal_value[0] instanceof IntermediaryCalculation)
-			) {
-				return this.internal_value[0].toNumericString();
-			}
-		}
-
-		return this.parse().toNumericString();
 	}
 
 	toString(): string {

@@ -67,37 +67,6 @@ export class NumberStrings
 		);
 	}
 
-	static numeric_string(
-		value:
-			| operand_types
-	): string {
-		const string = value.toFraction().toString();
-
-		if (/^\d+\.\d*\(\d\)$/.test(string)) {
-			return string.replace(
-				/\(\d+\)$/,
-				(match) => {
-					const chunk_length = match.length - 2;
-					const initial_length = (
-						string.split('.')[1].length - match.length
-					);
-
-					return match.substring(
-						1,
-						match.length - 1
-					).repeat(
-						Math.max(
-							1,
-							Math.floor((16 - initial_length) / chunk_length)
-						)
-					)
-				}
-			);
-		}
-
-		return value.toString();
-	}
-
 	static round_off(
 		number:
 			| BigNumber

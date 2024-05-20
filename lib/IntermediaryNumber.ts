@@ -778,6 +778,22 @@ export class IntermediaryCalculationTokenizerError extends Error
 	}
 }
 
+export class UnexpectedTokenWhenExpecting extends
+	IntermediaryCalculationTokenizerError
+{
+	constructor(
+		message:string,
+		state:IntermediaryCalculation_tokenizer_state,
+		previous?:unknown
+	) {
+		super(
+			`Unexpected token when expecting ${message}`,
+			state,
+			previous
+		)
+	}
+}
+
 function skip_for_right_operand(
 	was: IntermediaryCalculation_tokenizer,
 	is:''|operation_types,
@@ -1118,8 +1134,8 @@ function tokenizer_reduce(
 		assert.strictEqual(
 			'0123456789.(-'.includes(is),
 			true,
-			new IntermediaryCalculationTokenizerError(
-				'Unsupported token when expecting to switch away from ignoring leading characters!',
+			new UnexpectedTokenWhenExpecting(
+				'to switch away from ignoring leading characters!',
 				{
 					tokenizer: was,
 					current_token: is,
@@ -1316,8 +1332,8 @@ function tokenizer_reduce(
 							&& '' === was.current_left_operand_buffer
 						),
 						true,
-						new IntermediaryCalculationTokenizerError(
-							'Cannot use nested operation as right operand if no operator has been specified!',
+						new UnexpectedTokenWhenExpecting(
+							'a preceding operator the nested right operand',
 							{
 								tokenizer: was,
 								current_token: is,
@@ -1411,8 +1427,8 @@ function tokenizer_reduce(
 					|| (is in Fraction_operation_map)
 				),
 				true,
-				new IntermediaryCalculationTokenizerError(
-					'Unsupported token when expecting to be buffering a numeric string!',
+				new UnexpectedTokenWhenExpecting(
+					'to be buffering a numeric string!',
 					{
 						tokenizer: was,
 						current_token: is,
@@ -1508,8 +1524,8 @@ function tokenizer_reduce(
 					|| (is in Fraction_operation_map)
 				),
 				true,
-				new IntermediaryCalculationTokenizerError(
-					'Unsupported token when expecting to be buffering the decimal portion of a numeric string!',
+				new UnexpectedTokenWhenExpecting(
+					'to be buffering the decimal portion of a numeric string!',
 					{
 						tokenizer: was,
 						current_token: is,
@@ -1561,8 +1577,8 @@ function tokenizer_reduce(
 				|| maybe_should_switch_to_integer_or_decimal_mode
 			),
 			true,
-			new IntermediaryCalculationTokenizerError(
-				'Unsupported token when expecting to be ignoring leading characters!',
+			new UnexpectedTokenWhenExpecting(
+				'to be ignoring leading characters!',
 				{
 					tokenizer: was,
 					current_token: is,

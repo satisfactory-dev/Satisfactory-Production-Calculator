@@ -1046,6 +1046,647 @@ function tokenizer_found_operation(
 	return skip_for_right_operand(was, is, index, array);
 }
 
+function initial_tokenizer_state(
+	input_array: string[]
+): IntermediaryCalculation_tokenizer {
+	return {
+		result: undefined,
+		mode: 'leading_ignore',
+		operand_mode: 'only_numeric',
+		current_left_operand_buffer: '',
+		current_right_operand_buffer: '',
+		current_operation_buffer: '',
+		current_nesting: 0,
+		nesting_start: -1,
+		nesting_end: -1,
+		index: 0,
+		array: input_array,
+		skip_to_index: -1,
+	};
+}
+
+function tokenizer_reduce(
+	was: IntermediaryCalculation_tokenizer,
+	is: string,
+	index: number,
+	array: string[],
+): IntermediaryCalculation_tokenizer {
+	was.index = index;
+
+	if (was.skip_to_index !== -1) {
+		assert.notStrictEqual(
+			was.skip_to_index < index,
+			true,
+			new IntermediaryCalculationTokenizerError(
+				'Cannot skip backwards!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		)
+
+		if (was.skip_to_index > index) {
+			return was;
+		}
+
+		was.skip_to_index = -1;
+	}
+
+	let add_buffer = false;
+
+	if (
+		'leading_ignore' === was.mode
+		&& 'only_numeric' === was.operand_mode
+		&& (
+			0 === index
+			|| (
+				undefined === was.result
+				&& '' === was.current_left_operand_buffer
+			)
+		)
+		&& '-' === is
+	) {
+		add_buffer = true;
+		was.mode = 'integer_or_decimal_left';
+	} else if (
+		'leading_ignore' === was.mode
+		&& !'\t '.includes(is)
+	) {
+		assert.strictEqual(
+			'0123456789.(-'.includes(is),
+			true,
+			new IntermediaryCalculationTokenizerError(
+				'Unsupported token when expecting to switch away from ignoring leading characters!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		);
+
+		if (
+			'0123456789.'.includes(is)
+		) {
+			add_buffer = true;
+			was.mode = 'integer_or_decimal_left';
+		} else if (
+			'(' === is
+		) {
+			was.mode = 'nesting';
+
+			if (0 === was.current_nesting) {
+				was.nesting_start = index;
+			}
+
+			++was.current_nesting;
+
+			return was;
+		}
+	} else if (
+		'nesting' === was.mode
+	) {
+		const maybe_is_recursive_open = '(['.includes(is);
+		const maybe_is_recursive_passthrough = (
+			`0123456789.\t ${
+				Object.keys(Fraction_operation_map).join('')
+			}`.includes(is)
+			|| (
+				'r' === is
+				&& index >= 2
+				&& ')]'.includes(array[index - 1])
+				&& '0123456789'.includes(array[index - 2])
+			)
+		);
+		const maybe_is_recursive_close = ')' === is;
+
+		assert.strictEqual(
+			(
+				maybe_is_recursive_open
+				|| maybe_is_recursive_passthrough
+				|| maybe_is_recursive_close
+			),
+			true,
+			new IntermediaryCalculationTokenizerError(
+				'Unsupported action within nesting!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		);
+
+		if (maybe_is_recursive_open) {
+			const corresponding = {
+				'(': ')',
+				'[': ']',
+			};
+
+			assert.strictEqual(
+				index >= 1,
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported left parenthetical!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			)
+
+			const maybe_was_decimal = '0123456789.'.includes(
+				array[index - 1]
+			);
+
+			const maybe_was_recursive = (
+				'(\t '.includes(array[index - 1])
+				&& '(' === is
+			);
+
+			assert.strictEqual(
+				maybe_was_decimal || maybe_was_recursive,
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported action within parenthetical!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			);
+
+			if (maybe_was_decimal) {
+				const next = array.slice(index + 1).findIndex(
+					maybe => corresponding[
+						is as keyof typeof corresponding
+					] === maybe
+				);
+
+				if (next >= 0) {
+					was.skip_to_index = index + next + 2;
+
+					return was;
+				}
+			} else if (
+				maybe_was_recursive
+			) {
+				++was.current_nesting;
+
+				return was;
+			}
+		} else if (
+			maybe_is_recursive_passthrough
+		) {
+			return was;
+		} else if (maybe_is_recursive_close) {
+			was.nesting_end = index;
+			--was.current_nesting;
+
+			assert.strictEqual(
+				was.current_nesting >= 0,
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'de-nested too far!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			);
+
+			if (0 === was.current_nesting) {
+				assert.strictEqual(
+					was.nesting_start >= 0,
+					true,
+					new IntermediaryCalculationTokenizerError(
+						'Cannot de-nest if nesting not started!',
+						{
+							tokenizer: was,
+							current_token: is,
+							current_index: index,
+							all_tokens: array,
+						}
+					)
+				);
+				assert.strictEqual(
+					(
+						undefined === was.result
+						|| '' === was.current_right_operand_buffer
+					),
+					true,
+					new IntermediaryCalculationTokenizerError(
+						'Cannot de-nest if result already set!',
+						{
+							tokenizer: was,
+							current_token: is,
+							current_index: index,
+							all_tokens: array,
+						}
+					)
+				);
+
+				const nested_result = IntermediaryCalculation.fromString(
+					initial_tokenizer_state(
+						array.slice(
+							was.nesting_start + 1,
+							was.nesting_end
+						)
+					)
+				);
+
+				if (
+					was.result
+					|| '' !== was.current_left_operand_buffer
+				) {
+					assert_notStrictEqual(
+						(
+							undefined === was.result
+							&& '' === was.current_left_operand_buffer
+						),
+						true,
+						new IntermediaryCalculationTokenizerError(
+							'Cannot use nested operation as right operand if no operator has been specified!',
+							{
+								tokenizer: was,
+								current_token: is,
+								current_index: index,
+								all_tokens: array,
+							}
+						)
+					);
+
+					was.result = new IntermediaryCalculation(
+						(
+							was.result
+								? was.result
+								: IntermediaryNumber.create(
+									was.current_left_operand_buffer
+								)
+						),
+						was.current_operation_buffer as Exclude<
+							typeof was.current_operation_buffer,
+							''
+						>,
+						nested_result
+					);
+				} else {
+					was.result = nested_result;
+				}
+
+				was.mode = 'trailing_ignore';
+				was.operand_mode = 'right';
+				was.current_left_operand_buffer = '';
+				was.current_right_operand_buffer = '';
+				was.current_operation_buffer = '';
+				was.nesting_start = -1;
+				was.nesting_end = -1;
+			}
+
+			return was;
+		}
+	}
+
+	assert.strictEqual(
+		(
+			'integer_or_decimal_left' === was.mode
+			|| 'decimal_right' === was.mode
+			|| 'leading_ignore' === was.mode
+			|| 'trailing_ignore' === was.mode
+		),
+		true,
+		new IntermediaryCalculationTokenizerError(
+			'Could not determine appropriate action!',
+			{
+				tokenizer: was,
+				current_token: is,
+				current_index: index,
+				all_tokens: array,
+			}
+		)
+	)
+
+	if (
+		'integer_or_decimal_left' === was.mode
+	) {
+		if (
+			'0123456789'.includes(is)
+			|| (
+				'-' === is
+				&& (
+					0 === index
+					|| (
+						undefined === was.result
+						&& '' === was.current_left_operand_buffer
+					)
+				)
+				&& add_buffer
+			)
+		) {
+			add_buffer = true;
+		} else if (
+			'.' === is
+		) {
+			add_buffer = true;
+			was.mode = 'decimal_right';
+		} else if (switch_to_trailing_ignore(is, index, array)) {
+			was.mode = 'trailing_ignore';
+
+			return was;
+		} else {
+			assert.strictEqual(
+				(
+					'\t '.includes(is)
+					|| (is in Fraction_operation_map)
+				),
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported token when expecting to be buffering a numeric string!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			);
+
+			if (
+				'\t '.includes(is)
+			) {
+				if (
+					undefined === was.result
+					&& '' !== was.current_left_operand_buffer
+					&& '' !== was.current_operation_buffer
+					&& '' !== was.current_right_operand_buffer
+				) {
+					return determine_result(
+						was,
+						is,
+						index,
+						array
+					);
+				}
+
+				const next = array.slice(index).findIndex(
+					maybe => !'\t '.includes(maybe)
+				);
+
+				if (next >= 1) {
+					was.skip_to_index = index + next;
+
+					return was;
+				}
+			} else if (
+				is in Fraction_operation_map
+			) {
+				return tokenizer_found_operation(
+					was,
+					is as keyof typeof Fraction_operation_map,
+					index,
+					array
+				);
+			}
+		}
+	} else if (
+		'decimal_right' === was.mode
+	) {
+		if (
+			'0123456789.'.includes(is)
+		) {
+			add_buffer = true;
+		} else if (
+			'r()[]'.includes(is)
+		) {
+			assert.strictEqual(
+				(
+					(
+						(
+							'only_numeric' === was.operand_mode
+							|| 'left' === was.operand_mode
+						)
+						&& was.current_left_operand_buffer.includes(
+							is
+						)
+					)
+					|| was.current_right_operand_buffer.includes(
+						is
+					)
+				),
+				false,
+				new IntermediaryCalculationTokenizerError(
+					'Operand is already recursive!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			)
+
+			add_buffer = true;
+		} else if (switch_to_trailing_ignore(is, index, array)) {
+			was.mode = 'trailing_ignore';
+
+			return was;
+		} else {
+			assert.strictEqual(
+				(
+					'\t '.includes(is)
+					|| (is in Fraction_operation_map)
+				),
+				true,
+				new IntermediaryCalculationTokenizerError(
+					'Unsupported token when expecting to be buffering the decimal portion of a numeric string!',
+					{
+						tokenizer: was,
+						current_token: is,
+						current_index: index,
+						all_tokens: array,
+					}
+				)
+			);
+
+			if (
+				'\t '.includes(is)
+			) {
+				const next = array.slice(index).findIndex(
+					maybe => !'\t '.includes(maybe)
+				);
+
+				if (next >= 1) {
+					was.skip_to_index = index + next;
+
+					return was;
+				}
+			} else if (
+				is in Fraction_operation_map
+			) {
+				return tokenizer_found_operation(
+					was,
+					is as keyof typeof Fraction_operation_map,
+					index,
+					array
+				);
+			}
+		}
+	} else if (
+		'leading_ignore' === was.mode
+	) {
+		const maybe_is_ignore_characters = '\t '.includes(is);
+		const maybe_is_math_operation = (
+			is in Fraction_operation_map
+		);
+		const maybe_should_switch_to_integer_or_decimal_mode = (
+			undefined !== array[index + 1]
+			&& !'\t '.includes(array[index + 1])
+		);
+
+		assert.strictEqual(
+			(
+				maybe_is_ignore_characters
+				|| maybe_is_math_operation
+				|| maybe_should_switch_to_integer_or_decimal_mode
+			),
+			true,
+			new IntermediaryCalculationTokenizerError(
+				'Unsupported token when expecting to be ignoring leading characters!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		)
+
+		if (
+			maybe_is_ignore_characters
+		) {
+			add_buffer = false;
+		} else if (
+			maybe_is_math_operation
+		) {
+			return tokenizer_found_operation(
+				was,
+				is as keyof typeof Fraction_operation_map,
+				index,
+				array
+			);
+		} else if (
+			maybe_should_switch_to_integer_or_decimal_mode
+		) {
+			was.mode = 'integer_or_decimal_left';
+		}
+	} else if (
+		'trailing_ignore' === was.mode
+	) {
+		if (
+			'(' === is
+		) {
+			was.mode = 'nesting';
+
+			if (0 === was.current_nesting) {
+				was.nesting_start = index;
+			}
+
+			++was.current_nesting;
+
+			return was;
+		}
+
+		const maybe_is_ignore_characters = '\t '.includes(is);
+		const maybe_is_math_operation = (
+			is in Fraction_operation_map
+		);
+		const maybe_is_digit = '0123456789'.includes(is);
+
+		assert.strictEqual(
+			(
+				maybe_is_ignore_characters
+				|| maybe_is_math_operation
+				|| maybe_is_digit
+			),
+			true,
+			new IntermediaryCalculationTokenizerError(
+				'Expecting trailing space past this point!',
+				{
+					tokenizer: was,
+					current_token: is,
+					current_index: index,
+					all_tokens: array,
+				}
+			)
+		)
+
+		if (
+			maybe_is_ignore_characters
+		) {
+			const next = array.slice(index).findIndex(
+				maybe => !'\t '.includes(maybe)
+			);
+
+			if (next >= 1) {
+				was.skip_to_index = index + next;
+
+				return was;
+			} else if (-1 === next) {
+				was.skip_to_index = array.length - 1;
+
+				if (undefined === was.result) {
+					return determine_result(
+						was,
+						is,
+						index,
+						array
+					);
+				}
+
+				return was;
+			}
+		} else if (
+			maybe_is_math_operation
+		) {
+			return tokenizer_found_operation(
+				was,
+				is as keyof typeof Fraction_operation_map,
+				index,
+				array
+			);
+		} else if (
+			maybe_is_digit
+		) {
+			add_buffer = true;
+			was.mode = 'integer_or_decimal_left';
+		}
+	}
+
+	if (add_buffer) {
+		if (
+			'only_numeric' === was.operand_mode
+			|| 'left' === was.operand_mode
+		) {
+			was.current_left_operand_buffer += is;
+		} else {
+			was.current_right_operand_buffer += is;
+		}
+	}
+
+	return was;
+}
+
 export class IntermediaryCalculation implements CanResolveMathWithDispose
 {
 	readonly left_operand:operand_types;
@@ -1380,655 +2021,16 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	{
 		const input_array = input.split('');
 
-		const tokenizer_state = this.initial_tokenizer_state(input_array);
+		const tokenizer_state = initial_tokenizer_state(input_array);
 
 		return this.parseState(tokenizer_state);
-	}
-
-	private static initial_tokenizer_state(
-		input_array: string[]
-	): IntermediaryCalculation_tokenizer {
-		return {
-			result: undefined,
-			mode: 'leading_ignore',
-			operand_mode: 'only_numeric',
-			current_left_operand_buffer: '',
-			current_right_operand_buffer: '',
-			current_operation_buffer: '',
-			current_nesting: 0,
-			nesting_start: -1,
-			nesting_end: -1,
-			index: 0,
-			array: input_array,
-			skip_to_index: -1,
-		};
 	}
 
 	private static parseState(
 		input:IntermediaryCalculation_tokenizer
 	): IntermediaryCalculation_tokenizer {
 		const result = input.array.reduce(
-			(
-				was: IntermediaryCalculation_tokenizer,
-				is: string,
-				index: number,
-				array: string[],
-			): IntermediaryCalculation_tokenizer => {
-				was.index = index;
-
-				if (was.skip_to_index !== -1) {
-					assert.notStrictEqual(
-						was.skip_to_index < index,
-						true,
-						new IntermediaryCalculationTokenizerError(
-							'Cannot skip backwards!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						)
-					)
-
-					if (was.skip_to_index > index) {
-						return was;
-					}
-
-					was.skip_to_index = -1;
-				}
-
-				let add_buffer = false;
-
-				if (
-					'leading_ignore' === was.mode
-					&& 'only_numeric' === was.operand_mode
-					&& (
-						0 === index
-						|| (
-							undefined === was.result
-							&& '' === was.current_left_operand_buffer
-						)
-					)
-					&& '-' === is
-				) {
-					add_buffer = true;
-					was.mode = 'integer_or_decimal_left';
-				} else if (
-					'leading_ignore' === was.mode
-					&& !'\t '.includes(is)
-				) {
-					assert.strictEqual(
-						'0123456789.(-'.includes(is),
-						true,
-						new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to switch away from ignoring leading characters!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						)
-					);
-
-					if (
-						'0123456789.'.includes(is)
-					) {
-						add_buffer = true;
-						was.mode = 'integer_or_decimal_left';
-					} else if (
-						'(' === is
-					) {
-						was.mode = 'nesting';
-
-						if (0 === was.current_nesting) {
-							was.nesting_start = index;
-						}
-
-						++was.current_nesting;
-
-						return was;
-					}
-				} else if (
-					'nesting' === was.mode
-				) {
-					const maybe_is_recursive_open = '(['.includes(is);
-					const maybe_is_recursive_passthrough = (
-						`0123456789.\t ${
-							Object.keys(Fraction_operation_map).join('')
-						}`.includes(is)
-						|| (
-							'r' === is
-							&& index >= 2
-							&& ')]'.includes(array[index - 1])
-							&& '0123456789'.includes(array[index - 2])
-						)
-					);
-					const maybe_is_recursive_close = ')' === is;
-
-					assert.strictEqual(
-						(
-							maybe_is_recursive_open
-							|| maybe_is_recursive_passthrough
-							|| maybe_is_recursive_close
-						),
-						true,
-						new IntermediaryCalculationTokenizerError(
-							'Unsupported action within nesting!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						)
-					);
-
-					if (maybe_is_recursive_open) {
-						const corresponding = {
-							'(': ')',
-							'[': ']',
-						};
-
-						assert.strictEqual(
-							index >= 1,
-							true,
-							new IntermediaryCalculationTokenizerError(
-								'Unsupported left parenthetical!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						)
-
-						const maybe_was_decimal = '0123456789.'.includes(
-							array[index - 1]
-						);
-
-						const maybe_was_recursive = (
-							'(\t '.includes(array[index - 1])
-							&& '(' === is
-						);
-
-						assert.strictEqual(
-							maybe_was_decimal || maybe_was_recursive,
-							true,
-							new IntermediaryCalculationTokenizerError(
-								'Unsupported action within parenthetical!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						);
-
-						if (maybe_was_decimal) {
-							const next = array.slice(index + 1).findIndex(
-								maybe => corresponding[
-									is as keyof typeof corresponding
-								] === maybe
-							);
-
-							if (next >= 0) {
-								was.skip_to_index = index + next + 2;
-
-								return was;
-							}
-						} else if (
-							maybe_was_recursive
-						) {
-							++was.current_nesting;
-
-							return was;
-						}
-					} else if (
-						maybe_is_recursive_passthrough
-					) {
-						return was;
-					} else if (maybe_is_recursive_close) {
-						was.nesting_end = index;
-						--was.current_nesting;
-
-						assert.strictEqual(
-							was.current_nesting >= 0,
-							true,
-							new IntermediaryCalculationTokenizerError(
-								'de-nested too far!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						);
-
-						if (0 === was.current_nesting) {
-							assert.strictEqual(
-								was.nesting_start >= 0,
-								true,
-								new IntermediaryCalculationTokenizerError(
-									'Cannot de-nest if nesting not started!',
-									{
-										tokenizer: was,
-										current_token: is,
-										current_index: index,
-										all_tokens: array,
-									}
-								)
-							);
-							assert.strictEqual(
-								(
-									undefined === was.result
-									|| '' === was.current_right_operand_buffer
-								),
-								true,
-								new IntermediaryCalculationTokenizerError(
-									'Cannot de-nest if result already set!',
-									{
-										tokenizer: was,
-										current_token: is,
-										current_index: index,
-										all_tokens: array,
-									}
-								)
-							);
-
-							const nested_result = this.fromString(
-								this.initial_tokenizer_state(
-									array.slice(
-										was.nesting_start + 1,
-										was.nesting_end
-									)
-								)
-							);
-
-							if (
-								was.result
-								|| '' !== was.current_left_operand_buffer
-							) {
-								assert_notStrictEqual(
-									(
-										undefined === was.result
-										&& '' === was.current_left_operand_buffer
-									),
-									true,
-									new IntermediaryCalculationTokenizerError(
-										'Cannot use nested operation as right operand if no operator has been specified!',
-										{
-											tokenizer: was,
-											current_token: is,
-											current_index: index,
-											all_tokens: array,
-										}
-									)
-								);
-
-								was.result = new IntermediaryCalculation(
-									(
-										was.result
-											? was.result
-											: IntermediaryNumber.create(
-												was.current_left_operand_buffer
-											)
-									),
-									was.current_operation_buffer as Exclude<
-										typeof was.current_operation_buffer,
-										''
-									>,
-									nested_result
-								);
-							} else {
-								was.result = nested_result;
-							}
-
-							was.mode = 'trailing_ignore';
-							was.operand_mode = 'right';
-							was.current_left_operand_buffer = '';
-							was.current_right_operand_buffer = '';
-							was.current_operation_buffer = '';
-							was.nesting_start = -1;
-							was.nesting_end = -1;
-						}
-
-						return was;
-					}
-				}
-
-				assert.strictEqual(
-					(
-						'integer_or_decimal_left' === was.mode
-						|| 'decimal_right' === was.mode
-						|| 'leading_ignore' === was.mode
-						|| 'trailing_ignore' === was.mode
-					),
-					true,
-					new IntermediaryCalculationTokenizerError(
-						'Could not determine appropriate action!',
-						{
-							tokenizer: was,
-							current_token: is,
-							current_index: index,
-							all_tokens: array,
-						}
-					)
-				)
-
-				if (
-					'integer_or_decimal_left' === was.mode
-				) {
-					if (
-						'0123456789'.includes(is)
-						|| (
-							'-' === is
-							&& (
-								0 === index
-								|| (
-									undefined === was.result
-									&& '' === was.current_left_operand_buffer
-								)
-							)
-							&& add_buffer
-						)
-					) {
-						add_buffer = true;
-					} else if (
-						'.' === is
-					) {
-						add_buffer = true;
-						was.mode = 'decimal_right';
-					} else if (switch_to_trailing_ignore(is, index, array)) {
-						was.mode = 'trailing_ignore';
-
-						return was;
-					} else {
-						assert.strictEqual(
-							(
-								'\t '.includes(is)
-								|| (is in Fraction_operation_map)
-							),
-							true,
-							new IntermediaryCalculationTokenizerError(
-								'Unsupported token when expecting to be buffering a numeric string!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						);
-
-						if (
-							'\t '.includes(is)
-						) {
-							if (
-								undefined === was.result
-								&& '' !== was.current_left_operand_buffer
-								&& '' !== was.current_operation_buffer
-								&& '' !== was.current_right_operand_buffer
-							) {
-								return determine_result(
-									was,
-									is,
-									index,
-									array
-								);
-							}
-
-							const next = array.slice(index).findIndex(
-								maybe => !'\t '.includes(maybe)
-							);
-
-							if (next >= 1) {
-								was.skip_to_index = index + next;
-
-								return was;
-							}
-						} else if (
-							is in Fraction_operation_map
-						) {
-							return tokenizer_found_operation(
-								was,
-								is as keyof typeof Fraction_operation_map,
-								index,
-								array
-							);
-						}
-					}
-				} else if (
-					'decimal_right' === was.mode
-				) {
-					if (
-						'0123456789.'.includes(is)
-					) {
-						add_buffer = true;
-					} else if (
-						'r()[]'.includes(is)
-					) {
-						assert.strictEqual(
-							(
-								(
-									(
-										'only_numeric' === was.operand_mode
-										|| 'left' === was.operand_mode
-									)
-									&& was.current_left_operand_buffer.includes(
-										is
-									)
-								)
-								|| was.current_right_operand_buffer.includes(
-									is
-								)
-							),
-							false,
-							new IntermediaryCalculationTokenizerError(
-								'Operand is already recursive!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						)
-
-						add_buffer = true;
-					} else if (switch_to_trailing_ignore(is, index, array)) {
-						was.mode = 'trailing_ignore';
-
-						return was;
-					} else {
-						assert.strictEqual(
-							(
-								'\t '.includes(is)
-								|| (is in Fraction_operation_map)
-							),
-							true,
-							new IntermediaryCalculationTokenizerError(
-								'Unsupported token when expecting to be buffering the decimal portion of a numeric string!',
-								{
-									tokenizer: was,
-									current_token: is,
-									current_index: index,
-									all_tokens: array,
-								}
-							)
-						);
-
-						if (
-							'\t '.includes(is)
-						) {
-							const next = array.slice(index).findIndex(
-								maybe => !'\t '.includes(maybe)
-							);
-
-							if (next >= 1) {
-								was.skip_to_index = index + next;
-
-								return was;
-							}
-						} else if (
-							is in Fraction_operation_map
-						) {
-							return tokenizer_found_operation(
-								was,
-								is as keyof typeof Fraction_operation_map,
-								index,
-								array
-							);
-						}
-					}
-				} else if (
-					'leading_ignore' === was.mode
-				) {
-					const maybe_is_ignore_characters = '\t '.includes(is);
-					const maybe_is_math_operation = (
-						is in Fraction_operation_map
-					);
-					const maybe_should_switch_to_integer_or_decimal_mode = (
-						undefined !== array[index + 1]
-						&& !'\t '.includes(array[index + 1])
-					);
-
-					assert.strictEqual(
-						(
-							maybe_is_ignore_characters
-							|| maybe_is_math_operation
-							|| maybe_should_switch_to_integer_or_decimal_mode
-						),
-						true,
-						new IntermediaryCalculationTokenizerError(
-							'Unsupported token when expecting to be ignoring leading characters!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						)
-					)
-
-					if (
-						maybe_is_ignore_characters
-					) {
-						add_buffer = false;
-					} else if (
-						maybe_is_math_operation
-					) {
-						return tokenizer_found_operation(
-							was,
-							is as keyof typeof Fraction_operation_map,
-							index,
-							array
-						);
-					} else if (
-						maybe_should_switch_to_integer_or_decimal_mode
-					) {
-						was.mode = 'integer_or_decimal_left';
-					}
-				} else if (
-					'trailing_ignore' === was.mode
-				) {
-					if (
-						'(' === is
-					) {
-						was.mode = 'nesting';
-
-						if (0 === was.current_nesting) {
-							was.nesting_start = index;
-						}
-
-						++was.current_nesting;
-
-						return was;
-					}
-
-					const maybe_is_ignore_characters = '\t '.includes(is);
-					const maybe_is_math_operation = (
-						is in Fraction_operation_map
-					);
-					const maybe_is_digit = '0123456789'.includes(is);
-
-					assert.strictEqual(
-						(
-							maybe_is_ignore_characters
-							|| maybe_is_math_operation
-							|| maybe_is_digit
-						),
-						true,
-						new IntermediaryCalculationTokenizerError(
-							'Expecting trailing space past this point!',
-							{
-								tokenizer: was,
-								current_token: is,
-								current_index: index,
-								all_tokens: array,
-							}
-						)
-					)
-
-					if (
-						maybe_is_ignore_characters
-					) {
-						const next = array.slice(index).findIndex(
-							maybe => !'\t '.includes(maybe)
-						);
-
-						if (next >= 1) {
-							was.skip_to_index = index + next;
-
-							return was;
-						} else if (-1 === next) {
-							was.skip_to_index = array.length - 1;
-
-							if (undefined === was.result) {
-								return determine_result(
-									was,
-									is,
-									index,
-									array
-								);
-							}
-
-							return was;
-						}
-					} else if (
-						maybe_is_math_operation
-					) {
-						return tokenizer_found_operation(
-							was,
-							is as keyof typeof Fraction_operation_map,
-							index,
-							array
-						);
-					} else if (
-						maybe_is_digit
-					) {
-						add_buffer = true;
-						was.mode = 'integer_or_decimal_left';
-					}
-				}
-
-				if (add_buffer) {
-					if (
-						'only_numeric' === was.operand_mode
-						|| 'left' === was.operand_mode
-					) {
-						was.current_left_operand_buffer += is;
-					} else {
-						was.current_right_operand_buffer += is;
-					}
-				}
-
-				return was;
-			},
+			tokenizer_reduce,
 			input
 		);
 

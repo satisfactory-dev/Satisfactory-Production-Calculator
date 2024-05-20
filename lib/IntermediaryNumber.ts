@@ -104,7 +104,7 @@ export type CanConvertTypeJson =
 		value: [string|CanConvertTypeJson, ...(string|CanConvertTypeJson)[]],
 	}
 
-interface CanConvertType extends HasType
+export interface CanConvertType extends HasType
 {
 	toAmountString(): amount_string;
 

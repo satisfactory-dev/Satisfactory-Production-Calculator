@@ -4,6 +4,8 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+	CanConvertType,
+	CanConvertTypeJson,
 	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryNumber,
@@ -892,6 +894,261 @@ void describe('max', () => {
 					initial_arg.max(...max_args).toString(),
 					expectation
 				);
+			}
+		)
+	}
+})
+
+void describe('CanConvertType', () => {
+	const data_sets:(
+		| [() => CanConvertType, CanConvertTypeJson]
+		| [
+			() => IntermediaryCalculation|DeferredCalculation,
+			CanConvertTypeJson,
+			CanConvertTypeJson,
+		]
+	)[] = [
+		[
+			() => IntermediaryNumber.One,
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => IntermediaryNumber.Zero.plus(1),
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => new DeferredCalculation('1'),
+			{
+				type: 'DeferredCalculation',
+				value: [
+					'1',
+				],
+			},
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => new DeferredCalculation('0 + 1'),
+			{
+				type: 'DeferredCalculation',
+				value: [
+					'0 + 1',
+				],
+			},
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => (new DeferredCalculation('0')).plus('1'),
+			{
+				type: 'DeferredCalculation',
+				value: [
+					'(',
+					'0',
+					') + (',
+					{
+						type: 'IntermediaryNumber',
+						value: '1',
+					},
+					')',
+				],
+			},
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => new IntermediaryCalculation(
+				IntermediaryNumber.Zero,
+				'+',
+				IntermediaryNumber.One,
+			),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '0',
+				},
+				operation: '+',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+			},
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => new IntermediaryCalculation(
+				IntermediaryNumber.One,
+				'+',
+				IntermediaryNumber.Zero,
+			),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+				operation: '+',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '0',
+				},
+			},
+			{
+				type: 'IntermediaryNumber',
+				value: '1',
+			},
+		],
+		[
+			() => IntermediaryCalculation.fromString('0 + 1'),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '0',
+				},
+				operation: '+',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+			},
+		],
+		[
+			() => IntermediaryCalculation.fromString('1 + 0'),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+				operation: '+',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '0',
+				},
+			},
+		],
+		[
+			() => IntermediaryCalculation.fromString('3 * 1'),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '3',
+				},
+				operation: '*',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+			},
+		],
+		[
+			() => IntermediaryCalculation.fromString('3 * 2'),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '3',
+				},
+				operation: '*',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '2',
+				},
+			},
+		],
+		[
+			() => (new IntermediaryCalculation(
+				IntermediaryNumber.One,
+				'+',
+				IntermediaryCalculation.fromString('1/3')
+			)),
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '1',
+				},
+				operation: '+',
+				right: {
+					type: 'IntermediaryCalculation',
+					left: {
+						type: 'IntermediaryNumber',
+						value: '1',
+					},
+					operation: '/',
+					right: {
+						type: 'IntermediaryNumber',
+						value: '3',
+					},
+				},
+			},
+			{
+				type: 'IntermediaryCalculation',
+				left: {
+					type: 'IntermediaryNumber',
+					value: '4',
+				},
+				operation: '/',
+				right: {
+					type: 'IntermediaryNumber',
+					value: '3',
+				},
+			},
+		],
+	];
+
+	for (let index=0; index < data_sets.length; ++index) {
+		const [generator, expectation, resolve_expectation] = data_sets[index];
+
+		void it(
+			`CanConvertType().toJSON() with dataset ${
+				index
+			} returns ${
+				JSON.stringify(expectation)
+			}`,
+			() => {
+				let value:CanConvertType|undefined;
+
+				const get_value = () => {
+					value = generator();
+				};
+
+				assert.doesNotThrow(get_value);
+
+				not_undefined(value);
+
+				assert.deepStrictEqual(
+					value.toJSON(),
+					expectation
+				);
+
+				if (resolve_expectation) {
+					assert.deepStrictEqual(
+						(value as (
+							| IntermediaryCalculation
+							| DeferredCalculation
+						)).resolve().toJSON(),
+						resolve_expectation,
+					);
+				}
 			}
 		)
 	}

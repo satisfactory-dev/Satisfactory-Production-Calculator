@@ -1039,11 +1039,11 @@ export class ProductionIngredientsRequestTyped
 	input?: recipe_ingredients_request_output<
 		IntermediaryCalculation_operand_types
 	>[];
-	recipe_selection?: recipe_selection;
 	pool: {
 		item: keyof typeof recipe_selection_schema['properties'],
 		amount: IntermediaryCalculation_operand_types,
 	}[] = [];
+	recipe_selection?: recipe_selection;
 
 	toData(): production_ingredients_request<IntermediaryCalculation_operand_types>
 	{

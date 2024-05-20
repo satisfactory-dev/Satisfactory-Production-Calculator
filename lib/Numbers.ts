@@ -2,9 +2,9 @@ import assert from 'assert';
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import {
-	IntermediaryCalculation_operand_types,
+	operand_types,
 	IntermediaryNumber,
-	IntermediaryNumber_math_types,
+	math_types,
 } from './IntermediaryNumber';
 import {
 	amount_string,
@@ -18,20 +18,20 @@ export type number_arg =
 export class Numbers
 {
 	static divide_if_not_one(
-		left:IntermediaryNumber_math_types,
+		left:math_types,
 		right:Fraction,
 		require_fraction:true
 	): Fraction;
 	static divide_if_not_one(
-		left:IntermediaryNumber_math_types,
+		left:math_types,
 		right:Fraction,
 		require_fraction:false
-	): Fraction|IntermediaryNumber_math_types;
+	): Fraction|math_types;
 	static divide_if_not_one(
-		left:IntermediaryNumber_math_types,
+		left:math_types,
 		right:Fraction,
 		require_fraction:boolean
-	): Fraction|IntermediaryNumber_math_types {
+	): Fraction|math_types {
 		const result = (0 === right.compare(1))
 			? left
 			: IntermediaryNumber.reuse_or_create(left).divide(right);
@@ -49,15 +49,15 @@ export class Numbers
 		numbers:[
 			(
 				| number_arg
-				| IntermediaryCalculation_operand_types
+				| operand_types
 			),
 			(
 				| number_arg
-				| IntermediaryCalculation_operand_types
+				| operand_types
 			),
 			...(
 				| number_arg
-				| IntermediaryCalculation_operand_types
+				| operand_types
 			)[]
 		]
 	): (

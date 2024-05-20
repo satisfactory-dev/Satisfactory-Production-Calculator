@@ -30,7 +30,7 @@ import {
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 import {
 	IntermediaryCalculation,
-	IntermediaryCalculation_operand_types,
+	operand_types,
 	IntermediaryNumber,
 } from '../../lib/IntermediaryNumber';
 
@@ -44,9 +44,9 @@ function flattened_production_ingredients_request_result(
 	input:production_ingredients_request_result
 ) : flattened_result {
 	const calculating:{
-		ingredients: {[key: string]: IntermediaryCalculation_operand_types},
-		output: {[key: string]: IntermediaryCalculation_operand_types},
-		surplus: {[key: string]: IntermediaryCalculation_operand_types},
+		ingredients: {[key: string]: operand_types},
+		output: {[key: string]: operand_types},
+		surplus: {[key: string]: operand_types},
 	} = {
 		ingredients: {},
 		output: {},

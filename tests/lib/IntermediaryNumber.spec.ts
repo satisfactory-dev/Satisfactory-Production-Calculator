@@ -6,9 +6,9 @@ import assert from 'node:assert/strict';
 import {
 	DeferredCalculation,
 	IntermediaryCalculation,
-	IntermediaryCalculation_operand_types,
+	operand_types,
 	IntermediaryNumber,
-	IntermediaryNumber_math_types,
+	math_types,
 	NotValid,
 } from '../../lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
@@ -21,15 +21,15 @@ import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
 import {
-	IntermediaryNumber_input_types,
-	IntermediaryNumber_type_types,
+	input_types,
+	type_property_types,
 } from '../../lib/IntermediaryNumberTypes';
 
 void describe('IntermediaryNumber', () => {
 	void describe('create', () => {
 		const data_sets:[
-			IntermediaryNumber_input_types,
-			IntermediaryNumber_type_types|undefined,
+			input_types,
+			type_property_types|undefined,
 		][] = [
 			[
 				'1',
@@ -418,7 +418,7 @@ void describe('IntermediaryCalculation', () => {
 						);
 
 						let result:
-							| IntermediaryCalculation_operand_types
+							| operand_types
 							| undefined;
 
 						const get_result = (
@@ -711,7 +711,7 @@ void describe('do_math', () => {
 });
 
 void describe('abs', () => {
-	const data_sets:[() => IntermediaryCalculation_operand_types, string][] = [
+	const data_sets:[() => operand_types, string][] = [
 		[
 			() => IntermediaryNumber.create('-1'),
 			'1',
@@ -770,7 +770,7 @@ void describe('abs', () => {
 			] = data_sets[index];
 
 			let value:
-				| IntermediaryCalculation_operand_types
+				| operand_types
 				| undefined = undefined;
 
 			assert.doesNotThrow(() => {
@@ -779,7 +779,7 @@ void describe('abs', () => {
 
 			assert.strictEqual(
 				(
-					value as unknown as IntermediaryCalculation_operand_types
+					value as unknown as operand_types
 				).abs().toString(),
 				expectation
 			);
@@ -787,7 +787,7 @@ void describe('abs', () => {
 			// double-checking here because DeferredCalculation caches the result
 			assert.strictEqual(
 				(
-					value as unknown as IntermediaryCalculation_operand_types
+					value as unknown as operand_types
 				).abs().toString(),
 				expectation
 			);
@@ -798,9 +798,9 @@ void describe('abs', () => {
 void describe('max', () => {
 	const data_sets:[
 		[
-			IntermediaryNumber_math_types,
-			IntermediaryNumber_math_types,
-			...IntermediaryNumber_math_types[],
+			math_types,
+			math_types,
+			...math_types[],
 		],
 		string,
 	][] = [

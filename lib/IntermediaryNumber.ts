@@ -15,14 +15,14 @@ import {
 	require_non_empty_array,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
 import type {
-	IntermediaryNumber_input_types,
-	IntermediaryNumber_type_types,
-	IntermediaryNumber_value_types,
+	input_types,
+	type_property_types,
+	value_types,
 } from './IntermediaryNumberTypes';
 
-export type IntermediaryNumber_math_types =
-	| IntermediaryCalculation_operand_types
-	| IntermediaryNumber_input_types
+export type math_types =
+	| operand_types
+	| input_types
 	| DeferredCalculation;
 
 export const regex_recurring_number =
@@ -35,37 +35,37 @@ export type CanDoMath_result_types =
 
 interface HasType
 {
-	get type(): IntermediaryCalculation_operand_type_types;
+	get type(): operand_type_property_types;
 }
 
 interface CanDoMath<
 	ResultType extends CanDoMath_result_types = CanDoMath_result_types,
-	ResolveString extends string = IntermediaryNumber_type_types
+	ResolveString extends string = type_property_types
 > extends HasType {
 	get resolve_type(): ResolveString;
 
 	compare(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): -1|0|1;
 
 	divide(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): ResultType;
 
 	minus(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): ResultType;
 
 	modulo(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): ResultType;
 
 	plus(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): ResultType;
 
 	times(
-		value:IntermediaryNumber_math_types
+		value:math_types
 	): ResultType;
 
 	abs(): (
@@ -74,9 +74,9 @@ interface CanDoMath<
 	);
 
 	max(
-		first: IntermediaryNumber_math_types,
-		...remaining: IntermediaryNumber_math_types[]
-	): IntermediaryNumber_math_types;
+		first: math_types,
+		...remaining: math_types[]
+	): math_types;
 }
 
 interface CanResolveMath<
@@ -96,7 +96,7 @@ export type CanConvertTypeJson =
 	| {
 		type: 'IntermediaryCalculation',
 		left: CanConvertTypeJson,
-		operation: IntermediaryCalculation_operation_types,
+		operation: operation_types,
 		right: CanConvertTypeJson,
 	}
 	| {
@@ -118,9 +118,9 @@ interface CanConvertType extends HasType
 
 	toString(): string;
 
-	isLessThan(value:IntermediaryNumber_math_types): boolean;
+	isLessThan(value:math_types): boolean;
 
-	isGreaterThan(value:IntermediaryNumber_math_types): boolean;
+	isGreaterThan(value:math_types): boolean;
 
 	isOne(): boolean;
 
@@ -138,14 +138,14 @@ type CanDoMathWithDispose_operator_types =
 
 interface CanDoMathWithDispose<
 	ResultType extends CanDoMath_result_types = CanDoMath_result_types,
-	ResolveString extends string = IntermediaryNumber_type_types
+	ResolveString extends string = type_property_types
 > extends CanConvertType, CanDoMath<
 	ResultType,
 	ResolveString
 > {
 	do_math_then_dispose(
 		operator: CanDoMathWithDispose_operator_types,
-		right_operand: IntermediaryNumber_math_types
+		right_operand: math_types
 	): ResultType;
 }
 
@@ -159,9 +159,9 @@ interface CanResolveMathWithDispose<
 
 function do_math(
 	left_operand: IntermediaryNumber|IntermediaryCalculation,
-	operator: IntermediaryCalculation_operation_types,
-	right_operand: IntermediaryNumber_math_types
-) : IntermediaryCalculation_operand_types {
+	operator: operation_types,
+	right_operand: math_types
+) : operand_types {
 	return IntermediaryCalculation.maybe_short_circuit(
 		left_operand,
 		operator,
@@ -172,11 +172,11 @@ function do_math(
 function abs(
 	value:
 		| Exclude<
-			IntermediaryCalculation_operand_types,
+			operand_types,
 			DeferredCalculation
 		>
 ): Exclude<
-	IntermediaryCalculation_operand_types,
+	operand_types,
 	DeferredCalculation
 > {
 	if (value.isZero()) {
@@ -189,7 +189,7 @@ function abs(
 		)
 		: value
 	) as Exclude<
-		IntermediaryCalculation_operand_types,
+		operand_types,
 		DeferredCalculation
 	>;
 }
@@ -211,7 +211,7 @@ function assert_notStrictEqual<
 }
 
 function compare(
-	value: IntermediaryNumber_math_types,
+	value: math_types,
 	to: CanConvertType
 ): 0|1|-1 {
 	const comparable = IntermediaryNumber.reuse_or_create(
@@ -318,7 +318,7 @@ const conversion_cache = new class {
 	}
 }
 
-export function dispose(value:IntermediaryCalculation_operand_types)
+export function dispose(value:operand_types)
 {
 	conversion_cache.dispose(value);
 
@@ -328,10 +328,10 @@ export function dispose(value:IntermediaryCalculation_operand_types)
 }
 
 function max(
-	first: IntermediaryNumber_math_types,
-	second: IntermediaryNumber_math_types,
-	...remaining: IntermediaryNumber_math_types[]
-): IntermediaryNumber_math_types {
+	first: math_types,
+	second: math_types,
+	...remaining: math_types[]
+): math_types {
 	let max = IntermediaryNumber.reuse_or_create(first);
 
 	for (const entry of [second, ...remaining]) {
@@ -346,22 +346,22 @@ function max(
 
 export class IntermediaryNumber implements CanDoMathWithDispose
 {
-	private readonly value:IntermediaryNumber_value_types;
+	private readonly value:value_types;
 
 	static readonly One = new this('1');
 
 	static readonly Zero = new this('0');
 
-	protected constructor(value:IntermediaryNumber_value_types)
+	protected constructor(value:value_types)
 	{
 		this.value = value;
 	}
 
-	get resolve_type(): IntermediaryNumber_type_types {
+	get resolve_type(): type_property_types {
 		return this.type;
 	}
 
-	get type(): IntermediaryNumber_type_types
+	get type(): type_property_types
 	{
 		if (this.value instanceof BigNumber) {
 			return 'BigNumber';
@@ -379,18 +379,18 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return abs(this);
 	}
 
-	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+	compare(value: math_types): 0 | 1 | -1 {
 		return compare(value, this);
 	}
 
-	divide(value:IntermediaryNumber_math_types)
+	divide(value:math_types)
 	{
 		return do_math(this, '/', value);
 	}
 
 	do_math_then_dispose(
 		operator: CanDoMathWithDispose_operator_types,
-		right_operand: IntermediaryNumber_math_types
+		right_operand: math_types
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
@@ -401,11 +401,11 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return result;
 	}
 
-	isGreaterThan(value: IntermediaryNumber_math_types): boolean {
+	isGreaterThan(value: math_types): boolean {
 		return 1 === this.compare(value);
 	}
 
-	isLessThan(value: IntermediaryNumber_math_types): boolean {
+	isLessThan(value: math_types): boolean {
 		return -1 === this.compare(value);
 	}
 
@@ -419,23 +419,23 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	max(
-		first: IntermediaryNumber_math_types,
-		...remaining: IntermediaryNumber_math_types[]
-	): IntermediaryNumber_math_types {
+		first: math_types,
+		...remaining: math_types[]
+	): math_types {
 		return max(this, first, ...remaining);
 	}
 
-	minus(value:IntermediaryNumber_math_types)
+	minus(value:math_types)
 	{
 		return do_math(this, '-', value);
 	}
 
-	modulo(value:IntermediaryNumber_math_types)
+	modulo(value:math_types)
 	{
 		return do_math(this, '%', value);
 	}
 
-	plus(value:IntermediaryNumber_math_types)
+	plus(value:math_types)
 	{
 		if (this.isZero()) {
 			return IntermediaryNumber.reuse_or_create(value);
@@ -444,7 +444,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		return do_math(this, '+', value);
 	}
 
-	times(value:IntermediaryNumber_math_types)
+	times(value:math_types)
 	{
 		return do_math(this, 'x', value);
 	}
@@ -559,7 +559,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	static create(
-		input: IntermediaryNumber_input_types
+		input: input_types
 	): IntermediaryNumber {
 		if ('' === input) {
 			return IntermediaryNumber.Zero;
@@ -599,7 +599,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	static create_if_valid(
 		maybe:string
-	): IntermediaryCalculation_operand_types|NotValid {
+	): operand_types|NotValid {
 		maybe = maybe.trim();
 
 		if (
@@ -658,9 +658,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 
 	static reuse_or_create(
 		input:
-			| IntermediaryCalculation_operand_types
-			| IntermediaryNumber_input_types
-	): IntermediaryCalculation_operand_types {
+			| operand_types
+			| input_types
+	): operand_types {
 		return (
 			(
 				(input instanceof IntermediaryNumber)
@@ -687,12 +687,12 @@ export class NotValid extends Error
 	}
 }
 
-export type IntermediaryCalculation_operand_types =
+export type operand_types =
 	| IntermediaryNumber
 	| IntermediaryCalculation
 	| DeferredCalculation;
 
-export type IntermediaryCalculation_operation_types =
+export type operation_types =
 	| '+'
 	| '-'
 	| '*'
@@ -700,15 +700,15 @@ export type IntermediaryCalculation_operation_types =
 	| '/'
 	| '%';
 
-export type IntermediaryCalculation_operand_type_types =
-	| IntermediaryNumber_type_types
+export type operand_type_property_types =
+	| type_property_types
 	| 'IntermediaryCalculation'
 	| 'DeferredCalculation';
 
 const BigNumber_operation_map:{
 	[
 		key in Exclude<
-			IntermediaryCalculation_operation_types,
+			operation_types,
 			'/'
 		>
 	]: ((a: BigNumber, b:BigNumber) => BigNumber)
@@ -722,7 +722,7 @@ const BigNumber_operation_map:{
 
 const Fraction_operation_map:{
 	[
-		key in IntermediaryCalculation_operation_types
+		key in operation_types
 	]: ((a: Fraction, b:Fraction) => Fraction)
 } = {
 	'+': (a, b) => a.add(b),
@@ -745,7 +745,7 @@ type IntermediaryCalculation_tokenizer = {
 		| 'nesting',
 	operand_mode: 'only_numeric'|'left'|'right',
 	current_left_operand_buffer: string,
-	current_operation_buffer: ''|IntermediaryCalculation_operation_types,
+	current_operation_buffer: ''|operation_types,
 	current_right_operand_buffer: string,
 	current_nesting: number,
 	nesting_start: number,
@@ -780,7 +780,7 @@ export class IntermediaryCalculationTokenizerError extends Error
 
 function skip_for_right_operand(
 	was: IntermediaryCalculation_tokenizer,
-	is:''|IntermediaryCalculation_operation_types,
+	is:''|operation_types,
 	index: number,
 	array: string[],
 ) {
@@ -813,21 +813,21 @@ function skip_for_right_operand(
 
 export class IntermediaryCalculation implements CanResolveMathWithDispose
 {
-	readonly left_operand:IntermediaryCalculation_operand_types;
-	readonly operation:IntermediaryCalculation_operation_types;
-	readonly right_operand:IntermediaryCalculation_operand_types;
+	readonly left_operand:operand_types;
+	readonly operation:operation_types;
+	readonly right_operand:operand_types;
 
 	constructor(
-		left:IntermediaryCalculation_operand_types,
-		operation:IntermediaryCalculation_operation_types,
-		right:IntermediaryCalculation_operand_types
+		left:operand_types,
+		operation:operation_types,
+		right:operand_types
 	) {
 		this.left_operand = left;
 		this.operation = operation;
 		this.right_operand = right;
 	}
 
-	get left_type(): IntermediaryCalculation_operand_type_types
+	get left_type(): operand_type_property_types
 	{
 		if (this.left_operand instanceof IntermediaryCalculation) {
 			return 'IntermediaryCalculation';
@@ -840,7 +840,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return `${this.left_type} ${this.operation} ${this.right_type}`;
 	}
 
-	get right_type(): IntermediaryCalculation_operand_type_types
+	get right_type(): operand_type_property_types
 	{
 		if (this.right_operand instanceof IntermediaryCalculation) {
 			return 'IntermediaryCalculation';
@@ -849,7 +849,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return this.right_operand.type;
 	}
 
-	get type(): IntermediaryCalculation_operand_type_types
+	get type(): operand_type_property_types
 	{
 		return 'IntermediaryCalculation';
 	}
@@ -859,18 +859,18 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return abs(this);
 	}
 
-	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+	compare(value: math_types): 0 | 1 | -1 {
 		return compare(value, this);
 	}
 
-	divide(value:IntermediaryNumber_math_types)
+	divide(value:math_types)
 	{
 		return do_math(this, '/', value);
 	}
 
 	do_math_then_dispose(
 		operator: CanDoMathWithDispose_operator_types,
-		right_operand: IntermediaryNumber_math_types
+		right_operand: math_types
 	): CanDoMath_result_types {
 		const result = this[operator](right_operand);
 
@@ -881,11 +881,11 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return result;
 	}
 
-	isGreaterThan(value: IntermediaryNumber_math_types): boolean {
+	isGreaterThan(value: math_types): boolean {
 		return 1 === this.compare(value);
 	}
 
-	isLessThan(value: IntermediaryNumber_math_types): boolean {
+	isLessThan(value: math_types): boolean {
 		return -1 === this.compare(value);
 	}
 
@@ -898,23 +898,23 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	max(
-		first: IntermediaryNumber_math_types,
-		...remaining: IntermediaryNumber_math_types[]
-	): IntermediaryNumber_math_types {
+		first: math_types,
+		...remaining: math_types[]
+	): math_types {
 		return max(this, first, ...remaining);
 	}
 
-	minus(value:IntermediaryNumber_math_types)
+	minus(value:math_types)
 	{
 		return do_math(this, '-', value);
 	}
 
-	modulo(value:IntermediaryNumber_math_types)
+	modulo(value:math_types)
 	{
 		return do_math(this, '%', value);
 	}
 
-	plus(value:IntermediaryNumber_math_types)
+	plus(value:math_types)
 	{
 		if (this.isZero()) {
 			return IntermediaryNumber.reuse_or_create(value);
@@ -963,7 +963,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		);
 	}
 
-	times(value:IntermediaryNumber_math_types)
+	times(value:math_types)
 	{
 		return do_math(this, 'x', value);
 	}
@@ -1052,7 +1052,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	private operand_to_IntermediaryNumber(
-		operand:IntermediaryCalculation_operand_types
+		operand:operand_types
 	) : IntermediaryNumber {
 		if (
 			(operand instanceof IntermediaryCalculation)
@@ -1106,11 +1106,11 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	static maybe_short_circuit(
-		left:IntermediaryCalculation_operand_types,
-		operation:IntermediaryCalculation_operation_types,
-		right:IntermediaryCalculation_operand_types
+		left:operand_types,
+		operation:operation_types,
+		right:operand_types
 	) {
-		let value:IntermediaryCalculation_operand_types|undefined = undefined;
+		let value:operand_types|undefined = undefined;
 
 		if ('+' === operation) {
 			if (left.isZero()) {
@@ -1188,7 +1188,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 		function tokenizer_found_operation(
 			was: IntermediaryCalculation_tokenizer,
-			is:IntermediaryCalculation_operation_types,
+			is:operation_types,
 			index: number,
 			array: string[],
 		) : IntermediaryCalculation_tokenizer {
@@ -2054,7 +2054,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 export type DeferredCalculation_parts =
 	| string
-	| IntermediaryNumber_math_types;
+	| math_types;
 
 export class DeferredCalculation implements
 	CanResolveMathWithDispose<
@@ -2096,7 +2096,7 @@ export class DeferredCalculation implements
 		return this.value;
 	}
 
-	get type(): IntermediaryCalculation_operand_type_types
+	get type(): operand_type_property_types
 	{
 		return 'DeferredCalculation';
 	}
@@ -2117,7 +2117,7 @@ export class DeferredCalculation implements
 					: (IntermediaryNumber.reuse_or_create(
 						maybe
 					) as Exclude<
-						IntermediaryCalculation_operand_types,
+						operand_types,
 						DeferredCalculation
 					>)
 			);
@@ -2162,7 +2162,7 @@ export class DeferredCalculation implements
 		return cache.get(this) as IntermediaryNumber|IntermediaryCalculation;
 	}
 
-	compare(value: IntermediaryNumber_math_types): 0 | 1 | -1 {
+	compare(value: math_types): 0 | 1 | -1 {
 		if (value instanceof DeferredCalculation) {
 			const a = this.value;
 			const b = value.value;
@@ -2188,7 +2188,7 @@ export class DeferredCalculation implements
 		DeferredCalculation.cached_intermediary.delete(this);
 	}
 
-	divide(value: IntermediaryNumber_math_types): DeferredCalculation {
+	divide(value: math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
 			...this.internal_value,
@@ -2200,7 +2200,7 @@ export class DeferredCalculation implements
 
 	do_math_then_dispose(
 		operator: CanDoMathWithDispose_operator_types,
-		right_operand: IntermediaryNumber_math_types
+		right_operand: math_types
 	): DeferredCalculation {
 		const result = this[operator](right_operand);
 
@@ -2211,11 +2211,11 @@ export class DeferredCalculation implements
 		return result;
 	}
 
-	isGreaterThan(value: IntermediaryNumber_math_types): boolean {
+	isGreaterThan(value: math_types): boolean {
 		return 1 === this.compare(value);
 	}
 
-	isLessThan(value: IntermediaryNumber_math_types): boolean {
+	isLessThan(value: math_types): boolean {
 		return -1 === this.compare(value);
 	}
 
@@ -2242,13 +2242,13 @@ export class DeferredCalculation implements
 	}
 
 	max(
-		first: IntermediaryNumber_math_types,
-		...remaining: IntermediaryNumber_math_types[]
-	): IntermediaryNumber_math_types {
+		first: math_types,
+		...remaining: math_types[]
+	): math_types {
 		return max(this, first, ...remaining);
 	}
 
-	minus(value: IntermediaryNumber_math_types): DeferredCalculation {
+	minus(value: math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
 			...this.internal_value,
@@ -2258,7 +2258,7 @@ export class DeferredCalculation implements
 		);
 	}
 
-	modulo(value: IntermediaryNumber_math_types): DeferredCalculation {
+	modulo(value: math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
 			...this.internal_value,
@@ -2268,7 +2268,7 @@ export class DeferredCalculation implements
 		);
 	}
 
-	plus(value: IntermediaryNumber_math_types): DeferredCalculation {
+	plus(value: math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
 			...this.internal_value,
@@ -2301,7 +2301,7 @@ export class DeferredCalculation implements
 		return new DeferredCalculation(compared_to);
 	}
 
-	times(value: IntermediaryNumber_math_types): DeferredCalculation {
+	times(value: math_types): DeferredCalculation {
 		return new DeferredCalculation(
 			'(',
 			...this.internal_value,

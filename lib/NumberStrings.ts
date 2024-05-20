@@ -14,7 +14,7 @@ import {
 import BigNumber from 'bignumber.js';
 import Fraction from 'fraction.js';
 import type {
-	IntermediaryCalculation_operand_types,
+	operand_types,
 } from './IntermediaryNumber';
 
 export type amount_string =
@@ -69,7 +69,7 @@ export class NumberStrings
 
 	static numeric_string(
 		value:
-			| IntermediaryCalculation_operand_types
+			| operand_types
 	): string {
 		const string = value.toFraction().toString();
 
@@ -102,7 +102,7 @@ export class NumberStrings
 		number:
 			| BigNumber
 			| Fraction
-			| IntermediaryCalculation_operand_types,
+			| operand_types,
 	): amount_string {
 		let result:string;
 

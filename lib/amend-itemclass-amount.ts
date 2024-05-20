@@ -16,7 +16,7 @@ import {
 	resources,
 } from "./production-data";
 import {
-	IntermediaryCalculation_operand_types,
+	operand_types,
 	IntermediaryNumber,
 } from './IntermediaryNumber';
 
@@ -60,7 +60,7 @@ export function amend_ItemClass_amount_deferred(
 ): {
 	ItemClass: UnrealEngineString;
 	Amount: (
-		| IntermediaryCalculation_operand_types
+		| operand_types
 	);
 } {
 	const Desc_c = UnrealEngineString_right_x_C_suffix(

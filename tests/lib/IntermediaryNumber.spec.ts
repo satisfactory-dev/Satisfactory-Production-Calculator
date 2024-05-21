@@ -981,16 +981,8 @@ void describe('CanConvertType', () => {
 				IntermediaryNumber.One,
 			),
 			{
-				type: 'IntermediaryCalculation',
-				left: {
-					type: 'IntermediaryNumber',
-					value: '0',
-				},
-				operation: '+',
-				right: {
-					type: 'IntermediaryNumber',
-					value: '1',
-				},
+				type: 'IntermediaryNumber',
+				value: '1',
 			},
 			{
 				type: 'IntermediaryNumber',
@@ -1004,16 +996,8 @@ void describe('CanConvertType', () => {
 				IntermediaryNumber.Zero,
 			),
 			{
-				type: 'IntermediaryCalculation',
-				left: {
-					type: 'IntermediaryNumber',
-					value: '1',
-				},
-				operation: '+',
-				right: {
-					type: 'IntermediaryNumber',
-					value: '0',
-				},
+				type: 'IntermediaryNumber',
+				value: '1',
 			},
 			{
 				type: 'IntermediaryNumber',
@@ -1023,46 +1007,22 @@ void describe('CanConvertType', () => {
 		[
 			() => IntermediaryCalculation.fromString('0 + 1'),
 			{
-				type: 'IntermediaryCalculation',
-				left: {
-					type: 'IntermediaryNumber',
-					value: '0',
-				},
-				operation: '+',
-				right: {
-					type: 'IntermediaryNumber',
-					value: '1',
-				},
+				type: 'IntermediaryNumber',
+				value: '1',
 			},
 		],
 		[
 			() => IntermediaryCalculation.fromString('1 + 0'),
 			{
-				type: 'IntermediaryCalculation',
-				left: {
-					type: 'IntermediaryNumber',
-					value: '1',
-				},
-				operation: '+',
-				right: {
-					type: 'IntermediaryNumber',
-					value: '0',
-				},
+				type: 'IntermediaryNumber',
+				value: '1',
 			},
 		],
 		[
 			() => IntermediaryCalculation.fromString('3 * 1'),
 			{
-				type: 'IntermediaryCalculation',
-				left: {
-					type: 'IntermediaryNumber',
-					value: '3',
-				},
-				operation: '*',
-				right: {
-					type: 'IntermediaryNumber',
-					value: '1',
-				},
+				type: 'IntermediaryNumber',
+				value: '3',
 			},
 		],
 		[

@@ -160,7 +160,7 @@ function do_math(
 	operator: operation_types,
 	right_operand: math_types
 ) : operand_types {
-	return IntermediaryCalculation.maybe_short_circuit(
+	return IntermediaryCalculation.maybe_reduce_operands(
 		left_operand,
 		operator,
 		IntermediaryNumber.reuse_or_create(right_operand)
@@ -1962,23 +1962,37 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	toJSON(): CanConvertTypeJson {
-		return {
-			type: 'IntermediaryCalculation',
-			left: (
+		const left = (
 				(this.left_operand instanceof DeferredCalculation)
-					? this.left_operand.toJSON()
+				? this.left_operand
 					: this.operand_to_IntermediaryNumber(
 						this.left_operand
-					).toJSON()
-			),
-			operation: this.operation,
-			right: (
+			)
+		);
+
+		const right = (
 				(this.right_operand instanceof DeferredCalculation)
-					? this.right_operand.toJSON()
+				? this.right_operand
 					: this.operand_to_IntermediaryNumber(
 						this.right_operand
-					).toJSON()
-			),
+			)
+		);
+
+		const maybe = IntermediaryCalculation.maybe_short_circuit(
+			left,
+			this.operation,
+			right
+		);
+
+		if (maybe) {
+			return maybe.toJSON();
+		}
+
+		return {
+			type: 'IntermediaryCalculation',
+			left: left.toJSON(),
+			operation: this.operation,
+			right: right.toJSON(),
 		}
 	}
 
@@ -1991,6 +2005,34 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 		const value = this.resolve().toString();
 		cache.set(this, value);
+
+		return value;
+	}
+
+	private static maybe_short_circuit(
+		left:operand_types,
+		operation:operation_types,
+		right:operand_types
+	) {
+		let value:operand_types|undefined = undefined;
+
+		if ('+' === operation) {
+			if (left.isZero()) {
+				value = right;
+			} else if (right.isZero()) {
+				value = left;
+			}
+		} else if ('-' === operation && right.isZero()) {
+			value = left;
+		} else if ('*x'.includes(operation)) {
+			if (left.isZero() || right.isOne()) {
+				value = left;
+			} else if (right.isZero() || left.isOne()) {
+				value = right;
+			}
+		} else if ('/' === operation && right.isOne()) {
+			value = left;
+		}
 
 		return value;
 	}
@@ -2049,30 +2091,16 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return result.result;
 	}
 
-	static maybe_short_circuit(
+	static maybe_reduce_operands(
 		left:operand_types,
 		operation:operation_types,
 		right:operand_types
 	) {
-		let value:operand_types|undefined = undefined;
-
-		if ('+' === operation) {
-			if (left.isZero()) {
-				value = right;
-			} else if (right.isZero()) {
-				value = left;
-			}
-		} else if ('-' === operation && right.isZero()) {
-			value = left;
-		} else if ('*x'.includes(operation)) {
-			if (left.isZero() || right.isOne()) {
-				value = left;
-			} else if (right.isZero() || left.isOne()) {
-				value = right;
-			}
-		} else if ('/' === operation && right.isOne()) {
-			value = left;
-		}
+		let value:operand_types|undefined = this.maybe_short_circuit(
+			left,
+			operation,
+			right
+		);
 
 		if (undefined === value) {
 			value = new IntermediaryCalculation(left, operation, right);

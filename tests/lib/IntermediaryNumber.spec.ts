@@ -152,7 +152,26 @@ type from_string_data_set = [
 	'IntermediaryNumber'|'IntermediaryCalculation'|undefined,
 	string|undefined,
 	string|undefined,
+]|[
+	string,
+	'IntermediaryNumber'|'IntermediaryCalculation',
+	string,
+	string,
+	string,
 ];
+
+function modify_data_set(
+	input:from_string_data_set,
+	modifier: (input:from_string_data_set) => from_string_data_set,
+): from_string_data_set {
+	const output = modifier(input);
+
+	if (5 === input.length && 4 === output.length) {
+		output.push(input[4]);
+	}
+
+	return output;
+}
 
 function expand_nesting(
 	input:from_string_data_set
@@ -161,17 +180,17 @@ function expand_nesting(
 
 	const additional_nesting = Math.ceil(Math.random() * 10);
 
+	const [initial, ...remaining] = input;
+
 	result.push([
 		`${
 			'('.repeat(additional_nesting)
 		}${
-			input[0]
+			initial
 		}${
 			')'.repeat(additional_nesting)
 		}`,
-		input[1],
-		input[2],
-		input[3],
+		...remaining,
 	]);
 
 	return result;
@@ -184,25 +203,21 @@ function maybe_expand_whitspace(
 
 	const regex = /([\t ]+)/g;
 
-	if (regex.test(input[0])) {
+	const [initial, ...remaining] = input;
+
+	if (regex.test(initial)) {
 		result.push(...expand_nesting([
-			input[0].replace(regex, random_ignore_string),
-			input[1],
-			input[2],
-			input[3],
+			initial.replace(regex, random_ignore_string),
+			...remaining,
 		]));
 	} else {
 		result.push(...expand_nesting([
-			` ${input[0]}`.replace(regex, random_ignore_string),
-			input[1],
-			input[2],
-			input[3],
+			` ${initial}`.replace(regex, random_ignore_string),
+			...remaining,
 		]));
 		result.push(...expand_nesting([
-			`${input[0]} `.replace(regex, random_ignore_string),
-			input[1],
-			input[2],
-			input[3],
+			`${initial} `.replace(regex, random_ignore_string),
+			...remaining,
 		]));
 	}
 
@@ -219,35 +234,29 @@ function expand_ignore_characters(
 		...maybe_expand_whitspace(input),
 	];
 
-	if (regex_has_recursives.test(input[0])) {
+	const [initial, ...remaining] = input;
+
+	if (regex_has_recursives.test(initial)) {
 		result.push(
 			...maybe_expand_whitspace([
-				input[0].replace(regex_has_recursives, ' $1'),
-				input[1],
-				input[2],
-				input[3],
+				initial.replace(regex_has_recursives, ' $1'),
+				...remaining,
 			]),
 			...maybe_expand_whitspace([
-				input[0].replace(regex_has_recursives, ' $1 '),
-				input[1],
-				input[2],
-				input[3],
+				initial.replace(regex_has_recursives, ' $1 '),
+				...remaining,
 			]),
 			...maybe_expand_whitspace([
-				input[0].replace(regex_has_recursives, '$1 '),
-				input[1],
-				input[2],
-				input[3],
+				initial.replace(regex_has_recursives, '$1 '),
+				...remaining,
 			]),
 		);
 	}
 
-	if (/[\t ]/.test(input[0])) {
+	if (/[\t ]/.test(initial)) {
 		result.push([
-			input[0].replace(/[\t ]+/g, ''),
-			input[1],
-			input[2],
-			input[3],
+			initial.replace(/[\t ]+/g, ''),
+			...remaining,
 		]);
 	}
 
@@ -471,6 +480,7 @@ void describe('DeferredCalculation', () => {
 				expected_result_type,
 				expected_type_info,
 				expected_result_string,
+				expected_deferred_result_string,
 			] = data_set_raw;
 
 			for (const input_string of [
@@ -488,6 +498,9 @@ void describe('DeferredCalculation', () => {
 							: 'behaves'
 					}`,
 					() => {
+						let deferred:
+							| DeferredCalculation
+							| undefined;
 						let result:
 							| IntermediaryNumber
 							| IntermediaryCalculation
@@ -495,18 +508,14 @@ void describe('DeferredCalculation', () => {
 
 						const get_result = (
 						) => {
-							result = (new DeferredCalculation(
+							deferred = new DeferredCalculation(
 								input_string
-							)).resolve()
+							);
+							result = (deferred).resolve()
 						};
 
 						const maybe = IntermediaryNumber.create_if_valid(
 							input_string
-						);
-
-						assert.strictEqual(
-							(new DeferredCalculation(input_string)).valid,
-							(undefined !== expected_result_type)
 						);
 
 						if (undefined === expected_result_type) {
@@ -514,13 +523,48 @@ void describe('DeferredCalculation', () => {
 							is_instanceof(maybe, NotValid);
 						} else {
 							assert.doesNotThrow(get_result);
+
+							not_undefined(deferred);
 							not_undefined(result);
 							not_undefined(expected_type_info);
+
+							assert.strictEqual(
+								deferred.valid,
+								(undefined !== expected_result_type),
+								`Expected (new DeferredCalculation(${
+									input_string
+								})).valid to be ${
+									(undefined !== expected_result_type)
+										? 'true'
+										: 'false'
+								}, received ${
+									deferred.valid ? 'true' : 'false'
+								}`
+							);
+
 							assert.strictEqual(
 								result.constructor.name,
 								'IntermediaryNumber',
 								`expected result type to be IntermediaryNumber, got ${result.constructor.name}`
 							);
+
+							assert.strictEqual(
+								deferred.toString(),
+								(
+									expected_deferred_result_string
+									|| input_string
+								),
+								`Expected (new DeferredCalculation(${
+									JSON.stringify(input_string)
+								})).toString() to result in ${
+									(
+										expected_deferred_result_string
+										|| input_string
+									)
+								}, received ${
+									deferred.toString()
+								}`
+							)
 
 							assert.strictEqual(
 								result.resolve_type,
@@ -543,7 +587,12 @@ void describe('DeferredCalculation', () => {
 
 							assert.strictEqual(
 								result.toString(),
-								expected_result_string
+								expected_result_string,
+								`Expected (new DeferredCalculation(${
+									JSON.stringify(input_string)
+								})).resolve().toString() to return ${
+									expected_result_string
+								}, received ${result.toString()}`
 							);
 
 							assert.strictEqual(
@@ -556,7 +605,25 @@ void describe('DeferredCalculation', () => {
 								(
 									maybe as Exclude<typeof maybe, NotValid>
 								).toString(),
-								expected_result_string,
+								(maybe instanceof DeferredCalculation)
+									? input_string
+									: expected_result_string,
+								`Expected (new ${
+									maybe.constructor.name
+								}(${
+									JSON.stringify(input_string)
+								})).toString() to return ${
+									(maybe instanceof DeferredCalculation)
+									? input_string
+									: expected_result_string
+								}, received ${
+									(
+										maybe as Exclude<
+											typeof maybe,
+											NotValid
+										>
+									).toString()
+								}`
 							);
 						}
 					}
@@ -898,7 +965,14 @@ void describe('max', () => {
 
 				assert.strictEqual(
 					initial_arg.max(...max_args).toString(),
-					expectation
+					expectation,
+					`Expecting (new DeferredCalculation(IntermediaryNumber.reuse_or_create(${
+						JSON.stringify(max_args[index])
+					}), '+ 0')).toString() to return ${
+						expectation
+					}, received ${
+						initial_arg.max(...max_args).toString()
+					}`
 				);
 			}
 		)

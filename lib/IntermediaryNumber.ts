@@ -597,9 +597,9 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 	}
 
 	static create_if_valid(
-		maybe:string
+		input:string
 	): operand_types|NotValid {
-		maybe = maybe.trim();
+		const maybe = input.trim();
 
 		if (
 			NumberStrings.is_amount_string(maybe)
@@ -609,7 +609,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		} else if (
 			/^(\d+|\d*\.\d+)\s*[+/*x%-]\s*(\d+|\d*\.\d+)$/.test(maybe)
 		) {
-			return new DeferredCalculation(maybe);
+			return new DeferredCalculation(input);
 		}
 
 		const scientific = /^(-?\d+(?:\.\d+))e([+-])(\d+)$/.exec(maybe);
@@ -2158,10 +2158,11 @@ export class DeferredCalculation implements
 		DeferredCalculation
 	>
 {
-	private internal_value:[
+	private readonly internal_value:[
 		DeferredCalculation_parts,
 		...DeferredCalculation_parts[],
 	];
+	private readonly all_strings: boolean;
 
 	private static cached_intermediary = new WeakMap<
 		DeferredCalculation,
@@ -2176,6 +2177,9 @@ export class DeferredCalculation implements
 		...additional_parts:DeferredCalculation_parts[]
 	) {
 		this.internal_value = [value, ...additional_parts];
+		this.all_strings = this.internal_value.every(
+			maybe => is_string(maybe)
+		);
 	}
 
 	get resolve_type(): string {
@@ -2447,7 +2451,9 @@ export class DeferredCalculation implements
 			return cache.get(this) as string;
 		}
 
-		const value = this.resolve().toString();
+		const value = this.all_strings
+			? this.internal_value.join('')
+			: this.resolve().toString();
 		cache.set(this, value);
 
 		return value;

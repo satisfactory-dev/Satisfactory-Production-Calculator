@@ -1963,19 +1963,19 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 
 	toJSON(): CanConvertTypeJson {
 		const left = (
-				(this.left_operand instanceof DeferredCalculation)
+			(this.left_operand instanceof DeferredCalculation)
 				? this.left_operand
-					: this.operand_to_IntermediaryNumber(
-						this.left_operand
-			)
+				: this.operand_to_IntermediaryNumber(
+					this.left_operand
+				)
 		);
 
 		const right = (
-				(this.right_operand instanceof DeferredCalculation)
+			(this.right_operand instanceof DeferredCalculation)
 				? this.right_operand
-					: this.operand_to_IntermediaryNumber(
-						this.right_operand
-			)
+				: this.operand_to_IntermediaryNumber(
+					this.right_operand
+				)
 		);
 
 		const maybe = IntermediaryCalculation.maybe_short_circuit(

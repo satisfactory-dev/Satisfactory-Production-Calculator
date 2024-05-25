@@ -5,6 +5,7 @@ import {
 import type {
 	production_set,
 } from './production-data';
+// eslint-disable-next-line max-len
 import faux_recipe_keys from '../data/faux-recipe-ingredient-list.json' with {type: 'json'};
 import {
 	IntermediaryNumber,

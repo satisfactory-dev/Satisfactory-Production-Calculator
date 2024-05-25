@@ -2,16 +2,10 @@ import assert from 'assert';
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
-import {
-	ammo,
-	biomass,
-	consumable,
-	equipment,
-	fuel_nuclear,
-	items,
+import type {
 	production_set,
-	resources,
 } from './production-data';
+import faux_recipe_keys from '../data/faux-recipe-ingredient-list.json' with {type: 'json'};
 import {
 	IntermediaryNumber,
 } from './IntermediaryNumber';
@@ -34,15 +28,7 @@ export function faux_recipe(recipe:string): production_set
 	] = recipe.split('--');
 
 	assert.strictEqual(
-		(
-			faux_ingredient in ammo
-			|| faux_ingredient in biomass
-			|| faux_ingredient in consumable
-			|| faux_ingredient in equipment
-			|| faux_ingredient in fuel_nuclear
-			|| faux_ingredient in items
-			|| faux_ingredient in resources
-		),
+		faux_recipe_keys.includes(faux_ingredient),
 		true,
 		new NoMatchError(
 			{

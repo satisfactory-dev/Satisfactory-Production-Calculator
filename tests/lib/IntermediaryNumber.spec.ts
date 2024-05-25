@@ -160,19 +160,6 @@ type from_string_data_set = [
 	string,
 ];
 
-function modify_data_set(
-	input:from_string_data_set,
-	modifier: (input:from_string_data_set) => from_string_data_set,
-): from_string_data_set {
-	const output = modifier(input);
-
-	if (5 === input.length && 4 === output.length) {
-		output.push(input[4]);
-	}
-
-	return output;
-}
-
 function expand_nesting(
 	input:from_string_data_set
 ): [from_string_data_set, ...from_string_data_set[]] {

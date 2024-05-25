@@ -2009,34 +2009,6 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return value;
 	}
 
-	private static maybe_short_circuit(
-		left:operand_types,
-		operation:operation_types,
-		right:operand_types
-	) {
-		let value:operand_types|undefined = undefined;
-
-		if ('+' === operation) {
-			if (left.isZero()) {
-				value = right;
-			} else if (right.isZero()) {
-				value = left;
-			}
-		} else if ('-' === operation && right.isZero()) {
-			value = left;
-		} else if ('*x'.includes(operation)) {
-			if (left.isZero() || right.isOne()) {
-				value = left;
-			} else if (right.isZero() || left.isOne()) {
-				value = right;
-			}
-		} else if ('/' === operation && right.isOne()) {
-			value = left;
-		}
-
-		return value;
-	}
-
 	private operand_to_IntermediaryNumber(
 		operand:operand_types
 	) : IntermediaryNumber {
@@ -2122,6 +2094,34 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 		return this.parseState(tokenizer_state);
 	}
 
+	private static maybe_short_circuit(
+		left:operand_types,
+		operation:operation_types,
+		right:operand_types
+	) {
+		let value:operand_types|undefined = undefined;
+
+		if ('+' === operation) {
+			if (left.isZero()) {
+				value = right;
+			} else if (right.isZero()) {
+				value = left;
+			}
+		} else if ('-' === operation && right.isZero()) {
+			value = left;
+		} else if ('*x'.includes(operation)) {
+			if (left.isZero() || right.isOne()) {
+				value = left;
+			} else if (right.isZero() || left.isOne()) {
+				value = right;
+			}
+		} else if ('/' === operation && right.isOne()) {
+			value = left;
+		}
+
+		return value;
+	}
+
 	private static parseState(
 		input:IntermediaryCalculation_tokenizer
 	): IntermediaryCalculation_tokenizer {
@@ -2158,11 +2158,12 @@ export class DeferredCalculation implements
 		DeferredCalculation
 	>
 {
+	private readonly all_strings: boolean;
+
 	private readonly internal_value:[
 		DeferredCalculation_parts,
 		...DeferredCalculation_parts[],
 	];
-	private readonly all_strings: boolean;
 
 	private static cached_intermediary = new WeakMap<
 		DeferredCalculation,

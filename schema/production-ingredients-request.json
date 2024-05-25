@@ -156,10 +156,7 @@
 					"type": "object",
 					"const": {
 						"type": "object",
-						"required": [
-							"type",
-							"value"
-						],
+						"required": ["type", "value"],
 						"additionalProperties": false,
 						"properties": {
 							"type": {
@@ -187,12 +184,7 @@
 					"type": "object",
 					"const": {
 						"type": "object",
-						"required": [
-							"type",
-							"left",
-							"operation",
-							"right"
-						],
+						"required": ["type", "left", "operation", "right"],
 						"additionalProperties": false,
 						"properties": {
 							"type": {
@@ -204,14 +196,7 @@
 							},
 							"operation": {
 								"type": "string",
-								"enum": [
-									"+",
-									"-",
-									"*",
-									"x",
-									"/",
-									"%"
-								]
+								"enum": ["+", "-", "*", "x", "/", "%"]
 							},
 							"right": {
 								"$ref": "#/$defs/CanConvertTypeJson"
@@ -223,10 +208,7 @@
 					"type": "object",
 					"const": {
 						"type": "object",
-						"required": [
-							"type",
-							"value"
-						],
+						"required": ["type", "value"],
 						"additionalProperties": false,
 						"properties": {
 							"type": {

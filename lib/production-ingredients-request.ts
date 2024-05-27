@@ -56,6 +56,7 @@ import {
 	Root,
 } from './production-chain';
 import {
+	CanConvertTypeJson,
 	IntermediaryNumber,
 	operand_types,
 } from './IntermediaryNumber';
@@ -77,6 +78,18 @@ export type production_ingredients_request<
 		item: keyof typeof recipe_selection_schema['properties'],
 		amount: T2,
 	}[],
+};
+
+export type production_ingredients_request_json = {
+	input: undefined|({
+		item: string,
+		amount: CanConvertTypeJson,
+	}[]),
+	recipe_selection?: recipe_selection,
+	pool: ({
+		item: string,
+		amount: CanConvertTypeJson,
+	}[]),
 };
 
 export type recipe_ingredients_request_ingredient<
@@ -1055,6 +1068,25 @@ export class ProductionIngredientsRequestTyped
 			input: this.input,
 			recipe_selection: this.recipe_selection,
 			pool: this.pool,
+		};
+	}
+
+	toJSON(): production_ingredients_request_json
+	{
+		return {
+			input: this.input?.map(e => {
+				return {
+					item: e.item,
+					amount: e.amount.toJSON(),
+				};
+			}),
+			recipe_selection: this.recipe_selection,
+			pool: this.pool.map(e => {
+				return {
+					item: e.item,
+					amount: e.amount.toJSON(),
+				};
+			}),
 		};
 	}
 }

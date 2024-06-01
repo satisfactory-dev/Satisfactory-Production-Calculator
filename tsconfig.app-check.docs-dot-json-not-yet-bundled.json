@@ -1,0 +1,6 @@
+{
+	"extends": "./tsconfig.app-check.json",
+	"exclude": [
+		"./generate-*.ts"
+	]
+}

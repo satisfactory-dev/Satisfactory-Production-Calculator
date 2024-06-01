@@ -17,7 +17,7 @@ jobs:
                   node-version: 21.x
                   cache: 'npm'
             - run: npm ci
-            - run: ./node_modules/.bin/tsc --project ./tsconfig.app-check.json
+            - run: ./node_modules/.bin/tsc --project ./tsconfig.app-check.docs-dot-json-not-yet-bundled.json
             - run: ./node_modules/.bin/prettier . --check
             - run: ./node_modules/.bin/eslint .
     coverage:

@@ -3,7 +3,7 @@
 	"private": true,
 	"name": "@signpostmarv/docs.json.ts-production-planner",
 	"description": "Docs.json.ts-driven production planner",
-	"license": "SEE LICENSE IN proprietary",
+	"license": "Apache-2.0",
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
 		"@stdlib/types": "^0.3.2",

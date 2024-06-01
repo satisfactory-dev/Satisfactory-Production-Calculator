@@ -33,6 +33,9 @@ import {
 	IntermediaryNumber,
 	operand_types,
 } from '../../lib/IntermediaryNumber';
+import {
+	skip_because_docs_dot_json_not_yet_bundled,
+} from '../docs_dot_json_not_yet_bundled';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -120,7 +123,8 @@ function flattened_production_ingredients_request_result(
 	return result;
 }
 
-void describe('ProductionIngredientsRequest', () => {
+// eslint-disable-next-line max-len
+void describe('ProductionIngredientsRequest', skip_because_docs_dot_json_not_yet_bundled, () => {
 	const instance = new ProductionIngredientsRequest();
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =

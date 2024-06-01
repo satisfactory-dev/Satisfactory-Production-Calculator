@@ -10,8 +10,11 @@ import {
 	production_item,
 	recipe_selection,
 } from '../../lib/production-data';
+import {
+	skip_because_docs_dot_json_not_yet_bundled,
+} from '../docs_dot_json_not_yet_bundled';
 
-void describe('Root', () => {
+void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 	void describe('is_recursive', () => {
 		const data_sets:[
 			production_item,

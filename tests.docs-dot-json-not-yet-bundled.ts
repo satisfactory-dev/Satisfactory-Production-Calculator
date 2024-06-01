@@ -24,6 +24,7 @@ run({
 			&& !maybe.includes('production-chain.spec.ts')
 			&& !maybe.includes('planner-request.spec.ts')
 			&& !maybe.includes('Numbers.spec.ts')
+			&& !maybe.includes('IntermediaryNumber.spec.ts')
 		)
 	),
 	concurrency: true,

@@ -1,6 +1,7 @@
 {
 	"extends": "./tsconfig.app-check.json",
 	"exclude": [
+		"./lib/**/*.ts",
 		"./generate-*.ts"
 	]
 }

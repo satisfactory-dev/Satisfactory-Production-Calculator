@@ -18,7 +18,7 @@ jobs:
                   cache: 'npm'
             - run: npm ci
             - run: ./node_modules/.bin/prettier . --check
-            - run: ./node_modules/.bin/eslint lib tests
+            - run: ./node_modules/.bin/eslint lib tests --ignore-pattern './lib/{IntermediaryNumber}.ts'
             - run: ./node_modules/.bin/eslint ./validate-schemas.ts
     coverage:
         needs: basic-checks

@@ -17,10 +17,10 @@ jobs:
                   node-version: 21.x
                   cache: 'npm'
             - run: npm ci
-#            - run: ./node_modules/.bin/tsc --project ./tsconfig.app-check.json
+            #            - run: ./node_modules/.bin/tsc --project ./tsconfig.app-check.json
             - run: ./node_modules/.bin/prettier . --check
-#            - run: ./node_modules/.bin/eslint './*.ts' lib tests
-#            - run: ./node_modules/.bin/eslint ./validate-schemas.ts
+    #            - run: ./node_modules/.bin/eslint './*.ts' lib tests
+    #            - run: ./node_modules/.bin/eslint ./validate-schemas.ts
     coverage:
         needs: basic-checks
         runs-on: ubuntu-latest

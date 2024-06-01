@@ -23,6 +23,7 @@ run({
 			!maybe.includes('production-ingredients-request.spec.ts')
 			&& !maybe.includes('production-chain.spec.ts')
 			&& !maybe.includes('planner-request.spec.ts')
+			&& !maybe.includes('Numbers.spec.ts')
 		)
 	),
 	concurrency: true,

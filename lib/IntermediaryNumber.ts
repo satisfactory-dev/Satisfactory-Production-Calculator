@@ -765,6 +765,10 @@ type IntermediaryCalculation_tokenizer_state = {
 	all_tokens: string[],
 };
 
+export class IntermediaryCalculationEarlyExit extends Error
+{
+}
+
 export class IntermediaryCalculationTokenizerError extends Error
 {
 	readonly previous:unknown;
@@ -1387,7 +1391,7 @@ function tokenizer_reduce(
 					assert_notStrictEqual(
 						(
 							undefined === was.result
-							&& '' === was.current_left_operand_buffer
+							&& '' === was.current_left_operand_buffer.trim()
 						),
 						true,
 						new UnexpectedTokenWhenExpecting(
@@ -2032,8 +2036,21 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	}
 
 	static fromString(
-		input:string|IntermediaryCalculation_tokenizer
+		input:Exclude<string, ''>|IntermediaryCalculation_tokenizer
 	): IntermediaryNumber|IntermediaryCalculation {
+		if (is_string(input) && '' === input.trim()) {
+			throw new IntermediaryCalculationEarlyExit(
+				'Empty strings not allowed as input!'
+			);
+		} else if (
+			!is_string(input)
+			&& input.array.every(maybe => '' === maybe.trim())
+		) {
+			throw new IntermediaryCalculationEarlyExit(
+				'Empty strings not allowed as input!'
+			);
+		}
+
 		const result = is_string(input) ? this.parseString(input) : (
 			(undefined === input.result)
 				? this.parseState(input)

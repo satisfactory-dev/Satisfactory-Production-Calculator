@@ -363,6 +363,16 @@ const from_string_data_sets:from_string_data_set[] = [
 	]),
 ];
 
+const from_string_data_sets_throwing:[
+	string,
+][] = [
+	[''],
+	['()'],
+	['( )'],
+	['(\t)'],
+	['11 * ()'],
+];
+
 void describe('IntermediaryCalculation', () => {
 	void it ('does a better job of handling things than native', () => {
 		assert.notStrictEqual(
@@ -455,6 +465,19 @@ void describe('IntermediaryCalculation', () => {
 					}
 				)
 			}
+		}
+
+		for (const [
+			input,
+		] of from_string_data_sets_throwing) {
+			void it(
+				`IntermediaryNumber.fromString(${input}) should throw`,
+				() => {
+					assert.throws(
+						() => IntermediaryCalculation.fromString(input)
+					)
+				}
+			);
 		}
 	});
 })

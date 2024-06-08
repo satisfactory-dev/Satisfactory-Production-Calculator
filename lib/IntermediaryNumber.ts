@@ -1691,24 +1691,6 @@ function tokenizer_reduce(
 		);
 		const maybe_is_digit = '0123456789'.includes(is);
 
-		assert.strictEqual(
-			(
-				maybe_is_ignore_characters
-				|| maybe_is_math_operation
-				|| maybe_is_digit
-			),
-			true,
-			new IntermediaryCalculationTokenizerError(
-				'Expecting trailing space past this point!',
-				{
-					tokenizer: was,
-					current_token: is,
-					current_index: index,
-					all_tokens: array,
-				}
-			)
-		)
-
 		if (
 			maybe_is_ignore_characters
 		) {

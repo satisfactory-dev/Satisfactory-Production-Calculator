@@ -891,6 +891,13 @@ void describe('abs', () => {
 			);
 		})
 	}
+
+	void it('returns IntermediaryNumber.Zero', () => {
+		assert.strictEqual(
+			IntermediaryNumber.Zero.abs(),
+			IntermediaryNumber.Zero
+		)
+	})
 })
 
 void describe('max', () => {

@@ -2429,6 +2429,68 @@ export class DeferredCalculation implements
 		return this.parse().toFraction();
 	}
 
+	toIntermediaryCalculation(): IntermediaryCalculation
+	{
+		if (
+			3 !== this.internal_value.length
+		) {
+			throw new Error(
+				// eslint-disable-next-line max-len
+				'DeferredCalculation not in a convertible state, needs to have three parts!'
+			);
+		}
+
+		let [
+			left,
+			,
+			right,
+		] = this.internal_value;
+		const middle = this.internal_value[1];
+
+		if (
+			! (
+				left instanceof IntermediaryNumber
+				|| left instanceof IntermediaryCalculation
+				|| left instanceof DeferredCalculation
+			)
+		) {
+			throw new Error(
+				'DeferredCalculation not in a convertible state, left part is not a usable type!'
+			);
+		} else if (
+			! is_string(middle)
+			|| !(middle in Fraction_operation_map)
+		) {
+			throw new Error(
+				'DeferredCalculation not in a convertible state, middle part is not a usable type!'
+			);
+		} else if (
+			! (
+				right instanceof IntermediaryNumber
+				|| right instanceof IntermediaryCalculation
+				|| right instanceof DeferredCalculation
+			)
+		) {
+			throw new Error(
+				'DeferredCalculation not in a convertible state, right part is not a usable type!'
+			);
+		}
+
+		if (left instanceof DeferredCalculation) {
+			left = left.toIntermediaryCalculation();
+		}
+
+		if (right instanceof DeferredCalculation) {
+			right = right.toIntermediaryCalculation();
+		}
+
+		return new IntermediaryCalculation(
+			left,
+			middle as operation_types,
+			right
+		);
+	}
+
 	toJSON(): CanConvertTypeJson {
 		const value = require_non_empty_array(this.internal_value.map(
 			e => (

@@ -240,6 +240,45 @@ export class TokenScan
 		scan: TokenScan_parsing_tokens,
 		tokens: Exclude<TokenScan_internals['tokens'], undefined>
 	): Exclude<TokenScan_internals['tokens'], undefined> {
+		const smoosh_numerics:number[] = [];
+
+		for (
+			let token_index=tokens.length - 1; token_index > 0; --token_index
+		) {
+			const previous = tokens[token_index - 1];
+			const current = tokens[token_index];
+
+			if ('numeric' === previous.type) {
+				const previous_value = scan.value.substring(
+					previous.from,
+					previous.to
+				);
+				const current_value = scan.value.substring(
+					current.from,
+					current.to
+				);
+
+				if (
+					current_value.startsWith('.')
+					&& /^\d+$/.test(previous_value)
+				) {
+					smoosh_numerics.push(token_index);
+				}
+			}
+		}
+
+		for (const index of smoosh_numerics) {
+			tokens.splice(
+				index - 1,
+				2,
+				new TokenSpan(
+					tokens[index - 1].from,
+					tokens[index].to,
+					'numeric'
+				)
+			);
+		}
+
 		const convert_to_negative:number[] = [];
 
 		if (

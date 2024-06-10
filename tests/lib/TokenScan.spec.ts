@@ -120,6 +120,12 @@ const from_string_data_sets:from_string_data_set[] = [
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	],
+	...expand_ignore_characters([
+		'15+5.84583r+25.6875',
+		'IntermediaryCalculation',
+		'IntermediaryCalculation + amount_string',
+		'46.5(3)',
+	]),
 ];
 
 const from_string_data_sets_throwing:[

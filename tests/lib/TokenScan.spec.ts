@@ -109,18 +109,23 @@ const from_string_data_sets:from_string_data_set[] = [
 		'156.67864',
 	]),
 	[
+		// this caused issues with the old DeferredCalculation implementation
+		// eslint-disable-next-line max-len
 		'((((120 			   	*		 		  	   		 	 	 		  			   							 	 		  						.972322)	 		 		 		   	    	   	 	    		    		  	  			  	 					   	 	 	* 	  		  	   	  		 		 	 			 	   	3)+((120	  	  	 		  	 	 		  		 	 	 	 		  	  		  	 		 	 	   	 						   	 *				   	 			 	 	 		    1)			 	   	  			  	 				 	*					 			1))/3)',
 		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	],
 	[
+		// this caused issues with the old DeferredCalculation implementation
+		// eslint-disable-next-line max-len
 		'((((120  			  						  	      	  	 	  			 	 				  			  		*  	 			 			 		 				  	 	  	.972322)      		 				  	  			    		  	   	    		  	   	 	     	 		 			 	 		  			   		 		 	 	  		      	 	*	  			   	   	 	   			  	 	  	 	  		 	 	3)+((120				 							 	 			 	* 	  			     			  	    	   	 					   	  	 	1) 					 				    			 		  		 		  	 		 	  				 	   	  * 		 			  				 		 	     	     	  						 			   	  	 		      		  			 		 	  		 		   			 	          		 	1))/3)',
 		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	],
 	...expand_ignore_characters([
+		// naive parsing splits the two parts of the non-recurring decimal
 		'15+5.84583r+25.6875',
 		'IntermediaryCalculation',
 		'IntermediaryCalculation + amount_string',

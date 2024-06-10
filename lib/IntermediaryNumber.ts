@@ -587,11 +587,11 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 			return this.create(json.value);
 		}
 
-			return new IntermediaryCalculation(
-				this.fromJson(json.left),
-				json.operation,
-				this.fromJson(json.right)
-			);
+		return new IntermediaryCalculation(
+			this.fromJson(json.left),
+			json.operation,
+			this.fromJson(json.right)
+		);
 	}
 
 	static reuse_or_create(

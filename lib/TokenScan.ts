@@ -1,5 +1,5 @@
 import {
-	DeferredCalculation,
+	IntermediaryCalculation,
 	IntermediaryNumber,
 	operation_types,
 } from './IntermediaryNumber';
@@ -232,7 +232,7 @@ export class TokenScan
 		}
 	}
 
-	parse(): IntermediaryNumber|DeferredCalculation
+	parse(): IntermediaryNumber|IntermediaryCalculation
 	{
 		const reduced = this.tokens.reduce(
 			(
@@ -352,7 +352,7 @@ export class TokenScan
 					&& undefined !== was.left_operand
 					&& undefined === was.right_operand
 				) {
-					was.left_operand = new DeferredCalculation(
+					was.left_operand = new IntermediaryCalculation(
 						popped.left_operand,
 						popped.operation,
 						was.left_operand
@@ -395,7 +395,7 @@ export class TokenScan
 					);
 				}
 
-				let resolved = new DeferredCalculation(
+				let resolved = new IntermediaryCalculation(
 					was.left_operand,
 					was.operation,
 					IntermediaryNumber.create(scan.value.substring(
@@ -416,7 +416,7 @@ export class TokenScan
 						was.outter_stack.pop()
 					) as incomplete_operation;
 
-					resolved = new DeferredCalculation(
+					resolved = new IntermediaryCalculation(
 						previous.left_operand,
 						previous.operation,
 						resolved
@@ -464,7 +464,7 @@ export class TokenScan
 
 type TokenScan_tokenizer_operand_buffer =
 	| IntermediaryNumber
-	| DeferredCalculation
+	| IntermediaryCalculation
 	| undefined;
 
 type incomplete_operation = {

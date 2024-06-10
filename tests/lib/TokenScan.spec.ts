@@ -15,9 +15,6 @@ import {
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
-import {
-	DeferredCalculation,
-} from '../../lib/IntermediaryNumber';
 
 const from_string_data_sets:from_string_data_set[] = [
 	[
@@ -35,91 +32,91 @@ const from_string_data_sets:from_string_data_set[] = [
 	...expand_fraction_string('1.1(23)'),
 	...expand_ignore_characters([
 		'1.1(23) + 1',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'Fraction + amount_string',
 		'2.1(23)',
 	]),
 	...expand_ignore_characters([
 		'1.1(23) + 1 + 2',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation + amount_string',
 		'4.1(23)',
 	]),
 	...expand_ignore_characters([
 		'1.1(23) + 1 * 2',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation * amount_string',
 		'4.2(46)',
 	]),
 	...expand_ignore_characters([
 		'1.1(23) + (1 * 2)',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'Fraction + IntermediaryCalculation',
 		'3.1(23)',
 	]),
 	...expand_ignore_characters([
 		'(1.1(23) + 1) * 2',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation * amount_string',
 		'4.2(46)',
 	]),
 	...expand_ignore_characters([
 		'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'2.(8)',
 	]),
 	...expand_ignore_characters([
 		'.1 - .2 + .3 * .4 / .5',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'0.16',
 	]),
 	...expand_ignore_characters([
 		'3 x 5 % 9',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation % amount_string',
 		'6',
 	]),
 	...expand_ignore_characters([
 		'1 + (2/3)',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'amount_string + IntermediaryCalculation',
 		'1.(6)',
 	]),
 	...expand_ignore_characters([
 		'1 + 2',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'amount_string + amount_string',
 		'3',
 	]),
 	...expand_ignore_characters([
 		'( ( 46.53r ) x ( 3 ) ) - ( 0 )',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation - amount_string',
 		'139.6',
 	]),
 	...expand_ignore_characters([
 		'(((120 * .972322) * 3)+((120 * 1) * 1))/3',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	]),
 	...expand_ignore_characters([
 		'(((120*.972322) * 3)+120)/3',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	]),
 	[
 		'((((120 			   	*		 		  	   		 	 	 		  			   							 	 		  						.972322)	 		 		 		   	    	   	 	    		    		  	  			  	 					   	 	 	* 	  		  	   	  		 		 	 			 	   	3)+((120	  	  	 		  	 	 		  		 	 	 	 		  	  		  	 		 	 	   	 						   	 *				   	 			 	 	 		    1)			 	   	  			  	 				 	*					 			1))/3)',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	],
 	[
 		'((((120  			  						  	      	  	 	  			 	 				  			  		*  	 			 			 		 				  	 	  	.972322)      		 				  	  			    		  	   	    		  	   	 	     	 		 			 	 		  			   		 		 	 	  		      	 	*	  			   	   	 	   			  	 	  	 	  		 	 	3)+((120				 							 	 			 	* 	  			     			  	    	   	 					   	  	 	1) 					 				    			 		  		 		  	 		 	  				 	   	  * 		 			  				 		 	     	     	  						 			   	  	 		      		  			 		 	  		 		   			 	          		 	1))/3)',
-		'DeferredCalculation',
+		'IntermediaryCalculation',
 		'IntermediaryCalculation / amount_string',
 		'156.67864',
 	],
@@ -189,9 +186,7 @@ void describe('TokenScan', () => {
 							);
 
 							assert.strictEqual(
-								(result instanceof DeferredCalculation)
-									? result.toIntermediaryCalculation().resolve_type
-									: result.resolve_type,
+								result.resolve_type,
 								expected_type_info
 							);
 

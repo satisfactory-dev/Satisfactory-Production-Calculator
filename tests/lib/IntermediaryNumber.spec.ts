@@ -6,7 +6,6 @@ import assert from 'node:assert/strict';
 import {
 	CanConvertType,
 	CanConvertTypeJson,
-	DeferredCalculation,
 	IntermediaryCalculation,
 	IntermediaryNumber,
 	math_types,
@@ -26,14 +25,6 @@ import {
 	input_types,
 	type_property_types,
 } from '../../lib/IntermediaryNumberTypes';
-
-import {
-	expand_fraction_string,
-	expand_ignore_characters,
-	from_string_data_set,
-	random_ignore_string,
-	regex_has_recursives,
-} from '../utilities/expand-string-parsing';
 
 void describe('IntermediaryNumber', () => {
 	void describe('create', () => {
@@ -134,110 +125,6 @@ void describe('IntermediaryNumber', () => {
 	})
 });
 
-const from_string_data_sets:from_string_data_set[] = [
-	[
-		'1',
-		'IntermediaryNumber',
-		'amount_string',
-		'1',
-	],
-	[
-		'1.2r',
-		'IntermediaryNumber',
-		'Fraction',
-		'1.(2)',
-	],
-	...expand_fraction_string('1.1(23)'),
-	...expand_ignore_characters([
-		'1.1(23) + 1',
-		'IntermediaryCalculation',
-		'Fraction + amount_string',
-		'2.1(23)',
-	]),
-	...expand_ignore_characters([
-		'1.1(23) + 1 + 2',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation + amount_string',
-		'4.1(23)',
-	]),
-	...expand_ignore_characters([
-		'1.1(23) + 1 * 2',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation * amount_string',
-		'4.2(46)',
-	]),
-	...expand_ignore_characters([
-		'1.1(23) + (1 * 2)',
-		'IntermediaryCalculation',
-		'Fraction + IntermediaryCalculation',
-		'3.1(23)',
-	]),
-	...expand_ignore_characters([
-		'(1.1(23) + 1) * 2',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation * amount_string',
-		'4.2(46)',
-	]),
-	...expand_ignore_characters([
-		'1 + 2 * 3 / 4 % 5 - 6 + 7 * 8 / 9',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation / amount_string',
-		'2.(8)',
-	]),
-	...expand_ignore_characters([
-		'.1 - .2 + .3 * .4 / .5',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation / amount_string',
-		'0.16',
-	]),
-	...expand_ignore_characters([
-		'3 x 5 % 9',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation % amount_string',
-		'6',
-	]),
-	...expand_ignore_characters([
-		'1 + (2/3)',
-		'IntermediaryCalculation',
-		'amount_string + IntermediaryCalculation',
-		'1.(6)',
-	]),
-	...expand_ignore_characters([
-		'1 + 2',
-		'IntermediaryCalculation',
-		'amount_string + amount_string',
-		'3',
-	]),
-	...expand_ignore_characters([
-		'( ( 46.53r ) x ( 3 ) ) - ( 0 )',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation - amount_string',
-		'139.6',
-	]),
-	...expand_ignore_characters([
-		'(((120 * .972322) * 3)+((120 * 1) * 1))/3',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation / amount_string',
-		'116.67864', // incorrect value due to bugged parser
-	]),
-	...expand_ignore_characters([
-		'(((120*.972322) * 3)+120)/3',
-		'IntermediaryCalculation',
-		'IntermediaryCalculation / amount_string',
-		'156.67864',
-	]),
-];
-
-const from_string_data_sets_throwing:[
-	string,
-][] = [
-	[''],
-	['()'],
-	['( )'],
-	['(\t)'],
-	['11 * ()'],
-];
-
 void describe('IntermediaryCalculation', () => {
 	void it ('does a better job of handling things than native', () => {
 		assert.notStrictEqual(
@@ -259,255 +146,7 @@ void describe('IntermediaryCalculation', () => {
 			'1'
 		);
 	});
-
-	void describe('fromString', () => {
-		for (const data_set_raw of from_string_data_sets) {
-			const [
-				raw_input_string,
-				expected_result_type,
-				expected_type_info,
-				expected_result_string,
-			] = data_set_raw;
-
-			for (const input_string of [
-				raw_input_string,
-				`${random_ignore_string()}${raw_input_string}`,
-				`${raw_input_string}${random_ignore_string()}`,
-				`${random_ignore_string()}${raw_input_string}${random_ignore_string()}`,
-			]) {
-				void it (
-					`IntermediaryCalculation.fromString(${
-						JSON.stringify(input_string)
-					}) ${
-						undefined === expected_result_type
-							? 'throws'
-							: 'behaves'
-					}`,
-					() => {
-						const parsed = IntermediaryCalculation.parseString(
-							input_string
-						);
-
-						const actual_result_type =
-							parsed.result?.constructor.name;
-
-						assert.strictEqual(
-							actual_result_type,
-							expected_result_type
-						);
-
-						let result:
-							| operand_types
-							| undefined;
-
-						const get_result = (
-						) => {
-							result = IntermediaryCalculation.fromString(
-								input_string
-							)
-						};
-
-						if (undefined === expected_result_type) {
-							assert.throws(get_result);
-						} else {
-							assert.doesNotThrow(get_result);
-							not_undefined(result);
-							assert.strictEqual(
-								result.constructor.name,
-								expected_result_type
-							);
-
-							assert.strictEqual(
-								result.resolve_type,
-								expected_type_info
-							);
-
-							assert.strictEqual(
-								result.toString(),
-								expected_result_string
-							);
-						}
-					}
-				)
-			}
-		}
-
-		for (const [
-			input,
-		] of from_string_data_sets_throwing) {
-			void it(
-				`IntermediaryNumber.fromString(${input}) should throw`,
-				() => {
-					assert.throws(
-						() => IntermediaryCalculation.fromString(input)
-					)
-				}
-			);
-		}
-	});
 })
-
-void describe('DeferredCalculation', () => {
-	void describe('resolve()', () => {
-		for (const data_set_raw of from_string_data_sets) {
-			const [
-				raw_input_string,
-				expected_result_type,
-				expected_type_info,
-				expected_result_string,
-				expected_deferred_result_string,
-			] = data_set_raw;
-
-			for (const input_string of [
-				raw_input_string,
-				`${random_ignore_string()}${raw_input_string}`,
-				`${raw_input_string}${random_ignore_string()}`,
-				`${random_ignore_string()}${raw_input_string}${random_ignore_string()}`,
-			]) {
-				void it (
-					`(new DeferredCalculation(${
-						JSON.stringify(input_string)
-					})).resolve() ${
-						undefined === expected_result_type
-							? 'throws'
-							: 'behaves'
-					}`,
-					() => {
-						let deferred:
-							| DeferredCalculation
-							| undefined;
-						let result:
-							| IntermediaryNumber
-							| IntermediaryCalculation
-							| undefined;
-
-						const get_result = (
-						) => {
-							deferred = new DeferredCalculation(
-								input_string
-							);
-							result = (deferred).resolve()
-						};
-
-						const maybe = IntermediaryNumber.create_if_valid(
-							input_string
-						);
-
-						if (undefined === expected_result_type) {
-							assert.throws(get_result);
-							is_instanceof(maybe, NotValid);
-						} else {
-							assert.doesNotThrow(get_result);
-
-							not_undefined(deferred);
-							not_undefined(result);
-							not_undefined(expected_type_info);
-
-							assert.strictEqual(
-								deferred.valid,
-								(undefined !== expected_result_type),
-								`Expected (new DeferredCalculation(${
-									input_string
-								})).valid to be ${
-									(undefined !== expected_result_type)
-										? 'true'
-										: 'false'
-								}, received ${
-									deferred.valid ? 'true' : 'false'
-								}`
-							);
-
-							assert.strictEqual(
-								result.constructor.name,
-								'IntermediaryNumber',
-								`expected result type to be IntermediaryNumber, got ${result.constructor.name}`
-							);
-
-							assert.strictEqual(
-								deferred.toString(),
-								(
-									expected_deferred_result_string
-									|| input_string
-								),
-								`Expected (new DeferredCalculation(${
-									JSON.stringify(input_string)
-								})).toString() to result in ${
-									(
-										expected_deferred_result_string
-										|| input_string
-									)
-								}, received ${
-									deferred.toString()
-								}`
-							)
-
-							assert.strictEqual(
-								result.resolve_type,
-								(
-									expected_type_info.startsWith('Fraction ')
-									|| raw_input_string.includes('/')
-									|| regex_has_recursives.test(
-										raw_input_string
-									)
-								)
-									? 'Fraction'
-									: (
-										NumberStrings.is_amount_string(
-											raw_input_string
-										)
-											? 'amount_string'
-											: 'BigNumber'
-									)
-							);
-
-							assert.strictEqual(
-								result.toString(),
-								expected_result_string,
-								`Expected (new DeferredCalculation(${
-									JSON.stringify(input_string)
-								})).resolve().toString() to return ${
-									expected_result_string
-								}, received ${result.toString()}`
-							);
-
-							assert.strictEqual(
-								(maybe instanceof NotValid),
-								false,
-								`Expected "${input_string}" to be valid`
-							);
-
-							assert.strictEqual(
-								(
-									maybe as Exclude<typeof maybe, NotValid>
-								).toString(),
-								(maybe instanceof DeferredCalculation)
-									? input_string
-									: expected_result_string,
-								`Expected (new ${
-									maybe.constructor.name
-								}(${
-									JSON.stringify(input_string)
-								})).toString() to return ${
-									(maybe instanceof DeferredCalculation)
-									? input_string
-									: expected_result_string
-								}, received ${
-									(
-										maybe as Exclude<
-											typeof maybe,
-											NotValid
-										>
-									).toString()
-								}`
-							);
-						}
-					}
-				)
-			}
-		}
-	})
-})
-
 
 void describe('do_math', () => {
 	const data_sets:[
@@ -629,34 +268,6 @@ void describe('do_math', () => {
 				);
 			}
 		)
-
-		void it(
-			`DeferredCalculation: (${
-				left_operand_input
-			}) ${
-				operator_method
-			} (${
-				right_operand_input
-			}) returns ${
-				expectation
-			}`,
-			() => {
-				assert.strictEqual(
-					(
-						new DeferredCalculation(
-							left_operand_input
-						)
-					)[
-						operator_method
-					](
-						new DeferredCalculation(
-							right_operand_input
-						)
-					).resolve().toString(),
-					expectation
-				)
-			}
-		)
 	}
 });
 
@@ -686,30 +297,6 @@ void describe('abs', () => {
 			() => IntermediaryCalculation.fromString('1 - 1'),
 			'0',
 		],
-		[
-			() => new DeferredCalculation('1 - 2'),
-			'1',
-		],
-		[
-			() => new DeferredCalculation('1 + 2'),
-			'3',
-		],
-		[
-			() => (new DeferredCalculation('1')).minus(2),
-			'1',
-		],
-		[
-			() => (new DeferredCalculation('1')).plus(2),
-			'3',
-		],
-		[
-			() => (new DeferredCalculation('2 + 3')).minus(5),
-			'0',
-		],
-		[
-			() => new DeferredCalculation('0'),
-			'0',
-		],
 	];
 
 	for (let index = 0; index < data_sets.length; ++index) {
@@ -727,15 +314,6 @@ void describe('abs', () => {
 				value = get_value();
 			});
 
-			assert.strictEqual(
-				(
-					value as unknown as operand_types
-				).abs().toString(),
-				expectation
-			);
-
-			// double-checking here because
-			// DeferredCalculation caches the result
 			assert.strictEqual(
 				(
 					value as unknown as operand_types
@@ -769,7 +347,6 @@ void describe('max', () => {
 				new Fraction(3/4),
 				IntermediaryNumber.create('5.6r'),
 				IntermediaryCalculation.fromString('7 - 8 * 9'),
-				new DeferredCalculation('10 + 11', '/ 12'),
 			],
 			'5.(6)',
 		],
@@ -825,39 +402,6 @@ void describe('max', () => {
 				);
 			}
 		)
-
-		void it(
-			`DeferredCalculation max with ${
-				max_args.map(e => e.toString()).join(', ')
-			} returns ${
-				expectation
-			}`,
-			() => {
-				const index = Math.min(
-					max_args.length - 1,
-					Math.floor(Math.random() * max_args.length)
-				);
-
-				const initial_arg = new DeferredCalculation(
-					IntermediaryNumber.reuse_or_create(
-						max_args[index]
-					).toString(),
-					' + 0',
-				);
-
-				assert.strictEqual(
-					initial_arg.max(...max_args).toString(),
-					expectation,
-					`Expecting (new DeferredCalculation(IntermediaryNumber.reuse_or_create(${
-						JSON.stringify(max_args[index])
-					}), '+ 0')).toString() to return ${
-						expectation
-					}, received ${
-						initial_arg.max(...max_args).toString()
-					}`
-				);
-			}
-		)
 	}
 })
 
@@ -865,7 +409,7 @@ void describe('CanConvertType', () => {
 	const data_sets:(
 		| [() => CanConvertType, CanConvertTypeJson]
 		| [
-			() => IntermediaryCalculation|DeferredCalculation,
+			() => IntermediaryCalculation,
 			CanConvertTypeJson,
 			CanConvertTypeJson,
 		]
@@ -879,52 +423,6 @@ void describe('CanConvertType', () => {
 		],
 		[
 			() => IntermediaryNumber.Zero.plus(1),
-			{
-				type: 'IntermediaryNumber',
-				value: '1',
-			},
-		],
-		[
-			() => new DeferredCalculation('1'),
-			{
-				type: 'DeferredCalculation',
-				value: [
-					'1',
-				],
-			},
-			{
-				type: 'IntermediaryNumber',
-				value: '1',
-			},
-		],
-		[
-			() => new DeferredCalculation('0 + 1'),
-			{
-				type: 'DeferredCalculation',
-				value: [
-					'0 + 1',
-				],
-			},
-			{
-				type: 'IntermediaryNumber',
-				value: '1',
-			},
-		],
-		[
-			() => (new DeferredCalculation('0')).plus('1'),
-			{
-				type: 'DeferredCalculation',
-				value: [
-					'(',
-					'0',
-					') + (',
-					{
-						type: 'IntermediaryNumber',
-						value: '1',
-					},
-					')',
-				],
-			},
 			{
 				type: 'IntermediaryNumber',
 				value: '1',
@@ -1066,7 +564,6 @@ void describe('CanConvertType', () => {
 					assert.deepStrictEqual(
 						(value as (
 							| IntermediaryCalculation
-							| DeferredCalculation
 						)).resolve().toJSON(),
 						resolve_expectation,
 					);

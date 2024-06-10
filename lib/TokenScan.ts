@@ -37,12 +37,12 @@ export class TokenScanError extends Error
 export class TokenScanParseError extends Error
 {
 	readonly current?: TokenSpan<TokenSpan_types>;
-	readonly scan: TokenScan;
+	readonly scan: TokenScan_parsing_value;
 	readonly state?: TokenScan_tokenizer;
 
 	constructor(
 		message:string,
-		scan:TokenScan,
+		scan: TokenScan_parsing_value,
 		state: TokenScan_tokenizer,
 		current?: TokenSpan<TokenSpan_types>
 	) {
@@ -58,21 +58,69 @@ const regex_numeric = (
 	/(?:\d*\.\d*\(\d+\)r?|\d*\.\d*\[\d+\]r?|\d+(?:\.\d+r)?|\.\d+r?)/g
 );
 
+type TokenScan_internals = {
+	parsed: IntermediaryNumber|IntermediaryCalculation|undefined,
+	tokens: (TokenSpan<TokenSpan_types_part_baked>[])|undefined,
+	valid: boolean|undefined,
+};
+
+type TokenScan_parsing_tokens = Omit<TokenScan, 'is_valid'|'tokens'|'parsed'>;
+type TokenScan_parsing_value = Omit<TokenScan, 'is_valid'|'parsed'>;
+
 export class TokenScan
 {
-	readonly parsed:Set<number> = new Set();
-
-	readonly tokens:TokenSpan<TokenSpan_types_part_baked>[] = [];
+	private readonly internal:TokenScan_internals = {
+		parsed: undefined,
+		tokens: undefined,
+		valid: undefined,
+	};
 
 	readonly value:string;
 
 	constructor(value:string)
 	{
 		this.value = value;
+	}
+
+	get parsed(): Exclude<TokenScan_internals['parsed'], undefined>
+	{
+		if (undefined === this.internal.parsed) {
+			this.internal.parsed = TokenScan.parse_scan(this);
+		}
+
+		return this.internal.parsed;
+	}
+
+	get tokens(): Exclude<TokenScan_internals['tokens'], undefined>
+	{
+		if (undefined === this.internal.tokens) {
+			this.internal.tokens = TokenScan.determine_tokens_from_scan(this);
+		}
+
+		return this.internal.tokens;
+	}
+
+	get valid(): boolean
+	{
+		if (undefined === this.internal.valid) {
+			try {
+				this.parsed;
+				this.internal.valid = true;
+			} catch (err) {
+				this.internal.valid = false;
+			}
+		}
+
+		return this.internal.valid;
+	}
+
+	private static determine_tokens_from_scan(
+		scan: TokenScan_parsing_tokens
+	): Exclude<TokenScan_internals['tokens'], undefined> {
 
 		let tokens:TokenSpan<TokenSpan_types>[] = [];
 
-		for (const entry of value.matchAll(/([\s]+)/g)) {
+		for (const entry of scan.value.matchAll(/([\s]+)/g)) {
 			tokens.push(new TokenSpan(
 				entry.index,
 				entry.index + entry[0].length,
@@ -80,7 +128,7 @@ export class TokenScan
 			));
 		}
 
-		for (const entry of value.matchAll(regex_numeric)) {
+		for (const entry of scan.value.matchAll(regex_numeric)) {
 			tokens.push(new TokenSpan(
 				entry.index,
 				entry.index + entry[0].length,
@@ -88,7 +136,7 @@ export class TokenScan
 			));
 		}
 
-		for (const entry of value.matchAll(/([+/*x%-])/g)) {
+		for (const entry of scan.value.matchAll(/([+/*x%-])/g)) {
 			tokens.push(new TokenSpan(
 				entry.index,
 				entry.index + entry[0].length,
@@ -96,7 +144,7 @@ export class TokenScan
 			));
 		}
 
-		for (const entry of value.matchAll(/(\()/g)) {
+		for (const entry of scan.value.matchAll(/(\()/g)) {
 			tokens.push(new TokenSpan(
 				entry.index,
 				entry.index + entry[0].length,
@@ -104,7 +152,7 @@ export class TokenScan
 			));
 		}
 
-		for (const entry of value.matchAll(/(\))/g)) {
+		for (const entry of scan.value.matchAll(/(\))/g)) {
 			tokens.push(new TokenSpan(
 				entry.index,
 				entry.index + entry[0].length,
@@ -119,7 +167,7 @@ export class TokenScan
 		const recursive_numerics = tokens.filter(
 			maybe => (
 				'numeric' === maybe.type
-				&& /[()]/.test(value.substring(maybe.from, maybe.to))
+				&& /[()]/.test(scan.value.substring(maybe.from, maybe.to))
 			)
 		);
 
@@ -145,7 +193,7 @@ export class TokenScan
 			throw new TokenScanError('No tokens found!')
 		} else if (0 !== tokens[0].from) {
 			throw new TokenScanError('First token not at index 0!')
-		} else if (value.length !== tokens[tokens.length - 1].to) {
+		} else if (scan.value.length !== tokens[tokens.length - 1].to) {
 			throw new TokenScanError(
 				'Last token does not end at end of string!'
 			)
@@ -178,29 +226,37 @@ export class TokenScan
 			);
 		}
 
-		this.tokens = tokens.filter(
-			(maybe): maybe is TokenSpan<
-				TokenSpan_types_part_baked
-			> => 'ignore' !== maybe.type
+		return this.massage_part_baked_tokens(
+			scan,
+			tokens.filter(
+				(maybe): maybe is TokenSpan<
+					TokenSpan_types_part_baked
+				> => 'ignore' !== maybe.type
+			)
 		);
+	}
 
+	private static massage_part_baked_tokens(
+		scan: TokenScan_parsing_tokens,
+		tokens: Exclude<TokenScan_internals['tokens'], undefined>
+	): Exclude<TokenScan_internals['tokens'], undefined> {
 		const convert_to_negative:number[] = [];
 
 		if (
-			this.tokens.length >= 2
-			&& 'operation' === this.tokens[0].type
-			&& '-' === this.value[this.tokens[0].from]
-			&& 'numeric' === this.tokens[1].type
+			tokens.length >= 2
+			&& 'operation' === tokens[0].type
+			&& '-' === scan.value[tokens[0].from]
+			&& 'numeric' === tokens[1].type
 		) {
 			convert_to_negative.push(0);
 		}
 
 		for (
-			let token_index=0; token_index < this.tokens.length; ++token_index
+			let token_index=0; token_index < tokens.length; ++token_index
 		) {
-			const token = this.tokens[token_index];
-			const next = this.tokens[token_index + 1];
-			const after = this.tokens[token_index + 2];
+			const token = tokens[token_index];
+			const next = tokens[token_index + 1];
+			const after = tokens[token_index + 2];
 
 			if (
 				(
@@ -210,7 +266,7 @@ export class TokenScan
 				&& next
 				&& after
 				&& 'operation' === next.type
-				&& '-' === this.value[next.from]
+				&& '-' === scan.value[next.from]
 				&& 'numeric' === after.type
 			) {
 				convert_to_negative.push(token_index + 1);
@@ -220,27 +276,30 @@ export class TokenScan
 		}
 
 		for (const index of convert_to_negative.reverse()) {
-			this.tokens.splice(
+			tokens.splice(
 				index,
 				2,
 				new TokenSpan(
-					this.tokens[index].from,
-					this.tokens[index + 1].to,
+					tokens[index].from,
+					tokens[index + 1].to,
 					'numeric'
 				)
 			);
 		}
+
+		return tokens;
 	}
 
-	parse(): IntermediaryNumber|IntermediaryCalculation
-	{
-		const reduced = this.tokens.reduce(
+	private static parse_scan(
+		scan: TokenScan_parsing_value
+	): IntermediaryNumber|IntermediaryCalculation {
+		const reduced = scan.tokens.reduce(
 			(
 				was:TokenScan_tokenizer,
 				is:TokenSpan<TokenSpan_types_part_baked>,
 				index:number,
 			) => TokenScan.reduce(
-				this,
+				scan,
 				was,
 				is,
 				index,
@@ -259,13 +318,13 @@ export class TokenScan
 
 		throw new TokenScanParseError(
 			'Parse in unsupported state!',
-			this,
+			scan,
 			reduced
 		);
 	}
 
 	private static reduce(
-		scan: TokenScan,
+		scan: TokenScan_parsing_value,
 		was:TokenScan_tokenizer,
 		is:TokenSpan<TokenSpan_types_part_baked>,
 		index:number,

@@ -140,9 +140,9 @@ void describe('TokenScan', () => {
 			void it(
 				`(new TokenScan(${
 					JSON.stringify(input)
-				})).parse() throws`,
+				})).parsed throws`,
 				() => {
-					assert.throws(() => (new TokenScan(input)).parse());
+					assert.throws(() => (new TokenScan(input)).parsed);
 				}
 			)
 		}
@@ -163,10 +163,10 @@ void describe('TokenScan', () => {
 					void it(
 						`(new TokenScan(${
 							JSON.stringify(input_string)
-						})).parse() throws`,
+						})).parsed throws`,
 						() => {
 							assert.throws(
-								() => (new TokenScan(input_string)).parse()
+								() => (new TokenScan(input_string)).parsed
 							);
 						}
 					)
@@ -175,11 +175,11 @@ void describe('TokenScan', () => {
 					void it(
 						`(new TokenScan(${
 							JSON.stringify(input_string)
-						})).parse() behaves`,
+						})).parsed behaves`,
 						() => {
 							const result = (
 								new TokenScan(input_string)
-							).parse();
+							).parsed;
 							assert.strictEqual(
 								result.constructor.name,
 								expected_result_type

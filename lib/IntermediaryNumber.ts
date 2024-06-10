@@ -552,7 +552,7 @@ export class IntermediaryNumber implements CanDoMathWithDispose
 		} else if (
 			/^(\d+|\d*\.\d+)\s*[+/*x%-]\s*(\d+|\d*\.\d+)$/.test(maybe)
 		) {
-			return (new TokenScan(input)).parse();
+			return (new TokenScan(input)).parsed;
 		}
 
 		const scientific = /^(-?\d+(?:\.\d+))e([+-])(\d+)$/.exec(maybe);
@@ -932,7 +932,7 @@ export class IntermediaryCalculation implements CanResolveMathWithDispose
 	static fromString(
 		input:Exclude<string, ''>
 	): IntermediaryNumber|IntermediaryCalculation {
-		return (new TokenScan(input)).parse();
+		return (new TokenScan(input)).parsed;
 	}
 
 	static maybe_reduce_operands(

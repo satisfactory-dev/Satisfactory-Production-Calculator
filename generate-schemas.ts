@@ -375,29 +375,10 @@ const production_ingredients_request = {
 				right: {$ref: '#/$defs/CanConvertTypeJson'},
 			},
 		},
-		DeferredCalculation: {
-			type: 'object',
-			required: ['type', 'value'],
-			additionalProperties: false,
-			properties: {
-				type: {type: 'string', const: 'DeferredCalculation'},
-				value: {
-					type: 'array',
-					minItems: 1,
-					items: {
-						oneOf: [
-							{type: 'string'},
-							{$ref: '#/$defs/CanConvertTypeJson'},
-						],
-					},
-				},
-			},
-		},
 		CanConvertTypeJson: {
 			oneOf: [
 				{$ref: '#/$defs/IntermediaryNumber'},
 				{$ref: '#/$defs/IntermediaryCalculation'},
-				{$ref: '#/$defs/DeferredCalculation'},
 			],
 		},
 	},

@@ -174,7 +174,6 @@ function abs(
 	);
 }
 
-
 function compare(
 	value: math_types,
 	to: CanConvertType

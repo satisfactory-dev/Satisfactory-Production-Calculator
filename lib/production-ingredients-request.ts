@@ -892,7 +892,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 				}
 
-
 				return was;
 			},
 			{} as {[key: string]: (

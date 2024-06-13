@@ -3,7 +3,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	"postCreateCommand": "npm install && echo \"source ./.devcontainer/.post-create\" >> /home/node/.bashrc",
+	"postCreateCommand": "npm config set git-tag-version=false && npm install && echo \"source ./.devcontainer/.post-create\" >> /home/node/.bashrc",
 	"remoteUser": "node",
 	"updateRemoteUserUID": true,
 	"customizations": {

@@ -4,6 +4,11 @@
 	"name": "@signpostmarv/docs.json.ts-production-planner",
 	"description": "Docs.json.ts-driven production planner",
 	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SignpostMarv/Satisfactory-Production-Calculator.git.git"
+	},
+	"funding": "https://github.com/SignpostMarv/Satisfactory-Production-Calculator.git?sponsor=1",
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
 		"@stdlib/types": "^0.3.2",

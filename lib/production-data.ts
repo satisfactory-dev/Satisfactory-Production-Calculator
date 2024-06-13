@@ -81,7 +81,7 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import {
 	operand_types,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number/lib/IntermediaryNumber';
 
 export const ammo = Object.fromEntries(
 	[

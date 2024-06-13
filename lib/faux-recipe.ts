@@ -9,7 +9,7 @@ import type {
 import faux_recipe_keys from '../data/faux-recipe-ingredient-list.json' with {type: 'json'};
 import {
 	IntermediaryNumber,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number/lib/IntermediaryNumber';
 
 export function faux_recipe(recipe:string): production_set
 {

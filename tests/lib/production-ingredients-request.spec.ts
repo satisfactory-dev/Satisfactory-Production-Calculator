@@ -32,7 +32,7 @@ import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
 	operand_types,
-} from '../../lib/IntermediaryNumber';
+} from '@signpostmarv/intermediary-number/lib/IntermediaryNumber';
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled';

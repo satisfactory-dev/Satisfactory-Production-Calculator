@@ -12,10 +12,10 @@ import {
 import {
 	number_arg,
 	Numbers,
-} from './Numbers';
+} from '@signpostmarv/intermediary-number/lib/Numbers';
 import {
 	amount_string,
-} from './NumberStrings';
+} from '@signpostmarv/intermediary-number/lib/NumberStrings';
 import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
@@ -58,7 +58,7 @@ import {
 import {
 	IntermediaryNumber,
 	operand_types,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number/lib/IntermediaryNumber';
 import Fraction from 'fraction.js';
 
 export type production_ingredients_request<

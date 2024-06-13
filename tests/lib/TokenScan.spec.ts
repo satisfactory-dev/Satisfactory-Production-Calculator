@@ -14,7 +14,7 @@ import {
 } from '../utilities/expand-string-parsing';
 import {
 	not_undefined,
-} from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
+} from '@satisfactory-clips-archive/custom-assert/assert/CustomAssert';
 
 const from_string_data_sets:from_string_data_set[] = [
 	[

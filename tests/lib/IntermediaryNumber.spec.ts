@@ -20,7 +20,7 @@ import {
 import {
 	is_instanceof,
 	not_undefined,
-} from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
+} from '@satisfactory-clips-archive/custom-assert/assert/CustomAssert';
 import {
 	input_types,
 	type_property_types,

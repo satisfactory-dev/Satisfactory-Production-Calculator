@@ -375,10 +375,20 @@ const production_ingredients_request = {
 				right: {$ref: '#/$defs/CanConvertTypeJson'},
 			},
 		},
+		TokenScan: {
+			type: 'object',
+			required: ['type', 'value'],
+			additionalProperties: false,
+			properties: {
+				type: {type: 'string', const: 'TokenScan'},
+				value: {type: 'string'},
+			},
+		},
 		CanConvertTypeJson: {
 			oneOf: [
 				{$ref: '#/$defs/IntermediaryNumber'},
 				{$ref: '#/$defs/IntermediaryCalculation'},
+				{$ref: '#/$defs/TokenScan'},
 			],
 		},
 	},

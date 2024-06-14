@@ -52,7 +52,7 @@
 				"item_amount_object",
 				"IntermediaryNumber",
 				"IntermediaryCalculation",
-				"DeferredCalculation",
+				"TokenScan",
 				"CanConvertTypeJson"
 			],
 			"additionalProperties": false,
@@ -204,31 +204,15 @@
 						}
 					}
 				},
-				"DeferredCalculation": {
+				"TokenScan": {
 					"type": "object",
 					"const": {
 						"type": "object",
 						"required": ["type", "value"],
 						"additionalProperties": false,
 						"properties": {
-							"type": {
-								"type": "string",
-								"const": "DeferredCalculation"
-							},
-							"value": {
-								"type": "array",
-								"minItems": 1,
-								"items": {
-									"oneOf": [
-										{
-											"type": "string"
-										},
-										{
-											"$ref": "#/$defs/CanConvertTypeJson"
-										}
-									]
-								}
-							}
+							"type": {"type": "string", "const": "TokenScan"},
+							"value": {"type": "string"}
 						}
 					}
 				},
@@ -243,7 +227,7 @@
 								"$ref": "#/$defs/IntermediaryCalculation"
 							},
 							{
-								"$ref": "#/$defs/DeferredCalculation"
+								"$ref": "#/$defs/TokenScan"
 							}
 						]
 					}

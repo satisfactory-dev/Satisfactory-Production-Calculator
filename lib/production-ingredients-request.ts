@@ -10,12 +10,10 @@ import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
+	amount_string,
 	number_arg,
 	Numbers,
-} from '@signpostmarv/intermediary-number/lib/Numbers';
-import {
-	amount_string,
-} from '@signpostmarv/intermediary-number/lib/NumberStrings';
+} from '@signpostmarv/intermediary-number';
 import {
 	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
@@ -58,7 +56,7 @@ import {
 import {
 	IntermediaryNumber,
 	operand_types,
-} from '@signpostmarv/intermediary-number/lib/IntermediaryNumber';
+} from '@signpostmarv/intermediary-number';
 import Fraction from 'fraction.js';
 
 export type production_ingredients_request<

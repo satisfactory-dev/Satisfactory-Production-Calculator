@@ -19,7 +19,7 @@ import {
 } from './faux-recipe';
 import {
 	number_arg,
-} from '@signpostmarv/intermediary-number/lib/Numbers';
+} from '@signpostmarv/intermediary-number';
 import {
 	amend_ItemClass_amount,
 } from './amend-itemclass-amount';

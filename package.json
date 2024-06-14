@@ -27,7 +27,7 @@
 	"dependencies": {
 		"@satisfactory-clips-archive/custom-assert": "^0.1.2",
 		"@satisfactory-clips-archive/docs.json.ts": "^0.5.0",
-		"@signpostmarv/intermediary-number": "^0.1.1",
+		"@signpostmarv/intermediary-number": "^0.2.0",
 		"bignumber.js": "^9.1.2",
 		"fraction.js": "^4.3.7"
 	}

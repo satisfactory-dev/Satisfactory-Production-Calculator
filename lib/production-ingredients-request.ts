@@ -697,8 +697,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		let checking_recursively = this.top_level_only
 			? []
 			: initial_result.ingredients.filter(
-			maybe => !(maybe.item in resources)
-		);
+				maybe => !(maybe.item in resources)
+			);
 		const avoid_checking_further = new Set<string>();
 
 		const production_items = Object.fromEntries(

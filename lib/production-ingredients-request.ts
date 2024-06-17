@@ -138,6 +138,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 	production_ingredients_request,
 	production_ingredients_request_result
 > {
+	top_level_only:boolean = false;
+
 	private input:production_set<
 		| operand_types
 	> = {};
@@ -692,7 +694,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			| operand_types
 		>[] = initial_result.surplus || [];
 
-		let checking_recursively = initial_result.ingredients.filter(
+		let checking_recursively = this.top_level_only
+			? []
+			: initial_result.ingredients.filter(
 			maybe => !(maybe.item in resources)
 		);
 		const avoid_checking_further = new Set<string>();

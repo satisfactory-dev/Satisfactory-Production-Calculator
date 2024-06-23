@@ -17,13 +17,13 @@
 		"glob": "^10.3.12",
 		"prettier": "^3.2.5",
 		"ts-node": "^10.9.2",
-		"typescript": "~5.4.5",
+		"typescript": "~5.5.2",
 		"typescript-eslint": "^7.7.0"
 	},
 	"dependencies": {
-		"@satisfactory-clips-archive/custom-assert": "^0.1.4",
-		"@satisfactory-clips-archive/docs.json.ts": "^0.5.1",
-		"@signpostmarv/intermediary-number": "^0.3.1",
+		"@satisfactory-clips-archive/custom-assert": "^0.2.1",
+		"@satisfactory-clips-archive/docs.json.ts": "^0.6.0",
+		"@signpostmarv/intermediary-number": "^0.4.0",
 		"bignumber.js": "^9.1.2",
 		"fraction.js": "^4.3.7"
 	}

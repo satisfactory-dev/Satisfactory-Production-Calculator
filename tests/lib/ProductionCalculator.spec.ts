@@ -7,7 +7,7 @@ import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator';
 import {
-	production_ingredients_request_result,
+	production_result,
 } from '../../lib/types';
 import {
 	FGRecipe,
@@ -46,7 +46,7 @@ type flattened_result = {
 };
 
 function flattened_production_ingredients_request_result(
-	input:production_ingredients_request_result
+	input:production_result
 ) : flattened_result {
 	const calculating:{
 		ingredients: {[key: string]: operand_types},
@@ -200,7 +200,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 	})
 
 	void describe('validates', () => {
-		const result_1:production_ingredients_request_result = {
+		const result_1:production_result = {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
@@ -281,7 +281,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				},
 			],
 		};
-		const result_1000001:production_ingredients_request_result = {
+		const result_1000001:production_result = {
 			ingredients: [
 				{
 					item: 'Desc_ModularFrame_C',
@@ -366,7 +366,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		const test_cases:[
 			unknown,
 			| false
-			| production_ingredients_request_result,
+			| production_result,
 		][] = [
 			[
 				{

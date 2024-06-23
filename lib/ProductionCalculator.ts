@@ -58,7 +58,7 @@ import Fraction from 'fraction.js';
 
 import {
 	production_request,
-	production_ingredients_request_result,
+	production_result,
 	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
 } from './types';
@@ -81,7 +81,7 @@ export class ProductionCalculator {
 		);
 	}
 
-	calculate(data:unknown): production_ingredients_request_result
+	calculate(data:unknown): production_result
 	{
 		return this.calculate_validated(this.validate(data));
 	}
@@ -120,7 +120,7 @@ export class ProductionCalculator {
 		surplus?:recipe_ingredients_request_output<
 			| operand_types
 		>[]
-	): production_ingredients_request_result<
+	): production_result<
 		| operand_types
 	> {
 		const ingredients:{
@@ -543,7 +543,7 @@ export class ProductionCalculator {
 			)
 		);
 
-		const result:production_ingredients_request_result<
+		const result:production_result<
 			| operand_types
 		> = {
 			ingredients: Object.entries(ingredients).map(e => {
@@ -571,10 +571,10 @@ export class ProductionCalculator {
 
 	protected calculate_validated(
 		data:production_request
-	): production_ingredients_request_result {
+	): production_result {
 		const deferred = this.calculate_validated_deferred(data);
 
-		const result:production_ingredients_request_result = {
+		const result:production_result = {
 			ingredients: deferred.ingredients.map(
 				e => {
 					return {
@@ -628,7 +628,7 @@ export class ProductionCalculator {
 				| operand_types
 			)
 		>
-	): production_ingredients_request_result<
+	): production_result<
 		| operand_types
 	> {
 		const initial_result = this.calculate_precisely(data);
@@ -957,7 +957,7 @@ export class ProductionCalculator {
 			)
 		);
 
-		const result:production_ingredients_request_result<
+		const result:production_result<
 			| operand_types
 		> = {
 			ingredients: Object.entries(ingredients).map(e => {

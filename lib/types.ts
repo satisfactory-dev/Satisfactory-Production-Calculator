@@ -53,7 +53,7 @@ export type recipe_ingredients_request_output<
 	amount: T,
 };
 
-export type production_ingredients_request_result_surplus<
+export type production_result_surplus<
 	T extends (
 		| amount_string
 		| BigNumber
@@ -76,7 +76,7 @@ export type combined_production_entry<
 	surplus: T,
 };
 
-export type production_ingredients_request_result<
+export type production_result<
 	T extends (
 		| amount_string
 		| BigNumber
@@ -86,5 +86,5 @@ export type production_ingredients_request_result<
 	ingredients: recipe_ingredients_request_ingredient<T>[],
 	output: recipe_ingredients_request_output<T>[],
 	combined: combined_production_entry<T>[],
-	surplus?: production_ingredients_request_result_surplus<T>,
+	surplus?: production_result_surplus<T>,
 };

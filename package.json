@@ -10,7 +10,6 @@
 	},
 	"funding": "https://github.com/SignpostMarv/Satisfactory-Production-Calculator.git?sponsor=1",
 	"devDependencies": {
-		"@stdlib/types": "^0.3.2",
 		"@types/node": "^20.12.7",
 		"ajv": "^8.12.0",
 		"c8": "^9.1.0",

@@ -9,9 +9,9 @@ import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 
 import {
+	buildings,
 	items,
-	production_item,
-	recipe_selection,
+	resources,
 } from './production-data';
 
 export type production_request<
@@ -88,3 +88,17 @@ export type production_result<
 	combined: combined_production_entry<T>[],
 	surplus?: production_result_surplus<T>,
 };
+
+export type production_item = keyof (
+	| typeof buildings
+	| typeof items
+	| typeof resources
+);
+
+export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
+
+export type production_set<
+	T extends (
+		| operand_types
+	) = operand_types
+> = {[key in production_item]: T};

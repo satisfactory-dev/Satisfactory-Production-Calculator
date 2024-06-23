@@ -34,8 +34,6 @@ import {
 	known_byproduct,
 	known_not_sourced_from_recipe,
 	poles,
-	production_item,
-	production_set,
 	recipes,
 	resources,
 	vehicles,
@@ -56,9 +54,11 @@ import {
 } from '@signpostmarv/intermediary-number';
 import Fraction from 'fraction.js';
 
-import {
+import type {
+	production_item,
 	production_request,
 	production_result,
+	production_set,
 	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
 } from './types';

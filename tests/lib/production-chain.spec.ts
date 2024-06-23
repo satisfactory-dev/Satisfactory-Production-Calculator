@@ -6,10 +6,10 @@ import assert from 'node:assert/strict';
 import {
 	Root,
 } from '../../lib/production-chain';
-import {
+import type {
 	production_item,
 	recipe_selection,
-} from '../../lib/production-data';
+} from '../../lib/types';
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled';

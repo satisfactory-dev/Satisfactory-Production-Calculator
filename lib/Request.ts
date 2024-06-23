@@ -5,13 +5,11 @@ import {
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 
-import {
+import type {
 	production_request,
 	recipe_ingredients_request_output,
-} from './types';
-import {
 	recipe_selection,
-} from './production-data';
+} from './types';
 
 export class Request
 {

@@ -6,11 +6,13 @@ import {
 	equipment,
 	items,
 	known_not_sourced_from_recipe,
-	production_item,
-	recipe_selection,
 	recipes,
 	resources,
 } from './production-data';
+import type {
+	production_item,
+	recipe_selection,
+} from './types';
 
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};

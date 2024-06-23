@@ -20,7 +20,7 @@ let already_stopped = false;
 run({
 	files: (await glob(`${__dirname}/tests/**/*.spec.ts`)).filter(
 		maybe => (
-			!maybe.includes('production-ingredients-request.spec.ts')
+			!maybe.includes('production-request.spec.ts')
 			&& !maybe.includes('production-chain.spec.ts')
 			&& !maybe.includes('UnrealEngineString.spec.ts')
 			&& !maybe.includes('Numbers.spec.ts')

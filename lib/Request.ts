@@ -6,7 +6,7 @@ import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 
 import {
-	production_ingredients_request,
+	production_request,
 	recipe_ingredients_request_output,
 } from './types';
 import {
@@ -24,7 +24,7 @@ export class Request
 	}[] = [];
 	recipe_selection?: recipe_selection;
 
-	toData(): production_ingredients_request<operand_types>
+	toData(): production_request<operand_types>
 	{
 		return {
 			input: this.input,

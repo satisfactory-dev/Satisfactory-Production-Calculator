@@ -14,7 +14,7 @@ import {
 	recipe_selection,
 } from './production-data';
 
-export type production_ingredients_request<
+export type production_request<
 	T1 extends (
 		| amount_string
 		| operand_types

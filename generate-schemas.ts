@@ -287,7 +287,7 @@ const recipe_selection = {
 	properties: recipe_selection_enums,
 };
 
-const production_ingredients_request = {
+const production_request = {
 	type: 'object',
 	required: ['pool'],
 	additionalProperties: false,
@@ -415,12 +415,12 @@ const production_ingredients_request = {
 };
 
 await writeFile(
-	`${__dirname}/generated-schemas/production-ingredients-request.json`,
+	`${__dirname}/generated-schemas/production-request.json`,
 	`${JSON.stringify(
 		{
 			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'production-ingredients-request',
-			...production_ingredients_request,
+			$id: 'production-request',
+			...production_request,
 		},
 		null,
 		'\t'

@@ -32,7 +32,7 @@ generate--schemas: build
 
 generate--validators: build
 	@./node_modules/.bin/ts-node ./generate-validators.ts
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/production_ingredients_request_schema.mjs --outDir ./validator/
+	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/production_request_schema.mjs --outDir ./validator/
 
 lint--tsc:
 	@echo 'running syntax check'

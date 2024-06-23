@@ -4,8 +4,8 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-	ProductionIngredientsRequest,
-} from '../../lib/production-ingredients-request';
+	ProductionCalculator,
+} from '../../lib/ProductionCalculator';
 import {
 	production_ingredients_request_result,
 } from '../../lib/types';
@@ -126,8 +126,8 @@ function flattened_production_ingredients_request_result(
 }
 
 // eslint-disable-next-line max-len
-void describe('ProductionIngredientsRequest', skip_because_docs_dot_json_not_yet_bundled, () => {
-	const instance = new ProductionIngredientsRequest();
+void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, () => {
+	const instance = new ProductionCalculator();
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =
 		FGRecipe.Classes.reduce(

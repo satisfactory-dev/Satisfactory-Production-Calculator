@@ -31,7 +31,7 @@ const files = Object.fromEntries(
 );
 
 const schemas = {
-	'production-ingredients-request.json': `${__dirname}/schema/production-ingredients-request.json`,
+	'production-request.json': `${__dirname}/schema/production-request.json`,
 	'recipe-selection.json': `${__dirname}/schema/recipe-selection.json`,
 };
 

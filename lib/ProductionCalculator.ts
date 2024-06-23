@@ -2,8 +2,8 @@ import assert from 'assert';
 import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
-import production_ingredients_request_validator from
-	'../validator/production_ingredients_request_schema.mjs';
+import production_request_validator from
+	'../validator/production_request_schema.mjs';
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
@@ -57,7 +57,7 @@ import {
 import Fraction from 'fraction.js';
 
 import {
-	production_ingredients_request,
+	production_request,
 	production_ingredients_request_result,
 	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
@@ -66,18 +66,18 @@ import {
 	Request,
 } from './Request';
 
-export class ProductionIngredientsRequest {
+export class ProductionCalculator {
 	top_level_only:boolean = false;
 
 	private input:production_set<
 		| operand_types
 	> = {};
-	protected readonly check:ValidateFunction<production_ingredients_request>;
+	protected readonly check:ValidateFunction<production_request>;
 
 	constructor()
 	{
-		this.check = production_ingredients_request_validator as (
-			ValidateFunction<production_ingredients_request>
+		this.check = production_request_validator as (
+			ValidateFunction<production_request>
 		);
 	}
 
@@ -107,7 +107,7 @@ export class ProductionIngredientsRequest {
 	}
 
 	protected calculate_precisely(
-		data:production_ingredients_request<
+		data:production_request<
 			(
 				| amount_string
 				| operand_types
@@ -570,7 +570,7 @@ export class ProductionIngredientsRequest {
 	}
 
 	protected calculate_validated(
-		data:production_ingredients_request
+		data:production_request
 	): production_ingredients_request_result {
 		const deferred = this.calculate_validated_deferred(data);
 
@@ -618,7 +618,7 @@ export class ProductionIngredientsRequest {
 	}
 
 	protected calculate_validated_deferred(
-		data:production_ingredients_request<
+		data:production_request<
 			(
 				| amount_string
 				| operand_types

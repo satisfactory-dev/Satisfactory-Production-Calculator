@@ -3,9 +3,9 @@ import standalone from 'ajv/dist/standalone';
 import {
 	writeFile,
 } from 'node:fs/promises';
-import production_ingredients_request_schema from
+import production_request_schema from
 	// eslint-disable-next-line max-len
-	'./generated-schemas/production-ingredients-request.json' with {type: 'json'};
+	'./generated-schemas/production-request.json' with {type: 'json'};
 import recipe_selection_schema from
 	'./generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
@@ -31,9 +31,9 @@ const ajv = new Ajv({
 ajv.addSchema(recipe_selection_schema);
 
 await writeFile(
-	`${__dirname}/validator/production_ingredients_request_schema.mjs`,
+	`${__dirname}/validator/production_request_schema.mjs`,
 	esmify(standalone(
 		ajv,
-		ajv.compile(production_ingredients_request_schema)
+		ajv.compile(production_request_schema)
 	))
 );

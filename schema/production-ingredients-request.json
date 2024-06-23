@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "production-ingredients-request--meta-schema",
+	"$id": "production-request--meta-schema",
 	"$defs": {
 		"number_arg": {
 			"type": "object",
@@ -41,7 +41,7 @@
 			"type": "string",
 			"const": "https://json-schema.org/draft/2020-12/schema"
 		},
-		"$id": {"type": "string", "const": "production-ingredients-request"},
+		"$id": {"type": "string", "const": "production-request"},
 		"$defs": {
 			"type": "object",
 			"required": [

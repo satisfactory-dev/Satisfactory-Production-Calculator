@@ -22,7 +22,7 @@ run({
 		maybe => (
 			!maybe.includes('production-ingredients-request.spec.ts')
 			&& !maybe.includes('production-chain.spec.ts')
-			&& !maybe.includes('planner-request.spec.ts')
+			&& !maybe.includes('UnrealEngineString.spec.ts')
 			&& !maybe.includes('Numbers.spec.ts')
 			&& !maybe.includes('IntermediaryNumber.spec.ts')
 		)

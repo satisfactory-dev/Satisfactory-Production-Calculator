@@ -17,7 +17,7 @@ import {
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
-} from './lib/planner-request';
+} from './lib/UnrealEngineString';
 import {
 	FGBuildableResourceExtractor,
 // eslint-disable-next-line max-len

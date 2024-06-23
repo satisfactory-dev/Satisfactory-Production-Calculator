@@ -16,7 +16,7 @@ import {
 } from '@signpostmarv/intermediary-number';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import BigNumber from 'bignumber.js';
 import {
 	not_undefined,

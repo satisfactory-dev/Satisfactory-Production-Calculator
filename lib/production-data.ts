@@ -12,7 +12,7 @@ import {
 } from '../generated-types/update8/classes/CoreUObject/FGRecipe';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	FGBuildingDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGBuildingDescriptor';

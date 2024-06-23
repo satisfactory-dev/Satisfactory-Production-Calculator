@@ -7,7 +7,7 @@ import {
 } from "../generated-types/update8/utils/validators";
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	items,
 	resources,

@@ -25,7 +25,7 @@ import {
 } from './amend-itemclass-amount';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';

@@ -13,7 +13,6 @@ import {
 	recipe_selection,
 } from './production-data';
 
-
 export class Request
 {
 	input?: recipe_ingredients_request_output<

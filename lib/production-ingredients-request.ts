@@ -36,7 +36,6 @@ import {
 	poles,
 	production_item,
 	production_set,
-	recipe_selection,
 	recipes,
 	resources,
 	vehicles,
@@ -63,6 +62,9 @@ import {
 	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
 } from './ProductionIngredientsRequest/types';
+import {
+	Request,
+} from './Request';
 
 export class ProductionIngredientsRequest {
 	top_level_only:boolean = false;
@@ -87,7 +89,7 @@ export class ProductionIngredientsRequest {
 	validate(
 		data: unknown
 	) {
-		if (data instanceof ProductionIngredientsRequestTyped) {
+		if (data instanceof Request) {
 			return data.toData();
 		}
 
@@ -977,26 +979,5 @@ export class ProductionIngredientsRequest {
 		}
 
 		return result;
-	}
-}
-
-export class ProductionIngredientsRequestTyped
-{
-	input?: recipe_ingredients_request_output<
-		operand_types
-	>[];
-	pool: {
-		item: keyof typeof recipe_selection_schema['properties'],
-		amount: operand_types,
-	}[] = [];
-	recipe_selection?: recipe_selection;
-
-	toData(): production_ingredients_request<operand_types>
-	{
-		return {
-			input: this.input,
-			recipe_selection: this.recipe_selection,
-			pool: this.pool,
-		};
 	}
 }

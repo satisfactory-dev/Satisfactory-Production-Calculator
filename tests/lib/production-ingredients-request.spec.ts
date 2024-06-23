@@ -8,7 +8,7 @@ import {
 } from '../../lib/production-ingredients-request';
 import {
 	production_ingredients_request_result,
-} from '../../lib/ProductionIngredientsRequest/types';
+} from '../../lib/types';
 import {
 	FGRecipe,
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe';

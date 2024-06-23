@@ -6,13 +6,13 @@ import {
 import BigNumber from 'bignumber.js';
 
 import recipe_selection_schema from
-	'../../generated-schemas/recipe-selection.json' with {type: 'json'};
+	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 
 import {
 	items,
 	production_item,
 	recipe_selection,
-} from '../production-data';
+} from './production-data';
 
 export type production_ingredients_request<
 	T1 extends (

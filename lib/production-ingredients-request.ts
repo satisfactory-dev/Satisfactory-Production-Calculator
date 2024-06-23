@@ -61,7 +61,7 @@ import {
 	production_ingredients_request_result,
 	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
-} from './ProductionIngredientsRequest/types';
+} from './types';
 import {
 	Request,
 } from './Request';

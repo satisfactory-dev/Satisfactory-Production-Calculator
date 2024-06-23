@@ -8,7 +8,7 @@ import recipe_selection_schema from
 import {
 	production_ingredients_request,
 	recipe_ingredients_request_output,
-} from './ProductionIngredientsRequest/types';
+} from './types';
 import {
 	recipe_selection,
 } from './production-data';

@@ -1,7 +1,4 @@
 import {
-	ValidateFunction,
-} from 'ajv/dist/2020';
-import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
@@ -67,38 +64,4 @@ export function UnrealEngineString_right_x_C_suffix(
 	);
 
 	return match[2] as UnrealEngineString_right_x_C_suffix;
-}
-
-export abstract class PlannerRequest<
-	Data = unknown,
-	Result = unknown
-> {
-	protected readonly check:ValidateFunction<Data>;
-
-	constructor(check:ValidateFunction<Data>)
-	{
-		this.check = check;
-	}
-
-	calculate(data:unknown): Result
-	{
-		return this.calculate_validated(this.validate(data));
-	}
-
-	validate(data:unknown): Data
-	{
-		if (!this.check(data)) {
-			throw new NoMatchError(
-				{
-					data,
-					errors: this.check.errors,
-				},
-				'Data not a supported request!'
-			);
-		}
-
-		return data;
-	}
-
-	protected abstract calculate_validated(data:Data): Result;
 }

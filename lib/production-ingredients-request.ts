@@ -15,7 +15,6 @@ import {
 	Numbers,
 } from '@signpostmarv/intermediary-number';
 import {
-	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
 } from './planner-request';
 import BigNumber from 'bignumber.js';
@@ -134,23 +133,24 @@ export type production_ingredients_request_result<
 	surplus?: production_ingredients_request_result_surplus<T>,
 };
 
-export class ProductionIngredientsRequest extends PlannerRequest<
-	production_ingredients_request,
-	production_ingredients_request_result
-> {
+export class ProductionIngredientsRequest {
 	top_level_only:boolean = false;
 
 	private input:production_set<
 		| operand_types
 	> = {};
+	protected readonly check:ValidateFunction<production_ingredients_request>;
 
 	constructor()
 	{
-		super(
-			production_ingredients_request_validator as ValidateFunction<
-				production_ingredients_request
-			>
+		this.check = production_ingredients_request_validator as (
+			ValidateFunction<production_ingredients_request>
 		);
+	}
+
+	calculate(data:unknown): production_ingredients_request_result
+	{
+		return this.calculate_validated(this.validate(data));
 	}
 
 	validate(
@@ -160,7 +160,17 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			return data.toData();
 		}
 
-		return super.validate(data);
+		if (!this.check(data)) {
+			throw new NoMatchError(
+				{
+					data,
+					errors: this.check.errors,
+				},
+				'Data not a supported request!'
+			);
+		}
+
+		return data;
 	}
 
 	protected calculate_precisely(

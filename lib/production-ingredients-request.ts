@@ -17,7 +17,6 @@ import {
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';
-import BigNumber from 'bignumber.js';
 import {
 	not_undefined,
 } from '@satisfactory-clips-archive/custom-assert';
@@ -58,80 +57,12 @@ import {
 } from '@signpostmarv/intermediary-number';
 import Fraction from 'fraction.js';
 
-export type production_ingredients_request<
-	T1 extends (
-		| amount_string
-		| operand_types
-	) = operand_types,
-	T2 extends (
-		| number_arg
-		| operand_types
-	) = operand_types
-> = {
-	input?: recipe_ingredients_request_output<T1>[],
-	recipe_selection?: recipe_selection,
-	pool: {
-		item: keyof typeof recipe_selection_schema['properties'],
-		amount: T2,
-	}[],
-};
-
-export type recipe_ingredients_request_ingredient<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: keyof typeof items,
-	amount: T,
-};
-export type recipe_ingredients_request_output<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: production_item,
-	amount: T,
-};
-
-export type production_ingredients_request_result_surplus<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = [
-	recipe_ingredients_request_output<T>,
-	...recipe_ingredients_request_output<T>[],
-];
-
-export type combined_production_entry<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: production_item,
-	output: T,
-	surplus: T,
-};
-
-export type production_ingredients_request_result<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	ingredients: recipe_ingredients_request_ingredient<T>[],
-	output: recipe_ingredients_request_output<T>[],
-	combined: combined_production_entry<T>[],
-	surplus?: production_ingredients_request_result_surplus<T>,
-};
+import {
+	production_ingredients_request,
+	production_ingredients_request_result,
+	recipe_ingredients_request_ingredient,
+	recipe_ingredients_request_output,
+} from './ProductionIngredientsRequest/types';
 
 export class ProductionIngredientsRequest {
 	top_level_only:boolean = false;

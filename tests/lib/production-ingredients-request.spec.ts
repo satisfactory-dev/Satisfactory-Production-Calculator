@@ -4,9 +4,11 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-	production_ingredients_request_result,
 	ProductionIngredientsRequest,
 } from '../../lib/production-ingredients-request';
+import {
+	production_ingredients_request_result,
+} from '../../lib/ProductionIngredientsRequest/types';
 import {
 	FGRecipe,
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe';

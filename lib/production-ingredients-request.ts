@@ -21,7 +21,7 @@ import {
 import BigNumber from 'bignumber.js';
 import {
 	not_undefined,
-} from '@satisfactory-clips-archive/custom-assert/assert/CustomAssert';
+} from '@satisfactory-clips-archive/custom-assert';
 import {
 	require_non_empty_array,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';

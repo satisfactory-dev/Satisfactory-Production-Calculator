@@ -135,22 +135,41 @@ export class ProductionCalculator {
 			...this.input,
 		};
 
-		const data_input = undefined === data.input
-			? undefined
-			: Object.entries(data.input).map(e => ({
-				item: e[0],
-				amount: e[1],
-			}));
+		let additional_input:production_set<operand_types> = {};
 
-		for (const entry of (surplus || data_input || [])) {
-			if (!(entry.item in input)) {
+		if (undefined !== surplus) {
+			for (const {item, amount} of surplus) {
+				if (!(item in additional_input)) {
+					additional_input[item] = amount;
+				} else {
+					additional_input[item] = additional_input[
+						item
+					].do_math_then_dispose(
+						'plus',
+						amount
+					);
+				}
+			}
+		} else if (undefined !== data.input) {
+			additional_input = Object.fromEntries(
+				Object.entries(data.input).map(
+					(e): [string, operand_types] => [
+						e[0],
+						IntermediaryNumber.reuse_or_create(e[1]),
+					]
+				)
+			);
+		}
+
+		for (const [item, amount] of Object.entries(additional_input)) {
+			if (!(item in input)) {
 				input[
-					entry.item as keyof typeof input
-				] = IntermediaryNumber.reuse_or_create(entry.amount);
+					item as keyof typeof input
+				] = IntermediaryNumber.reuse_or_create(amount);
 			} else {
-				input[entry.item] = input[entry.item].do_math_then_dispose(
+				input[item] = input[item].do_math_then_dispose(
 					'plus',
-					entry.amount
+					amount
 				);
 			}
 		}

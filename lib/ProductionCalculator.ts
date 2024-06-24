@@ -59,7 +59,6 @@ import type {
 	production_request,
 	production_result,
 	production_set,
-	recipe_ingredients_request_ingredient,
 	recipe_ingredients_request_output,
 } from './types';
 import {
@@ -546,18 +545,22 @@ export class ProductionCalculator {
 		const result:production_result<
 			| operand_types
 		> = {
-			ingredients: Object.entries(ingredients).map(e => {
+			ingredients: Object.fromEntries(
+				Object.entries(ingredients).map(
+					(e): [string, operand_types] => {
 				const left_over = e[1].minus(input[e[0]] || 0);
 
-				return {
-					item: e[0],
-					amount: (
+				return [
+					e[0],
+					(
 						left_over.isLessThan(0)
 							? IntermediaryNumber.Zero
 							: left_over
 					),
-				};
-			}).filter(maybe => maybe.amount.isGreaterThan(0)),
+				];
+					}
+				).filter(maybe => maybe[1].isGreaterThan(0))
+			),
 			output: output_entries,
 			combined: Object.values(combined),
 		};
@@ -575,14 +578,7 @@ export class ProductionCalculator {
 		const deferred = this.calculate_validated_deferred(data);
 
 		const result:production_result = {
-			ingredients: deferred.ingredients.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			),
+			ingredients: {...deferred.ingredients},
 			output: deferred.output.map(
 				e => {
 					return {
@@ -639,8 +635,8 @@ export class ProductionCalculator {
 
 		let checking_recursively = this.top_level_only
 			? []
-			: initial_result.ingredients.filter(
-				maybe => !(maybe.item in resources)
+			: Object.entries(initial_result.ingredients).filter(
+				maybe => !(maybe[0] in resources)
 			);
 		const avoid_checking_further = new Set<string>();
 
@@ -654,38 +650,41 @@ export class ProductionCalculator {
 		);
 
 		while (checking_recursively.length > 0) {
-			const when_done:recipe_ingredients_request_ingredient<
+			const when_done:production_set<
 				(
 					| operand_types
 				)
-			>[] = [];
+			> = {};
 
-			for (const check_deeper of checking_recursively) {
+			for (const [
+				check_deeper_item,
+				check_deeper_amount,
+			] of checking_recursively) {
 				assert.strictEqual(
 					(
-						check_deeper.item in recipe_selection_schema[
+						check_deeper_item in recipe_selection_schema[
 							'properties'
 						]
 						|| known_not_sourced_from_recipe.includes(
-							check_deeper.item
+							check_deeper_item
 						)
 						|| known_byproduct.includes(
-							check_deeper.item
+							check_deeper_item
 						)
 					),
 					true,
 					new NoMatchError(
-						check_deeper.item,
-						`Item (${check_deeper.item}) not found in recipe selection!`
+						check_deeper_item,
+						`Item (${check_deeper_item}) not found in recipe selection!`
 					)
 				);
 
 				if (
 					known_not_sourced_from_recipe.includes(
-						check_deeper.item
+						check_deeper_item
 					)
 					|| known_byproduct.includes(
-						check_deeper.item
+						check_deeper_item
 					)
 				) {
 					continue;
@@ -694,25 +693,25 @@ export class ProductionCalculator {
 				let possibly_recursive = false;
 				let recursive_multiplier = new Fraction(1);
 
-				if (check_deeper.item in production_items) {
+				if (check_deeper_item in production_items) {
 					possibly_recursive = Root.is_recursive(
-						check_deeper.item,
+						check_deeper_item,
 						data.recipe_selection || {}
 					);
 
 					if (possibly_recursive) {
 						const lcm = production_items[
-							check_deeper.item
+							check_deeper_item
 						].toFraction().lcm(
-							check_deeper.amount.toFraction()
+							check_deeper_amount.toFraction()
 						);
 
 						const a = production_items[
-							check_deeper.item
+							check_deeper_item
 						].toFraction()
 						const b = (
 							(
-								check_deeper.amount
+								check_deeper_amount
 							)
 						).toFraction();
 						recursive_multiplier = Numbers.sum_series_fraction(
@@ -720,7 +719,7 @@ export class ProductionCalculator {
 							Numbers.divide_if_not_one(b, lcm, true),
 						);
 
-						avoid_checking_further.add(check_deeper.item);
+						avoid_checking_further.add(check_deeper_item);
 					}
 				}
 
@@ -729,13 +728,13 @@ export class ProductionCalculator {
 						...data,
 						pool: [{
 							item: (
-								check_deeper.item as keyof (
+								check_deeper_item as keyof (
 									typeof recipe_selection_schema[
 										'properties'
 									]
 								)
 							),
-							amount: check_deeper.amount.times(
+							amount: check_deeper_amount.times(
 								recursive_multiplier
 							),
 						}],
@@ -745,31 +744,51 @@ export class ProductionCalculator {
 				surplus = deeper_result.surplus || [];
 
 				const self_output = deeper_result.output.find(
-					maybe => maybe.item === check_deeper.item
+					maybe => maybe.item === check_deeper_item
 				);
 
 				not_undefined(self_output);
 
 				self_output.amount = self_output.amount.do_math_then_dispose(
 					'minus',
-					check_deeper.amount
+					check_deeper_amount
 				);
 
-				const maybe_check_further = deeper_result.ingredients.filter(
+				const maybe_check_further = Object.entries(
+					deeper_result.ingredients
+				).filter(
 					maybe => (
-						!(maybe.item in resources)
-						&& !avoid_checking_further.has(maybe.item)
+						!(maybe[0] in resources)
+						&& !avoid_checking_further.has(maybe[0])
 					)
 				);
 
 				if (maybe_check_further.length) {
-					when_done.push(...maybe_check_further);
+					for (
+						const [
+							further_item,
+							further_amount,
+						] of maybe_check_further
+					) {
+						if (further_item in when_done) {
+							when_done[
+								further_item
+							] = when_done[
+								further_item
+							].do_math_then_dispose(
+								'plus',
+								further_amount
+							);
+						} else {
+							when_done[further_item] = further_amount;
+						}
+					}
 				}
 
 				results.push(deeper_result);
 			}
 
-			checking_recursively = when_done;
+			checking_recursively = Object.entries(when_done);
 		}
 
 		const ingredients:{[key: string]: (
@@ -797,15 +816,15 @@ export class ProductionCalculator {
 		);
 
 		for (const entry of results) {
-			for (const ingredient of entry.ingredients) {
-				if (!(ingredient.item in ingredients)) {
-					ingredients[ingredient.item] = ingredient.amount;
+			for (const [item, amount] of Object.entries(entry.ingredients)) {
+				if (!(item in ingredients)) {
+					ingredients[item] = amount;
 				} else {
 					ingredients[
-						ingredient.item
-					] = ingredients[ingredient.item].do_math_then_dispose(
+						item
+					] = ingredients[item].do_math_then_dispose(
 						'plus',
-						ingredient.amount
+						amount
 					);
 				}
 			}
@@ -960,12 +979,7 @@ export class ProductionCalculator {
 		const result:production_result<
 			| operand_types
 		> = {
-			ingredients: Object.entries(ingredients).map(e => {
-				return {
-					item: e[0],
-					amount: e[1],
-				}
-			}),
+			ingredients,
 			output: output_entries_filtered.filter(
 				maybe => !maybe.amount.isZero()
 			),

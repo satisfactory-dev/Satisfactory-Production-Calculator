@@ -32,16 +32,6 @@ export type production_request<
 	}[],
 };
 
-export type recipe_ingredients_request_ingredient<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: keyof typeof items,
-	amount: T,
-};
 export type recipe_ingredients_request_output<
 	T extends (
 		| amount_string
@@ -83,7 +73,7 @@ export type production_result<
 		| operand_types
 	) = operand_types
 > = {
-	ingredients: recipe_ingredients_request_ingredient<T>[],
+	ingredients: production_set<T>,
 	output: recipe_ingredients_request_output<T>[],
 	combined: combined_production_entry<T>[],
 	surplus?: production_result_surplus<T>,
@@ -99,6 +89,8 @@ export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_$
 
 export type production_set<
 	T extends (
+		| amount_string
+		| BigNumber
 		| operand_types
 	) = operand_types
 > = {[key in production_item]: T};

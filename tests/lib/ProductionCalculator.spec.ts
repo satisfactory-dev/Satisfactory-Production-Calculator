@@ -1117,8 +1117,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					],
 					surplus: {
 						Desc_Plastic_C: IntermediaryCalculation.fromString(
-								'(8 + (1/3)) / 100'
-							),
+							'(8 + (1/3)) / 100'
+						),
 					},
 					combined: [
 						{
@@ -1243,7 +1243,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					],
 					surplus: {
 						Desc_IronIngot_C: IntermediaryNumber.create('1.5'),
-						},
+					},
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
@@ -1360,7 +1360,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_IronIngot_C: IntermediaryCalculation.fromString(
 							'1/3'
 						),
-						},
+					},
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',

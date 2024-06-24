@@ -40,8 +40,8 @@ export type combined_production_entry<
 	) = operand_types
 > = {
 	[key: production_item]: {
-	output: T,
-	surplus: T,
+		output: T,
+		surplus: T,
 	}
 };
 

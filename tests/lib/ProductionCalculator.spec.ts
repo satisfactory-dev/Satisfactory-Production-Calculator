@@ -7,6 +7,7 @@ import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator';
 import {
+	production_request,
 	production_result,
 } from '../../lib/types';
 import {
@@ -31,6 +32,7 @@ import {
 // eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 import {
+	amount_string,
 	IntermediaryCalculation,
 	IntermediaryNumber,
 	operand_types,
@@ -38,6 +40,7 @@ import {
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled';
+import BigNumber from 'bignumber.js';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -46,21 +49,34 @@ type flattened_result = {
 };
 
 function flattened_production_ingredients_request_result(
-	input:production_result
+	input:production_result<
+		(
+			| amount_string
+			| BigNumber
+			| operand_types
+		)
+	>
 ) : flattened_result {
 	const calculating:{
 		ingredients: {[key: string]: operand_types},
 		output: {[key: string]: operand_types},
 		surplus: {[key: string]: operand_types},
 	} = {
-		ingredients: input.ingredients,
+		ingredients: Object.fromEntries(
+			Object.entries(input.ingredients).map(e => [
+				e[0],
+				IntermediaryNumber.reuse_or_create(e[1]),
+			])
+		),
 		output: {},
 		surplus: {},
 	};
 
 	for (const entry of input.output) {
 		if (!(entry.item in calculating.output)) {
-			calculating.output[entry.item] = entry.amount;
+			calculating.output[entry.item] = (
+				IntermediaryNumber.reuse_or_create(entry.amount)
+			);
 		} else {
 			calculating.output[
 				entry.item
@@ -72,7 +88,9 @@ function flattened_production_ingredients_request_result(
 
 	for (const entry of input.surplus || []) {
 		if (!(entry.item in calculating.surplus)) {
-			calculating.surplus[entry.item] = entry.amount;
+			calculating.surplus[entry.item] = (
+				IntermediaryNumber.reuse_or_create(entry.amount)
+			);
 		} else {
 
 			calculating.surplus[
@@ -176,7 +194,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						pool: [
 							{
 								item: Desc_C,
-								amount: 1,
+								amount: '1' as amount_string,
 							},
 						],
 					});
@@ -258,16 +276,33 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		};
 
 		const test_cases:[
-			unknown,
-			| false
-			| production_result,
+			production_request<
+				(
+					| amount_string
+					| operand_types
+				),
+				(
+					| amount_string
+					| operand_types
+				)
+			>,
+			(
+				| false
+				| production_result<
+					(
+						| amount_string
+						| BigNumber
+						| operand_types
+					)
+				>
+			)
 		][] = [
 			[
 				{
 					pool: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -295,7 +330,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronRod_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -324,7 +359,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronScrew_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -354,7 +389,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -383,7 +418,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Cement_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -411,7 +446,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_SteelIngot_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -440,7 +475,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -470,7 +505,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_CopperIngot_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -498,7 +533,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Wire_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -527,7 +562,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Cable_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -557,7 +592,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronPlateReinforced_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -589,7 +624,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -622,7 +657,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			[
 				{pool: [{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: 1,
+					amount: '1' as amount_string,
 				}]},
 				result_1,
 			],
@@ -636,14 +671,15 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			[
 				{pool: [{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: '1.000001',
+					amount: '1.000001' as amount_string,
 				}]},
 				result_1000001,
 			],
 			[
 				{pool: [{
 					item: 'Desc_BlueprintDesigner_C',
-					amount: '1.0000001',
+					// not actually amount_string
+					amount: '1.0000001' as amount_string,
 				}]},
 				false,
 			],
@@ -687,7 +723,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			[
 				{pool: [{
 					item: 'Desc_Water_C',
-					amount: '123.456',
+					amount: '123.456' as amount_string,
 				}]},
 				{
 					ingredients: {},
@@ -714,7 +750,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Water_C',
-							amount: '123.456',
+							amount: '123.456' as amount_string,
 						},
 					],
 				},
@@ -768,7 +804,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Cable_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -798,13 +834,13 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					input: [
 						{
 							item: 'Desc_Wire_C',
-							amount: '10',
+							amount: '10' as amount_string,
 						},
 					],
 					pool: [
 						{
 							item: 'Desc_Cable_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -841,13 +877,13 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					input: [
 						{
 							item: 'Desc_OreIron_C',
-							amount: 30,
+							amount: '30' as amount_string,
 						},
 					],
 					pool: [
 						{
 							item: 'Desc_ModularFrame_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -892,7 +928,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_UraniumCell_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -934,7 +970,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_NuclearFuelRod_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -997,7 +1033,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_NuclearWaste_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1066,7 +1102,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_Plastic_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1128,7 +1164,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1176,7 +1212,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1205,13 +1241,13 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					input: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: 3,
+							amount: '3' as amount_string,
 						},
 					],
 					pool: [
 						{
 							item: 'Desc_IronPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1248,7 +1284,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1281,7 +1317,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1318,7 +1354,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					input: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: 3,
+							amount: '3' as amount_string,
 						},
 					],
 					recipe_selection: {
@@ -1327,7 +1363,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					pool: [
 						{
 							item: 'Desc_SteelPlate_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1369,13 +1405,13 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					input: [
 						{
 							item: 'Desc_IronIngot_C',
-							amount: 360,
+							amount: '360' as amount_string,
 						},
 					],
 					pool: [
 						{
 							item: 'Desc_BlueprintDesigner_C',
-							amount: 1,
+							amount: '1' as amount_string,
 						},
 					],
 				},
@@ -1448,7 +1484,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						pool: [
 							{
 								item: Desc_C,
-								amount: 1,
+								amount: '1' as amount_string,
 							},
 						],
 					});

@@ -573,7 +573,7 @@ export class ProductionCalculator {
 					}
 				).filter(maybe => maybe[1].isGreaterThan(0))
 			),
-			output: output_entries,
+			output,
 			combined: Object.values(combined),
 		};
 
@@ -594,14 +594,7 @@ export class ProductionCalculator {
 
 		const result:production_result = {
 			ingredients: {...deferred.ingredients},
-			output: deferred.output.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			),
+			output: deferred.output,
 			combined: deferred.combined.map(
 				e => {
 					return {
@@ -751,13 +744,15 @@ export class ProductionCalculator {
 				);
 				surplus = deeper_result.surplus || {};
 
-				const self_output = deeper_result.output.find(
-					maybe => maybe.item === check_deeper_item
-				);
+				const self_output = deeper_result.output[
+					check_deeper_item
+				];
 
 				not_undefined(self_output);
 
-				self_output.amount = self_output.amount.do_math_then_dispose(
+				deeper_result.output[
+					check_deeper_item
+				] = self_output.do_math_then_dispose(
 					'minus',
 					check_deeper_amount
 				);
@@ -820,15 +815,15 @@ export class ProductionCalculator {
 				}
 			}
 
-			for (const output_entry of entry.output) {
-				if (!(output_entry.item in output)) {
-					output[output_entry.item] = output_entry.amount;
+			for (const [item, amount] of Object.entries(entry.output)) {
+				if (!(item in output)) {
+					output[item] = amount;
 				} else {
 					output[
-						output_entry.item
-					] = output[output_entry.item].do_math_then_dispose(
+						item
+					] = output[item].do_math_then_dispose(
 						'plus',
-						output_entry.amount
+						amount
 					);
 				}
 			}
@@ -901,12 +896,7 @@ export class ProductionCalculator {
 
 		const output_entries_filtered = output_entries.filter(
 			maybe => maybe[1].isGreaterThan(0)
-		).map(e => {
-			return {
-				item: e[0],
-				amount: e[1],
-			};
-		});
+		);
 
 		const surplus_filtered = Object.entries(surplus).filter(
 			maybe => maybe[1].isGreaterThan(0)
@@ -918,18 +908,18 @@ export class ProductionCalculator {
 		});
 
 		const combined = output_entries_filtered.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = {
-						item: is.item,
+			(was, [item, amount]) => {
+				if (!(item in was)) {
+					was[item] = {
+						item: item,
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
 					}
 				}
 
-				was[is.item].output = was[is.item].output.do_math_then_dispose(
+				was[item].output = was[item].output.do_math_then_dispose(
 					'plus',
-					is.amount
+					amount
 				);
 
 				return was;
@@ -971,9 +961,9 @@ export class ProductionCalculator {
 			| operand_types
 		> = {
 			ingredients,
-			output: output_entries_filtered.filter(
-				maybe => !maybe.amount.isZero()
-			),
+			output: Object.fromEntries(output_entries_filtered.filter(
+				maybe => !maybe[1].isZero()
+			)),
 			combined: Object.values(combined),
 		};
 

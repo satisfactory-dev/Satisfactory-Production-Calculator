@@ -43,17 +43,6 @@ export type recipe_ingredients_request_output<
 	amount: T,
 };
 
-export type production_result_surplus<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = [
-	recipe_ingredients_request_output<T>,
-	...recipe_ingredients_request_output<T>[],
-];
-
 export type combined_production_entry<
 	T extends (
 		| amount_string
@@ -76,7 +65,7 @@ export type production_result<
 	ingredients: production_set<T>,
 	output: recipe_ingredients_request_output<T>[],
 	combined: combined_production_entry<T>[],
-	surplus?: production_result_surplus<T>,
+	surplus?: production_set<T>,
 };
 
 export type production_item = keyof (

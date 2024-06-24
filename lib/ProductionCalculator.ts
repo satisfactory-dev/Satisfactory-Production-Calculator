@@ -21,9 +21,6 @@ import {
 	not_undefined,
 } from '@satisfactory-clips-archive/custom-assert';
 import {
-	require_non_empty_array,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
-import {
 	ammo,
 	biomass,
 	buildings,
@@ -59,7 +56,6 @@ import type {
 	production_request,
 	production_result,
 	production_set,
-	recipe_ingredients_request_output,
 } from './types';
 import {
 	Request,
@@ -116,9 +112,9 @@ export class ProductionCalculator {
 				| operand_types
 			)
 		>,
-		surplus?:recipe_ingredients_request_output<
+		surplus?:production_set<
 			| operand_types
-		>[]
+		>
 	): production_result<
 		| operand_types
 	> {
@@ -138,18 +134,7 @@ export class ProductionCalculator {
 		let additional_input:production_set<operand_types> = {};
 
 		if (undefined !== surplus) {
-			for (const {item, amount} of surplus) {
-				if (!(item in additional_input)) {
-					additional_input[item] = amount;
-				} else {
-					additional_input[item] = additional_input[
-						item
-					].do_math_then_dispose(
-						'plus',
-						amount
-					);
-				}
-			}
+			additional_input = surplus;
 		} else if (undefined !== data.input) {
 			additional_input = Object.fromEntries(
 				Object.entries(data.input).map(
@@ -593,7 +578,10 @@ export class ProductionCalculator {
 		};
 
 		if (surplus_entries.length > 0) {
-			result.surplus = require_non_empty_array(surplus_entries);
+			result.surplus = Object.fromEntries(surplus_entries.map(e => [
+				e.item,
+				e.amount,
+			]));
 		}
 
 		return result;
@@ -627,14 +615,7 @@ export class ProductionCalculator {
 
 		if ('surplus' in deferred) {
 			not_undefined(deferred.surplus);
-			result.surplus = require_non_empty_array(deferred.surplus.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			))
+			result.surplus = deferred.surplus;
 		}
 
 		return result;
@@ -656,9 +637,9 @@ export class ProductionCalculator {
 	> {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
-		let surplus:recipe_ingredients_request_output<
+		let surplus:production_set<
 			| operand_types
-		>[] = initial_result.surplus || [];
+		> = initial_result.surplus || {};
 
 		let checking_recursively = this.top_level_only
 			? []
@@ -768,7 +749,7 @@ export class ProductionCalculator {
 					},
 					surplus
 				);
-				surplus = deeper_result.surplus || [];
+				surplus = deeper_result.surplus || {};
 
 				const self_output = deeper_result.output.find(
 					maybe => maybe.item === check_deeper_item
@@ -824,23 +805,6 @@ export class ProductionCalculator {
 		const output:{[key: string]: (
 			| operand_types
 		)} = {};
-		const surplus_map = surplus.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = is.amount;
-				} else {
-					was[is.item] = was[is.item].do_math_then_dispose(
-						'plus',
-						is.amount
-					);
-				}
-
-				return was;
-			},
-			{} as {[key: string]: (
-				| operand_types
-			)}
-		);
 
 		for (const entry of results) {
 			for (const [item, amount] of Object.entries(entry.ingredients)) {
@@ -902,10 +866,10 @@ export class ProductionCalculator {
 					entry[1]
 				)
 			) {
-				if (!(entry[0] in surplus_map)) {
-					surplus_map[entry[0]] = output[entry[0]].minus(entry[1]);
+				if (!(entry[0] in surplus)) {
+					surplus[entry[0]] = output[entry[0]].minus(entry[1]);
 				} else {
-					surplus_map[entry[0]] = surplus_map[
+					surplus[entry[0]] = surplus[
 						entry[0]
 					].do_math_then_dispose(
 						'plus',
@@ -944,7 +908,7 @@ export class ProductionCalculator {
 			};
 		});
 
-		const surplus_filtered = Object.entries(surplus_map).filter(
+		const surplus_filtered = Object.entries(surplus).filter(
 			maybe => maybe[1].isGreaterThan(0)
 		).map(e => {
 			return {
@@ -1014,8 +978,11 @@ export class ProductionCalculator {
 		};
 
 		if (surplus_filtered.length > 0) {
-			result.surplus = require_non_empty_array(
-				surplus_filtered
+			result.surplus = Object.fromEntries(
+				surplus_filtered.map(e => [
+					e.item,
+					e.amount,
+				])
 			);
 		}
 

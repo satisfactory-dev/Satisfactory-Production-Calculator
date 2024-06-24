@@ -86,18 +86,18 @@ function flattened_production_ingredients_request_result(
 		}
 	}
 
-	for (const entry of input.surplus || []) {
-		if (!(entry.item in calculating.surplus)) {
-			calculating.surplus[entry.item] = (
-				IntermediaryNumber.reuse_or_create(entry.amount)
+	for (const [item, amount] of Object.entries(input.surplus || {})) {
+		if (!(item in calculating.surplus)) {
+			calculating.surplus[item] = (
+				IntermediaryNumber.reuse_or_create(amount)
 			);
 		} else {
 
 			calculating.surplus[
-				entry.item
+				item
 			] = calculating.surplus[
-				entry.item
-			].plus(entry.amount);
+				item
+			].plus(amount);
 		}
 	}
 
@@ -849,12 +849,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							amount: IntermediaryNumber.create('1'),
 						},
 					],
-					surplus: [
-						{
-							item: 'Desc_Wire_C',
-							amount: IntermediaryNumber.create('8'),
-						},
-					],
+					surplus: {
+						Desc_Wire_C: IntermediaryNumber.create('8'),
+					},
 					combined: [
 						{
 							item: 'Desc_Cable_C',
@@ -897,12 +894,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							amount: IntermediaryNumber.create('1'),
 						},
 					],
-					surplus: [
-						{
-							item: 'Desc_OreIron_C',
-							amount: IntermediaryNumber.create('6'),
-						},
-					],
+					surplus: {
+						Desc_OreIron_C: IntermediaryNumber.create('6'),
+					},
 					combined: [
 						{
 							item: 'Desc_ModularFrame_C',
@@ -1121,14 +1115,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							amount: IntermediaryNumber.create('0.75'),
 						},
 					],
-					surplus: [
-						{
-							item: 'Desc_Plastic_C',
-							amount: IntermediaryCalculation.fromString(
+					surplus: {
+						Desc_Plastic_C: IntermediaryCalculation.fromString(
 								'(8 + (1/3)) / 100'
 							),
-						},
-					],
+					},
 					combined: [
 						{
 							item: 'Desc_Plastic_C',
@@ -1250,12 +1241,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							amount: IntermediaryNumber.create('1'),
 						},
 					],
-					surplus: [
-						{
-							item: 'Desc_IronIngot_C',
-							amount: IntermediaryNumber.create('1.5'),
+					surplus: {
+						Desc_IronIngot_C: IntermediaryNumber.create('1.5'),
 						},
-					],
 					combined: [
 						{
 							item: 'Desc_IronPlate_C',
@@ -1368,12 +1356,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							amount: IntermediaryNumber.create('1'),
 						},
 					],
-					surplus: [
-						{
-							item: 'Desc_IronIngot_C',
-							amount: IntermediaryCalculation.fromString('1/3'),
+					surplus: {
+						Desc_IronIngot_C: IntermediaryCalculation.fromString(
+							'1/3'
+						),
 						},
-					],
 					combined: [
 						{
 							item: 'Desc_SteelPlate_C',

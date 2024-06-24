@@ -244,14 +244,13 @@
 			"properties": {
 				"input": {
 					"type": "object",
-					"required": ["type", "minItems", "uniqueItems", "items"],
-					"additionalProperties": false,
-					"properties": {
-						"type": {"type": "string", "const": "array"},
-						"minItems": {"type": "integer", "const": 1},
-						"uniqueItems": {"type": "boolean", "const": true},
-						"items": {
-							"$ref": "#/$defs/item_amount_object"
+					"const": {
+						"type": "object",
+						"minProperties": 1,
+						"patternProperties": {
+							"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+								"$ref": "#/$defs/number_arg"
+							}
 						}
 					}
 				},

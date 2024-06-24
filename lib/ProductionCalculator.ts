@@ -134,7 +134,15 @@ export class ProductionCalculator {
 		} = {
 			...this.input,
 		};
-		for (const entry of (surplus || data.input || [])) {
+
+		const data_input = undefined === data.input
+			? undefined
+			: Object.entries(data.input).map(e => ({
+				item: e[0],
+				amount: e[1],
+			}));
+
+		for (const entry of (surplus || data_input || [])) {
 			if (!(entry.item in input)) {
 				input[
 					entry.item as keyof typeof input

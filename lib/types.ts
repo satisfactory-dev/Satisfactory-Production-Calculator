@@ -24,7 +24,7 @@ export type production_request<
 		| operand_types
 	) = operand_types
 > = {
-	input?: recipe_ingredients_request_output<T1>[],
+	input?: production_set<T1>,
 	recipe_selection?: recipe_selection,
 	pool: {
 		item: keyof typeof recipe_selection_schema['properties'],

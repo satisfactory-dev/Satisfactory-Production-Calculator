@@ -394,11 +394,12 @@ const production_request = {
 	},
 	properties: {
 		input: {
-			type: 'array',
-			minItems: 1,
-			uniqueItems: true,
-			items: {
-				$ref: '#/$defs/item_amount_object',
+			type: 'object',
+			minProperties: 1,
+			patternProperties: {
+				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+					$ref: '#/$defs/number_arg',
+				},
 			},
 		},
 		recipe_selection: {

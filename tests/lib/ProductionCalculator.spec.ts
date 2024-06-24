@@ -831,12 +831,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			],
 			[
 				{
-					input: [
-						{
-							item: 'Desc_Wire_C',
-							amount: '10' as amount_string,
-						},
-					],
+					input: {
+						Desc_Wire_C: '10' as amount_string,
+					},
 					pool: [
 						{
 							item: 'Desc_Cable_C',
@@ -874,12 +871,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			],
 			[
 				{
-					input: [
-						{
-							item: 'Desc_OreIron_C',
-							amount: '30' as amount_string,
-						},
-					],
+					input: {
+						Desc_OreIron_C: '30' as amount_string,
+					},
 					pool: [
 						{
 							item: 'Desc_ModularFrame_C',
@@ -1238,12 +1232,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			],
 			[
 				{
-					input: [
-						{
-							item: 'Desc_IronIngot_C',
-							amount: '3' as amount_string,
-						},
-					],
+					input: {
+						Desc_IronIngot_C: '3' as amount_string,
+					},
 					pool: [
 						{
 							item: 'Desc_IronPlate_C',
@@ -1351,12 +1342,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			],
 			[
 				{
-					input: [
-						{
-							item: 'Desc_IronIngot_C',
-							amount: '3' as amount_string,
-						},
-					],
+					input: {
+						Desc_IronIngot_C: '3' as amount_string,
+					},
 					recipe_selection: {
 						Desc_SteelIngot_C: 'Recipe_Alternate_IngotSteel_1_C',
 					},
@@ -1402,12 +1390,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			],
 			[
 				{
-					input: [
-						{
-							item: 'Desc_IronIngot_C',
-							amount: '360' as amount_string,
-						},
-					],
+					input: {
+						Desc_IronIngot_C: '360' as amount_string,
+					},
 					pool: [
 						{
 							item: 'Desc_BlueprintDesigner_C',

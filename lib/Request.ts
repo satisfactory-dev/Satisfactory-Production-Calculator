@@ -7,15 +7,15 @@ import recipe_selection_schema from
 
 import type {
 	production_request,
-	recipe_ingredients_request_output,
+	production_set,
 	recipe_selection,
 } from './types';
 
 export class Request
 {
-	input?: recipe_ingredients_request_output<
+	input?: production_set<
 		operand_types
-	>[];
+	>;
 	pool: {
 		item: keyof typeof recipe_selection_schema['properties'],
 		amount: operand_types,

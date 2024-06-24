@@ -39,9 +39,10 @@ export type combined_production_entry<
 		| operand_types
 	) = operand_types
 > = {
-	item: production_item,
+	[key: production_item]: {
 	output: T,
 	surplus: T,
+	}
 };
 
 export type production_result<
@@ -53,7 +54,7 @@ export type production_result<
 > = {
 	ingredients: production_set<T>,
 	output: production_set<T>,
-	combined: combined_production_entry<T>[],
+	combined: combined_production_entry<T>,
 	surplus?: production_set<T>,
 };
 

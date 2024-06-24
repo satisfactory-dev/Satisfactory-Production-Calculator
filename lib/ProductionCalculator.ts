@@ -52,6 +52,7 @@ import {
 import Fraction from 'fraction.js';
 
 import type {
+	combined_production_entry,
 	production_item,
 	production_request,
 	production_result,
@@ -512,7 +513,6 @@ export class ProductionCalculator {
 			(was, is) => {
 				if (!(is.item in was)) {
 					was[is.item] = {
-						item: is.item,
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
 					}
@@ -529,7 +529,6 @@ export class ProductionCalculator {
 				(was, is) => {
 					if (!(is.item in was)) {
 						was[is.item] = {
-							item: is.item,
 							output: IntermediaryNumber.Zero,
 							surplus: IntermediaryNumber.Zero,
 						}
@@ -544,13 +543,7 @@ export class ProductionCalculator {
 
 					return was;
 				},
-				{} as {
-					[key in production_item]: {
-						item: production_item,
-						output: operand_types,
-						surplus: operand_types,
-					}
-				}
+				{} as combined_production_entry<operand_types>
 			)
 		);
 
@@ -574,7 +567,7 @@ export class ProductionCalculator {
 				).filter(maybe => maybe[1].isGreaterThan(0))
 			),
 			output,
-			combined: Object.values(combined),
+			combined,
 		};
 
 		if (surplus_entries.length > 0) {
@@ -595,15 +588,7 @@ export class ProductionCalculator {
 		const result:production_result = {
 			ingredients: {...deferred.ingredients},
 			output: deferred.output,
-			combined: deferred.combined.map(
-				e => {
-					return {
-						item: e.item,
-						output: e.output,
-						surplus: e.surplus,
-					};
-				}
-			),
+			combined: deferred.combined,
 		};
 
 		if ('surplus' in deferred) {
@@ -964,7 +949,7 @@ export class ProductionCalculator {
 			output: Object.fromEntries(output_entries_filtered.filter(
 				maybe => !maybe[1].isZero()
 			)),
-			combined: Object.values(combined),
+			combined,
 		};
 
 		if (surplus_filtered.length > 0) {

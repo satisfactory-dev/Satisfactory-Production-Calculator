@@ -228,13 +228,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			output: {
 				Desc_BlueprintDesigner_C: IntermediaryNumber.create('1'),
 			},
-			combined: [
-				{
-					item: 'Desc_BlueprintDesigner_C',
+			combined: {
+				Desc_BlueprintDesigner_C: {
 					output: IntermediaryNumber.create('1'),
 					surplus: IntermediaryNumber.create('0'),
 				},
-			],
+			},
 		};
 		const result_1000001:production_result = {
 			ingredients: {
@@ -262,13 +261,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					'1.000001'
 				),
 			},
-			combined: [
-				{
-					item: 'Desc_BlueprintDesigner_C',
+			combined: {
+				Desc_BlueprintDesigner_C: {
 					output: IntermediaryNumber.create('1.000001'),
 					surplus: IntermediaryNumber.create('0'),
 				},
-			],
+			},
 		};
 
 		const test_cases:[
@@ -309,13 +307,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_IronIngot_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronIngot_C',
+					combined: {
+						Desc_IronIngot_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -335,13 +332,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_IronRod_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronRod_C',
+					combined: {
+						Desc_IronRod_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -362,13 +358,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_IronScrew_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronScrew_C',
+					combined: {
+						Desc_IronScrew_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -388,13 +383,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_IronPlate_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronPlate_C',
+					combined: {
+						Desc_IronPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -413,13 +407,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Cement_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_Cement_C',
+					combined: {
+						Desc_Cement_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -439,13 +432,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_SteelIngot_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_SteelIngot_C',
+					combined: {
+						Desc_SteelIngot_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -466,13 +458,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_SteelPlate_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_SteelPlate_C',
+					combined: {
+						Desc_SteelPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -491,13 +482,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_CopperIngot_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_CopperIngot_C',
+					combined: {
+						Desc_CopperIngot_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -517,13 +507,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Wire_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_Wire_C',
+					combined: {
+						Desc_Wire_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -544,13 +533,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Cable_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_Cable_C',
+					combined: {
+						Desc_Cable_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -575,13 +563,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'1'
 						),
 					},
-					combined: [
-						{
-							item: 'Desc_IronPlateReinforced_C',
+					combined: {
+						Desc_IronPlateReinforced_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -607,13 +594,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_ModularFrame_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_ModularFrame_C',
+					combined: {
+						Desc_ModularFrame_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -664,18 +650,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'0.5'
 						),
 					},
-					combined: [
-						{
-							item: 'Desc_Plastic_C',
+					combined: {
+						Desc_Plastic_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_HeavyOilResidue_C',
+						Desc_HeavyOilResidue_C: {
 							output: IntermediaryNumber.create('0.5'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -688,13 +672,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Water_C: IntermediaryNumber.create('123.456'),
 					},
-					combined: [
-						{
-							item: 'Desc_Water_C',
+					combined: {
+						Desc_Water_C: {
 							output: IntermediaryNumber.create('123.456'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -730,23 +713,20 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'30.864'
 						),
 					},
-					combined: [
-						{
-							item: 'Desc_Water_C',
+					combined: {
+						Desc_Water_C: {
 							output: IntermediaryNumber.create('123.456'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_FluidCanister_C',
+						Desc_FluidCanister_C: {
 							output: IntermediaryNumber.create('123.456'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_HeavyOilResidue_C',
+						Desc_HeavyOilResidue_C: {
 							output: IntermediaryNumber.create('30.864'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -767,13 +747,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Cable_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_Cable_C',
+					combined: {
+						Desc_Cable_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -796,18 +775,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					surplus: {
 						Desc_Wire_C: IntermediaryNumber.create('8'),
 					},
-					combined: [
-						{
-							item: 'Desc_Cable_C',
+					combined: {
+						Desc_Cable_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_Wire_C',
+						Desc_Wire_C: {
 							output: IntermediaryNumber.create('0'),
 							surplus: IntermediaryNumber.create('1'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -838,18 +815,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					surplus: {
 						Desc_OreIron_C: IntermediaryNumber.create('6'),
 					},
-					combined: [
-						{
-							item: 'Desc_ModularFrame_C',
+					combined: {
+						Desc_ModularFrame_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_OreIron_C',
+						Desc_OreIron_C: {
 							output: IntermediaryNumber.create('0'),
 							surplus: IntermediaryNumber.create('6'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -874,18 +849,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_UraniumCell_C: IntermediaryNumber.create('1'),
 						Desc_SulfuricAcid_C: IntermediaryNumber.create('0.4'),
 					},
-					combined: [
-						{
-							item: 'Desc_UraniumCell_C',
+					combined: {
+						Desc_UraniumCell_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_SulfuricAcid_C',
+						Desc_SulfuricAcid_C: {
 							output: IntermediaryNumber.create('0.4'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -931,18 +904,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_NuclearFuelRod_C: IntermediaryNumber.create('1'),
 						Desc_SulfuricAcid_C: IntermediaryNumber.create('20'),
 					},
-					combined: [
-						{
-							item: 'Desc_NuclearFuelRod_C',
+					combined: {
+						Desc_NuclearFuelRod_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_SulfuricAcid_C',
+						Desc_SulfuricAcid_C: {
 							output: IntermediaryNumber.create('20'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -990,18 +961,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_NuclearWaste_C: IntermediaryNumber.create('1'),
 						Desc_SulfuricAcid_C: IntermediaryNumber.create('0.4'),
 					},
-					combined: [
-						{
-							item: 'Desc_NuclearWaste_C',
+					combined: {
+						Desc_NuclearWaste_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_SulfuricAcid_C',
+						Desc_SulfuricAcid_C: {
 							output: IntermediaryNumber.create('0.4'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1037,23 +1006,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'(8 + (1/3)) / 100'
 						),
 					},
-					combined: [
-						{
-							item: 'Desc_Plastic_C',
-							output: IntermediaryNumber.create('1'),
-							surplus: IntermediaryNumber.create('0'),
-						},
-						{
-							item: 'Desc_PolymerResin_C',
+					combined: {
+						Desc_PolymerResin_C: {
 							output: IntermediaryNumber.create('0.75'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_Plastic_C',
-							output: IntermediaryNumber.create('0'),
+						Desc_Plastic_C: {
+							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0.083334'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1089,18 +1051,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_IronPlate_C: IntermediaryNumber.create('1'),
 						Desc_PolymerResin_C: IntermediaryNumber.create('0.1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronPlate_C',
+					combined: {
+						Desc_IronPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_PolymerResin_C',
+						Desc_PolymerResin_C: {
 							output: IntermediaryNumber.create('0.1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1120,13 +1080,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_IronPlate_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronPlate_C',
+					combined: {
+						Desc_IronPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1149,18 +1108,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					surplus: {
 						Desc_IronIngot_C: IntermediaryNumber.create('1.5'),
 					},
-					combined: [
-						{
-							item: 'Desc_IronPlate_C',
+					combined: {
+						Desc_IronPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_IronIngot_C',
+						Desc_IronIngot_C: {
 							output: IntermediaryNumber.create('0'),
 							surplus: IntermediaryNumber.create('1.5'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1181,13 +1138,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_SteelPlate_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_SteelPlate_C',
+					combined: {
+						Desc_SteelPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1218,13 +1174,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_SteelPlate_C: IntermediaryNumber.create('1'),
 					},
-					combined: [
-						{
-							item: 'Desc_SteelPlate_C',
+					combined: {
+						Desc_SteelPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1257,18 +1212,16 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'1/3'
 						),
 					},
-					combined: [
-						{
-							item: 'Desc_SteelPlate_C',
+					combined: {
+						Desc_SteelPlate_C: {
 							output: IntermediaryNumber.create('1'),
 							surplus: IntermediaryNumber.create('0'),
 						},
-						{
-							item: 'Desc_IronIngot_C',
+						Desc_IronIngot_C: {
 							output: IntermediaryNumber.create('0'),
 							surplus: IntermediaryCalculation.fromString('1/3'),
 						},
-					],
+					},
 				},
 			],
 			[
@@ -1301,13 +1254,17 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						)
 					),
 					output: result_1.output,
-					combined: Object.entries(result_1.output).map(e => {
-						return {
-							item: e[0],
-							output: e[1],
-							surplus: IntermediaryNumber.Zero,
-						};
-					}),
+					combined: Object.fromEntries(
+						Object.entries(result_1.output).map(e => {
+							return [
+								e[0],
+								{
+									output: e[1],
+									surplus: IntermediaryNumber.Zero,
+								},
+							];
+						})
+					),
 				},
 			],
 		];

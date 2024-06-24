@@ -548,16 +548,16 @@ export class ProductionCalculator {
 			ingredients: Object.fromEntries(
 				Object.entries(ingredients).map(
 					(e): [string, operand_types] => {
-				const left_over = e[1].minus(input[e[0]] || 0);
+						const left_over = e[1].minus(input[e[0]] || 0);
 
-				return [
-					e[0],
-					(
-						left_over.isLessThan(0)
-							? IntermediaryNumber.Zero
-							: left_over
-					),
-				];
+						return [
+							e[0],
+							(
+								left_over.isLessThan(0)
+									? IntermediaryNumber.Zero
+									: left_over
+							),
+						];
 					}
 				).filter(maybe => maybe[1].isGreaterThan(0))
 			),

@@ -1138,8 +1138,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							'2/3'
 						),
 						Desc_LiquidFuel_C: IntermediaryCalculation.fromString(
-								'(1 + (1/3))/10'
-							),
+							'(1 + (1/3))/10'
+						),
 						Desc_LiquidOil_C: IntermediaryNumber.create('0.2'),
 						Desc_OreIron_C: IntermediaryCalculation.fromString(
 							'2/3'
@@ -1289,14 +1289,14 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					ingredients: {
 						Desc_SteelIngot_C: IntermediaryNumber.create('4'),
 						Desc_IronIngot_C: IntermediaryCalculation.fromString(
-								'2 + (2/3)'
-							),
+							'2 + (2/3)'
+						),
 						Desc_OreIron_C: IntermediaryCalculation.fromString(
-								'2 + (2/3)'
-							),
+							'2 + (2/3)'
+						),
 						Desc_Coal_C: IntermediaryCalculation.fromString(
-								'2 + (2/3)'
-							),
+							'2 + (2/3)'
+						),
 					},
 					output: [
 						{
@@ -1335,8 +1335,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					ingredients: {
 						Desc_SteelIngot_C: IntermediaryNumber.create('4'),
 						Desc_Coal_C: IntermediaryCalculation.fromString(
-								'2 + (2/3)'
-							),
+							'2 + (2/3)'
+						),
 					},
 					output: [
 						{
@@ -1383,17 +1383,17 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					ingredients: Object.fromEntries(
 						Object.entries(result_1.ingredients).filter(
 							(maybe) => 'Desc_IronIngot_C' !== maybe[0]
-					).map(
-						(ingredient) => {
+						).map(
+							(ingredient) => {
 								if (ingredient[0] === 'Desc_OreIron_C') {
 									return [
 										'Desc_OreIron_C',
 										IntermediaryNumber.create('400'),
 									];
-							}
+								}
 
-							return ingredient;
-						}
+								return ingredient;
+							}
 						)
 					),
 					output: result_1.output,

@@ -116,8 +116,8 @@
 								"enum": {
 									"type": "array",
 									"items": {
-												"type": "string",
-												"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
+										"type": "string",
+										"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
 									}
 								}
 							}
@@ -125,7 +125,7 @@
 						"additionalProperties": {
 							"type": "object",
 							"const": {
-									"$ref": "#/$defs/number_arg"
+								"$ref": "#/$defs/number_arg"
 							}
 						}
 					}
@@ -239,7 +239,7 @@
 				"pool": {
 					"type": "object",
 					"const": {
-							"$ref": "#/$defs/item_amount_object"
+						"$ref": "#/$defs/item_amount_object"
 					}
 				}
 			}

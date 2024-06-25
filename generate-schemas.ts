@@ -325,11 +325,11 @@ const production_request = {
 			propertyNames: {
 				type: 'string',
 				enum: Object.keys(recipe_selection_enums).sort((a, b) => {
-						return a.localeCompare(b);
+					return a.localeCompare(b);
 				}),
 			},
 			additionalProperties: {
-					$ref: '#/$defs/number_arg',
+				$ref: '#/$defs/number_arg',
 			},
 		},
 		IntermediaryNumber: {
@@ -402,7 +402,7 @@ const production_request = {
 			$ref: 'recipe-selection',
 		},
 		pool: {
-				$ref: '#/$defs/item_amount_object',
+			$ref: '#/$defs/item_amount_object',
 		},
 	},
 };

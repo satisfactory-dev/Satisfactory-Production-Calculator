@@ -104,10 +104,7 @@
 						},
 						"propertyNames": {
 							"type": "object",
-							"required": [
-								"type",
-								"enum"
-							],
+							"required": ["type", "enum"],
 							"properties": {
 								"type": {
 									"type": "string",

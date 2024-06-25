@@ -41,6 +41,9 @@ import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled';
 import BigNumber from 'bignumber.js';
+import {
+	Request,
+} from '../../lib/Request';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -1203,6 +1206,50 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 							)
 						);
 					}
+				}
+			)
+
+			if (false === expectation) {
+				continue;
+			}
+
+			void it(
+				`behaves with a typed version of ${
+					JSON.stringify(data)
+				}`,
+				() => {
+					const request = new Request<
+						| amount_string
+						| operand_types
+					>();
+
+					request.input = data.input;
+					request.pool = data.pool;
+					request.recipe_selection = data.recipe_selection;
+
+
+					const get_result = () => instance.validate(
+						request
+					);
+					assert.doesNotThrow(get_result);
+
+					assert.deepEqual(
+						flattened_production_ingredients_request_result(
+							instance.calculate(request)
+						),
+						flattened_production_ingredients_request_result(
+							expectation
+						)
+					);
+
+					assert.deepEqual(
+						flattened_production_ingredients_request_result(
+							instance.calculate(request.toData())
+						),
+						flattened_production_ingredients_request_result(
+							expectation
+						)
+					);
 				}
 			)
 		}

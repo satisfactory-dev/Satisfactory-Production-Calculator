@@ -57,6 +57,7 @@ import type {
 	production_request,
 	production_result,
 	production_set,
+	recipe_selection_schema_key,
 } from './types';
 import {
 	Request,
@@ -166,9 +167,8 @@ export class ProductionCalculator {
 			)]: operand_types;
 		} = {};
 
-		for (const entry of data.pool) {
-			const {item: production, amount:output_amount} = entry;
-			let amount = IntermediaryNumber.reuse_or_create(entry.amount);
+		for (const [production, output_amount] of Object.entries(data.pool)) {
+			let amount = IntermediaryNumber.reuse_or_create(output_amount);
 			let amount_from_input:(
 				| operand_types
 			);
@@ -203,7 +203,9 @@ export class ProductionCalculator {
 			const recipe = (
 				data.recipe_selection && production in data.recipe_selection
 					? data.recipe_selection[production]
-					: recipe_selection_schema.properties[production].default
+					: recipe_selection_schema.properties[
+						production as recipe_selection_schema_key
+					].default
 			);
 
 			if (undefined === recipes[recipe]) {
@@ -250,9 +252,9 @@ export class ProductionCalculator {
 					}
 
 					output[
-						production as keyof typeof resources
+						production
 					] = output[
-						production as keyof typeof resources
+						production
 					].do_math_then_dispose(
 						'plus',
 						amount
@@ -287,9 +289,9 @@ export class ProductionCalculator {
 				);
 
 				output[
-					production as keyof typeof resources
+					production
 				] = output[
-					production as keyof typeof resources
+					production
 				].do_math_then_dispose(
 					'plus',
 					amount
@@ -606,7 +608,7 @@ export class ProductionCalculator {
 				| operand_types
 			),
 			(
-				| number_arg
+				| amount_string
 				| operand_types
 			)
 		>
@@ -627,10 +629,10 @@ export class ProductionCalculator {
 		const avoid_checking_further = new Set<string>();
 
 		const production_items = Object.fromEntries(
-			data.pool.map(e => [
-				e.item,
+			Object.entries(data.pool).map(e => [
+				e[0],
 				(
-					IntermediaryNumber.reuse_or_create(e.amount)
+					IntermediaryNumber.reuse_or_create(e[1])
 				),
 			])
 		);
@@ -709,21 +711,16 @@ export class ProductionCalculator {
 					}
 				}
 
+				const deeper_result_pool:production_request['pool'] = {
+					[check_deeper_item]: check_deeper_amount.times(
+						recursive_multiplier
+					),
+				};
+
 				const deeper_result = this.calculate_precisely(
 					{
 						...data,
-						pool: [{
-							item: (
-								check_deeper_item as keyof (
-									typeof recipe_selection_schema[
-										'properties'
-									]
-								)
-							),
-							amount: check_deeper_amount.times(
-								recursive_multiplier
-							),
-						}],
+						pool: deeper_result_pool,
 					},
 					surplus
 				);
@@ -814,27 +811,7 @@ export class ProductionCalculator {
 			}
 		}
 
-		const production_map = data.pool.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.reuse_or_create(
-						is.amount
-					);
-				} else {
-					was[is.item] = was[is.item].do_math_then_dispose(
-						'plus',
-						is.amount
-					);
-				}
-
-				return was;
-			},
-			{} as {[key: string]: (
-				| operand_types
-			)}
-		);
-
-		for (const entry of Object.entries(production_map)) {
+		for (const entry of Object.entries(data.pool)) {
 			assert.strictEqual(
 				entry[0] in output,
 				true,
@@ -857,7 +834,9 @@ export class ProductionCalculator {
 					);
 				}
 
-				output[entry[0]] = entry[1];
+				output[entry[0]] = IntermediaryNumber.reuse_or_create(
+					entry[1]
+				);
 			}
 		}
 

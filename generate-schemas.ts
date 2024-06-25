@@ -322,18 +322,14 @@ const production_request = {
 		},
 		item_amount_object: {
 			type: 'object',
-			required: ['item', 'amount'],
-			additionalProperties: false,
-			properties: {
-				item: {
-					type: 'string',
-					enum: Object.keys(recipe_selection_enums).sort((a, b) => {
+			propertyNames: {
+				type: 'string',
+				enum: Object.keys(recipe_selection_enums).sort((a, b) => {
 						return a.localeCompare(b);
-					}),
-				},
-				amount: {
+				}),
+			},
+			additionalProperties: {
 					$ref: '#/$defs/number_arg',
-				},
 			},
 		},
 		IntermediaryNumber: {
@@ -406,11 +402,7 @@ const production_request = {
 			$ref: 'recipe-selection',
 		},
 		pool: {
-			type: 'array',
-			minItems: 1,
-			items: {
 				$ref: '#/$defs/item_amount_object',
-			},
 		},
 	},
 };

@@ -12,17 +12,6 @@
 					"const": "#/$defs/number_arg"
 				}
 			}
-		},
-		"item_amount_object": {
-			"type": "object",
-			"required": ["$ref"],
-			"additionalProperties": false,
-			"properties": {
-				"$ref": {
-					"type": "string",
-					"const": "#/$defs/item_amount_object"
-				}
-			}
 		}
 	},
 	"type": "object",
@@ -105,49 +94,38 @@
 					"type": "object",
 					"required": [
 						"type",
-						"required",
-						"additionalProperties",
-						"properties"
+						"propertyNames",
+						"additionalProperties"
 					],
-					"additionalProperties": false,
 					"properties": {
-						"type": {"type": "string", "const": "object"},
-						"required": {
-							"type": "array",
-							"const": ["item", "amount"]
+						"type": {
+							"type": "string",
+							"const": "object"
 						},
-						"additionalProperties": {
-							"type": "boolean",
-							"const": false
-						},
-						"properties": {
+						"propertyNames": {
 							"type": "object",
-							"required": ["item", "amount"],
-							"additionalProperties": false,
+							"required": [
+								"type",
+								"enum"
+							],
 							"properties": {
-								"item": {
-									"type": "object",
-									"required": ["type", "enum"],
-									"additionalProperties": false,
-									"properties": {
-										"type": {
-											"type": "string",
-											"const": "string"
-										},
-										"enum": {
-											"type": "array",
-											"minItems": 1,
-											"uniqueItems": true,
-											"items": {
+								"type": {
+									"type": "string",
+									"const": "string"
+								},
+								"enum": {
+									"type": "array",
+									"items": {
 												"type": "string",
 												"pattern": "^(?:Desc|BP|Foundation)_[^.]+_C$"
-											}
-										}
 									}
-								},
-								"amount": {
-									"$ref": "#/$defs/number_arg"
 								}
+							}
+						},
+						"additionalProperties": {
+							"type": "object",
+							"const": {
+									"$ref": "#/$defs/number_arg"
 							}
 						}
 					}
@@ -260,13 +238,8 @@
 				},
 				"pool": {
 					"type": "object",
-					"required": ["type", "minItems", "items"],
-					"properties": {
-						"type": {"type": "string", "const": "array"},
-						"minItems": {"type": "integer", "const": 1},
-						"items": {
+					"const": {
 							"$ref": "#/$defs/item_amount_object"
-						}
 					}
 				}
 			}

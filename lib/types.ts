@@ -14,6 +14,19 @@ import {
 	resources,
 } from './production-data';
 
+export type recipe_selection_schema_key = (
+	keyof typeof recipe_selection_schema['properties']
+);
+
+export type production_pool<
+	Amount extends (
+		| number_arg
+		| operand_types
+	) = operand_types
+> = Partial<{
+	[key in recipe_selection_schema_key]: Amount;
+}>;
+
 export type production_request<
 	T1 extends (
 		| amount_string
@@ -26,10 +39,7 @@ export type production_request<
 > = {
 	input?: production_set<T1>,
 	recipe_selection?: recipe_selection,
-	pool: {
-		item: keyof typeof recipe_selection_schema['properties'],
-		amount: T2,
-	}[],
+	pool: production_pool<T2>,
 };
 
 export type combined_production_entry<

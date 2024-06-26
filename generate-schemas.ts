@@ -17,7 +17,7 @@ import {
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
-} from './lib/planner-request';
+} from './lib/UnrealEngineString';
 import {
 	FGBuildableResourceExtractor,
 // eslint-disable-next-line max-len
@@ -287,7 +287,7 @@ const recipe_selection = {
 	properties: recipe_selection_enums,
 };
 
-const production_ingredients_request = {
+const production_request = {
 	type: 'object',
 	required: ['pool'],
 	additionalProperties: false,
@@ -322,18 +322,14 @@ const production_ingredients_request = {
 		},
 		item_amount_object: {
 			type: 'object',
-			required: ['item', 'amount'],
-			additionalProperties: false,
-			properties: {
-				item: {
-					type: 'string',
-					enum: Object.keys(recipe_selection_enums).sort((a, b) => {
-						return a.localeCompare(b);
-					}),
-				},
-				amount: {
-					$ref: '#/$defs/number_arg',
-				},
+			propertyNames: {
+				type: 'string',
+				enum: Object.keys(recipe_selection_enums).sort((a, b) => {
+					return a.localeCompare(b);
+				}),
+			},
+			additionalProperties: {
+				$ref: '#/$defs/number_arg',
 			},
 		},
 		IntermediaryNumber: {
@@ -375,61 +371,49 @@ const production_ingredients_request = {
 				right: {$ref: '#/$defs/CanConvertTypeJson'},
 			},
 		},
-		DeferredCalculation: {
+		TokenScan: {
 			type: 'object',
 			required: ['type', 'value'],
 			additionalProperties: false,
 			properties: {
-				type: {type: 'string', const: 'DeferredCalculation'},
-				value: {
-					type: 'array',
-					minItems: 1,
-					items: {
-						oneOf: [
-							{type: 'string'},
-							{$ref: '#/$defs/CanConvertTypeJson'},
-						],
-					},
-				},
+				type: {type: 'string', const: 'TokenScan'},
+				value: {type: 'string'},
 			},
 		},
 		CanConvertTypeJson: {
 			oneOf: [
 				{$ref: '#/$defs/IntermediaryNumber'},
 				{$ref: '#/$defs/IntermediaryCalculation'},
-				{$ref: '#/$defs/DeferredCalculation'},
+				{$ref: '#/$defs/TokenScan'},
 			],
 		},
 	},
 	properties: {
 		input: {
-			type: 'array',
-			minItems: 1,
-			uniqueItems: true,
-			items: {
-				$ref: '#/$defs/item_amount_object',
+			type: 'object',
+			minProperties: 1,
+			patternProperties: {
+				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+					$ref: '#/$defs/number_arg',
+				},
 			},
 		},
 		recipe_selection: {
 			$ref: 'recipe-selection',
 		},
 		pool: {
-			type: 'array',
-			minItems: 1,
-			items: {
-				$ref: '#/$defs/item_amount_object',
-			},
+			$ref: '#/$defs/item_amount_object',
 		},
 	},
 };
 
 await writeFile(
-	`${__dirname}/generated-schemas/production-ingredients-request.json`,
+	`${__dirname}/generated-schemas/production-request.json`,
 	`${JSON.stringify(
 		{
 			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'production-ingredients-request',
-			...production_ingredients_request,
+			$id: 'production-request',
+			...production_request,
 		},
 		null,
 		'\t'

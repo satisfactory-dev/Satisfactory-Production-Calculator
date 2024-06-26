@@ -2,31 +2,24 @@ import assert from 'assert';
 import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
-import production_ingredients_request_validator from
-	'../validator/production_ingredients_request_schema.mjs';
+import production_request_validator from
+	'../validator/production_request_schema.mjs';
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
 import {
+	amount_string,
 	number_arg,
 	Numbers,
-} from './Numbers';
+} from '@signpostmarv/intermediary-number';
 import {
-	amount_string,
-} from './NumberStrings';
-import {
-	PlannerRequest,
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
-import BigNumber from 'bignumber.js';
+} from './UnrealEngineString';
 import {
 	not_undefined,
-} from '@satisfactory-clips-archive/docs.json.ts/assert/CustomAssert';
-import {
-	require_non_empty_array,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/ArrayUtilities';
+} from '@satisfactory-clips-archive/custom-assert';
 import {
 	ammo,
 	biomass,
@@ -38,9 +31,6 @@ import {
 	known_byproduct,
 	known_not_sourced_from_recipe,
 	poles,
-	production_item,
-	production_set,
-	recipe_selection,
 	recipes,
 	resources,
 	vehicles,
@@ -56,128 +46,65 @@ import {
 	Root,
 } from './production-chain';
 import {
-	CanConvertTypeJson,
 	IntermediaryNumber,
 	operand_types,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number';
 import Fraction from 'fraction.js';
 
-export type production_ingredients_request<
-	T1 extends (
-		| amount_string
-		| operand_types
-	) = operand_types,
-	T2 extends (
-		| number_arg
-		| operand_types
-	) = operand_types
-> = {
-	input?: recipe_ingredients_request_output<T1>[],
-	recipe_selection?: recipe_selection,
-	pool: {
-		item: keyof typeof recipe_selection_schema['properties'],
-		amount: T2,
-	}[],
-};
+import type {
+	combined_production_entry,
+	production_item,
+	production_request,
+	production_result,
+	production_set,
+	recipe_selection_schema_key,
+} from './types';
+import {
+	Request,
+} from './Request';
 
-export type production_ingredients_request_json = {
-	input: undefined|({
-		item: string,
-		amount: CanConvertTypeJson,
-	}[]),
-	recipe_selection?: recipe_selection,
-	pool: ({
-		item: string,
-		amount: CanConvertTypeJson,
-	}[]),
-};
+export class ProductionCalculator {
+	top_level_only:boolean = false;
 
-export type recipe_ingredients_request_ingredient<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: keyof typeof items,
-	amount: T,
-};
-export type recipe_ingredients_request_output<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: production_item,
-	amount: T,
-};
-
-export type production_ingredients_request_result_surplus<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = [
-	recipe_ingredients_request_output<T>,
-	...recipe_ingredients_request_output<T>[],
-];
-
-export type combined_production_entry<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	item: production_item,
-	output: T,
-	surplus: T,
-};
-
-export type production_ingredients_request_result<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types
-> = {
-	ingredients: recipe_ingredients_request_ingredient<T>[],
-	output: recipe_ingredients_request_output<T>[],
-	combined: combined_production_entry<T>[],
-	surplus?: production_ingredients_request_result_surplus<T>,
-};
-
-export class ProductionIngredientsRequest extends PlannerRequest<
-	production_ingredients_request,
-	production_ingredients_request_result
-> {
 	private input:production_set<
 		| operand_types
 	> = {};
+	protected readonly check:ValidateFunction<production_request>;
 
 	constructor()
 	{
-		super(
-			production_ingredients_request_validator as ValidateFunction<
-				production_ingredients_request
-			>
+		this.check = production_request_validator as (
+			ValidateFunction<production_request>
 		);
+	}
+
+	calculate(data:unknown): production_result
+	{
+		return this.calculate_validated(this.validate(data));
 	}
 
 	validate(
 		data: unknown
 	) {
-		if (data instanceof ProductionIngredientsRequestTyped) {
+		if (data instanceof Request) {
 			return data.toData();
 		}
 
-		return super.validate(data);
+		if (!this.check(data)) {
+			throw new NoMatchError(
+				{
+					data,
+					errors: this.check.errors,
+				},
+				'Data not a supported request!'
+			);
+		}
+
+		return data;
 	}
 
 	protected calculate_precisely(
-		data:production_ingredients_request<
+		data:production_request<
 			(
 				| amount_string
 				| operand_types
@@ -187,10 +114,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				| operand_types
 			)
 		>,
-		surplus?:recipe_ingredients_request_output<
+		surplus?:production_set<
 			| operand_types
-		>[]
-	): production_ingredients_request_result<
+		>
+	): production_result<
 		| operand_types
 	> {
 		const ingredients:{
@@ -205,15 +132,31 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		} = {
 			...this.input,
 		};
-		for (const entry of (surplus || data.input || [])) {
-			if (!(entry.item in input)) {
+
+		let additional_input:production_set<operand_types> = {};
+
+		if (undefined !== surplus) {
+			additional_input = surplus;
+		} else if (undefined !== data.input) {
+			additional_input = Object.fromEntries(
+				Object.entries(data.input).map(
+					(e): [string, operand_types] => [
+						e[0],
+						IntermediaryNumber.reuse_or_create(e[1]),
+					]
+				)
+			);
+		}
+
+		for (const [item, amount] of Object.entries(additional_input)) {
+			if (!(item in input)) {
 				input[
-					entry.item as keyof typeof input
-				] = IntermediaryNumber.reuse_or_create(entry.amount);
+					item as keyof typeof input
+				] = IntermediaryNumber.reuse_or_create(amount);
 			} else {
-				input[entry.item] = input[entry.item].do_math_then_dispose(
+				input[item] = input[item].do_math_then_dispose(
 					'plus',
-					entry.amount
+					amount
 				);
 			}
 		}
@@ -224,9 +167,8 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			)]: operand_types;
 		} = {};
 
-		for (const entry of data.pool) {
-			const {item: production, amount:output_amount} = entry;
-			let amount = IntermediaryNumber.reuse_or_create(entry.amount);
+		for (const [production, output_amount] of Object.entries(data.pool)) {
+			let amount = IntermediaryNumber.reuse_or_create(output_amount);
 			let amount_from_input:(
 				| operand_types
 			);
@@ -261,7 +203,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			const recipe = (
 				data.recipe_selection && production in data.recipe_selection
 					? data.recipe_selection[production]
-					: recipe_selection_schema.properties[production].default
+					: recipe_selection_schema.properties[
+						production as recipe_selection_schema_key
+					].default
 			);
 
 			if (undefined === recipes[recipe]) {
@@ -308,9 +252,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					}
 
 					output[
-						production as keyof typeof resources
+						production
 					] = output[
-						production as keyof typeof resources
+						production
 					].do_math_then_dispose(
 						'plus',
 						amount
@@ -345,9 +289,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				);
 
 				output[
-					production as keyof typeof resources
+					production
 				] = output[
-					production as keyof typeof resources
+					production
 				].do_math_then_dispose(
 					'plus',
 					amount
@@ -571,7 +515,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			(was, is) => {
 				if (!(is.item in was)) {
 					was[is.item] = {
-						item: is.item,
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
 					}
@@ -588,7 +531,6 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				(was, is) => {
 					if (!(is.item in was)) {
 						was[is.item] = {
-							item: is.item,
 							output: IntermediaryNumber.Zero,
 							surplus: IntermediaryNumber.Zero,
 						}
@@ -603,157 +545,134 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 					return was;
 				},
-				{} as {
-					[key in production_item]: {
-						item: production_item,
-						output: operand_types,
-						surplus: operand_types,
-					}
-				}
+				{} as combined_production_entry<operand_types>
 			)
 		);
 
-		const result:production_ingredients_request_result<
+		const result:production_result<
 			| operand_types
 		> = {
-			ingredients: Object.entries(ingredients).map(e => {
-				const left_over = e[1].minus(input[e[0]] || 0);
+			ingredients: Object.fromEntries(
+				Object.entries(ingredients).map(
+					(e): [string, operand_types] => {
+						const left_over = e[1].minus(input[e[0]] || 0);
 
-				return {
-					item: e[0],
-					amount: (
-						left_over.isLessThan(0)
-							? IntermediaryNumber.Zero
-							: left_over
-					),
-				};
-			}).filter(maybe => maybe.amount.isGreaterThan(0)),
-			output: output_entries,
-			combined: Object.values(combined),
+						return [
+							e[0],
+							(
+								left_over.isLessThan(0)
+									? IntermediaryNumber.Zero
+									: left_over
+							),
+						];
+					}
+				).filter(maybe => maybe[1].isGreaterThan(0))
+			),
+			output,
+			combined,
 		};
 
 		if (surplus_entries.length > 0) {
-			result.surplus = require_non_empty_array(surplus_entries);
+			result.surplus = Object.fromEntries(surplus_entries.map(e => [
+				e.item,
+				e.amount,
+			]));
 		}
 
 		return result;
 	}
 
 	protected calculate_validated(
-		data:production_ingredients_request
-	): production_ingredients_request_result {
+		data:production_request
+	): production_result {
 		const deferred = this.calculate_validated_deferred(data);
 
-		const result:production_ingredients_request_result = {
-			ingredients: deferred.ingredients.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			),
-			output: deferred.output.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			),
-			combined: deferred.combined.map(
-				e => {
-					return {
-						item: e.item,
-						output: e.output,
-						surplus: e.surplus,
-					};
-				}
-			),
+		const result:production_result = {
+			ingredients: {...deferred.ingredients},
+			output: deferred.output,
+			combined: deferred.combined,
 		};
 
 		if ('surplus' in deferred) {
 			not_undefined(deferred.surplus);
-			result.surplus = require_non_empty_array(deferred.surplus.map(
-				e => {
-					return {
-						item: e.item,
-						amount: e.amount,
-					};
-				}
-			))
+			result.surplus = deferred.surplus;
 		}
 
 		return result;
 	}
 
 	protected calculate_validated_deferred(
-		data:production_ingredients_request<
+		data:production_request<
 			(
 				| amount_string
 				| operand_types
 			),
 			(
-				| number_arg
+				| amount_string
 				| operand_types
 			)
 		>
-	): production_ingredients_request_result<
+	): production_result<
 		| operand_types
 	> {
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
-		let surplus:recipe_ingredients_request_output<
+		let surplus:production_set<
 			| operand_types
-		>[] = initial_result.surplus || [];
+		> = initial_result.surplus || {};
 
-		let checking_recursively = initial_result.ingredients.filter(
-			maybe => !(maybe.item in resources)
-		);
+		let checking_recursively = this.top_level_only
+			? []
+			: Object.entries(initial_result.ingredients).filter(
+				maybe => !(maybe[0] in resources)
+			);
 		const avoid_checking_further = new Set<string>();
 
 		const production_items = Object.fromEntries(
-			data.pool.map(e => [
-				e.item,
+			Object.entries(data.pool).map(e => [
+				e[0],
 				(
-					IntermediaryNumber.reuse_or_create(e.amount)
+					IntermediaryNumber.reuse_or_create(e[1])
 				),
 			])
 		);
 
 		while (checking_recursively.length > 0) {
-			const when_done:recipe_ingredients_request_ingredient<
+			const when_done:production_set<
 				(
 					| operand_types
 				)
-			>[] = [];
+			> = {};
 
-			for (const check_deeper of checking_recursively) {
+			for (const [
+				check_deeper_item,
+				check_deeper_amount,
+			] of checking_recursively) {
 				assert.strictEqual(
 					(
-						check_deeper.item in recipe_selection_schema[
+						check_deeper_item in recipe_selection_schema[
 							'properties'
 						]
 						|| known_not_sourced_from_recipe.includes(
-							check_deeper.item
+							check_deeper_item
 						)
 						|| known_byproduct.includes(
-							check_deeper.item
+							check_deeper_item
 						)
 					),
 					true,
 					new NoMatchError(
-						check_deeper.item,
-						`Item (${check_deeper.item}) not found in recipe selection!`
+						check_deeper_item,
+						`Item (${check_deeper_item}) not found in recipe selection!`
 					)
 				);
 
 				if (
 					known_not_sourced_from_recipe.includes(
-						check_deeper.item
+						check_deeper_item
 					)
 					|| known_byproduct.includes(
-						check_deeper.item
+						check_deeper_item
 					)
 				) {
 					continue;
@@ -762,25 +681,25 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 				let possibly_recursive = false;
 				let recursive_multiplier = new Fraction(1);
 
-				if (check_deeper.item in production_items) {
+				if (check_deeper_item in production_items) {
 					possibly_recursive = Root.is_recursive(
-						check_deeper.item,
+						check_deeper_item,
 						data.recipe_selection || {}
 					);
 
 					if (possibly_recursive) {
 						const lcm = production_items[
-							check_deeper.item
+							check_deeper_item
 						].toFraction().lcm(
-							check_deeper.amount.toFraction()
+							check_deeper_amount.toFraction()
 						);
 
 						const a = production_items[
-							check_deeper.item
+							check_deeper_item
 						].toFraction()
 						const b = (
 							(
-								check_deeper.amount
+								check_deeper_amount
 							)
 						).toFraction();
 						recursive_multiplier = Numbers.sum_series_fraction(
@@ -788,56 +707,73 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 							Numbers.divide_if_not_one(b, lcm, true),
 						);
 
-						avoid_checking_further.add(check_deeper.item);
+						avoid_checking_further.add(check_deeper_item);
 					}
 				}
+
+				const deeper_result_pool:production_request['pool'] = {
+					[check_deeper_item]: check_deeper_amount.times(
+						recursive_multiplier
+					),
+				};
 
 				const deeper_result = this.calculate_precisely(
 					{
 						...data,
-						pool: [{
-							item: (
-								check_deeper.item as keyof (
-									typeof recipe_selection_schema[
-										'properties'
-									]
-								)
-							),
-							amount: check_deeper.amount.times(
-								recursive_multiplier
-							),
-						}],
+						pool: deeper_result_pool,
 					},
 					surplus
 				);
-				surplus = deeper_result.surplus || [];
+				surplus = deeper_result.surplus || {};
 
-				const self_output = deeper_result.output.find(
-					maybe => maybe.item === check_deeper.item
-				);
+				const self_output = deeper_result.output[
+					check_deeper_item
+				];
 
 				not_undefined(self_output);
 
-				self_output.amount = self_output.amount.do_math_then_dispose(
+				deeper_result.output[
+					check_deeper_item
+				] = self_output.do_math_then_dispose(
 					'minus',
-					check_deeper.amount
+					check_deeper_amount
 				);
 
-				const maybe_check_further = deeper_result.ingredients.filter(
+				const maybe_check_further = Object.entries(
+					deeper_result.ingredients
+				).filter(
 					maybe => (
-						!(maybe.item in resources)
-						&& !avoid_checking_further.has(maybe.item)
+						!(maybe[0] in resources)
+						&& !avoid_checking_further.has(maybe[0])
 					)
 				);
 
 				if (maybe_check_further.length) {
-					when_done.push(...maybe_check_further);
+					for (
+						const [
+							further_item,
+							further_amount,
+						] of maybe_check_further
+					) {
+						if (further_item in when_done) {
+							when_done[
+								further_item
+							] = when_done[
+								further_item
+							].do_math_then_dispose(
+								'plus',
+								further_amount
+							);
+						} else {
+							when_done[further_item] = further_amount;
+						}
+					}
 				}
 
 				results.push(deeper_result);
 			}
 
-			checking_recursively = when_done;
+			checking_recursively = Object.entries(when_done);
 		}
 
 		const ingredients:{[key: string]: (
@@ -846,74 +782,36 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		const output:{[key: string]: (
 			| operand_types
 		)} = {};
-		const surplus_map = surplus.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = is.amount;
-				} else {
-					was[is.item] = was[is.item].do_math_then_dispose(
-						'plus',
-						is.amount
-					);
-				}
-
-				return was;
-			},
-			{} as {[key: string]: (
-				| operand_types
-			)}
-		);
 
 		for (const entry of results) {
-			for (const ingredient of entry.ingredients) {
-				if (!(ingredient.item in ingredients)) {
-					ingredients[ingredient.item] = ingredient.amount;
+			for (const [item, amount] of Object.entries(entry.ingredients)) {
+				if (!(item in ingredients)) {
+					ingredients[item] = amount;
 				} else {
 					ingredients[
-						ingredient.item
-					] = ingredients[ingredient.item].do_math_then_dispose(
+						item
+					] = ingredients[item].do_math_then_dispose(
 						'plus',
-						ingredient.amount
+						amount
 					);
 				}
 			}
 
-			for (const output_entry of entry.output) {
-				if (!(output_entry.item in output)) {
-					output[output_entry.item] = output_entry.amount;
+			for (const [item, amount] of Object.entries(entry.output)) {
+				if (!(item in output)) {
+					output[item] = amount;
 				} else {
 					output[
-						output_entry.item
-					] = output[output_entry.item].do_math_then_dispose(
+						item
+					] = output[item].do_math_then_dispose(
 						'plus',
-						output_entry.amount
+						amount
 					);
 				}
 			}
 		}
 
-		const production_map = data.pool.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = IntermediaryNumber.reuse_or_create(
-						is.amount
-					);
-				} else {
-					was[is.item] = was[is.item].do_math_then_dispose(
-						'plus',
-						is.amount
-					);
-				}
-
-
-				return was;
-			},
-			{} as {[key: string]: (
-				| operand_types
-			)}
-		);
-
-		for (const entry of Object.entries(production_map)) {
+		for (const entry of Object.entries(data.pool)) {
 			assert.strictEqual(
 				entry[0] in output,
 				true,
@@ -925,10 +823,10 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					entry[1]
 				)
 			) {
-				if (!(entry[0] in surplus_map)) {
-					surplus_map[entry[0]] = output[entry[0]].minus(entry[1]);
+				if (!(entry[0] in surplus)) {
+					surplus[entry[0]] = output[entry[0]].minus(entry[1]);
 				} else {
-					surplus_map[entry[0]] = surplus_map[
+					surplus[entry[0]] = surplus[
 						entry[0]
 					].do_math_then_dispose(
 						'plus',
@@ -936,7 +834,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 					);
 				}
 
-				output[entry[0]] = entry[1];
+				output[entry[0]] = IntermediaryNumber.reuse_or_create(
+					entry[1]
+				);
 			}
 		}
 
@@ -960,14 +860,9 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 
 		const output_entries_filtered = output_entries.filter(
 			maybe => maybe[1].isGreaterThan(0)
-		).map(e => {
-			return {
-				item: e[0],
-				amount: e[1],
-			};
-		});
+		);
 
-		const surplus_filtered = Object.entries(surplus_map).filter(
+		const surplus_filtered = Object.entries(surplus).filter(
 			maybe => maybe[1].isGreaterThan(0)
 		).map(e => {
 			return {
@@ -977,18 +872,18 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 		});
 
 		const combined = output_entries_filtered.reduce(
-			(was, is) => {
-				if (!(is.item in was)) {
-					was[is.item] = {
-						item: is.item,
+			(was, [item, amount]) => {
+				if (!(item in was)) {
+					was[item] = {
+						item: item,
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
 					}
 				}
 
-				was[is.item].output = was[is.item].output.do_math_then_dispose(
+				was[item].output = was[item].output.do_math_then_dispose(
 					'plus',
-					is.amount
+					amount
 				);
 
 				return was;
@@ -1026,67 +921,25 @@ export class ProductionIngredientsRequest extends PlannerRequest<
 			)
 		);
 
-		const result:production_ingredients_request_result<
+		const result:production_result<
 			| operand_types
 		> = {
-			ingredients: Object.entries(ingredients).map(e => {
-				return {
-					item: e[0],
-					amount: e[1],
-				}
-			}),
-			output: output_entries_filtered.filter(
-				maybe => !maybe.amount.isZero()
-			),
-			combined: Object.values(combined),
+			ingredients,
+			output: Object.fromEntries(output_entries_filtered.filter(
+				maybe => !maybe[1].isZero()
+			)),
+			combined,
 		};
 
 		if (surplus_filtered.length > 0) {
-			result.surplus = require_non_empty_array(
-				surplus_filtered
+			result.surplus = Object.fromEntries(
+				surplus_filtered.map(e => [
+					e.item,
+					e.amount,
+				])
 			);
 		}
 
 		return result;
-	}
-}
-
-export class ProductionIngredientsRequestTyped
-{
-	input?: recipe_ingredients_request_output<
-		operand_types
-	>[];
-	pool: {
-		item: keyof typeof recipe_selection_schema['properties'],
-		amount: operand_types,
-	}[] = [];
-	recipe_selection?: recipe_selection;
-
-	toData(): production_ingredients_request<operand_types>
-	{
-		return {
-			input: this.input,
-			recipe_selection: this.recipe_selection,
-			pool: this.pool,
-		};
-	}
-
-	toJSON(): production_ingredients_request_json
-	{
-		return {
-			input: this.input?.map(e => {
-				return {
-					item: e.item,
-					amount: e.amount.toJSON(),
-				};
-			}),
-			recipe_selection: this.recipe_selection,
-			pool: this.pool.map(e => {
-				return {
-					item: e.item,
-					amount: e.amount.toJSON(),
-				};
-			}),
-		};
 	}
 }

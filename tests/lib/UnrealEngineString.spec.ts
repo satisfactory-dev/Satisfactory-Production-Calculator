@@ -5,7 +5,7 @@ import {
 import assert from 'assert/strict';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
-} from "../../lib/planner-request";
+} from "../../lib/UnrealEngineString";
 
 void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
 	const data_set:[string, boolean][] = [

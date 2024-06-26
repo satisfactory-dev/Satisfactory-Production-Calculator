@@ -6,19 +6,17 @@ import {
 	UnrealEngineString,
 } from "../generated-types/update8/utils/validators";
 import {
-	number_arg,
-} from "./Numbers";
-import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	items,
 	resources,
 } from "./production-data";
 import {
 	IntermediaryNumber,
+	number_arg,
 	operand_types,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number';
 
 export function amend_ItemClass_amount(
 	ItemClass:{

@@ -4,12 +4,12 @@ import {
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
 import type {
 	production_set,
-} from './production-data';
+} from './types';
 // eslint-disable-next-line max-len
 import faux_recipe_keys from '../data/faux-recipe-ingredient-list.json' with {type: 'json'};
 import {
 	IntermediaryNumber,
-} from './IntermediaryNumber';
+} from '@signpostmarv/intermediary-number';
 
 export function faux_recipe(recipe:string): production_set
 {

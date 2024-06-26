@@ -12,7 +12,7 @@ import {
 } from '../generated-types/update8/classes/CoreUObject/FGRecipe';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	FGBuildingDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGBuildingDescriptor';
@@ -79,9 +79,6 @@ import {
 	FGBuildableGeneratorNuclear,
 // eslint-disable-next-line max-len
 } from '../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
-import {
-	operand_types,
-} from './IntermediaryNumber';
 
 export const ammo = Object.fromEntries(
 	[
@@ -228,17 +225,3 @@ export const known_not_sourced_from_recipe:string[] = [
 		&& !known_byproduct.includes(maybe)
 	)
 );
-
-export type production_item = keyof (
-	| typeof buildings
-	| typeof items
-	| typeof resources
-);
-
-export type production_set<
-	T extends (
-		| operand_types
-	) = operand_types
-> = {[key in production_item]: T};
-
-export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};

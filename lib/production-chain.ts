@@ -6,11 +6,13 @@ import {
 	equipment,
 	items,
 	known_not_sourced_from_recipe,
-	production_item,
-	recipe_selection,
 	recipes,
 	resources,
 } from './production-data';
+import type {
+	production_item,
+	recipe_selection,
+} from './types';
 
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
@@ -19,13 +21,13 @@ import {
 } from './faux-recipe';
 import {
 	number_arg,
-} from './Numbers';
+} from '@signpostmarv/intermediary-number';
 import {
 	amend_ItemClass_amount,
 } from './amend-itemclass-amount';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './planner-request';
+} from './UnrealEngineString';
 import {
 	NoMatchError,
 } from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';

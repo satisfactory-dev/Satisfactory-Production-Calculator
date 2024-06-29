@@ -9,13 +9,10 @@ import production_request_schema from
 import recipe_selection_schema from
 	'./generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
-	__dirname_from_meta,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
-import {
 	esmify,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/AjvUtilities';
+} from '@satisfactory-dev/docs.json.ts';
 
-const __dirname = __dirname_from_meta(import.meta);
+const __dirname = import.meta.dirname;
 
 const ajv = new Ajv({
 	verbose: false,

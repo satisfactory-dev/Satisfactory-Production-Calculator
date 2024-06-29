@@ -8,7 +8,7 @@ import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
+} from '@satisfactory-dev/docs.json.ts';
 import {
 	amount_string,
 	number_arg,
@@ -19,7 +19,7 @@ import {
 } from './UnrealEngineString';
 import {
 	not_undefined,
-} from '@satisfactory-clips-archive/custom-assert';
+} from '@satisfactory-dev/custom-assert';
 import {
 	ammo,
 	biomass,

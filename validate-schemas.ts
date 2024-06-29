@@ -6,11 +6,7 @@ import {
 	glob,
 } from 'glob';
 
-import {
-	__dirname_from_meta,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
-
-const __dirname = __dirname_from_meta(import.meta);
+const __dirname = import.meta.dirname;
 const ajv = new Ajv({
 	verbose: true,
 	code: {

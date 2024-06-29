@@ -6,9 +6,9 @@
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/SignpostMarv/Satisfactory-Production-Calculator.git.git"
+		"url": "git+https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git.git"
 	},
-	"funding": "https://github.com/SignpostMarv/Satisfactory-Production-Calculator.git?sponsor=1",
+	"funding": "https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git?sponsor=1",
 	"devDependencies": {
 		"@types/node": "^20.12.7",
 		"ajv": "^8.12.0",
@@ -21,9 +21,9 @@
 		"typescript-eslint": "^7.7.0"
 	},
 	"dependencies": {
-		"@satisfactory-clips-archive/custom-assert": "^0.2.1",
-		"@satisfactory-clips-archive/docs.json.ts": "^0.6.0",
-		"@signpostmarv/intermediary-number": "^0.4.0",
+		"@satisfactory-dev/custom-assert": "^0.2.2",
+		"@satisfactory-dev/docs.json.ts": "^0.6.1",
+		"@signpostmarv/intermediary-number": "^0.4.1",
 		"bignumber.js": "^9.1.2",
 		"fraction.js": "^4.3.7"
 	}

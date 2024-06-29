@@ -1,6 +1,6 @@
 # Satisfactory Production Calculator
 
-Production Calculator for Satisfactory built upon [Docs.json.ts](https://github.com/Satisfactory-Clips-Archive/Docs.json.ts).
+Production Calculator for Satisfactory built upon [Docs.json.ts](https://github.com/satisfactory-dev/Docs.json.ts).
 
 ## Using
 
@@ -30,8 +30,8 @@ Please refer to the tests in the meantime.
 
 ## Issues
 
-Issue tracker for both the calculator and the UI built atop the calculator are [available on GitHub](https://github.com/users/SignpostMarv/projects/1).
+Issue tracker for both the calculator and the UI built atop the calculator are [available on GitHub](https://github.com/orgs/satisfactory-dev/projects/1).
 
 ## Implementations
 
--   [SignpostMarv's Experimental Production Planner](https://tools.satisfactory.video/experimental-production-planner/)
+-   [SignpostMarv's Experimental Production Planner](https://u8.satisfactory.dev/planner/)

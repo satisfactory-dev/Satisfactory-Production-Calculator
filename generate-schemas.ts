@@ -12,9 +12,6 @@ import {
 	FGBuildableWaterPump,
 } from './generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
 import {
-	__dirname_from_meta,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
-import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
 } from './lib/UnrealEngineString';
@@ -27,14 +24,14 @@ import {
 } from './generated-types/update8/data/CoreUObject/FGResourceDescriptor';
 import {
 	NoMatchError,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts';
 import {
 	FGBuildableGeneratorNuclear,
 // eslint-disable-next-line max-len
 } from './generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
 import BigNumber from 'bignumber.js';
 
-const __dirname = __dirname_from_meta(import.meta);
+const __dirname = import.meta.dirname;
 
 type recipe_selection_properties = {
 	[key: UnrealEngineString_right_x_C_suffix]: {

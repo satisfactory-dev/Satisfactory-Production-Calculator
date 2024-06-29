@@ -1,13 +1,11 @@
 import {
+	is_string,
 	NoMatchError,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions.js';
+} from '@satisfactory-dev/docs.json.ts';
 import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';
 import assert from 'assert';
-import {
-	is_string,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/StringStartsWith.js';
 
 export type UnrealEngineString_right_x_C_suffix =
 	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'}_${string}_C`;

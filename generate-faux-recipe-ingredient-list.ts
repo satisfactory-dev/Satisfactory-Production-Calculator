@@ -1,7 +1,3 @@
-
-import {
-	__dirname_from_meta,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/__dirname';
 import {
 	writeFile,
 } from 'fs/promises';
@@ -16,7 +12,7 @@ import {
 	resources,
 } from './lib/production-data';
 
-const __dirname = __dirname_from_meta(import.meta);
+const __dirname = import.meta.dirname;
 
 await writeFile(
 	`${__dirname}/data/faux-recipe-ingredient-list.json`,

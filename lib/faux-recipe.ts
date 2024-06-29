@@ -1,7 +1,7 @@
 import assert from 'assert';
 import {
 	NoMatchError,
-} from '@satisfactory-clips-archive/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts';
 import type {
 	production_set,
 } from './types';

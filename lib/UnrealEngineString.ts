@@ -1,7 +1,9 @@
 import {
 	is_string,
+} from '@satisfactory-dev/docs.json.ts/lib/StringStartsWith';
+import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts';
+} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
 import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';

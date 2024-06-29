@@ -4,11 +4,19 @@ import {
 import Ajv from 'ajv/dist/2020';
 import {
 	configure_ajv,
+} from '@satisfactory-dev/docs.json.ts/lib/DocsValidation';
+import {
 	DocsTsGenerator,
+} from '@satisfactory-dev/docs.json.ts/lib/DocsTsGenerator';
+import {
 	NoMatchError,
+} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+import {
 	setup_PerformanceObserver,
+} from '@satisfactory-dev/docs.json.ts/setup_PerformanceObserver';
+import {
 	TypeDefinitionWriter,
-} from '@satisfactory-dev/docs.json.ts';
+} from '@satisfactory-dev/docs.json.ts/lib/TypeDefinitionWriter';
 
 const __dirname = import.meta.dirname;
 const ajv = new Ajv({

@@ -4,6 +4,8 @@ import {
 import Ajv from 'ajv/dist/2020';
 import {
 	configure_ajv,
+} from '@satisfactory-dev/docs.json.ts/lib/generator';
+import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
 import {

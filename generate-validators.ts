@@ -10,7 +10,7 @@ import recipe_selection_schema from
 	'./generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	esmify,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
+} from '@satisfactory-dev/ajv-utilities';
 
 const __dirname = import.meta.dirname;
 

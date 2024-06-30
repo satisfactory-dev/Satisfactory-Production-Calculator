@@ -10,6 +10,7 @@
 	},
 	"funding": "https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git?sponsor=1",
 	"devDependencies": {
+		"@satisfactory-dev/ajv-utilities": "^0.1.0",
 		"@types/node": "^20.12.7",
 		"ajv": "^8.12.0",
 		"c8": "^10.1.2",
@@ -22,7 +23,7 @@
 	},
 	"dependencies": {
 		"@satisfactory-dev/custom-assert": "^0.2.2",
-		"@satisfactory-dev/docs.json.ts": "^0.7.0",
+		"@satisfactory-dev/docs.json.ts": "^0.7.2",
 		"@satisfactory-dev/predicates.ts": "^0.1.0",
 		"@signpostmarv/intermediary-number": "^0.4.1",
 		"bignumber.js": "^9.1.2",

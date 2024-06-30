@@ -1,10 +1,12 @@
 import BigNumber from "bignumber.js";
 import {
 	integer_string__type,
-} from "../generated-types/update8/common/unassigned";
+// eslint-disable-next-line max-len
+} from "@satisfactory-dev/docs.json.ts/generated-types/update8/common/scalar";
 import {
 	UnrealEngineString,
-} from "../generated-types/update8/utils/validators";
+// eslint-disable-next-line max-len
+} from "@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators";
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';

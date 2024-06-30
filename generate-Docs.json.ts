@@ -32,6 +32,9 @@ export const docs = new DocsTsGenerator({
 	ajv,
 	docs_path: `${__dirname}/data/Docs.json`,
 	cache_path: `${__dirname}/data/`,
+	types_from_module: (
+		'@satisfactory-dev/docs.json.ts/generated-types/update8'
+	),
 });
 
 const perf = setup_PerformanceObserver();

@@ -3,13 +3,15 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptor';
 import {
 	FGItemDescriptor__FGResourceDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptor';
 import {
 	FGRecipe,
 } from '../generated-types/update8/data/CoreUObject/FGRecipe';
 import {
 	FGRecipe__type,
-} from '../generated-types/update8/classes/CoreUObject/FGRecipe';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGRecipe';
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';
@@ -18,17 +20,19 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGBuildingDescriptor';
 import {
 	FGBuildingDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGBuildingDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildingDescriptor';
 import {
 	FGResourceDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGResourceDescriptor';
 import {
 	FGResourceDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
 import {
 	FGItemDescriptorBiomass__type,
 // eslint-disable-next-line max-len
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorBiomass';
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptorBiomass';
 import {
 	FGItemDescriptorBiomass,
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptorBiomass';
@@ -37,10 +41,12 @@ import {
 } from '../generated-types/update8/data/CoreUObject/FGPoleDescriptor';
 import {
 	FGPoleDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGPoleDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGPoleDescriptor';
 import {
 	FGEquipmentDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGEquipmentDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGEquipmentDescriptor';
 import {
 	FGEquipmentDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGEquipmentDescriptor';
@@ -51,21 +57,23 @@ import {
 	FGVehicleDescriptor__fueled_with_inventory__type,
 	FGVehicleDescriptor__powered_no_inventory__type,
 	FGVehicleDescriptor__unfueled_with_inventory__type,
-} from '../generated-types/update8/classes/CoreUObject/FGVehicleDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGVehicleDescriptor';
 import {
 	FGVehicleDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGVehicleDescriptor';
 import {
 	FGItemDescriptorNuclearFuel__type,
 // eslint-disable-next-line max-len
-} from '../generated-types/update8/classes/CoreUObject/FGItemDescriptorNuclearFuel';
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptorNuclearFuel';
 import {
 	FGItemDescriptorNuclearFuel,
 // eslint-disable-next-line max-len
 } from '../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel';
 import {
 	FGConsumableDescriptor__type,
-} from '../generated-types/update8/classes/CoreUObject/FGConsumableDescriptor';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGConsumableDescriptor';
 import {
 	FGConsumableDescriptor,
 } from '../generated-types/update8/data/CoreUObject/FGConsumableDescriptor';

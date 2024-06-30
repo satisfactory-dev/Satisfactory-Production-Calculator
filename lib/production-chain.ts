@@ -30,7 +30,7 @@ import {
 } from './UnrealEngineString';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts/lib/index';
 
 class Item
 {

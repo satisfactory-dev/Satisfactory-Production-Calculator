@@ -24,7 +24,7 @@ import {
 } from './generated-types/update8/data/CoreUObject/FGResourceDescriptor';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
 	FGBuildableGeneratorNuclear,
 // eslint-disable-next-line max-len

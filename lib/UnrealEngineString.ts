@@ -3,7 +3,7 @@ import {
 } from '@satisfactory-dev/predicates.ts';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
 	UnrealEngineString,
 } from '../generated-types/update8/utils/validators';

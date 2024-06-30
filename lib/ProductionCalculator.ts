@@ -8,7 +8,7 @@ import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
 	amount_string,
 	number_arg,

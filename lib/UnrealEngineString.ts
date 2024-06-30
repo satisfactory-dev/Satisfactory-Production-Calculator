@@ -1,6 +1,6 @@
 import {
 	is_string,
-} from '@satisfactory-dev/docs.json.ts/lib/StringStartsWith';
+} from '@satisfactory-dev/predicates.ts';
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/Exceptions';

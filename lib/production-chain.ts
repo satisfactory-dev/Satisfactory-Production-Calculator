@@ -121,16 +121,16 @@ class Item
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
-						mProduct.map(
+				mProduct.map(
 					(e): [string, number_arg] => [
-								UnrealEngineString_right_x_C_suffix(
-									e.ItemClass
-								),
+						UnrealEngineString_right_x_C_suffix(
+							e.ItemClass
+						),
 						amend_ItemClass_amount(
-									this.production_data,
-									e
+							this.production_data,
+							e
 						).Amount,
-							]
+					]
 				)
 			);
 

@@ -315,17 +315,17 @@ export class ProductionCalculator {
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
-					mProduct.map(
+				mProduct.map(
 					(e): [string, (
 							| operand_types
 					)] => [
-							UnrealEngineString_right_x_C_suffix(e.ItemClass),
+						UnrealEngineString_right_x_C_suffix(e.ItemClass),
 						amend_ItemClass_amount_deferred(
-								this.production_data,
-								e
+							this.production_data,
+							e
 						).Amount,
-						]
-					)
+					]
+				)
 			);
 
 			assert.strictEqual(

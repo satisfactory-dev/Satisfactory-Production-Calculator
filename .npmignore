@@ -20,7 +20,6 @@
 /.prettierrc
 /tsconfig*.json
 /generated-types/
-/generated-schemas/
 /**/.gitkeep
 /validator/
 /data/

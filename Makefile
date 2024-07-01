@@ -5,7 +5,7 @@ build:
 	@echo 'building from ./tsconfig.app.json'
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app.json
 
-generate: generate--skip-checks lint generate--post-build generate--post-docs-json
+generate: generate--skip-checks lint generate--post-build build
 
 generate--skip-checks:
 	@echo 'running ./generate-Docs.json.ts'
@@ -20,15 +20,6 @@ generate--post-build:
 		--cache-strategy content \
 		--cache \
 		./generated-types/
-
-generate--post-docs-json:
-	@./node_modules/.bin/ts-node ./generate-schemas.ts
-	@./node_modules/.bin/ts-node ./generate-faux-recipe-ingredient-list.ts
-	@make build
-
-generate--schemas: build
-	@./node_modules/.bin/ts-node ./generate-schemas.ts
-	@make lint--schemas
 
 generate--validators: build
 	@./node_modules/.bin/ts-node ./generate-validators.ts
@@ -50,10 +41,7 @@ lint--eslint:
 		--cache \
 		'./*.ts' lib tests
 
-lint--schemas: build
-	@./node_modules/.bin/ts-node ./validate-schemas.ts
-
-lint: lint--prettier lint--tsc lint--eslint lint--schemas
+lint: lint--prettier lint--tsc lint--eslint
 
 lint-fix:
 	@echo 'fixing prettier issues'

@@ -113,66 +113,66 @@ export class ProductionData
 		);
 
 		const ammo = Object.fromEntries(
-				[
-					...FGAmmoTypeProjectile.Classes,
-					...FGAmmoTypeInstantHit.Classes,
-					...FGAmmoTypeSpreadshot.Classes,
-				].map(e => [e.ClassName, e])
+			[
+				...FGAmmoTypeProjectile.Classes,
+				...FGAmmoTypeInstantHit.Classes,
+				...FGAmmoTypeSpreadshot.Classes,
+			].map(e => [e.ClassName, e])
 		);
 
 		const biomass = Object.fromEntries(
-				FGItemDescriptorBiomass.Classes.map(
-					(e): [
-						FGItemDescriptorBiomass__type[
-							'ClassName'
-						],
-						FGItemDescriptorBiomass__type,
-					] => [e.ClassName, e]
-				)
+			FGItemDescriptorBiomass.Classes.map(
+				(e): [
+					FGItemDescriptorBiomass__type[
+						'ClassName'
+					],
+					FGItemDescriptorBiomass__type,
+				] => [e.ClassName, e]
+			)
 		);
 
 		const consumable = Object.fromEntries(
-				FGConsumableDescriptor.Classes.map(
-					(e): [
-						FGConsumableDescriptor__type[
-							'ClassName'
-						],
-						FGConsumableDescriptor__type,
-					] => [e.ClassName, e]
-				)
+			FGConsumableDescriptor.Classes.map(
+				(e): [
+					FGConsumableDescriptor__type[
+						'ClassName'
+					],
+					FGConsumableDescriptor__type,
+				] => [e.ClassName, e]
+			)
 		);
 
 		const equipment = Object.fromEntries(
-				FGEquipmentDescriptor.Classes.map(
-					(e): [
-						FGEquipmentDescriptor__type[
-							'ClassName'
-						],
-						FGEquipmentDescriptor__type,
-					] => [e.ClassName, e]
-				)
+			FGEquipmentDescriptor.Classes.map(
+				(e): [
+					FGEquipmentDescriptor__type[
+						'ClassName'
+					],
+					FGEquipmentDescriptor__type,
+				] => [e.ClassName, e]
+			)
 		);
 
 		const fuel_nuclear = Object.fromEntries(
-				FGItemDescriptorNuclearFuel.Classes.map(
-					(e): [
-						FGItemDescriptorNuclearFuel__type[
-							'ClassName'
-						],
-						FGItemDescriptorNuclearFuel__type,
-					] => [e.ClassName, e]
-				)
+			FGItemDescriptorNuclearFuel.Classes.map(
+				(e): [
+					FGItemDescriptorNuclearFuel__type[
+						'ClassName'
+					],
+					FGItemDescriptorNuclearFuel__type,
+				] => [e.ClassName, e]
+			)
 		);
 
 		const items = Object.fromEntries(
-				FGItemDescriptor.Classes.map(
-					(e): [
-						FGItemDescriptor__FGResourceDescriptor__type[
-							'ClassName'
-						],
-						FGItemDescriptor__FGResourceDescriptor__type,
-					] => [e.ClassName, e]
-				)
+			FGItemDescriptor.Classes.map(
+				(e): [
+					FGItemDescriptor__FGResourceDescriptor__type[
+						'ClassName'
+					],
+					FGItemDescriptor__FGResourceDescriptor__type,
+				] => [e.ClassName, e]
+			)
 		);
 
 		return {

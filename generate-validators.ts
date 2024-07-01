@@ -1,16 +1,16 @@
 import Ajv from "ajv/dist/2020";
-import standalone from 'ajv/dist/standalone';
 import {
 	writeFile,
 } from 'node:fs/promises';
-import production_request_schema from
-	// eslint-disable-next-line max-len
-	'./generated-schemas/production-request.json' with {type: 'json'};
-import recipe_selection_schema from
-	'./generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
-	esmify,
-} from '@satisfactory-dev/ajv-utilities';
+	GenerateSchemas,
+} from './lib/generate-schemas';
+import {
+	GenerateValidators,
+} from './lib/generate-validators';
+import {
+	instance as production_data,
+} from './tests/utilities/production-data';
 
 const __dirname = import.meta.dirname;
 
@@ -25,12 +25,11 @@ const ajv = new Ajv({
 		optimize: 2,
 	},
 });
-ajv.addSchema(recipe_selection_schema);
 
 await writeFile(
 	`${__dirname}/validator/production_request_schema.mjs`,
-	esmify(standalone(
-		ajv,
-		ajv.compile(production_request_schema)
-	))
+	GenerateValidators.toStandalone(
+		GenerateSchemas.factory(production_data),
+		ajv
+	)
 );

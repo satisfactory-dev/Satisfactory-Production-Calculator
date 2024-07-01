@@ -19,8 +19,6 @@ await writeFile(
 	`${__dirname}/generated-schemas/production-request.json`,
 	`${JSON.stringify(
 		{
-			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'production-request',
 			...production_request,
 		},
 		null,
@@ -32,8 +30,6 @@ await writeFile(
 	`${__dirname}/generated-schemas/recipe-selection.json`,
 	`${JSON.stringify(
 		{
-			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'recipe-selection',
 			...recipe_selection,
 		},
 		null,

@@ -47,6 +47,12 @@ import {
 import {
 	instance as production_data,
 } from '../utilities/production-data';
+import {
+	GenerateValidators,
+} from '../../lib/generate-validators';
+import {
+	ValidateFunction,
+} from 'ajv';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -138,9 +144,17 @@ function flattened_production_ingredients_request_result(
 }
 
 // eslint-disable-next-line max-len
-void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, () => {
+void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
+	const validators = await GenerateValidators.fromStandalone(
+		import(
+			'../../validator/production_request_schema.mjs'
+		) as unknown as Promise<{
+			default: ValidateFunction<production_request>,
+		}>
+	);
 	const instance = new ProductionCalculator(
-		production_data
+		production_data,
+		validators
 	);
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =

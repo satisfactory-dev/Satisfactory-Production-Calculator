@@ -2,8 +2,6 @@ import assert from 'assert';
 import {
 	ValidateFunction,
 } from 'ajv/dist/2020';
-import production_request_validator from
-	'../validator/production_request_schema.mjs';
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
@@ -51,6 +49,9 @@ import {
 import {
 	GenerateSchemas,
 } from './generate-schemas';
+import {
+	GenerateValidators,
+} from './generate-validators';
 
 export class ProductionCalculator {
 	top_level_only:boolean = false;
@@ -63,10 +64,9 @@ export class ProductionCalculator {
 
 	constructor(
 		production_data:ProductionData,
+		generator_validators:GenerateValidators
 	) {
-		this.check = production_request_validator as (
-			ValidateFunction<production_request>
-		);
+		this.check = generator_validators.validation_function;
 		this.production_data = production_data;
 	}
 

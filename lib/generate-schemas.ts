@@ -158,8 +158,16 @@ export class GenerateSchemas
 			production_request,
 		} = this.#generate_schemas();
 
-		this.recipe_selection = recipe_selection;
-		this.production_request = production_request;
+		this.recipe_selection = {
+			$schema: 'https://json-schema.org/draft/2020-12/schema',
+			$id: 'recipe-selection',
+			...recipe_selection,
+		};
+		this.production_request = {
+			$schema: 'https://json-schema.org/draft/2020-12/schema',
+			$id: 'production-request',
+			...production_request,
+		};
 	}
 
 	#generate_schemas()

@@ -47,6 +47,17 @@ import {
 import {
 	ProductionData,
 } from '../../lib/production-data';
+import {
+	FGBuildableFrackingActivator,
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
+import {
+	FGBuildableWaterPump,
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
+import {
+	FGBuildableResourceExtractor,
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 
 export const instance = new ProductionData(() => ({
 	FGAmmoTypeProjectile,
@@ -63,4 +74,7 @@ export const instance = new ProductionData(() => ({
 	FGResourceDescriptor,
 	FGVehicleDescriptor,
 	FGBuildableGeneratorNuclear,
+	FGBuildableFrackingActivator,
+	FGBuildableWaterPump,
+	FGBuildableResourceExtractor,
 }));

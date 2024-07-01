@@ -360,11 +360,11 @@ export class ProductionData
 
 		return {
 			ammo: Object.fromEntries(
-	[
-		...FGAmmoTypeProjectile.Classes,
-		...FGAmmoTypeInstantHit.Classes,
-		...FGAmmoTypeSpreadshot.Classes,
-	].map(e => [e.ClassName, e])
+				[
+					...FGAmmoTypeProjectile.Classes,
+					...FGAmmoTypeInstantHit.Classes,
+					...FGAmmoTypeSpreadshot.Classes,
+				].map(e => [e.ClassName, e])
 			),
 			biomass: Object.fromEntries(
 				FGItemDescriptorBiomass.Classes.map(

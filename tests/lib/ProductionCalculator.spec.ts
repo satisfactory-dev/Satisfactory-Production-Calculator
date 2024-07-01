@@ -197,8 +197,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					instance.constructor.name
 				}.calculate({pool: {${Desc_C}: 1}}) behaves`,
-				async () => {
-					const result = await instance.calculate({
+				() => {
+					const result = instance.calculate({
 						pool: {
 							[Desc_C]: '1' as amount_string,
 						},
@@ -1195,7 +1195,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					expectation ? 'behaves' : 'throws'
 				} with ${JSON.stringify(data)}`,
-				async () => {
+				() => {
 					const get_result = () => instance.validate(
 						data
 					);
@@ -1207,7 +1207,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 						assert.deepEqual(
 							flattened_production_ingredients_request_result(
-								await instance.calculate(data)
+								instance.calculate(data)
 							),
 							flattened_production_ingredients_request_result(
 								expectation
@@ -1225,7 +1225,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`behaves with a typed version of ${
 					JSON.stringify(data)
 				}`,
-				async () => {
+				() => {
 					const request = new Request<
 						| amount_string
 						| operand_types
@@ -1243,7 +1243,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							await instance.calculate(request)
+							instance.calculate(request)
 						),
 						flattened_production_ingredients_request_result(
 							expectation
@@ -1252,7 +1252,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							await instance.calculate(request.toData())
+							instance.calculate(request.toData())
 						),
 						flattened_production_ingredients_request_result(
 							expectation

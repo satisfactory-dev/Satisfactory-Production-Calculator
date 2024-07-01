@@ -6,9 +6,6 @@ import type {
 	production_item,
 	recipe_selection,
 } from './types';
-
-import recipe_selection_schema from
-	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	faux_recipe,
 } from './faux-recipe';
@@ -24,6 +21,9 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
+import {
+	GenerateSchemas,
+} from './generate-schemas';
 
 class Item
 {
@@ -67,6 +67,9 @@ class Item
 			resources,
 		} = this.production_data.data;
 
+		const {
+			recipe_selection: recipe_selection_schema,
+		} = GenerateSchemas.factory(this.production_data);
 
 		if ((known_not_sourced_from_recipe as string[]).includes(this.item)) {
 			return [];
@@ -74,17 +77,15 @@ class Item
 
 		const ingredients:production_item[] = [];
 
-		const maybe_recipe = this.item in this.recipe_selection
-			? this.recipe_selection[this.item]
-			: (
-				this.item in recipe_selection_schema.properties
-					? recipe_selection_schema.properties[
-						this.item as keyof typeof recipe_selection_schema[
-							'properties'
-						]
-					].default
-					: undefined
-			);
+		let maybe_recipe:string|undefined = undefined;
+
+		if (this.item in this.recipe_selection) {
+			maybe_recipe = this.recipe_selection[this.item];
+		} else if (this.item in recipe_selection_schema.properties) {
+			maybe_recipe = recipe_selection_schema.properties[
+				this.item as keyof typeof recipe_selection_schema.properties
+			].default;
+		}
 
 		assert.strictEqual(
 			undefined !== maybe_recipe,

@@ -4,8 +4,6 @@ import {
 } from 'ajv/dist/2020';
 import production_request_validator from
 	'../validator/production_request_schema.mjs';
-import recipe_selection_schema from
-	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
@@ -50,6 +48,9 @@ import type {
 import {
 	Request,
 } from './Request';
+import {
+	GenerateSchemas,
+} from './generate-schemas';
 
 export class ProductionCalculator {
 	top_level_only:boolean = false;
@@ -125,6 +126,10 @@ export class ProductionCalculator {
 			vehicles,
 		} = this.production_data.data;
 
+		const {
+			recipe_selection: recipe_selection_schema,
+		} = GenerateSchemas.factory(this.production_data);
+
 		const ingredients:{
 			[key in keyof typeof items]: (
 				| operand_types
@@ -170,6 +175,7 @@ export class ProductionCalculator {
 		} = {};
 
 		for (const [production, output_amount] of Object.entries(data.pool)) {
+			not_undefined(output_amount);
 			let amount = IntermediaryNumber.reuse_or_create(output_amount);
 			let amount_from_input:(
 				| operand_types
@@ -628,6 +634,11 @@ export class ProductionCalculator {
 			known_byproduct,
 			resources,
 		} = this.production_data.data;
+
+		const {
+			recipe_selection: recipe_selection_schema,
+		} = GenerateSchemas.factory(this.production_data);
+
 		const initial_result = this.calculate_precisely(data);
 		const results = [initial_result];
 		let surplus:production_set<
@@ -645,7 +656,11 @@ export class ProductionCalculator {
 			Object.entries(data.pool).map(e => [
 				e[0],
 				(
-					IntermediaryNumber.reuse_or_create(e[1])
+					IntermediaryNumber.reuse_or_create(
+						e[1] as Exclude<
+						typeof e[1],
+						undefined
+					>)
 				),
 			])
 		);
@@ -833,6 +848,7 @@ export class ProductionCalculator {
 				true,
 				`${entry[0]} not on output map!`
 			);
+			not_undefined(entry[1]);
 
 			if (
 				output[entry[0]].isGreaterThan(

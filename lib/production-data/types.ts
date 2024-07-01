@@ -125,11 +125,17 @@ export type recipe_selection_properties = {
 };
 
 export type recipe_selection_properties_with_default = (
-	& recipe_selection_properties
+	& recipe_selection_properties[UnrealEngineString_right_x_C_suffix]
 	& {
 		default:string,
 	}
 );
+
+export type recipe_selection_properties_with_defaults = {
+	[
+		key: UnrealEngineString_right_x_C_suffix
+	]: recipe_selection_properties_with_default
+};
 
 export type data = {
 	ammo: {
@@ -175,5 +181,5 @@ export type data = {
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
 	)[],
-	recipe_selection_enums: recipe_selection_properties,
+	recipe_selection_enums: recipe_selection_properties_with_defaults,
 };

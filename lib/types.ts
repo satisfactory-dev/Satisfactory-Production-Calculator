@@ -5,11 +5,12 @@ import {
 } from '@signpostmarv/intermediary-number';
 import BigNumber from 'bignumber.js';
 
-import recipe_selection_schema from
-	'../generated-schemas/recipe-selection.json' with {type: 'json'};
+import {
+	recipe_selection_properties_with_defaults,
+} from './production-data/types';
 
 export type recipe_selection_schema_key = (
-	keyof typeof recipe_selection_schema['properties']
+	keyof recipe_selection_properties_with_defaults
 );
 
 export type production_pool<

@@ -8,6 +8,7 @@ import {
 	imports,
 	recipe_selection_properties,
 	recipe_selection_properties_with_default,
+	recipe_selection_properties_with_defaults,
 } from './types';
 import {
 	NoMatchError,
@@ -15,7 +16,7 @@ import {
 
 export function recipe_selection_enums(
 	imports:imports
-): recipe_selection_properties {
+): recipe_selection_properties_with_defaults {
 	const {
 		FGRecipe,
 		FGResourceDescriptor,
@@ -278,5 +279,5 @@ export function recipe_selection_enums(
 		});
 	}
 
-	return recipe_selection_enums;
+	return recipe_selection_enums as recipe_selection_properties_with_defaults;
 }

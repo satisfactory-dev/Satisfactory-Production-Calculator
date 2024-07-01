@@ -10,13 +10,13 @@ import {
 	ProductionData,
 } from './production-data';
 import {
-	recipe_selection_properties,
+	recipe_selection_properties_with_defaults,
 } from './production-data/types';
 
 type recipe_selection = SchemaObject & {
 	type: 'object',
 	additionalProperties: false,
-	properties: recipe_selection_properties,
+	properties: recipe_selection_properties_with_defaults,
 };
 
 type production_request = SchemaObject & {
@@ -56,7 +56,7 @@ type production_request = SchemaObject & {
 			type: 'object',
 			propertyNames: {
 				type: 'string',
-				enum: (keyof recipe_selection_properties)[],
+				enum: (keyof recipe_selection_properties_with_defaults)[],
 			},
 			additionalProperties: {
 				$ref: '#/$defs/number_arg',

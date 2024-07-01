@@ -1,0 +1,8 @@
+{
+	"extends": "./tsconfig.app",
+	"include": ["./lib/**/*.ts", "./index.ts"],
+	"compilerOptions": {
+		"declaration": true,
+		"sourceMap": false
+	}
+}

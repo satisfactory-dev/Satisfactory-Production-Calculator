@@ -1,7 +1,6 @@
 {
 	"type": "module",
-	"private": true,
-	"name": "@signpostmarv/docs.json.ts-production-planner",
+	"name": "@satisfactory-dev/docs.json.ts-production-planner",
 	"description": "Docs.json.ts-driven production planner",
 	"license": "Apache-2.0",
 	"repository": {
@@ -9,6 +8,8 @@
 		"url": "git+https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git.git"
 	},
 	"funding": "https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git?sponsor=1",
+  "exports": "./index.js",
+  "types": "./index.d.ts",
 	"devDependencies": {
 		"@satisfactory-dev/ajv-utilities": "^0.1.0",
 		"@signpostmarv/setup-performance-observer": "^0.1.2",

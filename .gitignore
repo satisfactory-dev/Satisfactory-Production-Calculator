@@ -5,6 +5,7 @@
 /.eslintcache
 /**/*.js
 /**/*.js.map
+/**/*.d.ts
 /coverage/
 /discover-types.perf.json
 /validator/

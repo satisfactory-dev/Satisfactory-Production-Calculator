@@ -4,6 +4,8 @@
 /tests/**/*.*
 /*.js
 /*.d.ts
+!/index.js
+!/index.d.ts
 /coverage/
 /.c8rc*.json
 /.devcontainer/
@@ -18,4 +20,8 @@
 /.prettierrc
 /tsconfig*.json
 /generated-types/
+/generated-schemas/
 /**/.gitkeep
+/validator/
+/data/
+/discover-types-perf.json

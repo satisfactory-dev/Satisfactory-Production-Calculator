@@ -5,7 +5,7 @@ import {
 	instance as production_data,
 } from './tests/utilities/production-data';
 import {
-	generate_schemas,
+	GenerateSchemas,
 } from './lib/generate-schemas';
 
 const __dirname = import.meta.dirname;
@@ -13,7 +13,7 @@ const __dirname = import.meta.dirname;
 const {
 	recipe_selection,
 	production_request,
-} = generate_schemas(production_data);
+} = GenerateSchemas.factory(production_data);
 
 await writeFile(
 	`${__dirname}/generated-schemas/production-request.json`,

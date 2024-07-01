@@ -5,3 +5,5 @@ export * from './lib/ProductionCalculator';
 export * from './lib/Request';
 export * from './lib/faux-recipe';
 export * from './lib/UnrealEngineString';
+export * from './lib/generate-schemas';
+export * from './lib/generate-validators';

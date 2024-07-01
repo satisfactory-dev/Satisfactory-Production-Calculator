@@ -3,8 +3,8 @@ import {
 } from 'fs/promises';
 
 import {
-	ProductionData,
-} from './lib/production-data';
+	instance as production_data,
+} from './tests/utilities/production-data';
 
 const __dirname = import.meta.dirname;
 
@@ -16,9 +16,7 @@ const {
 	fuel_nuclear,
 	items,
 	resources,
-} = await (new ProductionData(
-		`${__dirname}/generated-types/update8/`
-).data)
+} = production_data.data;
 
 await writeFile(
 	`${__dirname}/data/faux-recipe-ingredient-list.json`,

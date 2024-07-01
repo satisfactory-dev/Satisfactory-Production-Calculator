@@ -45,8 +45,8 @@ import {
 	Request,
 } from '../../lib/Request';
 import {
-	ProductionData,
-} from '../../lib/production-data';
+	instance as production_data,
+} from '../utilities/production-data';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -140,9 +140,7 @@ function flattened_production_ingredients_request_result(
 // eslint-disable-next-line max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, () => {
 	const instance = new ProductionCalculator(
-		new ProductionData(
-			`${import.meta.dirname}/../../generated-types/update8/`
-		)
+		production_data
 	);
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =

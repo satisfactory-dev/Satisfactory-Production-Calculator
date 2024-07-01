@@ -85,7 +85,7 @@ type FGVehicleDescriptor__type = (
 	| FGVehicleDescriptor__fueled_with_inventory__type
 );
 
-type imports = {
+export type imports = {
 	FGAmmoTypeProjectile: FGAmmoTypeProjectile__NativeClass,
 	FGAmmoTypeInstantHit: FGAmmoTypeInstantHit__NativeClass,
 	FGAmmoTypeSpreadshot: FGAmmoTypeSpreadshot__NativeClass,
@@ -150,166 +150,22 @@ type data = {
 
 export class ProductionData
 {
-	#imports:Promise<imports>;
-	#data:Promise<data>
+	#imports:imports;
+	#data:data;
 
-	constructor(root:string)
+	constructor(imports:() => imports)
 	{
-		this.#imports = new Promise<imports>((yup, nope) => {
-			Promise.all([
-				import(
-					`${root}/data/CoreUObject/FGAmmoTypeProjectile`
-				) as Promise<{
-					FGAmmoTypeProjectile: FGAmmoTypeProjectile__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGAmmoTypeInstantHit`
-				) as Promise<{
-					FGAmmoTypeInstantHit: FGAmmoTypeInstantHit__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGAmmoTypeSpreadshot`
-				) as Promise<{
-					FGAmmoTypeSpreadshot: FGAmmoTypeSpreadshot__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGItemDescriptorBiomass`
-				) as Promise<{
-					FGItemDescriptorBiomass: (
-						FGItemDescriptorBiomass__NativeClass
-					),
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGBuildingDescriptor`
-				) as Promise<{
-					FGBuildingDescriptor: (
-						FGBuildingDescriptor__NativeClass
-					),
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGConsumableDescriptor`
-				) as Promise<{
-					FGConsumableDescriptor: (
-						FGConsumableDescriptor__NativeClass
-					),
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGEquipmentDescriptor`
-				) as Promise<{
-					FGEquipmentDescriptor: (
-						FGEquipmentDescriptor__NativeClass
-					),
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGItemDescriptorNuclearFuel`
-				) as Promise<{
-					FGItemDescriptorNuclearFuel: (
-						FGItemDescriptorNuclearFuel__NativeClass
-					),
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGItemDescriptor`
-				) as Promise<{
-					FGItemDescriptor: FGItemDescriptor__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGPoleDescriptor`
-				) as Promise<{
-					FGPoleDescriptor: FGPoleDescriptor__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGRecipe`
-				) as Promise<{
-					FGRecipe: FGRecipe__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGResourceDescriptor`
-				) as Promise<{
-					FGResourceDescriptor: FGResourceDescriptor__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGVehicleDescriptor`
-				) as Promise<{
-					FGVehicleDescriptor: FGVehicleDescriptor__NativeClass,
-				}>,
-				import(
-					`${root}/data/CoreUObject/FGBuildableGeneratorNuclear`
-				) as Promise<{
-					FGBuildableGeneratorNuclear: (
-						FGBuildableGeneratorNuclear__NativeClass
-					),
-				}>,
-			]).then(([
-				{
-					FGAmmoTypeProjectile,
-				},
-				{
-					FGAmmoTypeInstantHit,
-				},
-				{
-					FGAmmoTypeSpreadshot,
-				},
-				{
-					FGItemDescriptorBiomass,
-				},
-				{
-					FGBuildingDescriptor,
-				},
-				{
-					FGConsumableDescriptor,
-				},
-				{
-					FGEquipmentDescriptor,
-				},
-				{
-					FGItemDescriptorNuclearFuel,
-				},
-				{
-					FGItemDescriptor,
-				},
-				{
-					FGPoleDescriptor,
-				},
-				{
-					FGRecipe,
-				},
-				{
-					FGResourceDescriptor,
-				},
-				{
-					FGVehicleDescriptor,
-				},
-				{
-					FGBuildableGeneratorNuclear,
-				},
-			]) => {
-				yup({
-					FGAmmoTypeProjectile,
-					FGAmmoTypeInstantHit,
-					FGAmmoTypeSpreadshot,
-					FGItemDescriptorBiomass,
-					FGBuildingDescriptor,
-					FGConsumableDescriptor,
-					FGEquipmentDescriptor,
-					FGItemDescriptorNuclearFuel,
-					FGItemDescriptor,
-					FGPoleDescriptor,
-					FGRecipe,
-					FGResourceDescriptor,
-					FGVehicleDescriptor,
-					FGBuildableGeneratorNuclear,
-				})
-			}).catch(nope);
-		})
+		this.#imports = imports();
 		this.#data = this.#get_data();
 	}
 
-	get data(): Promise<data>
+	get data(): data
 	{
 		return this.#data;
 	}
 
-	async #get_data(): Promise<data> {
+	#get_data(): data
+	{
 		const {
 			FGAmmoTypeProjectile,
 			FGAmmoTypeInstantHit,
@@ -325,7 +181,7 @@ export class ProductionData
 			FGResourceDescriptor,
 			FGVehicleDescriptor,
 			FGBuildableGeneratorNuclear,
-		} = await this.#imports;
+		} = this.#imports;
 
 		const resources = Object.fromEntries(
 			FGResourceDescriptor.Classes.map(

@@ -31,7 +31,7 @@ class Item
 	readonly parents:production_item[];
 	readonly production_data:ProductionData;
 	readonly recipe_selection:recipe_selection;
-	readonly result: Promise<Item[]> = Promise.resolve([]);
+	readonly result: Item[] = []
 
 	constructor(
 		production_data: ProductionData,
@@ -49,18 +49,12 @@ class Item
 		}
 	}
 
-	async is_recursive(): Promise<boolean>
+	is_recursive(): boolean
 	{
-		for (const maybe of await this.result) {
-			if (await maybe.is_recursive()) {
-				return true;
-			}
-		}
-
-		return false;
+		return !!this.result.find(maybe => maybe.is_recursive());
 	}
 
-	private async calculate(): Promise<Item[]>
+	private calculate(): Item[]
 	{
 		const {
 			ammo,
@@ -71,7 +65,7 @@ class Item
 			known_not_sourced_from_recipe,
 			recipes,
 			resources,
-		} = await this.production_data.data;
+		} = this.production_data.data;
 
 
 		if ((known_not_sourced_from_recipe as string[]).includes(this.item)) {
@@ -119,27 +113,24 @@ class Item
 				mProduct,
 			} = recipes[recipe];
 
-			const ingredient_amounts = (await Promise.all(mIngredients.map(
+			const ingredient_amounts = mIngredients.map(
 				e => amend_ItemClass_amount(
 					this.production_data,
 					e
-				)
-			))).map(e => e.Amount);
+				).Amount
+			);
 
 			const mapped_product_amounts = Object.fromEntries(
-				(
-					await Promise.all(
 						mProduct.map(
-							async (e): Promise<[string, number_arg]> => [
+					(e): [string, number_arg] => [
 								UnrealEngineString_right_x_C_suffix(
 									e.ItemClass
 								),
-								(await amend_ItemClass_amount(
+						amend_ItemClass_amount(
 									this.production_data,
 									e
-								)).Amount,
+						).Amount,
 							]
-						))
 				)
 			);
 
@@ -236,7 +227,7 @@ class Recursive extends Item
 {
 	is_recursive()
 	{
-		return Promise.resolve(true);
+		return true;
 	}
 }
 
@@ -260,11 +251,11 @@ export class Root extends Item
 		);
 	}
 
-	static async is_recursive(
+	static is_recursive(
 		production_data: ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection
-	): Promise<boolean> {
+	): boolean {
 		if (!this.cache.has(recipe_selection)) {
 			this.cache.set(recipe_selection, {});
 		}
@@ -276,7 +267,7 @@ export class Root extends Item
 		) {
 			(
 				this.cache.get(recipe_selection) as {[key: string]: boolean}
-			)[item] = await (
+			)[item] = (
 				new Root(production_data, item, recipe_selection)
 			).is_recursive();
 		}

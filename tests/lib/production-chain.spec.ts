@@ -14,14 +14,10 @@ import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled';
 import {
-	ProductionData,
-} from '../../lib/production-data';
+	instance as production_data,
+} from '../utilities/production-data';
 
 void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
-	const production_data = new ProductionData(
-		`${import.meta.dirname}/../../generated-types/update8/`
-	)
-
 	void describe('is_recursive', () => {
 		const data_sets:[
 			production_item,
@@ -68,7 +64,7 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 				})).is_recursive resolves to ${
 					expectation ? 'true' : 'false'
 				}`,
-				async () => {
+				() => {
 					const root = new Root(
 						production_data,
 						item,
@@ -76,7 +72,7 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 					);
 
 					assert.strictEqual(
-						await root.is_recursive(),
+						root.is_recursive(),
 						expectation
 					);
 				}
@@ -98,13 +94,11 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 		for (const data_set of data_sets) {
 			const [item, recipe_selection] = data_set;
 
-			const root = new Root(
+			void assert.throws(() => new Root(
 				production_data,
 				item,
 				recipe_selection,
-			);
-
-			void assert.rejects(() => root.result);
+			));
 		}
 	});
 });

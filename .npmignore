@@ -14,12 +14,12 @@
 /Makefile
 /.editorconfig
 /.eslintignore
-/.eslintcache
-/.eslintrc.json
+/**/.eslintcache
+/**/.eslintrc.json
 /.prettierignore
 /.prettierrc
 /tsconfig*.json
-/generated-types/
+/generated-types/*/data/
 /**/.gitkeep
 /validator/
 /data/

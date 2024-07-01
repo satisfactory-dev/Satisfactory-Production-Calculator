@@ -1,6 +1,7 @@
 {
 	"extends": "./tsconfig.app",
-	"include": ["./lib/**/*.ts", "./index.ts"],
+	"include": ["./lib/**/*.ts", "./index.ts", "./generated-types/**/*.ts"],
+	"exclude": ["./generated-types/*/data/**/*.ts"],
 	"compilerOptions": {
 		"declaration": true,
 		"sourceMap": false

@@ -204,8 +204,6 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						},
 					});
 
-					console.log(`checking ${Desc_C}`);
-
 					assert.strictEqual(
 						Desc_C in result.output,
 						true

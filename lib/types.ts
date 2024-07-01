@@ -8,12 +8,6 @@ import BigNumber from 'bignumber.js';
 import recipe_selection_schema from
 	'../generated-schemas/recipe-selection.json' with {type: 'json'};
 
-import {
-	buildings,
-	items,
-	resources,
-} from './production-data';
-
 export type recipe_selection_schema_key = (
 	keyof typeof recipe_selection_schema['properties']
 );
@@ -68,11 +62,8 @@ export type production_result<
 	surplus?: production_set<T>,
 };
 
-export type production_item = keyof (
-	| typeof buildings
-	| typeof items
-	| typeof resources
-);
+// this would be more specific but it resolves to string anyway
+export type production_item = string;
 
 export type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
 

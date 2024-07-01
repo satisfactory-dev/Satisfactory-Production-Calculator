@@ -21,19 +21,7 @@ import {
 	not_undefined,
 } from '@satisfactory-dev/custom-assert';
 import {
-	ammo,
-	biomass,
-	buildings,
-	consumable,
-	equipment,
-	fuel_nuclear,
-	items,
-	known_byproduct,
-	known_not_sourced_from_recipe,
-	poles,
-	recipes,
-	resources,
-	vehicles,
+	ProductionData,
 } from './production-data';
 import {
 	faux_recipe,
@@ -69,16 +57,19 @@ export class ProductionCalculator {
 	private input:production_set<
 		| operand_types
 	> = {};
+	private production_data:ProductionData;
 	protected readonly check:ValidateFunction<production_request>;
 
-	constructor()
-	{
+	constructor(
+		production_data:ProductionData,
+	) {
 		this.check = production_request_validator as (
 			ValidateFunction<production_request>
 		);
+		this.production_data = production_data;
 	}
 
-	calculate(data:unknown): production_result
+	calculate(data:unknown): Promise<production_result>
 	{
 		return this.calculate_validated(this.validate(data));
 	}
@@ -103,7 +94,7 @@ export class ProductionCalculator {
 		return data;
 	}
 
-	protected calculate_precisely(
+	protected async calculate_precisely(
 		data:production_request<
 			(
 				| amount_string
@@ -117,9 +108,23 @@ export class ProductionCalculator {
 		surplus?:production_set<
 			| operand_types
 		>
-	): production_result<
+	): Promise<production_result<
 		| operand_types
-	> {
+	>> {
+		const {
+			ammo,
+			biomass,
+			buildings,
+			consumable,
+			equipment,
+			fuel_nuclear,
+			items,
+			resources,
+			poles,
+			recipes,
+			vehicles,
+		} = await this.production_data.data;
+
 		const ingredients:{
 			[key in keyof typeof items]: (
 				| operand_types
@@ -161,10 +166,7 @@ export class ProductionCalculator {
 			}
 		}
 		const output:{
-			[key in keyof (
-				| typeof buildings
-				| typeof resources
-			)]: operand_types;
+			[key in string]: operand_types;
 		} = {};
 
 		for (const [production, output_amount] of Object.entries(data.pool)) {
@@ -305,22 +307,28 @@ export class ProductionCalculator {
 				mProduct,
 			} = recipes[recipe];
 
-			const ingredient_amounts = mIngredients.map(
-				e => amend_ItemClass_amount(
+			const ingredient_amounts = (await Promise.all(mIngredients.map(
+				(e) => amend_ItemClass_amount(
+					this.production_data,
 					e
-				).Amount
-			);
+				))
+			)).map(e => e.Amount);
 
-			const mapped_product_amounts = Object.fromEntries(mProduct.map(
-				(e): [string, (
-					| operand_types
-				)] => [
-					UnrealEngineString_right_x_C_suffix(e.ItemClass),
-					amend_ItemClass_amount_deferred(
-						e
-					).Amount,
-				]
-			));
+			const mapped_product_amounts = Object.fromEntries(
+				await Promise.all(
+					mProduct.map(
+						async(e): Promise<[string, (
+							| operand_types
+						)]> => [
+							UnrealEngineString_right_x_C_suffix(e.ItemClass),
+							(await amend_ItemClass_amount_deferred(
+								this.production_data,
+								e
+							)).Amount,
+						]
+					)
+				)
+			);
 
 			assert.strictEqual(
 				production in mapped_product_amounts,
@@ -411,9 +419,10 @@ export class ProductionCalculator {
 					)
 				);
 
-				const ammended_amount = amend_ItemClass_amount_deferred(
+				const ammended_amount = (await amend_ItemClass_amount_deferred(
+					this.production_data,
 					ingredient
-				).Amount;
+				)).Amount;
 
 				const multiplied = amount.times(
 					Numbers.divide_if_not_one(
@@ -464,9 +473,10 @@ export class ProductionCalculator {
 					)
 				);
 
-				const ammended_amount = amend_ItemClass_amount_deferred(
+				const ammended_amount = (await amend_ItemClass_amount_deferred(
+					this.production_data,
 					product
-				).Amount;
+				)).Amount;
 
 				const multiplied = amount.times(
 					Numbers.divide_if_not_one(
@@ -582,10 +592,10 @@ export class ProductionCalculator {
 		return result;
 	}
 
-	protected calculate_validated(
+	protected async calculate_validated(
 		data:production_request
-	): production_result {
-		const deferred = this.calculate_validated_deferred(data);
+	): Promise<production_result> {
+		const deferred = await this.calculate_validated_deferred(data);
 
 		const result:production_result = {
 			ingredients: {...deferred.ingredients},
@@ -601,7 +611,7 @@ export class ProductionCalculator {
 		return result;
 	}
 
-	protected calculate_validated_deferred(
+	protected async calculate_validated_deferred(
 		data:production_request<
 			(
 				| amount_string
@@ -612,10 +622,15 @@ export class ProductionCalculator {
 				| operand_types
 			)
 		>
-	): production_result<
+	): Promise<production_result<
 		| operand_types
-	> {
-		const initial_result = this.calculate_precisely(data);
+	>> {
+		const {
+			known_not_sourced_from_recipe,
+			known_byproduct,
+			resources,
+		} = await this.production_data.data;
+		const initial_result = await this.calculate_precisely(data);
 		const results = [initial_result];
 		let surplus:production_set<
 			| operand_types
@@ -653,10 +668,12 @@ export class ProductionCalculator {
 						check_deeper_item in recipe_selection_schema[
 							'properties'
 						]
-						|| known_not_sourced_from_recipe.includes(
+						|| (
+							known_not_sourced_from_recipe as string[]
+						).includes(
 							check_deeper_item
 						)
-						|| known_byproduct.includes(
+						|| (known_byproduct as string[]).includes(
 							check_deeper_item
 						)
 					),
@@ -668,10 +685,10 @@ export class ProductionCalculator {
 				);
 
 				if (
-					known_not_sourced_from_recipe.includes(
+					(known_not_sourced_from_recipe as string[]).includes(
 						check_deeper_item
 					)
-					|| known_byproduct.includes(
+					|| (known_byproduct as string[]).includes(
 						check_deeper_item
 					)
 				) {
@@ -682,7 +699,8 @@ export class ProductionCalculator {
 				let recursive_multiplier = new Fraction(1);
 
 				if (check_deeper_item in production_items) {
-					possibly_recursive = Root.is_recursive(
+					possibly_recursive = await Root.is_recursive(
+						this.production_data,
 						check_deeper_item,
 						data.recipe_selection || {}
 					);
@@ -717,7 +735,7 @@ export class ProductionCalculator {
 					),
 				};
 
-				const deeper_result = this.calculate_precisely(
+				const deeper_result = await this.calculate_precisely(
 					{
 						...data,
 						pool: deeper_result_pool,

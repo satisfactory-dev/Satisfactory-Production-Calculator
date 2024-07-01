@@ -44,6 +44,9 @@ import BigNumber from 'bignumber.js';
 import {
 	Request,
 } from '../../lib/Request';
+import {
+	ProductionData,
+} from '../../lib/production-data';
 
 type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -136,7 +139,11 @@ function flattened_production_ingredients_request_result(
 
 // eslint-disable-next-line max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, () => {
-	const instance = new ProductionCalculator();
+	const instance = new ProductionCalculator(
+		new ProductionData(
+			`${import.meta.dirname}/../../generated-types/update8/`
+		)
+	);
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =
 		FGRecipe.Classes.reduce(
@@ -192,14 +199,19 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					instance.constructor.name
 				}.calculate({pool: {${Desc_C}: 1}}) behaves`,
-				() => {
-					const get_result = () => instance.calculate({
+				async () => {
+					const result = await instance.calculate({
 						pool: {
 							[Desc_C]: '1' as amount_string,
 						},
 					});
 
-					assert.doesNotThrow(get_result);
+					console.log(`checking ${Desc_C}`);
+
+					assert.strictEqual(
+						Desc_C in result.output,
+						true
+					)
 				}
 			)
 		}
@@ -1187,7 +1199,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					expectation ? 'behaves' : 'throws'
 				} with ${JSON.stringify(data)}`,
-				() => {
+				async () => {
 					const get_result = () => instance.validate(
 						data
 					);
@@ -1199,7 +1211,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 						assert.deepEqual(
 							flattened_production_ingredients_request_result(
-								instance.calculate(data)
+								await instance.calculate(data)
 							),
 							flattened_production_ingredients_request_result(
 								expectation
@@ -1217,7 +1229,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`behaves with a typed version of ${
 					JSON.stringify(data)
 				}`,
-				() => {
+				async () => {
 					const request = new Request<
 						| amount_string
 						| operand_types
@@ -1235,7 +1247,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request)
+							await instance.calculate(request)
 						),
 						flattened_production_ingredients_request_result(
 							expectation
@@ -1244,7 +1256,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request.toData())
+							await instance.calculate(request.toData())
 						),
 						flattened_production_ingredients_request_result(
 							expectation

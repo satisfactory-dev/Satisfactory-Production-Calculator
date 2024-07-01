@@ -11,8 +11,7 @@ import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';
 import {
-	items,
-	resources,
+	ProductionData,
 } from "./production-data";
 import {
 	IntermediaryNumber,
@@ -20,15 +19,21 @@ import {
 	operand_types,
 } from '@signpostmarv/intermediary-number';
 
-export function amend_ItemClass_amount(
+export async function amend_ItemClass_amount(
+	production_data: ProductionData,
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount: integer_string__type;
 	}
-): {
+): Promise<{
 	ItemClass: UnrealEngineString;
 	Amount: number_arg;
-} {
+}> {
+	const {
+		items,
+		resources,
+	} = await production_data.data;
+
 	const Desc_c = UnrealEngineString_right_x_C_suffix(
 		ItemClass.ItemClass
 	);
@@ -52,17 +57,23 @@ export function amend_ItemClass_amount(
 	};
 }
 
-export function amend_ItemClass_amount_deferred(
+export async function amend_ItemClass_amount_deferred(
+	production_data: ProductionData,
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount: integer_string__type;
 	}
-): {
+): Promise<{
 	ItemClass: UnrealEngineString;
 	Amount: (
 		| operand_types
 	);
-} {
+}> {
+	const {
+		items,
+		resources,
+	} = await production_data.data;
+
 	const Desc_c = UnrealEngineString_right_x_C_suffix(
 		ItemClass.ItemClass
 	);

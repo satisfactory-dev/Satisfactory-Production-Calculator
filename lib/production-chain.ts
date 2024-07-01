@@ -1,13 +1,6 @@
 import assert from 'assert';
 import {
-	ammo,
-	biomass,
-	consumable,
-	equipment,
-	items,
-	known_not_sourced_from_recipe,
-	recipes,
-	resources,
+	ProductionData,
 } from './production-data';
 import type {
 	production_item,
@@ -36,14 +29,17 @@ class Item
 {
 	readonly item:production_item;
 	readonly parents:production_item[];
+	readonly production_data:ProductionData;
 	readonly recipe_selection:recipe_selection;
-	readonly result: Item[] = [];
+	readonly result: Promise<Item[]> = Promise.resolve([]);
 
 	constructor(
+		production_data: ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
 		parents:production_item[]
 	) {
+		this.production_data = production_data;
 		this.item = item;
 		this.recipe_selection = recipe_selection;
 		this.parents = parents;
@@ -53,14 +49,32 @@ class Item
 		}
 	}
 
-	get is_recursive(): boolean
+	async is_recursive(): Promise<boolean>
 	{
-		return !!this.result.find(maybe => maybe.is_recursive);
+		for (const maybe of await this.result) {
+			if (await maybe.is_recursive()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
-	private calculate(): Item[]
+	private async calculate(): Promise<Item[]>
 	{
-		if (known_not_sourced_from_recipe.includes(this.item)) {
+		const {
+			ammo,
+			biomass,
+			consumable,
+			equipment,
+			items,
+			known_not_sourced_from_recipe,
+			recipes,
+			resources,
+		} = await this.production_data.data;
+
+
+		if ((known_not_sourced_from_recipe as string[]).includes(this.item)) {
 			return [];
 		}
 
@@ -105,20 +119,29 @@ class Item
 				mProduct,
 			} = recipes[recipe];
 
-			const ingredient_amounts = mIngredients.map(
+			const ingredient_amounts = (await Promise.all(mIngredients.map(
 				e => amend_ItemClass_amount(
+					this.production_data,
 					e
-				).Amount
-			);
+				)
+			))).map(e => e.Amount);
 
-			const mapped_product_amounts = Object.fromEntries(mProduct.map(
-				(e): [string, number_arg] => [
-					UnrealEngineString_right_x_C_suffix(e.ItemClass),
-					amend_ItemClass_amount(
-						e
-					).Amount,
-				]
-			));
+			const mapped_product_amounts = Object.fromEntries(
+				(
+					await Promise.all(
+						mProduct.map(
+							async (e): Promise<[string, number_arg]> => [
+								UnrealEngineString_right_x_C_suffix(
+									e.ItemClass
+								),
+								(await amend_ItemClass_amount(
+									this.production_data,
+									e
+								)).Amount,
+							]
+						))
+				)
+			);
 
 			assert.strictEqual(
 				this.item in mapped_product_amounts,
@@ -192,6 +215,7 @@ class Item
 		).map(item => {
 			if (next_parents.includes(item)) {
 				return new Recursive(
+					this.production_data,
 					item,
 					this.recipe_selection,
 					next_parents
@@ -199,6 +223,7 @@ class Item
 			}
 
 			return new Item(
+				this.production_data,
 				item,
 				this.recipe_selection,
 				next_parents
@@ -209,9 +234,9 @@ class Item
 
 class Recursive extends Item
 {
-	get is_recursive()
+	is_recursive()
 	{
-		return true;
+		return Promise.resolve(true);
 	}
 }
 
@@ -223,16 +248,23 @@ export class Root extends Item
 	> = new WeakMap();
 
 	constructor(
+		production_data: ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	) {
-		super(item, recipe_selection, []);
+		super(
+			production_data,
+			item,
+			recipe_selection,
+			[]
+		);
 	}
 
-	static is_recursive(
+	static async is_recursive(
+		production_data: ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection
-	): boolean {
+	): Promise<boolean> {
 		if (!this.cache.has(recipe_selection)) {
 			this.cache.set(recipe_selection, {});
 		}
@@ -244,9 +276,9 @@ export class Root extends Item
 		) {
 			(
 				this.cache.get(recipe_selection) as {[key: string]: boolean}
-			)[item] = (
-				new Root(item, recipe_selection)
-			).is_recursive;
+			)[item] = await (
+				new Root(production_data, item, recipe_selection)
+			).is_recursive();
 		}
 
 		return (

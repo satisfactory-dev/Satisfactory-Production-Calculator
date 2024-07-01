@@ -100,7 +100,10 @@ class Item
 				/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 					.test(recipe)
 			) {
-				const faux_result = faux_recipe(recipe);
+				const faux_result = faux_recipe(
+					this.production_data,
+					recipe
+				);
 
 				for (const faux_ingredient of Object.keys(faux_result)) {
 					if (!ingredients.includes(faux_ingredient)) {

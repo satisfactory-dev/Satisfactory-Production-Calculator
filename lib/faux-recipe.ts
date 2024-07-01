@@ -6,19 +6,27 @@ import type {
 	production_set,
 } from './types';
 // eslint-disable-next-line max-len
-import faux_recipe_keys from '../data/faux-recipe-ingredient-list.json' with {type: 'json'};
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
+import {
+	ProductionData,
+} from './production-data';
 
-export function faux_recipe(recipe:string): production_set
-{
+export function faux_recipe(
+	production_data: ProductionData,
+	recipe:string
+): production_set {
 	if (
 		!/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 			.test(recipe)
 	) {
 		return {};
 	}
+
+	const {
+		faux_ingredients_list: faux_recipe_keys,
+	} = production_data.data;
 
 	const [
 		,

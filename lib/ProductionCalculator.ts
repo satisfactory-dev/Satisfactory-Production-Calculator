@@ -221,7 +221,10 @@ export class ProductionCalculator {
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
 				) {
-					const faux_result = faux_recipe(recipe);
+					const faux_result = faux_recipe(
+						this.production_data,
+						recipe
+					);
 
 					assert.strictEqual(
 						(

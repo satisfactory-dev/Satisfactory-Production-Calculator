@@ -182,4 +182,5 @@ export type data = {
 		| `SC_${string}_C`
 	)[],
 	recipe_selection_enums: recipe_selection_properties_with_defaults,
+	faux_ingredients_list: string[],
 };

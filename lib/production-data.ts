@@ -112,15 +112,15 @@ export class ProductionData
 			)
 		);
 
-		return {
-			ammo: Object.fromEntries(
+		const ammo = Object.fromEntries(
 				[
 					...FGAmmoTypeProjectile.Classes,
 					...FGAmmoTypeInstantHit.Classes,
 					...FGAmmoTypeSpreadshot.Classes,
 				].map(e => [e.ClassName, e])
-			),
-			biomass: Object.fromEntries(
+		);
+
+		const biomass = Object.fromEntries(
 				FGItemDescriptorBiomass.Classes.map(
 					(e): [
 						FGItemDescriptorBiomass__type[
@@ -129,7 +129,55 @@ export class ProductionData
 						FGItemDescriptorBiomass__type,
 					] => [e.ClassName, e]
 				)
-			),
+		);
+
+		const consumable = Object.fromEntries(
+				FGConsumableDescriptor.Classes.map(
+					(e): [
+						FGConsumableDescriptor__type[
+							'ClassName'
+						],
+						FGConsumableDescriptor__type,
+					] => [e.ClassName, e]
+				)
+		);
+
+		const equipment = Object.fromEntries(
+				FGEquipmentDescriptor.Classes.map(
+					(e): [
+						FGEquipmentDescriptor__type[
+							'ClassName'
+						],
+						FGEquipmentDescriptor__type,
+					] => [e.ClassName, e]
+				)
+		);
+
+		const fuel_nuclear = Object.fromEntries(
+				FGItemDescriptorNuclearFuel.Classes.map(
+					(e): [
+						FGItemDescriptorNuclearFuel__type[
+							'ClassName'
+						],
+						FGItemDescriptorNuclearFuel__type,
+					] => [e.ClassName, e]
+				)
+		);
+
+		const items = Object.fromEntries(
+				FGItemDescriptor.Classes.map(
+					(e): [
+						FGItemDescriptor__FGResourceDescriptor__type[
+							'ClassName'
+						],
+						FGItemDescriptor__FGResourceDescriptor__type,
+					] => [e.ClassName, e]
+				)
+		);
+
+		return {
+			ammo,
+			biomass,
 			buildings: Object.fromEntries(
 				FGBuildingDescriptor.Classes.map(
 					(e): [
@@ -140,46 +188,10 @@ export class ProductionData
 					] => [e.ClassName, e]
 				)
 			),
-			consumable: Object.fromEntries(
-				FGConsumableDescriptor.Classes.map(
-					(e): [
-						FGConsumableDescriptor__type[
-							'ClassName'
-						],
-						FGConsumableDescriptor__type,
-					] => [e.ClassName, e]
-				)
-			),
-			equipment: Object.fromEntries(
-				FGEquipmentDescriptor.Classes.map(
-					(e): [
-						FGEquipmentDescriptor__type[
-							'ClassName'
-						],
-						FGEquipmentDescriptor__type,
-					] => [e.ClassName, e]
-				)
-			),
-			fuel_nuclear: Object.fromEntries(
-				FGItemDescriptorNuclearFuel.Classes.map(
-					(e): [
-						FGItemDescriptorNuclearFuel__type[
-							'ClassName'
-						],
-						FGItemDescriptorNuclearFuel__type,
-					] => [e.ClassName, e]
-				)
-			),
-			items: Object.fromEntries(
-				FGItemDescriptor.Classes.map(
-					(e): [
-						FGItemDescriptor__FGResourceDescriptor__type[
-							'ClassName'
-						],
-						FGItemDescriptor__FGResourceDescriptor__type,
-					] => [e.ClassName, e]
-				)
-			),
+			consumable,
+			equipment,
+			fuel_nuclear,
+			items,
 			poles: Object.fromEntries(
 				FGPoleDescriptor.Classes.map(
 					(e): [
@@ -225,6 +237,15 @@ export class ProductionData
 				)
 			),
 			recipe_selection_enums: recipe_selection_enums(this.#imports),
+			faux_ingredients_list: [
+				...Object.keys(ammo),
+				...Object.keys(biomass),
+				...Object.keys(consumable),
+				...Object.keys(equipment),
+				...Object.keys(fuel_nuclear),
+				...Object.keys(items),
+				...Object.keys(resources),
+			],
 		};
 	}
 }

@@ -74,7 +74,6 @@ type production_request = SchemaObject & {
 						{$ref: '#/$defs/numeric_string'},
 						{
 							type: 'string',
-							// eslint-disable-next-line max-len
 							pattern: string,
 						},
 					],

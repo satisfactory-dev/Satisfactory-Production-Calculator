@@ -5,7 +5,6 @@ import {
 import type {
 	production_set,
 } from './types';
-// eslint-disable-next-line max-len
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';

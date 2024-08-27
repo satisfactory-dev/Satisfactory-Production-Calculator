@@ -43,12 +43,6 @@ lint--eslint:
 
 lint: lint--prettier lint--tsc lint--eslint
 
-lint-fix:
-	@echo 'fixing prettier issues'
-	@./node_modules/.bin/prettier . --write
-	@echo 'fixing eslint issues'
-	@./node_modules/.bin/eslint --cache './*.ts' lib tests --fix
-
 .PHONY: tests
 tests: build
 	@./node_modules/.bin/ts-node ./tests.ts

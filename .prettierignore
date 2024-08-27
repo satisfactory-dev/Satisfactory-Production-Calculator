@@ -3,4 +3,5 @@ package.json
 LICENSE.md
 **/*.ts
 **/*.js
+**/*.mjs
 discover-types.perf.json

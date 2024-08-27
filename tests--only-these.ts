@@ -17,9 +17,9 @@ const [,, from_args] = process.argv;
 const all_tests = await glob(`${__dirname}/tests/**/*.spec.ts`);
 
 const files = (from_args || '').split(' ').filter(
-	maybe => maybe.startsWith('tests/') && maybe.endsWith('.spec.ts')
+	maybe => maybe.startsWith('tests/') && maybe.endsWith('.spec.ts'),
 ).map(e => `${__dirname}/${e}`).filter(
-	maybe => all_tests.includes(maybe)
+	maybe => all_tests.includes(maybe),
 );
 
 let already_stopped = false;

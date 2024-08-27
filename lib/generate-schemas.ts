@@ -220,7 +220,7 @@ export class GenerateSchemas
 					propertyNames: {
 						type: 'string',
 						enum: object_keys(
-							recipe_selection_enums
+							recipe_selection_enums,
 						).sort((a, b) => {
 							return a.localeCompare(b);
 						}),

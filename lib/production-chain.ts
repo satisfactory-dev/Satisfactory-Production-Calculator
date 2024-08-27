@@ -37,7 +37,7 @@ class Item
 		production_data: ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
-		parents:production_item[]
+		parents:production_item[],
 	) {
 		this.production_data = production_data;
 		this.item = item;
@@ -90,7 +90,7 @@ class Item
 		assert.strictEqual(
 			undefined !== maybe_recipe,
 			true,
-			new Error(`Could not find recipe for ${this.item}`)
+			new Error(`Could not find recipe for ${this.item}`),
 		);
 
 		const recipe = maybe_recipe as string;
@@ -102,7 +102,7 @@ class Item
 			) {
 				const faux_result = faux_recipe(
 					this.production_data,
-					recipe
+					recipe,
 				);
 
 				for (const faux_ingredient of Object.keys(faux_result)) {
@@ -120,22 +120,22 @@ class Item
 			const ingredient_amounts = mIngredients.map(
 				e => amend_ItemClass_amount(
 					this.production_data,
-					e
-				).Amount
+					e,
+				).Amount,
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
 				mProduct.map(
 					(e): [string, number_arg] => [
 						UnrealEngineString_right_x_C_suffix(
-							e.ItemClass
+							e.ItemClass,
 						),
 						amend_ItemClass_amount(
 							this.production_data,
-							e
+							e,
 						).Amount,
-					]
-				)
+					],
+				),
 			);
 
 			assert.strictEqual(
@@ -146,8 +146,8 @@ class Item
 						production: this.item,
 						mapped_product_amounts,
 					},
-					'Production item not found in mapped product amounts!'
-				)
+					'Production item not found in mapped product amounts!',
+				),
 			);
 
 			const product_amounts = Object.values(mapped_product_amounts);
@@ -164,13 +164,13 @@ class Item
 					{
 						amounts,
 					},
-					'Expected at least two numbers!'
-				)
+					'Expected at least two numbers!',
+				),
 			);
 
 			for (const ingredient of mIngredients) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					ingredient.ItemClass
+					ingredient.ItemClass,
 				);
 
 				assert.strictEqual(
@@ -189,8 +189,8 @@ class Item
 							ingredient: ingredient.ItemClass.right,
 							expected: Desc_C,
 						},
-						`Supported ingredient found (${Desc_C}) but missing item!`
-					)
+						`Supported ingredient found (${Desc_C}) but missing item!`,
+					),
 				);
 
 				if (!ingredients.includes(Desc_C)) {
@@ -206,14 +206,14 @@ class Item
 		}
 
 		return ingredients.filter(
-			maybe => !(maybe in resources)
+			maybe => !(maybe in resources),
 		).map(item => {
 			if (next_parents.includes(item)) {
 				return new Recursive(
 					this.production_data,
 					item,
 					this.recipe_selection,
-					next_parents
+					next_parents,
 				);
 			}
 
@@ -221,7 +221,7 @@ class Item
 				this.production_data,
 				item,
 				this.recipe_selection,
-				next_parents
+				next_parents,
 			);
 		});
 	}
@@ -251,14 +251,14 @@ export class Root extends Item
 			production_data,
 			item,
 			recipe_selection,
-			[]
+			[],
 		);
 	}
 
 	static is_recursive(
 		production_data: ProductionData,
 		item:production_item,
-		recipe_selection:recipe_selection
+		recipe_selection:recipe_selection,
 	): boolean {
 		if (!this.cache.has(recipe_selection)) {
 			this.cache.set(recipe_selection, {});

@@ -17,9 +17,9 @@ void describe('faux_recipe', () => {
 		assert.deepStrictEqual(
 			faux_recipe(
 				production_data,
-				'not a faux recipe'
+				'not a faux recipe',
 			),
-			{}
+			{},
 		)
 	})
 })

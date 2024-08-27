@@ -64,7 +64,7 @@ export class ProductionCalculator {
 
 	constructor(
 		production_data:ProductionData,
-		generator_validators:GenerateValidators
+		generator_validators:GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
 		this.production_data = production_data;
@@ -76,7 +76,7 @@ export class ProductionCalculator {
 	}
 
 	validate(
-		data: unknown
+		data: unknown,
 	) {
 		if (data instanceof Request) {
 			return data.toData();
@@ -88,7 +88,7 @@ export class ProductionCalculator {
 					data,
 					errors: this.check.errors,
 				},
-				'Data not a supported request!'
+				'Data not a supported request!',
 			);
 		}
 
@@ -108,7 +108,7 @@ export class ProductionCalculator {
 		>,
 		surplus?:production_set<
 			| operand_types
-		>
+		>,
 	): production_result<
 		| operand_types
 	> {
@@ -153,8 +153,8 @@ export class ProductionCalculator {
 					(e): [string, operand_types] => [
 						e[0],
 						IntermediaryNumber.reuse_or_create(e[1]),
-					]
-				)
+					],
+				),
 			);
 		}
 
@@ -166,7 +166,7 @@ export class ProductionCalculator {
 			} else {
 				input[item] = input[item].do_math_then_dispose(
 					'plus',
-					amount
+					amount,
 				);
 			}
 		}
@@ -184,17 +184,17 @@ export class ProductionCalculator {
 			if (production in input) {
 				if (
 					input[production].isLessThan(
-						amount
+						amount,
 					)
 				) {
 					amount_from_input = input[production];
 					amount = amount.do_math_then_dispose(
 						'minus',
-						amount_from_input
+						amount_from_input,
 					);
 				} else {
 					amount_from_input = IntermediaryNumber.reuse_or_create(
-						output_amount
+						output_amount,
 					);
 					amount = IntermediaryNumber.Zero;
 				}
@@ -223,7 +223,7 @@ export class ProductionCalculator {
 				) {
 					const faux_result = faux_recipe(
 						this.production_data,
-						recipe
+						recipe,
 					);
 
 					assert.strictEqual(
@@ -237,8 +237,8 @@ export class ProductionCalculator {
 								recipe,
 								expected: production,
 							},
-							`Supported ingredient found but missing production item (${production})!`
-						)
+							`Supported ingredient found but missing production item (${production})!`,
+						),
 					);
 
 					for (const entry of Object.entries(faux_result)) {
@@ -257,7 +257,7 @@ export class ProductionCalculator {
 								faux_ingredient
 							].do_math_then_dispose(
 								'plus',
-								multiplied
+								multiplied,
 							);
 						}
 					}
@@ -268,7 +268,7 @@ export class ProductionCalculator {
 						production
 					].do_math_then_dispose(
 						'plus',
-						amount
+						amount,
 					);
 
 					continue;
@@ -283,8 +283,8 @@ export class ProductionCalculator {
 							amount,
 							recipe,
 						},
-						'Expecting to find a building recipe!'
-					)
+						'Expecting to find a building recipe!',
+					),
 				);
 
 				assert.strictEqual(
@@ -295,8 +295,8 @@ export class ProductionCalculator {
 							recipe,
 							expected: production,
 						},
-						`Supported ingredient found but missing item!`
-					)
+						`Supported ingredient found but missing item!`,
+					),
 				);
 
 				output[
@@ -305,7 +305,7 @@ export class ProductionCalculator {
 					production
 				].do_math_then_dispose(
 					'plus',
-					amount
+					amount,
 				);
 
 				continue;
@@ -319,8 +319,8 @@ export class ProductionCalculator {
 			const ingredient_amounts = mIngredients.map(
 				(e) => amend_ItemClass_amount(
 					this.production_data,
-					e
-				).Amount
+					e,
+				).Amount,
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
@@ -331,10 +331,10 @@ export class ProductionCalculator {
 						UnrealEngineString_right_x_C_suffix(e.ItemClass),
 						amend_ItemClass_amount_deferred(
 							this.production_data,
-							e
+							e,
 						).Amount,
-					]
-				)
+					],
+				),
 			);
 
 			assert.strictEqual(
@@ -345,8 +345,8 @@ export class ProductionCalculator {
 						production,
 						mapped_product_amounts,
 					},
-					'Production item not found in mapped product amounts!'
-				)
+					'Production item not found in mapped product amounts!',
+				),
 			);
 
 			const product_amounts = Object.values(mapped_product_amounts);
@@ -363,8 +363,8 @@ export class ProductionCalculator {
 					{
 						amounts,
 					},
-					'Expected at least two numbers!'
-				)
+					'Expected at least two numbers!',
+				),
 			);
 
 			let divisor = Numbers.least_common_multiple_deferred(
@@ -380,7 +380,7 @@ export class ProductionCalculator {
 					...(
 						| operand_types
 					)[],
-				]
+				],
 			);
 
 			const divisor_pre_adjustment = divisor;
@@ -394,16 +394,16 @@ export class ProductionCalculator {
 							mapped_product_amounts[production]
 						),
 						divisor_pre_adjustment,
-						true
+						true,
 					),
-					true
+					true,
 				),
-				true
+				true,
 			);
 
 			for (const ingredient of mIngredients) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					ingredient.ItemClass
+					ingredient.ItemClass,
 				);
 
 				assert.strictEqual(
@@ -422,21 +422,21 @@ export class ProductionCalculator {
 							ingredient: ingredient.ItemClass.right,
 							expected: Desc_C,
 						},
-						`Supported ingredient found (${Desc_C}) but missing item!`
-					)
+						`Supported ingredient found (${Desc_C}) but missing item!`,
+					),
 				);
 
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					this.production_data,
-					ingredient
+					ingredient,
 				).Amount;
 
 				const multiplied = amount.times(
 					Numbers.divide_if_not_one(
 						ammended_amount,
 						divisor,
-						false
-					)
+						false,
+					),
 				);
 
 				if (!(Desc_C in ingredients)) {
@@ -446,14 +446,14 @@ export class ProductionCalculator {
 						Desc_C
 					].do_math_then_dispose(
 						'plus',
-						multiplied
+						multiplied,
 					);
 				}
 			}
 
 			for (const product of mProduct) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					product.ItemClass
+					product.ItemClass,
 				);
 
 				assert.strictEqual(
@@ -476,21 +476,21 @@ export class ProductionCalculator {
 							product: product.ItemClass.right,
 							expected: Desc_C,
 						},
-						`Supported product found (${Desc_C}) but missing item!`
-					)
+						`Supported product found (${Desc_C}) but missing item!`,
+					),
 				);
 
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					this.production_data,
-					product
+					product,
 				).Amount;
 
 				const multiplied = amount.times(
 					Numbers.divide_if_not_one(
 						ammended_amount,
 						divisor,
-						false
-					)
+						false,
+					),
 				);
 
 				if (!(Desc_C in output)) {
@@ -498,7 +498,7 @@ export class ProductionCalculator {
 				} else {
 					output[Desc_C] = output[Desc_C].do_math_then_dispose(
 						'plus',
-						multiplied
+						multiplied,
 					);
 				}
 			}
@@ -508,7 +508,7 @@ export class ProductionCalculator {
 			return {
 				item: e[0],
 				amount: e[1]
-					.minus(
+					.minus((
 						(e[0] in ingredients)
 							? (
 								ingredients[
@@ -516,7 +516,7 @@ export class ProductionCalculator {
 								]
 							)
 							: 0
-					)
+					))
 					.minus(output[e[0]] || 0),
 			};
 		}).filter(maybe => maybe.amount.isGreaterThan(0));
@@ -539,7 +539,7 @@ export class ProductionCalculator {
 
 				was[is.item].output = was[is.item].output.do_math_then_dispose(
 					'plus',
-					is.amount
+					is.amount,
 				);
 
 				return was;
@@ -557,13 +557,13 @@ export class ProductionCalculator {
 						is.item
 					].surplus.do_math_then_dispose(
 						'plus',
-						is.amount
+						is.amount,
 					);
 
 					return was;
 				},
-				{} as combined_production_entry<operand_types>
-			)
+				{} as combined_production_entry<operand_types>,
+			),
 		);
 
 		const result:production_result<
@@ -582,8 +582,8 @@ export class ProductionCalculator {
 									: left_over
 							),
 						];
-					}
-				).filter(maybe => maybe[1].isGreaterThan(0))
+					},
+				).filter(maybe => maybe[1].isGreaterThan(0)),
 			),
 			output,
 			combined,
@@ -600,7 +600,7 @@ export class ProductionCalculator {
 	}
 
 	protected calculate_validated(
-		data:production_request
+		data:production_request,
 	): production_result {
 		const deferred = this.calculate_validated_deferred(data);
 
@@ -628,7 +628,7 @@ export class ProductionCalculator {
 				| amount_string
 				| operand_types
 			)
-		>
+		>,
 	): production_result<
 		| operand_types
 	> {
@@ -651,7 +651,7 @@ export class ProductionCalculator {
 		let checking_recursively = this.top_level_only
 			? []
 			: Object.entries(initial_result.ingredients).filter(
-				maybe => !(maybe[0] in resources)
+				maybe => !(maybe[0] in resources),
 			);
 		const avoid_checking_further = new Set<string>();
 
@@ -665,7 +665,7 @@ export class ProductionCalculator {
 						undefined
 					>)
 				),
-			])
+			]),
 		);
 
 		while (checking_recursively.length > 0) {
@@ -687,25 +687,25 @@ export class ProductionCalculator {
 						|| (
 							known_not_sourced_from_recipe as string[]
 						).includes(
-							check_deeper_item
+							check_deeper_item,
 						)
 						|| (known_byproduct as string[]).includes(
-							check_deeper_item
+							check_deeper_item,
 						)
 					),
 					true,
 					new NoMatchError(
 						check_deeper_item,
-						`Item (${check_deeper_item}) not found in recipe selection!`
-					)
+						`Item (${check_deeper_item}) not found in recipe selection!`,
+					),
 				);
 
 				if (
 					(known_not_sourced_from_recipe as string[]).includes(
-						check_deeper_item
+						check_deeper_item,
 					)
 					|| (known_byproduct as string[]).includes(
-						check_deeper_item
+						check_deeper_item,
 					)
 				) {
 					continue;
@@ -718,14 +718,14 @@ export class ProductionCalculator {
 					possibly_recursive = Root.is_recursive(
 						this.production_data,
 						check_deeper_item,
-						data.recipe_selection || {}
+						data.recipe_selection || {},
 					);
 
 					if (possibly_recursive) {
 						const lcm = production_items[
 							check_deeper_item
 						].toFraction().lcm(
-							check_deeper_amount.toFraction()
+							check_deeper_amount.toFraction(),
 						);
 
 						const a = production_items[
@@ -747,7 +747,7 @@ export class ProductionCalculator {
 
 				const deeper_result_pool:production_request['pool'] = {
 					[check_deeper_item]: check_deeper_amount.times(
-						recursive_multiplier
+						recursive_multiplier,
 					),
 				};
 
@@ -756,7 +756,7 @@ export class ProductionCalculator {
 						...data,
 						pool: deeper_result_pool,
 					},
-					surplus
+					surplus,
 				);
 				surplus = deeper_result.surplus || {};
 
@@ -770,16 +770,16 @@ export class ProductionCalculator {
 					check_deeper_item
 				] = self_output.do_math_then_dispose(
 					'minus',
-					check_deeper_amount
+					check_deeper_amount,
 				);
 
 				const maybe_check_further = Object.entries(
-					deeper_result.ingredients
+					deeper_result.ingredients,
 				).filter(
 					maybe => (
 						!(maybe[0] in resources)
 						&& !avoid_checking_further.has(maybe[0])
-					)
+					),
 				);
 
 				if (maybe_check_further.length) {
@@ -796,7 +796,7 @@ export class ProductionCalculator {
 								further_item
 							].do_math_then_dispose(
 								'plus',
-								further_amount
+								further_amount,
 							);
 						} else {
 							when_done[further_item] = further_amount;
@@ -826,7 +826,7 @@ export class ProductionCalculator {
 						item
 					] = ingredients[item].do_math_then_dispose(
 						'plus',
-						amount
+						amount,
 					);
 				}
 			}
@@ -839,7 +839,7 @@ export class ProductionCalculator {
 						item
 					] = output[item].do_math_then_dispose(
 						'plus',
-						amount
+						amount,
 					);
 				}
 			}
@@ -849,13 +849,13 @@ export class ProductionCalculator {
 			assert.strictEqual(
 				entry[0] in output,
 				true,
-				`${entry[0]} not on output map!`
+				`${entry[0]} not on output map!`,
 			);
 			not_undefined(entry[1]);
 
 			if (
 				output[entry[0]].isGreaterThan(
-					entry[1]
+					entry[1],
 				)
 			) {
 				if (!(entry[0] in surplus)) {
@@ -865,19 +865,19 @@ export class ProductionCalculator {
 						entry[0]
 					].do_math_then_dispose(
 						'plus',
-						output[entry[0]].minus(entry[1])
+						output[entry[0]].minus(entry[1]),
 					);
 				}
 
 				output[entry[0]] = IntermediaryNumber.reuse_or_create(
-					entry[1]
+					entry[1],
 				);
 			}
 		}
 
 		const output_entries = Object.entries(output);
 		const negative_outputs = output_entries.filter(
-			maybe => maybe[1].isLessThan(0)
+			maybe => maybe[1].isLessThan(0),
 		);
 
 		for (const entry of negative_outputs) {
@@ -888,17 +888,17 @@ export class ProductionCalculator {
 					entry[0]
 				].do_math_then_dispose(
 					'plus',
-					entry[1].abs()
+					entry[1].abs(),
 				);
 			}
 		}
 
 		const output_entries_filtered = output_entries.filter(
-			maybe => maybe[1].isGreaterThan(0)
+			maybe => maybe[1].isGreaterThan(0),
 		);
 
 		const surplus_filtered = Object.entries(surplus).filter(
-			maybe => maybe[1].isGreaterThan(0)
+			maybe => maybe[1].isGreaterThan(0),
 		).map(e => {
 			return {
 				item: e[0],
@@ -918,7 +918,7 @@ export class ProductionCalculator {
 
 				was[item].output = was[item].output.do_math_then_dispose(
 					'plus',
-					amount
+					amount,
 				);
 
 				return was;
@@ -937,7 +937,7 @@ export class ProductionCalculator {
 						is.item
 					].surplus.do_math_then_dispose(
 						'plus',
-						is.amount
+						is.amount,
 					);
 
 					return was;
@@ -952,8 +952,8 @@ export class ProductionCalculator {
 							| operand_types
 						),
 					}
-				}
-			)
+				},
+			),
 		);
 
 		const result:production_result<
@@ -961,7 +961,7 @@ export class ProductionCalculator {
 		> = {
 			ingredients,
 			output: Object.fromEntries(output_entries_filtered.filter(
-				maybe => !maybe[1].isZero()
+				maybe => !maybe[1].isZero(),
 			)),
 			combined,
 		};
@@ -971,7 +971,7 @@ export class ProductionCalculator {
 				surplus_filtered.map(e => [
 					e.item,
 					e.amount,
-				])
+				]),
 			);
 		}
 

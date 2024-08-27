@@ -32,14 +32,14 @@ export class GenerateValidators
 	private constructor(
 		validation_function:ValidateFunction<
 			production_request
-		>
+		>,
 	) {
 		this.validation_function = validation_function;
 	}
 
 	static #compile(
 		schemas:GenerateSchemas,
-		ajv: Ajv
+		ajv: Ajv,
 	) {
 		const {
 			production_request,
@@ -53,7 +53,7 @@ export class GenerateValidators
 
 	static fromCompile(
 		schemas:GenerateSchemas,
-		ajv: Ajv
+		ajv: Ajv,
 	): GenerateValidators {
 		let existing_outter = this.#ajv_instances.get(schemas);
 
@@ -80,11 +80,11 @@ export class GenerateValidators
 
 	static toStandalone(
 		schemas:GenerateSchemas,
-		ajv: Ajv
+		ajv: Ajv,
 	): string {
 		return esmify(standalone(
 			ajv,
-			this.#compile(schemas, ajv)
+			this.#compile(schemas, ajv),
 		));
 	}
 }

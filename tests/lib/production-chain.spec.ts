@@ -68,14 +68,14 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 					const root = new Root(
 						production_data,
 						item,
-						recipe_selection
+						recipe_selection,
 					);
 
 					assert.strictEqual(
 						root.is_recursive(),
-						expectation
+						expectation,
 					);
-				}
+				},
 			)
 		}
 	});

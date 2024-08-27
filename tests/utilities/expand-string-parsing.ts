@@ -5,9 +5,9 @@ export function random_ignore_string()
 		Math.min(
 			100,
 			Math.round(
-				Math.random() * 100
-			)
-		)
+				Math.random() * 100,
+			),
+		),
 	);
 
 	let result = '';
@@ -40,7 +40,7 @@ export type from_string_data_set = [
 ];
 
 function expand_nesting(
-	input:from_string_data_set
+	input:from_string_data_set,
 ): [from_string_data_set, ...from_string_data_set[]] {
 	const result:[from_string_data_set, ...from_string_data_set[]] = [input];
 
@@ -63,7 +63,7 @@ function expand_nesting(
 }
 
 function maybe_expand_whitspace(
-	input:from_string_data_set
+	input:from_string_data_set,
 ): from_string_data_set[] {
 	const result:from_string_data_set[] = [];
 
@@ -132,7 +132,7 @@ export function expand_ignore_characters(
 }
 
 export function expand_fraction_string(
-	fraction_string:`${number}.${number}(${number})`
+	fraction_string:`${number}.${number}(${number})`,
 ): [from_string_data_set, ...from_string_data_set[]] {
 	return [
 		...expand_ignore_characters([

@@ -29,9 +29,9 @@ void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
 			() => {
 				assert.equal(
 					filter_UnrealEngineString_right_x_C_suffix(input),
-					expectation
+					expectation,
 				);
-			}
+			},
 		);
 	}
 })

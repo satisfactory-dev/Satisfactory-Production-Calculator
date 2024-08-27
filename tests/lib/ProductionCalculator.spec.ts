@@ -67,7 +67,7 @@ function flattened_production_ingredients_request_result(
 			| BigNumber
 			| operand_types
 		)
-	>
+	>,
 ) : flattened_result {
 	const calculating:{
 		ingredients: {[key: string]: operand_types},
@@ -78,7 +78,7 @@ function flattened_production_ingredients_request_result(
 			Object.entries(input.ingredients).map(e => [
 				e[0],
 				IntermediaryNumber.reuse_or_create(e[1]),
-			])
+			]),
 		),
 		output: {},
 		surplus: {},
@@ -114,7 +114,7 @@ function flattened_production_ingredients_request_result(
 	}
 
 	const surplus_entries = Object.entries(
-		calculating.surplus
+		calculating.surplus,
 	).map((e): [string, string] => [
 		e[0],
 		parseFloat(e[1].toAmountString()).toString(),
@@ -123,16 +123,16 @@ function flattened_production_ingredients_request_result(
 	const result:flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
-				calculating.ingredients
-			).map(e => [e[0], parseFloat(e[1].toAmountString()).toString()])
+				calculating.ingredients,
+			).map(e => [e[0], parseFloat(e[1].toAmountString()).toString()]),
 		),
 		output: Object.fromEntries(
 			Object.entries(
-				calculating.output
+				calculating.output,
 			).map(e => [
 				e[0],
 				parseFloat(e[1].toAmountString()).toString(),
-			])
+			]),
 		),
 	};
 
@@ -150,11 +150,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			'../../validator/production_request_schema.mjs'
 		) as unknown as Promise<{
 			default: ValidateFunction<production_request>,
-		}>
+		}>,
 	);
 	const instance = new ProductionCalculator(
 		production_data,
-		validators
+		validators,
 	);
 
 	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =
@@ -162,7 +162,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			(was, is) => {
 				for (const product of is.mProduct) {
 					const Desc_C = UnrealEngineString_right_x_C_suffix(
-						product.ItemClass
+						product.ItemClass,
 					);
 
 					if (!was.includes(Desc_C)) {
@@ -176,10 +176,10 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				(maybe) => (
 					'RF_SOLID' === maybe.mForm
 					&& filter_UnrealEngineString_right_x_C_suffix(
-						maybe.ClassName
+						maybe.ClassName,
 					)
-				)
-			).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix)
+				),
+			).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix),
 		);
 
 	does_not_throw_cases = [
@@ -191,7 +191,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			if (is.mAllowedResources instanceof Array) {
 				for (const resource of is.mAllowedResources) {
 					const Desc_C = UnrealEngineString_right_x_C_suffix(
-						resource
+						resource,
 					);
 
 					if (!was.includes(Desc_C)) {
@@ -202,7 +202,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 			return was;
 		},
-		does_not_throw_cases
+		does_not_throw_cases,
 	);
 
 	void describe('calculate', () => {
@@ -220,9 +220,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.strictEqual(
 						Desc_C in result.output,
-						true
+						true,
 					)
-				}
+				},
 			)
 		}
 	})
@@ -264,7 +264,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				Desc_Cement_C: IntermediaryNumber.create('100.0001'),
 				Desc_SteelPlate_C: IntermediaryNumber.create('100.0001'),
 				Desc_IronPlateReinforced_C: IntermediaryNumber.create(
-					'22.5000225'
+					'22.5000225',
 				),
 				Desc_IronRod_C: IntermediaryNumber.create('157.5001575'),
 				Desc_IronPlate_C: IntermediaryNumber.create('135.000135'),
@@ -280,7 +280,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			},
 			output: {
 				Desc_BlueprintDesigner_C: IntermediaryNumber.create(
-					'1.000001'
+					'1.000001',
 				),
 			},
 			combined: {
@@ -549,7 +549,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					},
 					output: {
 						Desc_IronPlateReinforced_C: IntermediaryNumber.create(
-							'1'
+							'1',
 						),
 					},
 					combined: {
@@ -569,7 +569,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_IronPlateReinforced_C: IntermediaryNumber.create(
-							'1.5'
+							'1.5',
 						),
 						Desc_IronRod_C: IntermediaryNumber.create('10.5'),
 						Desc_IronPlate_C: IntermediaryNumber.create('9'),
@@ -626,7 +626,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Plastic_C: IntermediaryNumber.create('1'),
 						Desc_HeavyOilResidue_C: IntermediaryNumber.create(
-							'0.5'
+							'0.5',
 						),
 					},
 					combined: {
@@ -670,11 +670,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_PackagedWater_C: IntermediaryNumber.create(
-							'123.456'
+							'123.456',
 						),
 						Desc_Water_C: IntermediaryNumber.create('123.456'),
 						Desc_FluidCanister_C: IntermediaryNumber.create(
-							'123.456'
+							'123.456',
 						),
 						Desc_Plastic_C: IntermediaryNumber.create('61.728'),
 						Desc_LiquidOil_C: IntermediaryNumber.create('92.592'),
@@ -682,10 +682,10 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					output: {
 						Desc_Water_C: IntermediaryNumber.create('123.456'),
 						Desc_FluidCanister_C: IntermediaryNumber.create(
-							'123.456'
+							'123.456',
 						),
 						Desc_HeavyOilResidue_C: IntermediaryNumber.create(
-							'30.864'
+							'30.864',
 						),
 					},
 					combined: {
@@ -768,7 +768,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_IronPlateReinforced_C: IntermediaryNumber.create(
-							'1.5'
+							'1.5',
 						),
 						Desc_IronRod_C: IntermediaryNumber.create('10.5'),
 						Desc_IronPlate_C: IntermediaryNumber.create('9'),
@@ -850,7 +850,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_SteelIngot_C: IntermediaryNumber.create('81.75'),
 						Desc_SteelPipe_C: IntermediaryNumber.create('22.5'),
 						Desc_SteelPlateReinforced_C: IntermediaryNumber.create(
-							'3'
+							'3',
 						),
 						Desc_SteelPlate_C: IntermediaryNumber.create('12'),
 						Desc_Stone_C: IntermediaryNumber.create('135'),
@@ -895,7 +895,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_GoldIngot_C: IntermediaryNumber.create('0.4'),
 						Desc_HighSpeedWire_C: IntermediaryNumber.create('2'),
 						Desc_NuclearFuelRod_C: IntermediaryNumber.create(
-							'0.02'
+							'0.02',
 						),
 						Desc_OreCopper_C: IntermediaryNumber.create('1.6'),
 						Desc_OreGold_C: IntermediaryNumber.create('1.2'),
@@ -945,10 +945,10 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_LiquidOil_C: IntermediaryNumber.create('1.5'),
 						Desc_LiquidFuel_C: IntermediaryNumber.One,
 						Desc_Plastic_C: IntermediaryCalculation.fromString(
-							'1/3'
+							'1/3',
 						),
 						Desc_Rubber_C: IntermediaryCalculation.fromString(
-							'2/3'
+							'2/3',
 						),
 					},
 					output: {
@@ -957,7 +957,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					},
 					surplus: {
 						Desc_Plastic_C: IntermediaryCalculation.fromString(
-							'(8 + (1/3)) / 100'
+							'(8 + (1/3)) / 100',
 						),
 					},
 					combined: {
@@ -986,14 +986,14 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_IronIngot_C: IntermediaryCalculation.fromString(
-							'2/3'
+							'2/3',
 						),
 						Desc_LiquidFuel_C: IntermediaryCalculation.fromString(
-							'(1 + (1/3))/10'
+							'(1 + (1/3))/10',
 						),
 						Desc_LiquidOil_C: IntermediaryNumber.create('0.2'),
 						Desc_OreIron_C: IntermediaryCalculation.fromString(
-							'2/3'
+							'2/3',
 						),
 						Desc_Plastic_C: IntermediaryNumber.create('0.177778'),
 						Desc_Rubber_C: IntermediaryNumber.create('0.088889'),
@@ -1101,13 +1101,13 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					ingredients: {
 						Desc_SteelIngot_C: IntermediaryNumber.create('4'),
 						Desc_IronIngot_C: IntermediaryCalculation.fromString(
-							'2 + (2/3)'
+							'2 + (2/3)',
 						),
 						Desc_OreIron_C: IntermediaryCalculation.fromString(
-							'2 + (2/3)'
+							'2 + (2/3)',
 						),
 						Desc_Coal_C: IntermediaryCalculation.fromString(
-							'2 + (2/3)'
+							'2 + (2/3)',
 						),
 					},
 					output: {
@@ -1137,7 +1137,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					ingredients: {
 						Desc_SteelIngot_C: IntermediaryNumber.create('4'),
 						Desc_Coal_C: IntermediaryCalculation.fromString(
-							'2 + (2/3)'
+							'2 + (2/3)',
 						),
 					},
 					output: {
@@ -1145,7 +1145,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					},
 					surplus: {
 						Desc_IronIngot_C: IntermediaryCalculation.fromString(
-							'1/3'
+							'1/3',
 						),
 					},
 					combined: {
@@ -1172,7 +1172,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: Object.fromEntries(
 						Object.entries(result_1.ingredients).filter(
-							(maybe) => 'Desc_IronIngot_C' !== maybe[0]
+							(maybe) => 'Desc_IronIngot_C' !== maybe[0],
 						).map(
 							(ingredient) => {
 								if (ingredient[0] === 'Desc_OreIron_C') {
@@ -1183,8 +1183,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 								}
 
 								return ingredient;
-							}
-						)
+							},
+						),
 					),
 					output: result_1.output,
 					combined: Object.fromEntries(
@@ -1196,7 +1196,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 									surplus: IntermediaryNumber.Zero,
 								},
 							];
-						})
+						}),
 					),
 				},
 			],
@@ -1211,7 +1211,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				} with ${JSON.stringify(data)}`,
 				() => {
 					const get_result = () => instance.validate(
-						data
+						data,
 					);
 
 					if (false === expectation) {
@@ -1221,14 +1221,14 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 						assert.deepEqual(
 							flattened_production_ingredients_request_result(
-								instance.calculate(data)
+								instance.calculate(data),
 							),
 							flattened_production_ingredients_request_result(
-								expectation
-							)
+								expectation,
+							),
 						);
 					}
-				}
+				},
 			)
 
 			if (false === expectation) {
@@ -1251,28 +1251,28 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 
 					const get_result = () => instance.validate(
-						request
+						request,
 					);
 					assert.doesNotThrow(get_result);
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request)
+							instance.calculate(request),
 						),
 						flattened_production_ingredients_request_result(
-							expectation
-						)
+							expectation,
+						),
 					);
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request.toData())
+							instance.calculate(request.toData()),
 						),
 						flattened_production_ingredients_request_result(
-							expectation
-						)
+							expectation,
+						),
 					);
-				}
+				},
 			)
 		}
 
@@ -1289,7 +1289,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					});
 
 					assert.doesNotThrow(get_result);
-				}
+				},
 			)
 		}
 	})

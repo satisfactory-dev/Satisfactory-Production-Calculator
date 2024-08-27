@@ -24,7 +24,7 @@ export function amend_ItemClass_amount(
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount: integer_string__type;
-	}
+	},
 ): {
 	ItemClass: UnrealEngineString;
 	Amount: number_arg;
@@ -35,7 +35,7 @@ export function amend_ItemClass_amount(
 	} = production_data.data;
 
 	const Desc_c = UnrealEngineString_right_x_C_suffix(
-		ItemClass.ItemClass
+		ItemClass.ItemClass,
 	);
 
 	return {
@@ -62,7 +62,7 @@ export function amend_ItemClass_amount_deferred(
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount: integer_string__type;
-	}
+	},
 ): {
 	ItemClass: UnrealEngineString;
 	Amount: (
@@ -75,7 +75,7 @@ export function amend_ItemClass_amount_deferred(
 	} = production_data.data;
 
 	const Desc_c = UnrealEngineString_right_x_C_suffix(
-		ItemClass.ItemClass
+		ItemClass.ItemClass,
 	);
 
 	return {

@@ -22,7 +22,7 @@ run({
 			&& !maybe.includes('UnrealEngineString.spec.ts')
 			&& !maybe.includes('Numbers.spec.ts')
 			&& !maybe.includes('IntermediaryNumber.spec.ts')
-		)
+		),
 	),
 	concurrency: true,
 	signal: ac.signal,

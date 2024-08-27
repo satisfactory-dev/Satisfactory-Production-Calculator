@@ -30,6 +30,6 @@ await writeFile(
 	`${__dirname}/validator/production_request_schema.mjs`,
 	GenerateValidators.toStandalone(
 		GenerateSchemas.factory(production_data),
-		ajv
-	)
+		ajv,
+	),
 );

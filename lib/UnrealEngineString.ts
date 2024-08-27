@@ -16,11 +16,11 @@ const UnrealEngineString_right_x_C_suffix_regex_prefixes =
 	'(?:Desc|BP|Foundation|Recipe|SC)'
 
 const UnrealEngineString_right_x_C_suffix_regex = new RegExp(
-	`^${UnrealEngineString_right_x_C_suffix_regex_prefixes}_[^.]+_C$`
+	`^${UnrealEngineString_right_x_C_suffix_regex_prefixes}_[^.]+_C$`,
 );
 
 export function filter_UnrealEngineString_right_x_C_suffix(
-	maybe:unknown
+	maybe:unknown,
 ): maybe is UnrealEngineString_right_x_C_suffix {
 	return (
 		is_string(maybe)
@@ -36,16 +36,16 @@ const UnrealEngineString_right_x_C_suffix_extraction_regex = new RegExp(
 	}_[^.]+)_C)$`);
 
 export function UnrealEngineString_right_x_C_suffix(
-	value:UnrealEngineString
+	value:UnrealEngineString,
 ) : UnrealEngineString_right_x_C_suffix {
 	const maybe_match =
 		UnrealEngineString_right_x_C_suffix_extraction_regex.exec(
-			value.right
+			value.right,
 		);
 
 	assert.notStrictEqual(maybe_match, null, new NoMatchError(
 		value,
-		'UnrealEngineString contains unsupported value!'
+		'UnrealEngineString contains unsupported value!',
 	));
 
 	const match = maybe_match as RegExpExecArray;
@@ -59,8 +59,8 @@ export function UnrealEngineString_right_x_C_suffix(
 				first: match[1],
 				second: match[3],
 			},
-			'UnrealEngineString mismatched suffix!'
-		)
+			'UnrealEngineString mismatched suffix!',
+		),
 	);
 
 	return match[2] as UnrealEngineString_right_x_C_suffix;

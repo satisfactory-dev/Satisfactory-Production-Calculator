@@ -50,7 +50,7 @@ try {
 	const result = await discovery.discover_type_$defs();
 
 	process.stdout.write(
-		`${JSON.stringify(result.missing_classes, null, '\t')}\n`
+		`${JSON.stringify(result.missing_classes, null, '\t')}\n`,
 	);
 	console.table({
 		'Found Types': Object.keys(result.found_types).length,
@@ -60,12 +60,12 @@ try {
 	});
 	await writeFile(
 		`${__dirname}/discover-types.perf.json`,
-		`${JSON.stringify(perf(), null, '\t')}`
+		`${JSON.stringify(perf(), null, '\t')}`,
 	);
 } catch (err) {
 	await writeFile(
 		`${__dirname}/discover-types.perf.json`,
-		`${JSON.stringify(perf(), null, '\t')}`
+		`${JSON.stringify(perf(), null, '\t')}`,
 	);
 	if (err instanceof NoMatchError) {
 		console.error('ran into an issue');
@@ -78,8 +78,8 @@ try {
 					stack: err.stack?.split('\n'),
 				},
 				null,
-				'\t'
-			)
+				'\t',
+			),
 		);
 
 		console.error(err.message, err.stack);

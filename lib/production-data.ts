@@ -88,28 +88,28 @@ export class ProductionData
 						'ClassName'
 					],
 					FGResourceDescriptor__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		const ingredients = (new Set(FGRecipe.Classes.flatMap(
 			e => e.mIngredients.map(
-				e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
-			)
+				e => UnrealEngineString_right_x_C_suffix(e.ItemClass),
+			),
 		)));
 
 		const products = (new Set(FGRecipe.Classes.flatMap(
 			e => e.mProduct.map(
-				e => UnrealEngineString_right_x_C_suffix(e.ItemClass)
-			)
+				e => UnrealEngineString_right_x_C_suffix(e.ItemClass),
+			),
 		)));
 
 		const resource_keys = Object.keys(resources);
 
 		const known_byproduct = FGBuildableGeneratorNuclear.Classes.flatMap(
 			(e) => e.mFuel.map(
-				fuel => fuel.mByproduct
-			)
+				fuel => fuel.mByproduct,
+			),
 		);
 
 		const ammo = Object.fromEntries(
@@ -117,7 +117,7 @@ export class ProductionData
 				...FGAmmoTypeProjectile.Classes,
 				...FGAmmoTypeInstantHit.Classes,
 				...FGAmmoTypeSpreadshot.Classes,
-			].map(e => [e.ClassName, e])
+			].map(e => [e.ClassName, e]),
 		);
 
 		const biomass = Object.fromEntries(
@@ -127,8 +127,8 @@ export class ProductionData
 						'ClassName'
 					],
 					FGItemDescriptorBiomass__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		const consumable = Object.fromEntries(
@@ -138,8 +138,8 @@ export class ProductionData
 						'ClassName'
 					],
 					FGConsumableDescriptor__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		const equipment = Object.fromEntries(
@@ -149,8 +149,8 @@ export class ProductionData
 						'ClassName'
 					],
 					FGEquipmentDescriptor__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		const fuel_nuclear = Object.fromEntries(
@@ -160,8 +160,8 @@ export class ProductionData
 						'ClassName'
 					],
 					FGItemDescriptorNuclearFuel__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		const items = Object.fromEntries(
@@ -171,8 +171,8 @@ export class ProductionData
 						'ClassName'
 					],
 					FGItemDescriptor__FGResourceDescriptor__type,
-				] => [e.ClassName, e]
-			)
+				] => [e.ClassName, e],
+			),
 		);
 
 		return {
@@ -185,8 +185,8 @@ export class ProductionData
 							'ClassName'
 						],
 						FGBuildingDescriptor__type,
-					] => [e.ClassName, e]
-				)
+					] => [e.ClassName, e],
+				),
 			),
 			consumable,
 			equipment,
@@ -199,8 +199,8 @@ export class ProductionData
 							'ClassName'
 						],
 						FGPoleDescriptor__type,
-					] => [e.ClassName, e]
-				)
+					] => [e.ClassName, e],
+				),
 			),
 			recipes: Object.fromEntries(
 				FGRecipe.Classes.map(
@@ -209,8 +209,8 @@ export class ProductionData
 							'ClassName'
 						],
 						FGRecipe__type,
-					] => [e.ClassName, e]
-				)
+					] => [e.ClassName, e],
+				),
 			),
 			resources,
 			vehicles: Object.fromEntries(
@@ -220,8 +220,8 @@ export class ProductionData
 							'ClassName'
 						],
 						FGVehicleDescriptor__type,
-					] => [e.ClassName, e]
-				)
+					] => [e.ClassName, e],
+				),
 			),
 			ingredients,
 			products,
@@ -234,7 +234,7 @@ export class ProductionData
 					!products.has(maybe)
 					&& !resource_keys.includes(maybe)
 					&& !(known_byproduct as string[]).includes(maybe)
-				)
+				),
 			),
 			recipe_selection_enums: recipe_selection_enums(this.#imports),
 			faux_ingredients_list: [

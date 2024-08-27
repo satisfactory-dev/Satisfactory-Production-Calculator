@@ -15,7 +15,7 @@ import {
 
 export function faux_recipe(
 	production_data: ProductionData,
-	recipe:string
+	recipe:string,
 ): production_set {
 	if (
 		!/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
@@ -44,8 +44,8 @@ export function faux_recipe(
 				recipe,
 				faux_ingredient,
 			},
-			`Supported faux-recipe found, but missing item (${faux_ingredient})!`
-		)
+			`Supported faux-recipe found, but missing item (${faux_ingredient})!`,
+		),
 	);
 
 	return {

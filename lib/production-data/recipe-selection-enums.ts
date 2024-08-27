@@ -15,7 +15,7 @@ import {
 } from '@satisfactory-dev/docs.json.ts/lib';
 
 export function recipe_selection_enums(
-	imports:imports
+	imports:imports,
 ): recipe_selection_properties_with_defaults {
 	const {
 		FGRecipe,
@@ -29,11 +29,11 @@ export function recipe_selection_enums(
 	let recipe_selection_enums = FGRecipe.Classes.reduce(
 		(
 			was:recipe_selection_properties,
-			is
+			is,
 		): recipe_selection_properties => {
 			for (const product of is.mProduct) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					product.ItemClass
+					product.ItemClass,
 				);
 
 				if (!(Desc_C in was)) {
@@ -52,9 +52,9 @@ export function recipe_selection_enums(
 		(maybe) => (
 			'RF_SOLID' === maybe.mForm
 			&& filter_UnrealEngineString_right_x_C_suffix(
-				maybe.ClassName
+				maybe.ClassName,
 			)
-		)
+		),
 	).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix);
 
 	for (
@@ -68,7 +68,7 @@ export function recipe_selection_enums(
 			fuel
 		}--${
 			BigNumber(1).dividedBy(
-				nuke_gen_fuel.mByproductAmount
+				nuke_gen_fuel.mByproductAmount,
 			).toString()
 		}--_C`;
 
@@ -91,7 +91,7 @@ export function recipe_selection_enums(
 	].reduce(
 		(
 			was:recipe_selection_properties,
-			is
+			is,
 		): recipe_selection_properties => {
 			if (!(is.mAllowedResources instanceof Array)) {
 				for (const Desc_C of RF_SOLID) {
@@ -110,7 +110,7 @@ export function recipe_selection_enums(
 
 			for (const resource of is.mAllowedResources) {
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					resource
+					resource,
 				);
 
 				if (!(Desc_C in was)) {
@@ -122,7 +122,7 @@ export function recipe_selection_enums(
 
 			return was;
 		},
-		recipe_selection_enums
+		recipe_selection_enums,
 	);
 
 	const preferred_defaults = [
@@ -147,10 +147,10 @@ export function recipe_selection_enums(
 				? value.enum[0]
 				: (
 					preferred_defaults.find(
-						maybe => value.enum.includes(maybe)
+						maybe => value.enum.includes(maybe),
 					)
 					|| value.enum.find(
-						maybe => maybe === key.replace(/^Desc_/, 'Recipe_')
+						maybe => maybe === key.replace(/^Desc_/, 'Recipe_'),
 					)
 					|| (
 						value.enum.find(maybe => maybe.includes('_Alternate_'))
@@ -158,57 +158,57 @@ export function recipe_selection_enums(
 								maybe => (
 									!maybe.includes('_Alternate_')
 									&& !maybe.includes('_Unpackage')
-								)
+								),
 							)
 							: undefined
 					)
 					|| (
 						(
 							value.enum.find(
-								maybe => maybe.includes('_Alternate_')
+								maybe => maybe.includes('_Alternate_'),
 							)
 							&& ! value.enum.find(
 								maybe => (
 									!maybe.includes('_Alternate_')
 									&& !maybe.includes('_Unpackage')
-								)
+								),
 							)
 						)
 							? [...value.enum.filter(
-								maybe => maybe.includes('_Alternate_')
+								maybe => maybe.includes('_Alternate_'),
 							)].sort((a, b) => a.length - b.length)[0]
 							: undefined
 					)
 					|| (
 						(
 							value.enum.find(
-								maybe => maybe.startsWith('Recipe_Liquid')
+								maybe => maybe.startsWith('Recipe_Liquid'),
 							)
 							&& value.enum.find(
-								maybe => maybe.startsWith('Recipe_Unpackage')
+								maybe => maybe.startsWith('Recipe_Unpackage'),
 							)
 						)
 							? value.enum.find(
-								maybe => maybe.startsWith('Recipe_Liquid')
+								maybe => maybe.startsWith('Recipe_Liquid'),
 							)
 							: undefined
 					) || (
 						(
 							value.enum.find(
-								maybe => maybe.startsWith('Recipe_Ingot')
+								maybe => maybe.startsWith('Recipe_Ingot'),
 							)
 							&& value.enum.find(
-								maybe => maybe.startsWith('Recipe_Pure')
+								maybe => maybe.startsWith('Recipe_Pure'),
 							)
 						)
 							? value.enum.find(
-								maybe => maybe.startsWith('Recipe_Ingot')
+								maybe => maybe.startsWith('Recipe_Ingot'),
 							)
 							: undefined
 					) || (
 						key.startsWith('Desc_')
 							? value.enum.find(
-								maybe => `Recipe_${key.substring(5)}` === maybe
+								maybe => `Recipe_${key.substring(5)}` === maybe,
 							)
 							: undefined
 					) || (
@@ -217,7 +217,7 @@ export function recipe_selection_enums(
 							: undefined
 					) || (
 						value.enum.every(
-							maybe => /^Recipe_.+_\d+_C$/.test(maybe)
+							maybe => /^Recipe_.+_\d+_C$/.test(maybe),
 						)
 							? value.enum.find(maybe => maybe.endsWith('_1_C'))
 							: undefined
@@ -230,7 +230,7 @@ export function recipe_selection_enums(
 				{
 					[key]: value,
 				},
-				'Could not find default!'
+				'Could not find default!',
 			);
 		}
 

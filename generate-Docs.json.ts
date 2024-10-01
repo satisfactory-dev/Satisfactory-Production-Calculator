@@ -13,6 +13,7 @@ import {
 } from '@satisfactory-dev/docs.json.ts/setup_PerformanceObserver';
 import {
 	DocsTsGenerator,
+	DocsTsGeneratorVersion,
 	TypeDefinitionWriter,
 } from '@satisfactory-dev/docs.json.ts/lib/generator';
 
@@ -30,18 +31,23 @@ configure_ajv(ajv);
 
 export const docs = new DocsTsGenerator({
 	ajv,
-	docs_path: `${__dirname}/data/Docs.json`,
-	cache_path: `${__dirname}/data/`,
-	types_from_module: (
-		'@satisfactory-dev/docs.json.ts/generated-types/update8'
-	),
+	docs_versions: {
+		update8: new DocsTsGeneratorVersion({
+			docs_path: `${__dirname}/data/Docs.json`,
+			cache_path: `${__dirname}/data/`,
+			types_from_module: (
+				'@satisfactory-dev/docs.json.ts/generated-types/update8'
+			),
+			UnrealEngineString_quote_mode: 'original',
+		}),
+	},
 });
 
 const perf = setup_PerformanceObserver();
 
 try {
 	performance.mark('start');
-	const bar = new TypeDefinitionWriter(docs);
+	const bar = new TypeDefinitionWriter(docs, 'update8');
 	performance.measure('bootstrap', 'start');
 	performance.mark('bootstrap done');
 	await bar.write(`${__dirname}/generated-types/update8/`);

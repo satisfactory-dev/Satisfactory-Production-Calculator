@@ -15,11 +15,11 @@ generate--skip-checks:
 generate--post-build:
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json
 	@./node_modules/.bin/eslint \
-		--config ./generated-types/.eslintrc.json \
-		--cache-location ./generated-types/update8/.eslintcache \
+		--config ./eslint.config.generated-types.mjs \
+		--cache-location ./generated-types/.eslintcache \
 		--cache-strategy content \
 		--cache \
-		./generated-types/
+		'./generated-types/**/*.ts'
 
 generate--validators: build
 	@./node_modules/.bin/ts-node ./generate-validators.ts

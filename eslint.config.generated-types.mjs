@@ -1,4 +1,4 @@
-import config from '../eslint.config.mjs';
+import config from './eslint.config.mjs';
 
 export default [
 	...config,
@@ -14,5 +14,6 @@ export default [
 			'object-curly-newline': 'off',
 			'sort-imports': 'off',
 		},
+		ignores: ['**/*.js'],
 	},
 ];

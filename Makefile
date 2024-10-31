@@ -7,10 +7,16 @@ build:
 
 generate: generate--skip-checks lint generate--post-build build
 
-generate--skip-checks:
+generate--skip-checks: generate--skip-checks--common generate--skip-checks--update8 build
+
+generate--skip-checks--common:
+	@echo 'running ./generate-common-types.ts'
+	@./node_modules/.bin/ts-node ./generate-common-types.ts
+
+generate--skip-checks--update8:
 	@echo 'running ./generate-Docs.json.ts'
 	@./node_modules/.bin/ts-node ./generate-Docs.json.ts
-	@make build
+
 
 generate--post-build:
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json

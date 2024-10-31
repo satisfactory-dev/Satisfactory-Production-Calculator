@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import {
 	integer_string__type,
-} from "@satisfactory-dev/docs.json.ts/generated-types/update8/common/scalar";
+} from "@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar";
 import {
 	UnrealEngineString,
 // eslint-disable-next-line max-len

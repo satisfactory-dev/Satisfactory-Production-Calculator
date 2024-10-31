@@ -32,9 +32,17 @@ configure_ajv(ajv);
 export const docs = new DocsTsGenerator({
 	ajv,
 	docs_versions: {
+		common: new DocsTsGeneratorVersion({
+			docs_path: `${__dirname}/node_modules/@satisfactory-dev/docs.json.ts/data/common/faux.json`,
+			cache_path: `${__dirname}/data/common/`,
+			types_from_module: (
+				'@satisfactory-dev/docs.json.ts/generated-types/common'
+			),
+			UnrealEngineString_quote_mode: 'original',
+		}),
 		update8: new DocsTsGeneratorVersion({
-			docs_path: `${__dirname}/data/Docs.json`,
-			cache_path: `${__dirname}/data/`,
+			docs_path: `${__dirname}/data/update8/Docs.json`,
+			cache_path: `${__dirname}/data/update8/`,
 			types_from_module: (
 				'@satisfactory-dev/docs.json.ts/generated-types/update8'
 			),

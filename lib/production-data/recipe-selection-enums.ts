@@ -5,11 +5,13 @@ import {
 	UnrealEngineString_right_x_C_suffix,
 } from '../UnrealEngineString';
 import {
-	imports,
 	recipe_selection_properties,
 	recipe_selection_properties_with_default,
 	recipe_selection_properties_with_defaults,
 } from './types';
+import {
+	imports,
+} from './types/update8';
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib';

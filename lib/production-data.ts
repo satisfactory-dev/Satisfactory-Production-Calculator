@@ -9,9 +9,9 @@ import {
 	recipe_selection_enums,
 } from './production-data/recipe-selection-enums';
 import {
-	common_base__FGRecipe__type,
+	ItemClass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGRecipe';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
 
 export class ProductionData
 {
@@ -58,11 +58,8 @@ export class ProductionData
 			e => e.mIngredients,
 		).filter(
 			(
-				maybe,
-			): maybe is Exclude<
-				common_base__FGRecipe__type['mIngredients'],
-				''
-			> => '' !== maybe,
+				maybe: '' | ItemClass__type,
+			): maybe is ItemClass__type => '' !== maybe,
 		).flatMap(
 			e => e.map(
 				e => UnrealEngineString_right_x_C_suffix(e.ItemClass),
@@ -78,9 +75,9 @@ export class ProductionData
 		const resource_keys = Object.keys(resources);
 
 		const known_byproduct = FGBuildableGeneratorNuclear.Classes.flatMap(
-			(e) => e.mFuel.map(
-				fuel => fuel.mByproduct,
-			),
+			(e) => e.mFuel,
+		).map(
+			(e) => e.mByproduct,
 		);
 
 		const ammo = Object.fromEntries(
@@ -159,7 +156,7 @@ export class ProductionData
 				(maybe) => (
 					!products.has(maybe)
 					&& !resource_keys.includes(maybe)
-					&& !known_byproduct.includes(maybe)
+					&& !(known_byproduct as string[]).includes(maybe as string)
 				),
 			),
 			recipe_selection_enums: recipe_selection_enums(this.#imports),

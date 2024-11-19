@@ -54,6 +54,7 @@ import {
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot';
 import {
+	common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
 	common_base__FGBuildableGeneratorNuclear__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableGeneratorNuclear';
@@ -97,61 +98,73 @@ type NativeClass__type__wrapper<
 	Classes: [T, ...T[]],
 };
 
-export type imports = imports_dict & {
-	FGAmmoTypeProjectile: NativeClass__type__wrapper<
-		common_base__FGAmmoTypeProjectile__type
-	>,
-	FGAmmoTypeInstantHit: NativeClass__type__wrapper<(
+export type imports<
+	FGAmmoTypeProjectile extends common_base__FGAmmoTypeProjectile__type,
+	FGAmmoTypeInstantHit extends (
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
-	)>,
-	FGAmmoTypeSpreadshot: NativeClass__type__wrapper<
-		common_base__FGAmmoTypeSpreadshot__type
-	>,
-	FGItemDescriptorBiomass: NativeClass__type__wrapper<
-		common_base__FGItemDescriptorBiomass__type
-	>,
-	FGBuildingDescriptor: NativeClass__type__wrapper<
-		common_base__FGBuildingDescriptor__type
-	>,
-	FGConsumableDescriptor: NativeClass__type__wrapper<
-		common_base__FGConsumableDescriptor__type
-	>,
-	FGEquipmentDescriptor: NativeClass__type__wrapper<
-		common_base__FGEquipmentDescriptor__type
-	>,
-	FGItemDescriptorNuclearFuel: NativeClass__type__wrapper<
-		common_base__FGItemDescriptorNuclearFuel__type
-	>,
-	FGItemDescriptor: NativeClass__type__wrapper<
-		common_base__FGItemDescriptor__FGResourceDescriptor__type
-	>,
-	FGPoleDescriptor: NativeClass__type__wrapper<
-		common_base__FGPoleDescriptor__type
-	>,
-	FGRecipe: NativeClass__type__wrapper<common_base__FGRecipe__type>,
-	FGResourceDescriptor: NativeClass__type__wrapper<
-		common_base__FGResourceDescriptor__type
-	>,
-	FGVehicleDescriptor: NativeClass__type__wrapper<(
+	),
+	FGAmmoTypeSpreadshot extends common_base__FGAmmoTypeSpreadshot__type,
+	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type,
+	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type,
+	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type,
+	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type,
+	FGItemDescriptorNuclearFuel extends (
+		| common_base__FGItemDescriptorNuclearFuel__type
+	),
+	FGItemDescriptor extends (
+		| common_base__FGItemDescriptor__FGResourceDescriptor__type
+	),
+	FGPoleDescriptor extends common_base__FGPoleDescriptor__type,
+	FGRecipe extends common_base__FGRecipe__type,
+	FGResourceDescriptor extends common_base__FGResourceDescriptor__type,
+	FGVehicleDescriptor extends (
 		| common_base__FGVehicleDescriptor__fueled_with_inventory__type
 		| common_base__FGVehicleDescriptor__powered_no_inventory__type
 		| common_base__FGVehicleDescriptor__with_inventory__type
-	)>,
-	FGBuildableGeneratorNuclear: NativeClass__type__wrapper<
-		common_base__FGBuildableGeneratorNuclear__type
-	>,
-	FGBuildableFrackingActivator: NativeClass__type__wrapper<
-		common_base__FGBuildableFrackingActivator__type
-	>,
-	FGBuildableWaterPump: NativeClass__type__wrapper<
-		common_base__FGBuildableWaterPump__type
-	>,
-	FGBuildableResourceExtractor: NativeClass__type__wrapper<(
+	),
+	FGBuildableGeneratorNuclear extends (
+		| common_base__FGBuildableGeneratorNuclear__type
+	),
+	FGBuildableFrackingActivator extends (
+		| common_base__FGBuildableFrackingActivator__type
+	),
+	FGBuildableWaterPump extends common_base__FGBuildableWaterPump__type,
+	FGBuildableResourceExtractor extends (
 		| common_base__FGBuildableResourceExtractor__oil_extractor__type
 		| common_base__FGBuildableResourceExtractor__miner_mk3__type
 		| common_base__FGBuildableResourceExtractor__miner__type
-	)>,
+	),
+> = imports_dict & {
+	FGAmmoTypeProjectile: NativeClass__type__wrapper<FGAmmoTypeProjectile>,
+	FGAmmoTypeInstantHit: NativeClass__type__wrapper<FGAmmoTypeInstantHit>,
+	FGAmmoTypeSpreadshot: NativeClass__type__wrapper<FGAmmoTypeSpreadshot>,
+	FGItemDescriptorBiomass: NativeClass__type__wrapper<
+		FGItemDescriptorBiomass
+	>,
+	FGBuildingDescriptor: NativeClass__type__wrapper<FGBuildingDescriptor>,
+	FGConsumableDescriptor: NativeClass__type__wrapper<
+		FGConsumableDescriptor
+	>,
+	FGEquipmentDescriptor: NativeClass__type__wrapper<FGEquipmentDescriptor>,
+	FGItemDescriptorNuclearFuel: NativeClass__type__wrapper<
+		FGItemDescriptorNuclearFuel
+	>,
+	FGItemDescriptor: NativeClass__type__wrapper<FGItemDescriptor>,
+	FGPoleDescriptor: NativeClass__type__wrapper<FGPoleDescriptor>,
+	FGRecipe: NativeClass__type__wrapper<FGRecipe>,
+	FGResourceDescriptor: NativeClass__type__wrapper<FGResourceDescriptor>,
+	FGVehicleDescriptor: NativeClass__type__wrapper<FGVehicleDescriptor>,
+	FGBuildableGeneratorNuclear: NativeClass__type__wrapper<
+		FGBuildableGeneratorNuclear
+	>,
+	FGBuildableFrackingActivator: NativeClass__type__wrapper<
+		FGBuildableFrackingActivator
+	>,
+	FGBuildableWaterPump: NativeClass__type__wrapper<FGBuildableWaterPump>,
+	FGBuildableResourceExtractor: NativeClass__type__wrapper<
+		FGBuildableResourceExtractor
+	>,
 }
 
 export type recipe_selection_properties = {
@@ -175,49 +188,53 @@ export type recipe_selection_properties_with_defaults = {
 };
 
 export type data<
-	T_NuclearByproduct extends string,
+	T_ammo extends (
+		| common_base__FGAmmoTypeProjectile__type
+		| common_base__FGAmmoTypeInstantHit__chaos__type
+		| common_base__FGAmmoTypeInstantHit__standard__type
+		| common_base__FGAmmoTypeSpreadshot__type
+	),
+	T_biomass extends common_base__FGItemDescriptorBiomass__type,
+	T_buildings extends common_base__FGBuildingDescriptor__type,
+	T_consumable extends common_base__FGConsumableDescriptor__type,
+	T_equipment extends common_base__FGEquipmentDescriptor__type,
+	T_fuel_nuclear extends common_base__FGItemDescriptorNuclearFuel__type,
+	T_items extends common_base__FGItemDescriptor__FGResourceDescriptor__type,
+	T_poles extends common_base__FGPoleDescriptor__type,
+	T_recipes extends common_base__FGRecipe__type,
+	T_resources extends common_base__FGResourceDescriptor__type,
+	T_vehicles extends FGVehicleDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_NuclearByproduct extends common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
 > = {
-	ammo: {
-		[k: string]: (
-			| common_base__FGAmmoTypeProjectile__type
-			| common_base__FGAmmoTypeInstantHit__chaos__type
-			| common_base__FGAmmoTypeInstantHit__standard__type
-			| common_base__FGAmmoTypeSpreadshot__type
-		),
-	},
-	biomass: {[key: string]: common_base__FGItemDescriptorBiomass__type},
-	buildings: {[key: string]: common_base__FGBuildingDescriptor__type},
-	consumable: {[key: string]: common_base__FGConsumableDescriptor__type},
-	equipment: {[key: string]: common_base__FGEquipmentDescriptor__type},
-	fuel_nuclear: {
-		[key: string]: common_base__FGItemDescriptorNuclearFuel__type
-	},
-	items: {
-		[
-			key: string
-		]: common_base__FGItemDescriptor__FGResourceDescriptor__type
-	},
-	poles: {[key: string]: common_base__FGPoleDescriptor__type},
-	recipes: {[key: string]: common_base__FGRecipe__type},
-	resources: {[key: string]: common_base__FGResourceDescriptor__type},
-	vehicles: {[key: string]: FGVehicleDescriptor__type},
-	ingredients: Set<
+	ammo: {[k: string]: T_ammo},
+	biomass: {[key: string]: T_biomass},
+	buildings: {[key: string]: T_buildings},
+	consumable: {[key: string]: T_consumable},
+	equipment: {[key: string]: T_equipment},
+	fuel_nuclear: {[key: string]: T_fuel_nuclear},
+	items: {[key: string]: T_items},
+	poles: {[key: string]: T_poles},
+	recipes: {[key: string]: T_recipes},
+	resources: {[key: string]: T_resources},
+	vehicles: {[key: string]: T_vehicles},
+	ingredients: Set<(
 		| `Desc_${string}_C`
 		| `BP_${string}_C`
 		| `Foundation_${string}_C`
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
-	>,
-	products: Set<
+	)>,
+	products: Set<(
 		| `Desc_${string}_C`
 		| `BP_${string}_C`
 		| `Foundation_${string}_C`
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
-	>,
+	)>,
 	resource_keys: string[],
 	known_byproduct: (
-		T_NuclearByproduct[]
+		(T_NuclearByproduct['mByproduct'])[]
 	),
 	known_not_sourced_from_recipe: (
 		| `Desc_${string}_C`

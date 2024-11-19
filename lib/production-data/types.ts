@@ -1,120 +1,157 @@
 import {
-	FGItemDescriptor__FGResourceDescriptor__type,
+	common_base__FGItemDescriptor__FGResourceDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor';
 import {
-	FGRecipe__NativeClass,
-	FGRecipe__type,
+	common_base__FGRecipe__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGRecipe';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGRecipe';
 import {
-	FGBuildingDescriptor__NativeClass,
-	FGBuildingDescriptor__type,
+	common_base__FGBuildingDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildingDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor';
 import {
-	FGResourceDescriptor__NativeClass,
-	FGResourceDescriptor__type,
+	common_base__FGResourceDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGResourceDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGResourceDescriptor';
 import {
-	FGItemDescriptorBiomass__NativeClass,
-	FGItemDescriptorBiomass__type,
+	common_base__FGItemDescriptorBiomass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptorBiomass';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass';
 import {
-	FGPoleDescriptor__NativeClass,
-	FGPoleDescriptor__type,
+	common_base__FGPoleDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGPoleDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor';
 import {
-	FGEquipmentDescriptor__NativeClass,
-	FGEquipmentDescriptor__type,
+	common_base__FGEquipmentDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGEquipmentDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor';
 import {
-	FGVehicleDescriptor__fueled_with_inventory__type,
-	FGVehicleDescriptor__NativeClass,
-	FGVehicleDescriptor__powered_no_inventory__type,
-	FGVehicleDescriptor__unfueled_with_inventory__type,
+	common_base__FGVehicleDescriptor__fueled_with_inventory__type,
+	common_base__FGVehicleDescriptor__powered_no_inventory__type,
+	common_base__FGVehicleDescriptor__with_inventory__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGVehicleDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGVehicleDescriptor';
 import {
-	FGItemDescriptorNuclearFuel__NativeClass,
-	FGItemDescriptorNuclearFuel__type,
+	common_base__FGItemDescriptorNuclearFuel__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptorNuclearFuel';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel';
 import {
-	FGConsumableDescriptor__NativeClass,
-	FGConsumableDescriptor__type,
+	common_base__FGConsumableDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGConsumableDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor';
 import {
-	FGItemDescriptor__NativeClass,
+	common_base__FGAmmoTypeProjectile__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGItemDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile';
 import {
-	FGAmmoTypeProjectile__NativeClass,
-	FGAmmoTypeProjectile__type,
+	common_base__FGAmmoTypeInstantHit__chaos__type,
+	common_base__FGAmmoTypeInstantHit__standard__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGAmmoTypeProjectile';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit';
 import {
-	FGAmmoTypeInstantHit__chaos__type,
-	FGAmmoTypeInstantHit__NativeClass,
-	FGAmmoTypeInstantHit__standard__type,
+	common_base__FGAmmoTypeSpreadshot__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGAmmoTypeInstantHit';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot';
 import {
-	FGAmmoTypeSpreadshot__NativeClass,
-	FGAmmoTypeSpreadshot__type,
+	common_base__FGBuildableGeneratorNuclear__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGAmmoTypeSpreadshot';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableGeneratorNuclear';
 import {
-	FGBuildableGeneratorNuclear__NativeClass,
-	FGBuildableGeneratorNuclear__type,
+	common_base__FGBuildableFrackingActivator__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildableGeneratorNuclear';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableFrackingActivator';
 import {
-	FGBuildableFrackingActivator__NativeClass,
+	common_base__FGBuildableWaterPump__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildableFrackingActivator';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableWaterPump';
 import {
-	FGBuildableWaterPump__NativeClass,
+	common_base__FGBuildableResourceExtractor__miner__type,
+	common_base__FGBuildableResourceExtractor__oil_extractor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildableWaterPump';
-import {
-	FGBuildableResourceExtractor__NativeClass,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/update8/classes/CoreUObject/FGBuildableResourceExtractor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableResourceExtractor';
 
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from '../UnrealEngineString';
+import {
+	class__no_description_or_display_name__type,
+	common_base__FGBuildableResourceExtractor__miner_mk3__type,
+	NativeClass__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
 
 export type FGVehicleDescriptor__type = (
-	| FGVehicleDescriptor__powered_no_inventory__type
-	| FGVehicleDescriptor__unfueled_with_inventory__type
-	| FGVehicleDescriptor__fueled_with_inventory__type
+	| common_base__FGVehicleDescriptor__powered_no_inventory__type
+	| common_base__FGVehicleDescriptor__with_inventory__type
+	| common_base__FGVehicleDescriptor__fueled_with_inventory__type
 );
 
-export type imports = {
-	FGAmmoTypeProjectile: FGAmmoTypeProjectile__NativeClass,
-	FGAmmoTypeInstantHit: FGAmmoTypeInstantHit__NativeClass,
-	FGAmmoTypeSpreadshot: FGAmmoTypeSpreadshot__NativeClass,
-	FGItemDescriptorBiomass: FGItemDescriptorBiomass__NativeClass,
-	FGBuildingDescriptor: FGBuildingDescriptor__NativeClass,
-	FGConsumableDescriptor: FGConsumableDescriptor__NativeClass,
-	FGEquipmentDescriptor: FGEquipmentDescriptor__NativeClass,
-	FGItemDescriptorNuclearFuel: FGItemDescriptorNuclearFuel__NativeClass,
-	FGItemDescriptor: FGItemDescriptor__NativeClass,
-	FGPoleDescriptor: FGPoleDescriptor__NativeClass,
-	FGRecipe: FGRecipe__NativeClass,
-	FGResourceDescriptor: FGResourceDescriptor__NativeClass,
-	FGVehicleDescriptor: FGVehicleDescriptor__NativeClass,
-	FGBuildableGeneratorNuclear: FGBuildableGeneratorNuclear__NativeClass,
-	FGBuildableFrackingActivator: FGBuildableFrackingActivator__NativeClass,
-	FGBuildableWaterPump: FGBuildableWaterPump__NativeClass,
-	FGBuildableResourceExtractor: FGBuildableResourceExtractor__NativeClass,
+export type imports_dict = {
+	[key: string]: NativeClass__type,
+};
+
+type NativeClass__type__wrapper<
+	T extends class__no_description_or_display_name__type
+> = NativeClass__type & {
+	Classes: [T, ...T[]],
+};
+
+export type imports = imports_dict & {
+	FGAmmoTypeProjectile: NativeClass__type__wrapper<
+		common_base__FGAmmoTypeProjectile__type
+	>,
+	FGAmmoTypeInstantHit: NativeClass__type__wrapper<(
+		| common_base__FGAmmoTypeInstantHit__chaos__type
+		| common_base__FGAmmoTypeInstantHit__standard__type
+	)>,
+	FGAmmoTypeSpreadshot: NativeClass__type__wrapper<
+		common_base__FGAmmoTypeSpreadshot__type
+	>,
+	FGItemDescriptorBiomass: NativeClass__type__wrapper<
+		common_base__FGItemDescriptorBiomass__type
+	>,
+	FGBuildingDescriptor: NativeClass__type__wrapper<
+		common_base__FGBuildingDescriptor__type
+	>,
+	FGConsumableDescriptor: NativeClass__type__wrapper<
+		common_base__FGConsumableDescriptor__type
+	>,
+	FGEquipmentDescriptor: NativeClass__type__wrapper<
+		common_base__FGEquipmentDescriptor__type
+	>,
+	FGItemDescriptorNuclearFuel: NativeClass__type__wrapper<
+		common_base__FGItemDescriptorNuclearFuel__type
+	>,
+	FGItemDescriptor: NativeClass__type__wrapper<
+		common_base__FGItemDescriptor__FGResourceDescriptor__type
+	>,
+	FGPoleDescriptor: NativeClass__type__wrapper<
+		common_base__FGPoleDescriptor__type
+	>,
+	FGRecipe: NativeClass__type__wrapper<common_base__FGRecipe__type>,
+	FGResourceDescriptor: NativeClass__type__wrapper<
+		common_base__FGResourceDescriptor__type
+	>,
+	FGVehicleDescriptor: NativeClass__type__wrapper<(
+		| common_base__FGVehicleDescriptor__fueled_with_inventory__type
+		| common_base__FGVehicleDescriptor__powered_no_inventory__type
+		| common_base__FGVehicleDescriptor__with_inventory__type
+	)>,
+	FGBuildableGeneratorNuclear: NativeClass__type__wrapper<
+		common_base__FGBuildableGeneratorNuclear__type
+	>,
+	FGBuildableFrackingActivator: NativeClass__type__wrapper<
+		common_base__FGBuildableFrackingActivator__type
+	>,
+	FGBuildableWaterPump: NativeClass__type__wrapper<
+		common_base__FGBuildableWaterPump__type
+	>,
+	FGBuildableResourceExtractor: NativeClass__type__wrapper<(
+		| common_base__FGBuildableResourceExtractor__oil_extractor__type
+		| common_base__FGBuildableResourceExtractor__miner_mk3__type
+		| common_base__FGBuildableResourceExtractor__miner__type
+	)>,
 }
 
 export type recipe_selection_properties = {
@@ -137,24 +174,32 @@ export type recipe_selection_properties_with_defaults = {
 	]: recipe_selection_properties_with_default
 };
 
-export type data = {
+export type data<
+	T_NuclearByproduct extends string,
+> = {
 	ammo: {
 		[k: string]: (
-			| FGAmmoTypeProjectile__type
-			| FGAmmoTypeInstantHit__chaos__type
-			| FGAmmoTypeInstantHit__standard__type
-			| FGAmmoTypeSpreadshot__type
+			| common_base__FGAmmoTypeProjectile__type
+			| common_base__FGAmmoTypeInstantHit__chaos__type
+			| common_base__FGAmmoTypeInstantHit__standard__type
+			| common_base__FGAmmoTypeSpreadshot__type
 		),
 	},
-	biomass: {[key: string]: FGItemDescriptorBiomass__type},
-	buildings: {[key: string]: FGBuildingDescriptor__type},
-	consumable: {[key: string]: FGConsumableDescriptor__type},
-	equipment: {[key: string]: FGEquipmentDescriptor__type},
-	fuel_nuclear: {[key: string]: FGItemDescriptorNuclearFuel__type},
-	items: {[key: string]: FGItemDescriptor__FGResourceDescriptor__type},
-	poles: {[key: string]: FGPoleDescriptor__type},
-	recipes: {[key: string]: FGRecipe__type},
-	resources: {[key: string]: FGResourceDescriptor__type},
+	biomass: {[key: string]: common_base__FGItemDescriptorBiomass__type},
+	buildings: {[key: string]: common_base__FGBuildingDescriptor__type},
+	consumable: {[key: string]: common_base__FGConsumableDescriptor__type},
+	equipment: {[key: string]: common_base__FGEquipmentDescriptor__type},
+	fuel_nuclear: {
+		[key: string]: common_base__FGItemDescriptorNuclearFuel__type
+	},
+	items: {
+		[
+			key: string
+		]: common_base__FGItemDescriptor__FGResourceDescriptor__type
+	},
+	poles: {[key: string]: common_base__FGPoleDescriptor__type},
+	recipes: {[key: string]: common_base__FGRecipe__type},
+	resources: {[key: string]: common_base__FGResourceDescriptor__type},
 	vehicles: {[key: string]: FGVehicleDescriptor__type},
 	ingredients: Set<
 		| `Desc_${string}_C`
@@ -172,7 +217,7 @@ export type data = {
 	>,
 	resource_keys: string[],
 	known_byproduct: (
-		FGBuildableGeneratorNuclear__type['mFuel'][number]['mByproduct'][]
+		T_NuclearByproduct[]
 	),
 	known_not_sourced_from_recipe: (
 		| `Desc_${string}_C`

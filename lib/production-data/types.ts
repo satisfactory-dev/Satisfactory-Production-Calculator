@@ -99,38 +99,66 @@ type NativeClass__type__wrapper<
 };
 
 export type imports<
-	FGAmmoTypeProjectile extends common_base__FGAmmoTypeProjectile__type,
+	// eslint-disable-next-line max-len
+	FGAmmoTypeProjectile extends common_base__FGAmmoTypeProjectile__type = common_base__FGAmmoTypeProjectile__type,
 	FGAmmoTypeInstantHit extends (
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
+	) = (
+		| common_base__FGAmmoTypeInstantHit__chaos__type
+		| common_base__FGAmmoTypeInstantHit__standard__type
 	),
-	FGAmmoTypeSpreadshot extends common_base__FGAmmoTypeSpreadshot__type,
-	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type,
-	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type,
-	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type,
-	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type,
+	// eslint-disable-next-line max-len
+	FGAmmoTypeSpreadshot extends common_base__FGAmmoTypeSpreadshot__type = common_base__FGAmmoTypeSpreadshot__type,
+	// eslint-disable-next-line max-len
+	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
+	// eslint-disable-next-line max-len
+	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
+	// eslint-disable-next-line max-len
+	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
+	// eslint-disable-next-line max-len
+	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
 	FGItemDescriptorNuclearFuel extends (
+		| common_base__FGItemDescriptorNuclearFuel__type
+	) = (
 		| common_base__FGItemDescriptorNuclearFuel__type
 	),
 	FGItemDescriptor extends (
 		| common_base__FGItemDescriptor__FGResourceDescriptor__type
+	) = (
+		| common_base__FGItemDescriptor__FGResourceDescriptor__type
 	),
-	FGPoleDescriptor extends common_base__FGPoleDescriptor__type,
-	FGRecipe extends common_base__FGRecipe__type,
-	FGResourceDescriptor extends common_base__FGResourceDescriptor__type,
+	// eslint-disable-next-line max-len
+	FGPoleDescriptor extends common_base__FGPoleDescriptor__type = common_base__FGPoleDescriptor__type,
+	FGRecipe extends common_base__FGRecipe__type = common_base__FGRecipe__type,
+	// eslint-disable-next-line max-len
+	FGResourceDescriptor extends common_base__FGResourceDescriptor__type = common_base__FGResourceDescriptor__type,
 	FGVehicleDescriptor extends (
+		| common_base__FGVehicleDescriptor__fueled_with_inventory__type
+		| common_base__FGVehicleDescriptor__powered_no_inventory__type
+		| common_base__FGVehicleDescriptor__with_inventory__type
+	) = (
 		| common_base__FGVehicleDescriptor__fueled_with_inventory__type
 		| common_base__FGVehicleDescriptor__powered_no_inventory__type
 		| common_base__FGVehicleDescriptor__with_inventory__type
 	),
 	FGBuildableGeneratorNuclear extends (
 		| common_base__FGBuildableGeneratorNuclear__type
+	) = (
+		| common_base__FGBuildableGeneratorNuclear__type
 	),
 	FGBuildableFrackingActivator extends (
 		| common_base__FGBuildableFrackingActivator__type
+	) = (
+		| common_base__FGBuildableFrackingActivator__type
 	),
-	FGBuildableWaterPump extends common_base__FGBuildableWaterPump__type,
+	// eslint-disable-next-line max-len
+	FGBuildableWaterPump extends common_base__FGBuildableWaterPump__type = common_base__FGBuildableWaterPump__type,
 	FGBuildableResourceExtractor extends (
+		| common_base__FGBuildableResourceExtractor__oil_extractor__type
+		| common_base__FGBuildableResourceExtractor__miner_mk3__type
+		| common_base__FGBuildableResourceExtractor__miner__type
+	) = (
 		| common_base__FGBuildableResourceExtractor__oil_extractor__type
 		| common_base__FGBuildableResourceExtractor__miner_mk3__type
 		| common_base__FGBuildableResourceExtractor__miner__type
@@ -193,19 +221,33 @@ export type data<
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
 		| common_base__FGAmmoTypeSpreadshot__type
+	) = (
+		| common_base__FGAmmoTypeProjectile__type
+		| common_base__FGAmmoTypeInstantHit__chaos__type
+		| common_base__FGAmmoTypeInstantHit__standard__type
+		| common_base__FGAmmoTypeSpreadshot__type
 	),
-	T_biomass extends common_base__FGItemDescriptorBiomass__type,
-	T_buildings extends common_base__FGBuildingDescriptor__type,
-	T_consumable extends common_base__FGConsumableDescriptor__type,
-	T_equipment extends common_base__FGEquipmentDescriptor__type,
-	T_fuel_nuclear extends common_base__FGItemDescriptorNuclearFuel__type,
-	T_items extends common_base__FGItemDescriptor__FGResourceDescriptor__type,
-	T_poles extends common_base__FGPoleDescriptor__type,
-	T_recipes extends common_base__FGRecipe__type,
-	T_resources extends common_base__FGResourceDescriptor__type,
-	T_vehicles extends FGVehicleDescriptor__type,
 	// eslint-disable-next-line max-len
-	T_NuclearByproduct extends common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
+	T_biomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
+	// eslint-disable-next-line max-len
+	T_buildings extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_consumable extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_equipment extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_fuel_nuclear extends common_base__FGItemDescriptorNuclearFuel__type = common_base__FGItemDescriptorNuclearFuel__type,
+	// eslint-disable-next-line max-len
+	T_items extends common_base__FGItemDescriptor__FGResourceDescriptor__type = common_base__FGItemDescriptor__FGResourceDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_poles extends common_base__FGPoleDescriptor__type = common_base__FGPoleDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_recipes extends common_base__FGRecipe__type = common_base__FGRecipe__type,
+	// eslint-disable-next-line max-len
+	T_resources extends common_base__FGResourceDescriptor__type = common_base__FGResourceDescriptor__type,
+	T_vehicles extends FGVehicleDescriptor__type = FGVehicleDescriptor__type,
+	// eslint-disable-next-line max-len
+	T_NuclearByproduct extends common_base__FGBuildableGeneratorNuclear__mFuel__base__type = common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
 > = {
 	ammo: {[k: string]: T_ammo},
 	biomass: {[key: string]: T_biomass},

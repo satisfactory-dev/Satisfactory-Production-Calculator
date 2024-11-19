@@ -5,13 +5,11 @@ import {
 	UnrealEngineString_right_x_C_suffix,
 } from '../UnrealEngineString';
 import {
+	imports,
 	recipe_selection_properties,
 	recipe_selection_properties_with_default,
 	recipe_selection_properties_with_defaults,
 } from './types';
-import {
-	imports,
-} from './types/update8';
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib';
@@ -75,14 +73,16 @@ export function recipe_selection_enums(
 		}--_C`;
 
 		if (!(byproduct in recipe_selection_enums)) {
-			recipe_selection_enums[byproduct] = {
+			// eslint-disable-next-line max-len
+			recipe_selection_enums[byproduct as keyof typeof recipe_selection_enums] = {
 				type: 'string',
 				enum: [
 					faux_recipe,
 				],
 			};
 		} else {
-			recipe_selection_enums[byproduct].enum.push(faux_recipe);
+			// eslint-disable-next-line max-len
+			recipe_selection_enums[byproduct as keyof typeof recipe_selection_enums].enum.push(faux_recipe);
 		}
 	}
 

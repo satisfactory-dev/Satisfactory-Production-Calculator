@@ -316,11 +316,27 @@ export class ProductionCalculator {
 				mProduct,
 			} = recipes[recipe];
 
+			if ('' === mIngredients) {
+				throw new Error('Empty ingredient found!');
+			}
+
 			const ingredient_amounts = mIngredients.map(
-				(e) => amend_ItemClass_amount(
-					this.production_data,
-					e,
-				).Amount,
+				({
+					ItemClass,
+					Amount,
+				}) => {
+					if (undefined === Amount) {
+						throw new Error('No amount found!');
+					}
+
+					return amend_ItemClass_amount(
+						this.production_data,
+						{
+							ItemClass,
+							Amount,
+						},
+					).Amount;
+				},
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
@@ -402,6 +418,10 @@ export class ProductionCalculator {
 			);
 
 			for (const ingredient of mIngredients) {
+				if ('string' === typeof ingredient) {
+					continue;
+				}
+
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass,
 				);
@@ -426,9 +446,21 @@ export class ProductionCalculator {
 					),
 				);
 
+				const {
+					ItemClass,
+					Amount,
+				} = ingredient;
+
+				if (undefined === Amount) {
+					throw new Error('No amount found!');
+				}
+
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					this.production_data,
-					ingredient,
+					{
+						ItemClass,
+						Amount,
+					},
 				).Amount;
 
 				const multiplied = amount.times(
@@ -689,7 +721,7 @@ export class ProductionCalculator {
 						).includes(
 							check_deeper_item,
 						)
-						|| (known_byproduct as string[]).includes(
+						|| known_byproduct.includes(
 							check_deeper_item,
 						)
 					),
@@ -704,7 +736,7 @@ export class ProductionCalculator {
 					(known_not_sourced_from_recipe as string[]).includes(
 						check_deeper_item,
 					)
-					|| (known_byproduct as string[]).includes(
+					|| known_byproduct.includes(
 						check_deeper_item,
 					)
 				) {

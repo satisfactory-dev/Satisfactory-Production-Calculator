@@ -24,6 +24,9 @@ import {
 import {
 	GenerateSchemas,
 } from './generate-schemas';
+import {
+	object_has_property,
+} from '@satisfactory-dev/predicates.ts';
 
 class Item
 {
@@ -117,11 +120,27 @@ class Item
 				mProduct,
 			} = recipes[recipe];
 
+			if ('' === mIngredients) {
+				throw new Error('Empty ingredient found!');
+			}
+
 			const ingredient_amounts = mIngredients.map(
-				e => amend_ItemClass_amount(
-					this.production_data,
-					e,
-				).Amount,
+				({
+					ItemClass,
+					Amount,
+				}) => {
+					if (undefined === Amount) {
+						throw new Error('No amount found!');
+					}
+
+					return amend_ItemClass_amount(
+						this.production_data,
+						{
+							ItemClass,
+							Amount,
+						},
+					).Amount;
+				},
 			);
 
 			const mapped_product_amounts = Object.fromEntries(
@@ -169,6 +188,9 @@ class Item
 			);
 
 			for (const ingredient of mIngredients) {
+				if (!object_has_property(ingredient, 'ItemClass')) {
+					continue;
+				}
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass,
 				);

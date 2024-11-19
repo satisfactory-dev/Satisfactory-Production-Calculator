@@ -4,7 +4,7 @@ import {
 import {
 	data,
 	imports,
-} from './production-data/types/update8';
+} from './production-data/types';
 import {
 	recipe_selection_enums,
 } from './production-data/recipe-selection-enums';
@@ -156,7 +156,7 @@ export class ProductionData
 				(maybe) => (
 					!products.has(maybe)
 					&& !resource_keys.includes(maybe)
-					&& !(known_byproduct as string[]).includes(maybe as string)
+					&& !known_byproduct.includes(maybe as string)
 				),
 			),
 			recipe_selection_enums: recipe_selection_enums(this.#imports),

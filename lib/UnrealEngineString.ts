@@ -6,7 +6,8 @@ import {
 } from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
 	UnrealEngineString,
-} from '../generated-types/update8/utils/validators';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators';
 import assert from 'assert';
 
 export type UnrealEngineString_right_x_C_suffix =

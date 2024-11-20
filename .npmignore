@@ -19,7 +19,7 @@
 /.prettierignore
 /.prettierrc
 /tsconfig*.json
-/generated-types/*/data/
+/generated-types/
 /**/.gitkeep
 /validator/
 /data/

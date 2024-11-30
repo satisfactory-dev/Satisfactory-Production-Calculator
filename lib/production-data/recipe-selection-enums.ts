@@ -139,6 +139,8 @@ export function recipe_selection_enums(
 		'Desc_AlienProtein_C',
 		'Desc_GenericBiomass_C',
 		'Desc_Medkit_C',
+		'Desc_FicsiteIngot_C',
+		'Desc_CrystalShard_C',
 	];
 
 	for (const entry of Object.entries(recipe_selection_enums)) {

@@ -745,7 +745,10 @@ export class ProductionCalculator {
 				}
 
 				let possibly_recursive = false;
-				let recursive_multiplier:Fraction|IntermediaryNumberInfinity = new Fraction(1);
+				let recursive_multiplier:(
+					| Fraction
+					| IntermediaryNumberInfinity
+				) = new Fraction(1);
 
 				if (check_deeper_item in production_items) {
 					possibly_recursive = Root.is_recursive(

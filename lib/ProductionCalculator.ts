@@ -7,6 +7,7 @@ import {
 } from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
 	amount_string,
+	IntermediaryNumberInfinity,
 	number_arg,
 	Numbers,
 } from '@signpostmarv/intermediary-number';
@@ -744,7 +745,7 @@ export class ProductionCalculator {
 				}
 
 				let possibly_recursive = false;
-				let recursive_multiplier = new Fraction(1);
+				let recursive_multiplier:Fraction|IntermediaryNumberInfinity = new Fraction(1);
 
 				if (check_deeper_item in production_items) {
 					possibly_recursive = Root.is_recursive(
@@ -768,7 +769,10 @@ export class ProductionCalculator {
 								check_deeper_amount
 							)
 						).toFraction();
-						recursive_multiplier = Numbers.sum_series_fraction(
+
+						recursive_multiplier = 1 === b.compare(a)
+							? IntermediaryNumberInfinity.One
+							: Numbers.sum_series_fraction(
 							Numbers.divide_if_not_one(a, lcm, true),
 							Numbers.divide_if_not_one(b, lcm, true),
 						);

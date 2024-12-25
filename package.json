@@ -28,7 +28,7 @@
     "@satisfactory-dev/custom-assert": "^0.2.3",
     "@satisfactory-dev/docs.json.ts": "^0.14.4",
     "@satisfactory-dev/predicates.ts": "^0.1.1",
-    "@signpostmarv/intermediary-number": "^0.6.0",
+    "@signpostmarv/intermediary-number": "^0.6.2",
     "bignumber.js": "^9.1.2",
     "fraction.js": "^4.3.7"
   }

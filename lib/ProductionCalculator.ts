@@ -773,9 +773,9 @@ export class ProductionCalculator {
 						recursive_multiplier = 1 === b.compare(a)
 							? IntermediaryNumberInfinity.One
 							: Numbers.sum_series_fraction(
-							Numbers.divide_if_not_one(a, lcm, true),
-							Numbers.divide_if_not_one(b, lcm, true),
-						);
+								Numbers.divide_if_not_one(a, lcm, true),
+								Numbers.divide_if_not_one(b, lcm, true),
+							);
 
 						avoid_checking_further.add(check_deeper_item);
 					}

@@ -133,6 +133,8 @@ export function recipe_selection_enums(
 		'Build_WaterPump_C',
 		// have to ensure OilPump & WaterPump come first
 		'Build_FrackingSmasher_C',
+		// 1.0 compact coal needs a default
+		'Recipe_Alternate_EnrichedCoal_C',
 	];
 
 	const permitted_first_match = [

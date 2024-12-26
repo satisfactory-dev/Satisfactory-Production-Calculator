@@ -27,17 +27,29 @@ import {
 import {
 	object_has_property,
 } from '@satisfactory-dev/predicates.ts';
+import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
 
-class Item
+class Item<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+>
 {
 	readonly item:production_item;
 	readonly parents:production_item[];
-	readonly production_data:ProductionData;
+	readonly production_data:ProductionData<FGPowerShardDescriptor>;
 	readonly recipe_selection:recipe_selection;
 	readonly result: Item[] = []
 
 	constructor(
-		production_data: ProductionData,
+		production_data: ProductionData<FGPowerShardDescriptor>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 		parents:production_item[],
@@ -257,7 +269,12 @@ class Recursive extends Item
 	}
 }
 
-export class Root extends Item
+export class Root<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+> extends Item
 {
 	private static cache:WeakMap<
 		recipe_selection,
@@ -265,7 +282,7 @@ export class Root extends Item
 	> = new WeakMap();
 
 	constructor(
-		production_data: ProductionData,
+		production_data: ProductionData<FGPowerShardDescriptor>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	) {
@@ -277,8 +294,13 @@ export class Root extends Item
 		);
 	}
 
-	static is_recursive(
-		production_data: ProductionData,
+	static is_recursive<
+		FGPowerShardDescriptor extends (
+			| FGPowerShardDescriptor__type
+			| undefined
+		) = undefined,
+	>(
+		production_data: ProductionData<FGPowerShardDescriptor>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	): boolean {

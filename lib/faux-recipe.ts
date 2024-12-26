@@ -9,11 +9,20 @@ import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
 import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
 	ProductionData,
 } from './production-data';
 
-export function faux_recipe(
-	production_data: ProductionData,
+export function faux_recipe<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+>(
+	production_data: ProductionData<FGPowerShardDescriptor>,
 	recipe:string,
 ): production_set {
 	if (

@@ -9,6 +9,28 @@ import {
 	it,
 } from 'node:test';
 import assert from 'node:assert/strict';
+import {
+	ValidateFunction,
+} from 'ajv';
+import {
+	GenerateValidators,
+} from '../../lib/generate-validators';
+// eslint-disable-next-line max-len
+import production_request_schema from '../../validator/production_request_schema.mjs';
+import {
+	ProductionCalculator,
+} from '../../lib/ProductionCalculator';
+import {
+	production_request,
+} from '../../lib/types';
+
+const validators = await GenerateValidators.fromStandalone(
+	Promise.resolve({
+		default: production_request_schema as ValidateFunction<
+			production_request
+		>,
+	}),
+);
 
 void describe('Power Shards\' existence in production data', () => {
 	void it('Behaves as expected on Update 8', () => {
@@ -23,6 +45,19 @@ void describe('Power Shards\' existence in production data', () => {
 			'Desc_CrystalShard_C' in u8_production_data.data.items,
 			true,
 		);
+
+		const calculator = new ProductionCalculator(
+			u8_production_data,
+			validators,
+		);
+
+		assert.doesNotThrow(() => {
+			calculator.validate({
+				pool: {
+					'Desc_CrystalShard_C': '1',
+				},
+			});
+		})
 	});
 
 	void it('Behaves as expected on 1.0', () => {
@@ -44,5 +79,18 @@ void describe('Power Shards\' existence in production data', () => {
 			'Desc_CrystalShard_C' in v1_production_data.data.items,
 			false,
 		);
+
+		const calculator = new ProductionCalculator(
+			v1_production_data,
+			validators,
+		);
+
+		assert.doesNotThrow(() => {
+			calculator.validate({
+				pool: {
+					'Desc_CrystalShard_C': '1',
+				},
+			});
+		})
 	});
 })

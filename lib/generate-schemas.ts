@@ -7,6 +7,11 @@ import {
 } from '@satisfactory-dev/predicates.ts';
 
 import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+
+import {
 	ProductionData,
 } from './production-data';
 import {
@@ -140,16 +145,32 @@ type production_request = SchemaObject & {
 	},
 };
 
-export class GenerateSchemas
+export class GenerateSchemas<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+>
 {
-	#data:ProductionData;
+	#data:ProductionData<FGPowerShardDescriptor>;
 
 	readonly production_request: production_request;
 	readonly recipe_selection: recipe_selection;
 
-	static #instances:WeakMap<ProductionData, GenerateSchemas> = new WeakMap();
+	static #instances:WeakMap<
+		ProductionData<(
+			| FGPowerShardDescriptor__type
+			| undefined
+		)>,
+		GenerateSchemas<(
+			| FGPowerShardDescriptor__type
+			| undefined
+		)>
+	> = new WeakMap();
 
-	private constructor(production_data: ProductionData)
+	private constructor(
+		production_data: ProductionData<FGPowerShardDescriptor>,
+	)
 	{
 		this.#data = production_data;
 		const {
@@ -313,7 +334,14 @@ export class GenerateSchemas
 		};
 	}
 
-	static factory(production_data: ProductionData)
+	static factory<
+		FGPowerShardDescriptor extends (
+			| FGPowerShardDescriptor__type
+			| undefined
+		) = undefined,
+	>(production_data: ProductionData<
+		FGPowerShardDescriptor
+	>)
 	{
 		let existing = this.#instances.get(production_data);
 

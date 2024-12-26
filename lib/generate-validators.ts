@@ -7,6 +7,11 @@ import {
 	esmify,
 } from '@satisfactory-dev/ajv-utilities';
 
+import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+
 import type {
 	GenerateSchemas,
 } from './generate-schemas';
@@ -38,7 +43,10 @@ export class GenerateValidators
 	}
 
 	static #compile(
-		schemas:GenerateSchemas,
+		schemas:GenerateSchemas<(
+			| FGPowerShardDescriptor__type
+			| undefined
+		)>,
 		ajv: Ajv,
 	) {
 		const {
@@ -79,7 +87,10 @@ export class GenerateValidators
 	}
 
 	static toStandalone(
-		schemas:GenerateSchemas,
+		schemas:GenerateSchemas<(
+			| FGPowerShardDescriptor__type
+			| undefined
+		)>,
 		ajv: Ajv,
 	): string {
 		return esmify(standalone(

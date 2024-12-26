@@ -6,6 +6,10 @@ import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
 	amount_string,
 	IntermediaryNumberInfinity,
 	number_arg,
@@ -54,17 +58,22 @@ import {
 	GenerateValidators,
 } from './generate-validators';
 
-export class ProductionCalculator {
+export class ProductionCalculator<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+> {
 	top_level_only:boolean = false;
 
 	private input:production_set<
 		| operand_types
 	> = {};
-	private production_data:ProductionData;
+	private production_data:ProductionData<FGPowerShardDescriptor>;
 	protected readonly check:ValidateFunction<production_request>;
 
 	constructor(
-		production_data:ProductionData,
+		production_data:ProductionData<FGPowerShardDescriptor>,
 		generator_validators:GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;

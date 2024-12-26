@@ -66,7 +66,7 @@ coverage: build
 coverage--only-unstaged: build
 	@./node_modules/.bin/c8 ./node_modules/.bin/ts-node ./tests--only-these.ts '$(shell git diff HEAD --name-only)'
 
-npm-prep: tests
+npm-prep: lint tests
 	@echo 'building from ./tsconfig.app-npm.json'
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-npm.json
 	@npm publish --dry-run

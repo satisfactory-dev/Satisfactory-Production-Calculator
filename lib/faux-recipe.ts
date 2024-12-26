@@ -17,6 +17,7 @@ import {
 } from './production-data';
 import {
 	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export function faux_recipe<

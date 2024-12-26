@@ -66,6 +66,7 @@ export class ProductionCalculator<
 > {
 	top_level_only:boolean = false;
 
+	private allowed_empty_ingredients:string[];
 	private input:production_set<
 		| operand_types
 	> = {};
@@ -78,6 +79,24 @@ export class ProductionCalculator<
 	) {
 		this.check = generator_validators.validation_function;
 		this.production_data = production_data;
+
+
+
+		const allowed_empty_ingredients:`Recipe_${string}_C`[] = [];
+		const supported_empty_ingredient_recipes:`Recipe_${string}_C`[] = [
+			'Recipe_QuantumEnergy_C',
+		];
+
+		for (const recipe of supported_empty_ingredient_recipes) {
+			if (
+				recipe in production_data.data.recipes
+				&& '' === production_data.data.recipes[recipe].mIngredients
+			) {
+				allowed_empty_ingredients.push(recipe);
+			}
+		}
+
+		this.allowed_empty_ingredients = allowed_empty_ingredients;
 	}
 
 	calculate(data:unknown): production_result
@@ -327,11 +346,18 @@ export class ProductionCalculator<
 				mProduct,
 			} = recipes[recipe];
 
-			if ('' === mIngredients) {
+			if (
+				'' === mIngredients
+				&& !this.allowed_empty_ingredients.includes(recipe)
+			) {
 				throw new Error('Empty ingredient found!');
 			}
 
-			const ingredient_amounts = mIngredients.map(
+			const ingredient_amounts = (
+				'' === mIngredients
+					? []
+					: mIngredients
+			).map(
 				({
 					ItemClass,
 					Amount,
@@ -383,6 +409,23 @@ export class ProductionCalculator<
 				...product_amounts,
 			];
 
+			if (
+				this.allowed_empty_ingredients.includes(recipe)
+				&& '' === recipes[recipe].mIngredients
+			) {
+				assert.strictEqual(
+					ingredient_amounts.length,
+					0,
+					// eslint-disable-next-line max-len
+					'Recipes with no ingredients should have no ingredient amounts!',
+				);
+				assert.strictEqual(
+					product_amounts.length >= 1,
+					true,
+					// eslint-disable-next-line max-len
+					'Recipes with no ingredients should have at least one product!',
+				);
+			} else {
 			assert.strictEqual(
 				amounts.length >= 2,
 				true,
@@ -393,6 +436,7 @@ export class ProductionCalculator<
 					'Expected at least two numbers!',
 				),
 			);
+			}
 
 			let divisor = Numbers.least_common_multiple_deferred(
 				[

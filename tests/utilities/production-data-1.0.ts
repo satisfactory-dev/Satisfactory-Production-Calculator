@@ -59,7 +59,6 @@ import {
 } from '../../generated-types/1.0/data/CoreUObject/FGBuildableResourceExtractor';
 import {
 	FGPowerShardDescriptor,
-// eslint-disable-next-line max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGPowerShardDescriptor';
 import {
 	FGPowerShardDescriptor__type,

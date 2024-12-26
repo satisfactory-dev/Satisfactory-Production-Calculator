@@ -23,8 +23,6 @@ import {
 import {
 	production_request,
 } from '../../lib/types';
-import { NoMatchError } from '@satisfactory-dev/docs.json.ts/lib';
-import { amount_string } from '@signpostmarv/intermediary-number';
 
 const v1_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({

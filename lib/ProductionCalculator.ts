@@ -426,16 +426,16 @@ export class ProductionCalculator<
 					'Recipes with no ingredients should have at least one product!',
 				);
 			} else {
-			assert.strictEqual(
-				amounts.length >= 2,
-				true,
-				new NoMatchError(
-					{
-						amounts,
-					},
-					'Expected at least two numbers!',
-				),
-			);
+				assert.strictEqual(
+					amounts.length >= 2,
+					true,
+					new NoMatchError(
+						{
+							amounts,
+						},
+						'Expected at least two numbers!',
+					),
+				);
 			}
 
 			let divisor = Numbers.least_common_multiple_deferred(

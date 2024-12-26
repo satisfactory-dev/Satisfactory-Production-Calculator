@@ -20,6 +20,7 @@ import {
 } from '../../lib/generate-validators';
 // eslint-disable-next-line max-len
 import update8_production_request_schema from '../../validator/update8/production_request_schema.mjs';
+// eslint-disable-next-line max-len
 import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
 import {
 	ProductionCalculator,
@@ -27,8 +28,9 @@ import {
 import {
 	production_request,
 } from '../../lib/types';
-import { NoMatchError } from '@satisfactory-dev/docs.json.ts/lib';
-import { amount_string } from '@signpostmarv/intermediary-number';
+import {
+	amount_string,
+} from '@signpostmarv/intermediary-number';
 
 const update8_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({
@@ -152,14 +154,6 @@ void describe('Power Shards\' existence in production data', () => {
 				Desc_IonizedFuel_C: '1',
 			},
 		};
-
-		try {
-			calculator.validate(ionized_fuel_data);
-		} catch (err) {
-			if (err instanceof NoMatchError) {
-				console.error(err.property);
-			}
-		}
 
 		assert.doesNotThrow(() => {
 			calculator.validate(ionized_fuel_data);

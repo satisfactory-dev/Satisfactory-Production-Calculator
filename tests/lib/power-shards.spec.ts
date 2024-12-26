@@ -5,6 +5,9 @@ import {
 	instance as v1_production_data,
 } from '../utilities/production-data-1.0';
 import {
+	flattened_production_ingredients_request_result,
+} from '../utilities/flattened-production-ingredients-request-result';
+import {
 	describe,
 	it,
 } from 'node:test';
@@ -58,6 +61,27 @@ void describe('Power Shards\' existence in production data', () => {
 				},
 			});
 		})
+
+		assert.deepEqual(
+			flattened_production_ingredients_request_result(
+				calculator.calculate({
+					pool: {
+						'Desc_CrystalShard_C': '1',
+					},
+				}),
+			),
+			flattened_production_ingredients_request_result(
+				{
+					ingredients: {
+						Desc_Crystal_C: '1',
+					},
+					output: {
+						Desc_CrystalShard_C: '1',
+					},
+					combined: {},
+				},
+			),
+		);
 	});
 
 	void it('Behaves as expected on 1.0', () => {
@@ -92,5 +116,26 @@ void describe('Power Shards\' existence in production data', () => {
 				},
 			});
 		})
+
+		assert.deepEqual(
+			flattened_production_ingredients_request_result(
+				calculator.calculate({
+					pool: {
+						'Desc_CrystalShard_C': '1',
+					},
+				}),
+			),
+			flattened_production_ingredients_request_result(
+				{
+					ingredients: {
+						Desc_Crystal_C: '1',
+					},
+					output: {
+						Desc_CrystalShard_C: '1',
+					},
+					combined: {},
+				},
+			),
+		);
 	});
 })

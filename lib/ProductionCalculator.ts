@@ -134,6 +134,7 @@ export class ProductionCalculator<
 			poles,
 			recipes,
 			vehicles,
+			power_shards,
 		} = this.production_data.data;
 
 		const {
@@ -510,6 +511,9 @@ export class ProductionCalculator<
 						|| Desc_C in poles
 						|| Desc_C in resources
 						|| Desc_C in vehicles
+						|| (
+							power_shards && Desc_C in power_shards
+						)
 					),
 					true,
 					new NoMatchError(

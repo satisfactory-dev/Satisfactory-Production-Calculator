@@ -17,12 +17,20 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+
 
 export function recipe_selection_enums<
-	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined
+	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined,
+	// eslint-disable-next-line max-len
+	T_PowerBoosterFuel extends undefined|FGItemDescriptorPowerBoosterFuel__type = undefined,
 >(
 	imports:imports<
-		T_PowerShard
+		T_PowerShard,
+		T_PowerBoosterFuel
 	>,
 ): recipe_selection_properties_with_defaults {
 	const {

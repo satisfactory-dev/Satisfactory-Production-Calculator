@@ -10,6 +10,10 @@ import {
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
 import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+import {
 	amount_string,
 	IntermediaryNumberInfinity,
 	number_arg,
@@ -62,7 +66,17 @@ export class ProductionCalculator<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
 		| undefined
-	) = undefined,
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 > {
 	top_level_only:boolean = false;
 
@@ -70,11 +84,17 @@ export class ProductionCalculator<
 	private input:production_set<
 		| operand_types
 	> = {};
-	private production_data:ProductionData<FGPowerShardDescriptor>;
+	private production_data:ProductionData<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
 	protected readonly check:ValidateFunction<production_request>;
 
 	constructor(
-		production_data:ProductionData<FGPowerShardDescriptor>,
+		production_data:ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
 		generator_validators:GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
@@ -154,6 +174,7 @@ export class ProductionCalculator<
 			recipes,
 			vehicles,
 			power_shards,
+			power_booster_fuel,
 		} = this.production_data.data;
 
 		const {
@@ -558,6 +579,9 @@ export class ProductionCalculator<
 						|| Desc_C in vehicles
 						|| (
 							power_shards && Desc_C in power_shards
+						)
+						|| (
+							power_booster_fuel && Desc_C in power_booster_fuel
 						)
 					),
 					true,

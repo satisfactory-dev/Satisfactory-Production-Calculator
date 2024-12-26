@@ -31,6 +31,10 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 class Item<
 	FGPowerShardDescriptor extends (
@@ -40,16 +44,29 @@ class Item<
 		| FGPowerShardDescriptor__type
 		| undefined
 	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 >
 {
 	readonly item:production_item;
 	readonly parents:production_item[];
-	readonly production_data:ProductionData<FGPowerShardDescriptor>;
+	readonly production_data:ProductionData<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
 	readonly recipe_selection:recipe_selection;
 	readonly result: Item[] = []
 
 	constructor(
-		production_data: ProductionData<FGPowerShardDescriptor>,
+		production_data: ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 		parents:production_item[],
@@ -273,7 +290,17 @@ export class Root<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
 		| undefined
-	) = undefined,
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 > extends Item
 {
 	private static cache:WeakMap<
@@ -282,7 +309,10 @@ export class Root<
 	> = new WeakMap();
 
 	constructor(
-		production_data: ProductionData<FGPowerShardDescriptor>,
+		production_data: ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	) {
@@ -298,9 +328,22 @@ export class Root<
 		FGPowerShardDescriptor extends (
 			| FGPowerShardDescriptor__type
 			| undefined
-		) = undefined,
+		) = (
+			| FGPowerShardDescriptor__type
+			| undefined
+		),
+		FGItemDescriptorPowerBoosterFuel extends (
+			| FGItemDescriptorPowerBoosterFuel__type
+			| undefined
+		) = (
+			| FGItemDescriptorPowerBoosterFuel__type
+			| undefined
+		),
 	>(
-		production_data: ProductionData<FGPowerShardDescriptor>,
+		production_data: ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	): boolean {

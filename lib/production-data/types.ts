@@ -85,6 +85,10 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export type FGVehicleDescriptor__type = (
 	| common_base__FGVehicleDescriptor__powered_no_inventory__type
@@ -105,6 +109,10 @@ export type NativeClass__type__wrapper<
 export type imports<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
 		| undefined
 	) = undefined,
 	// eslint-disable-next-line max-len
@@ -208,6 +216,13 @@ export type imports<
 				Exclude<FGPowerShardDescriptor, undefined>
 			>
 	),
+	FGItemDescriptorPowerBoosterFuel?: (
+		FGItemDescriptorPowerBoosterFuel extends undefined
+			? undefined
+			: NativeClass__type__wrapper<
+				Exclude<FGItemDescriptorPowerBoosterFuel, undefined>
+			>
+	),
 }
 
 export type recipe_selection_properties = {
@@ -232,6 +247,10 @@ export type recipe_selection_properties_with_defaults = {
 
 export type data<
 	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined,
+	T_PowerBoosterFuel extends (
+		| undefined
+		| FGItemDescriptorPowerBoosterFuel__type
+	) = undefined,
 	T_ammo extends (
 		| common_base__FGAmmoTypeProjectile__type
 		| common_base__FGAmmoTypeInstantHit__chaos__type
@@ -280,6 +299,11 @@ export type data<
 		T_PowerShard extends undefined
 			? undefined
 			: {[key: string]: T_PowerShard}
+	),
+	power_booster_fuel?: (
+		T_PowerBoosterFuel extends undefined
+			? undefined
+			: {[key: string]: T_PowerBoosterFuel}
 	),
 	ingredients: Set<(
 		| `Desc_${string}_C`

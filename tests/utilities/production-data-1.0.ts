@@ -64,9 +64,18 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel,
+// eslint-disable-next-line max-len
+} from '../../generated-types/1.0/data/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export const instance = new ProductionData<
-	FGPowerShardDescriptor__type
+	FGPowerShardDescriptor__type,
+	FGItemDescriptorPowerBoosterFuel__type
 >(() => ({
 	FGAmmoTypeProjectile,
 	FGAmmoTypeInstantHit,
@@ -86,4 +95,5 @@ export const instance = new ProductionData<
 	FGBuildableWaterPump,
 	FGBuildableResourceExtractor,
 	FGPowerShardDescriptor,
+	FGItemDescriptorPowerBoosterFuel,
 }));

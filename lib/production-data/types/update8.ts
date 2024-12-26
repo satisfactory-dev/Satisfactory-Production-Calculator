@@ -94,6 +94,7 @@ export type FGVehicleDescriptor__type = common_FGVehicleDescriptor__type & (
 
 export type imports = common_imports<
 	undefined,
+	undefined,
 	FGAmmoTypeProjectile__type,
 	(
 		| FGAmmoTypeInstantHit__chaos__type
@@ -125,6 +126,7 @@ export type imports = common_imports<
 >
 
 export type data = common_data<
+	undefined,
 	undefined,
 	(
 		| FGAmmoTypeProjectile__type

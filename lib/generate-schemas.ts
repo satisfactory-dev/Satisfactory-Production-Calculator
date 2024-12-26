@@ -10,6 +10,10 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 import {
 	ProductionData,
@@ -149,27 +153,55 @@ export class GenerateSchemas<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
 		| undefined
-	) = undefined,
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 >
 {
-	#data:ProductionData<FGPowerShardDescriptor>;
+	#data:ProductionData<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
 
 	readonly production_request: production_request;
 	readonly recipe_selection: recipe_selection;
 
 	static #instances:WeakMap<
-		ProductionData<(
-			| FGPowerShardDescriptor__type
-			| undefined
-		)>,
-		GenerateSchemas<(
-			| FGPowerShardDescriptor__type
-			| undefined
-		)>
+		ProductionData<
+			(
+				| FGPowerShardDescriptor__type
+				| undefined
+			),
+			(
+				| FGItemDescriptorPowerBoosterFuel__type
+				| undefined
+			)
+		>,
+		GenerateSchemas<
+			(
+				| FGPowerShardDescriptor__type
+				| undefined
+			),
+			(
+				| FGItemDescriptorPowerBoosterFuel__type
+				| undefined
+			)
+		>
 	> = new WeakMap();
 
 	private constructor(
-		production_data: ProductionData<FGPowerShardDescriptor>,
+		production_data: ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
 	)
 	{
 		this.#data = production_data;
@@ -335,12 +367,23 @@ export class GenerateSchemas<
 	}
 
 	static factory<
-		FGPowerShardDescriptor extends (
-			| FGPowerShardDescriptor__type
-			| undefined
-		) = undefined,
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 	>(production_data: ProductionData<
-		FGPowerShardDescriptor
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
 	>)
 	{
 		let existing = this.#instances.get(production_data);

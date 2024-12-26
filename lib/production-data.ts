@@ -16,29 +16,56 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export class ProductionData<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
 		| undefined
 	) = undefined,
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = undefined,
 >
 {
-	#imports:imports<FGPowerShardDescriptor>;
-	#data:data<FGPowerShardDescriptor>;
+	#imports: imports<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
+	#data: data<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
 
-	constructor(imports:() => imports<FGPowerShardDescriptor>)
+	constructor(imports:() => imports<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>)
 	{
 		this.#imports = imports();
 		this.#data = this.#get_data();
 	}
 
-	get data(): data<FGPowerShardDescriptor>
+	get data(): (
+		data<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>
+	)
 	{
 		return this.#data;
 	}
 
-	#get_data(): data<FGPowerShardDescriptor>
+	#get_data(): (
+		data<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>
+	)
 	{
 		const {
 			FGAmmoTypeProjectile,
@@ -60,6 +87,12 @@ export class ProductionData<
 		const FGPowerShardDescriptor = (
 			('FGPowerShardDescriptor' in this.#imports)
 				? this.#imports.FGPowerShardDescriptor
+				: undefined
+		);
+
+		const FGItemDescriptorPowerBoosterFuel = (
+			('FGItemDescriptorPowerBoosterFuel' in this.#imports)
+				? this.#imports.FGItemDescriptorPowerBoosterFuel
 				: undefined
 		);
 
@@ -151,7 +184,28 @@ export class ProductionData<
 				: { [key: string]: FGPowerShardDescriptor; }
 		);
 
-		const result:data<FGPowerShardDescriptor> = {
+		const power_booster_fuel:(
+			FGItemDescriptorPowerBoosterFuel extends undefined
+				? undefined
+				: { [key: string]: FGItemDescriptorPowerBoosterFuel; }
+		) = (
+			undefined === FGItemDescriptorPowerBoosterFuel
+				? undefined
+				: Object.fromEntries(
+					FGItemDescriptorPowerBoosterFuel.Classes.map(
+						(e) => [e.ClassName, e],
+					),
+				)
+		) as (
+			FGItemDescriptorPowerBoosterFuel extends undefined
+				? undefined
+				: { [key: string]: FGItemDescriptorPowerBoosterFuel; }
+		);
+
+		const result:data<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		> = {
 			ammo,
 			biomass,
 			buildings: Object.fromEntries(
@@ -180,6 +234,7 @@ export class ProductionData<
 				),
 			),
 			power_shards,
+			power_booster_fuel,
 			ingredients,
 			products,
 			resource_keys,

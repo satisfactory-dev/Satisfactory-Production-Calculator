@@ -15,14 +15,30 @@ import {
 import {
 	ProductionData,
 } from './production-data';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export function faux_recipe<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type
 		| undefined
-	) = undefined,
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
 >(
-	production_data: ProductionData<FGPowerShardDescriptor>,
+	production_data: ProductionData<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>,
 	recipe:string,
 ): production_set {
 	if (

@@ -9,7 +9,6 @@ import {
 } from '../../generated-types/1.0/data/CoreUObject/FGAmmoTypeSpreadshot';
 import {
 	FGItemDescriptorBiomass,
-// eslint-disable-next-line max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGItemDescriptorBiomass';
 import {
 	FGBuildingDescriptor,

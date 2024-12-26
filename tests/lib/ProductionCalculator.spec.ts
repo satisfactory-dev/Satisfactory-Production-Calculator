@@ -61,7 +61,7 @@ import {
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
 	const validators = await GenerateValidators.fromStandalone(
 		import(
-			'../../validator/production_request_schema.mjs'
+			'../../validator/update8/production_request_schema.mjs'
 		) as unknown as Promise<{
 			default: ValidateFunction<production_request>,
 		}>,

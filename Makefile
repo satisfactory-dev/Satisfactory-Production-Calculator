@@ -32,7 +32,8 @@ generate--post-build:
 
 generate--validators: build
 	@./node_modules/.bin/ts-node ./generate-validators.ts
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/production_request_schema.mjs --outDir ./validator/
+	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/update8/production_request_schema.mjs --outDir ./validator/update8/
+	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/1.0/production_request_schema.mjs --outDir ./validator/1.0/
 
 lint--tsc:
 	@echo 'running syntax check'

@@ -9,27 +9,46 @@ import {
 	GenerateValidators,
 } from './lib/generate-validators';
 import {
-	instance as production_data,
+	instance as u8_production_data,
 } from './tests/utilities/production-data';
+import {
+	instance as v1_production_data,
+} from './tests/utilities/production-data-1.0';
 
 const __dirname = import.meta.dirname;
 
-const ajv = new Ajv({
-	verbose: false,
-	logger: false,
-	allErrors: true,
-	code: {
-		source: true,
-		esm: true,
-		lines: true,
-		optimize: 2,
-	},
-});
+await writeFile(
+	`${__dirname}/validator/update8/production_request_schema.mjs`,
+	GenerateValidators.toStandalone(
+		GenerateSchemas.factory(u8_production_data),
+		new Ajv({
+			verbose: false,
+			logger: false,
+			allErrors: true,
+			code: {
+				source: true,
+				esm: true,
+				lines: true,
+				optimize: 2,
+			},
+		}),
+	),
+);
 
 await writeFile(
-	`${__dirname}/validator/production_request_schema.mjs`,
+	`${__dirname}/validator/1.0/production_request_schema.mjs`,
 	GenerateValidators.toStandalone(
-		GenerateSchemas.factory(production_data),
-		ajv,
+		GenerateSchemas.factory(v1_production_data),
+		new Ajv({
+			verbose: false,
+			logger: false,
+			allErrors: true,
+			code: {
+				source: true,
+				esm: true,
+				lines: true,
+				optimize: 2,
+			},
+		}),
 	),
 );

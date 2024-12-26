@@ -445,6 +445,7 @@ export class ProductionCalculator<
 						|| Desc_C in equipment
 						|| Desc_C in items
 						|| Desc_C in resources
+						|| (power_shards && Desc_C in power_shards)
 					),
 					true,
 					new NoMatchError(

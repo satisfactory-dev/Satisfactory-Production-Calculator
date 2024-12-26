@@ -59,7 +59,9 @@ import {
 // eslint-disable-next-line max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
 
-export const instance = new ProductionData(() => ({
+export const instance = new ProductionData<
+	undefined
+>(() => ({
 	FGAmmoTypeProjectile,
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeSpreadshot,

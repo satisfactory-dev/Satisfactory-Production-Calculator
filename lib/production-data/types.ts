@@ -81,6 +81,10 @@ import {
 	NativeClass__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
+import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
 
 export type FGVehicleDescriptor__type = (
 	| common_base__FGVehicleDescriptor__powered_no_inventory__type
@@ -92,13 +96,17 @@ export type imports_dict = {
 	[key: string]: NativeClass__type,
 };
 
-type NativeClass__type__wrapper<
+export type NativeClass__type__wrapper<
 	T extends class__no_description_or_display_name__type
 > = NativeClass__type & {
 	Classes: [T, ...T[]],
 };
 
 export type imports<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
 	// eslint-disable-next-line max-len
 	FGAmmoTypeProjectile extends common_base__FGAmmoTypeProjectile__type = common_base__FGAmmoTypeProjectile__type,
 	FGAmmoTypeInstantHit extends (
@@ -193,6 +201,13 @@ export type imports<
 	FGBuildableResourceExtractor: NativeClass__type__wrapper<
 		FGBuildableResourceExtractor
 	>,
+	FGPowerShardDescriptor?: (
+		FGPowerShardDescriptor extends undefined
+			? undefined
+			: NativeClass__type__wrapper<
+				Exclude<FGPowerShardDescriptor, undefined>
+			>
+	),
 }
 
 export type recipe_selection_properties = {
@@ -216,6 +231,7 @@ export type recipe_selection_properties_with_defaults = {
 };
 
 export type data<
+	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined,
 	T_ammo extends (
 		| common_base__FGAmmoTypeProjectile__type
 		| common_base__FGAmmoTypeInstantHit__chaos__type
@@ -260,6 +276,11 @@ export type data<
 	recipes: {[key: string]: T_recipes},
 	resources: {[key: string]: T_resources},
 	vehicles: {[key: string]: T_vehicles},
+	power_shards?: (
+		T_PowerShard extends undefined
+			? undefined
+			: {[key: string]: T_PowerShard}
+	),
 	ingredients: Set<(
 		| `Desc_${string}_C`
 		| `BP_${string}_C`

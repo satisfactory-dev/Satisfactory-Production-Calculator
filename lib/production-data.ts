@@ -12,24 +12,33 @@ import {
 	ItemClass__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
+import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
 
-export class ProductionData
+export class ProductionData<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = undefined,
+>
 {
-	#imports:imports;
-	#data:data;
+	#imports:imports<FGPowerShardDescriptor>;
+	#data:data<FGPowerShardDescriptor>;
 
-	constructor(imports:() => imports)
+	constructor(imports:() => imports<FGPowerShardDescriptor>)
 	{
 		this.#imports = imports();
 		this.#data = this.#get_data();
 	}
 
-	get data(): data
+	get data(): data<FGPowerShardDescriptor>
 	{
 		return this.#data;
 	}
 
-	#get_data(): data
+	#get_data(): data<FGPowerShardDescriptor>
 	{
 		const {
 			FGAmmoTypeProjectile,
@@ -47,6 +56,12 @@ export class ProductionData
 			FGVehicleDescriptor,
 			FGBuildableGeneratorNuclear,
 		} = this.#imports;
+
+		const FGPowerShardDescriptor = (
+			('FGPowerShardDescriptor' in this.#imports)
+				? this.#imports.FGPowerShardDescriptor
+				: undefined
+		);
 
 		const resources = Object.fromEntries(
 			FGResourceDescriptor.Classes.map(
@@ -118,7 +133,25 @@ export class ProductionData
 			),
 		);
 
-		return {
+		const power_shards:(
+			FGPowerShardDescriptor extends undefined
+				? undefined
+				: { [key: string]: FGPowerShardDescriptor; }
+		) = (
+			undefined === FGPowerShardDescriptor
+				? undefined
+				: Object.fromEntries(
+					FGPowerShardDescriptor.Classes.map(
+						(e) => [e.ClassName, e],
+					),
+				)
+		) as (
+			FGPowerShardDescriptor extends undefined
+				? undefined
+				: { [key: string]: FGPowerShardDescriptor; }
+		);
+
+		const result:data<FGPowerShardDescriptor> = {
 			ammo,
 			biomass,
 			buildings: Object.fromEntries(
@@ -146,6 +179,7 @@ export class ProductionData
 					(e) => [e.ClassName, e],
 				),
 			),
+			power_shards,
 			ingredients,
 			products,
 			resource_keys,
@@ -170,5 +204,7 @@ export class ProductionData
 				...Object.keys(resources),
 			],
 		};
+
+		return result;
 	}
 }

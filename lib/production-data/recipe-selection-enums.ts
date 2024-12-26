@@ -13,9 +13,17 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib';
+import {
+	FGPowerShardDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
 
-export function recipe_selection_enums(
-	imports:imports,
+export function recipe_selection_enums<
+	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined
+>(
+	imports:imports<
+		T_PowerShard
+	>,
 ): recipe_selection_properties_with_defaults {
 	const {
 		FGRecipe,

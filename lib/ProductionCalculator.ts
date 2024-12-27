@@ -32,7 +32,6 @@ import {
 	faux_recipe,
 } from './faux-recipe';
 import {
-	amend_ItemClass_amount,
 	amend_ItemClass_amount_deferred,
 } from './amend-itemclass-amount';
 import {
@@ -50,7 +49,6 @@ import type {
 	production_request,
 	production_result,
 	production_set,
-	recipe_selection_schema_key,
 } from './types';
 import {
 	Request,
@@ -61,6 +59,9 @@ import {
 import {
 	GenerateValidators,
 } from './generate-validators';
+import {
+	ProductionResolver,
+} from './production-resolver';
 
 export class ProductionCalculator<
 	FGPowerShardDescriptor extends (
@@ -177,10 +178,6 @@ export class ProductionCalculator<
 			power_booster_fuel,
 		} = this.production_data.data;
 
-		const {
-			recipe_selection: recipe_selection_schema,
-		} = GenerateSchemas.factory(this.production_data);
-
 		const ingredients:{
 			[key in keyof typeof items]: (
 				| operand_types
@@ -259,13 +256,13 @@ export class ProductionCalculator<
 				continue;
 			}
 
-			const recipe = (
-				data.recipe_selection && production in data.recipe_selection
-					? data.recipe_selection[production]
-					: recipe_selection_schema.properties[
-						production as recipe_selection_schema_key
-					].default
+			const production_resolver = new ProductionResolver(
+				this.production_data,
+				production,
+				data.recipe_selection || {},
 			);
+
+			const recipe = production_resolver.recipe;
 
 			if (undefined === recipes[recipe]) {
 				if (
@@ -363,101 +360,11 @@ export class ProductionCalculator<
 			}
 
 			const {
+				mapped_product_amounts,
 				mIngredients,
 				mProduct,
-			} = recipes[recipe];
-
-			if (
-				'' === mIngredients
-				&& !this.allowed_empty_ingredients.includes(recipe)
-			) {
-				throw new Error('Empty ingredient found!');
-			}
-
-			const ingredient_amounts = (
-				'' === mIngredients
-					? []
-					: mIngredients
-			).map(
-				({
-					ItemClass,
-					Amount,
-				}) => {
-					if (undefined === Amount) {
-						throw new Error('No amount found!');
-					}
-
-					return amend_ItemClass_amount(
-						this.production_data,
-						{
-							ItemClass,
-							Amount,
-						},
-					).Amount;
-				},
-			);
-
-			const mapped_product_amounts = Object.fromEntries(
-				mProduct.map(
-					(e): [string, (
-							| operand_types
-					)] => [
-						UnrealEngineString_right_x_C_suffix(e.ItemClass),
-						amend_ItemClass_amount_deferred(
-							this.production_data,
-							e,
-						).Amount,
-					],
-				),
-			);
-
-			assert.strictEqual(
-				production in mapped_product_amounts,
-				true,
-				new NoMatchError(
-					{
-						production,
-						mapped_product_amounts,
-					},
-					'Production item not found in mapped product amounts!',
-				),
-			);
-
-			const product_amounts = Object.values(mapped_product_amounts);
-
-			const amounts = [
-				...ingredient_amounts,
-				...product_amounts,
-			];
-
-			if (
-				this.allowed_empty_ingredients.includes(recipe)
-				&& '' === recipes[recipe].mIngredients
-			) {
-				assert.strictEqual(
-					ingredient_amounts.length,
-					0,
-					// eslint-disable-next-line max-len
-					'Recipes with no ingredients should have no ingredient amounts!',
-				);
-				assert.strictEqual(
-					product_amounts.length >= 1,
-					true,
-					// eslint-disable-next-line max-len
-					'Recipes with no ingredients should have at least one product!',
-				);
-			} else {
-				assert.strictEqual(
-					amounts.length >= 2,
-					true,
-					new NoMatchError(
-						{
-							amounts,
-						},
-						'Expected at least two numbers!',
-					),
-				);
-			}
+				product_amounts,
+			} = production_resolver.amended_amounts;
 
 			let divisor = Numbers.least_common_multiple_deferred(
 				[
@@ -493,34 +400,19 @@ export class ProductionCalculator<
 				true,
 			);
 
-			for (const ingredient of mIngredients) {
+			for (const maybe_ingredient of mIngredients) {
+				const ingredient = ProductionResolver.verify_ingredient(
+					this.production_data,
+					maybe_ingredient,
+					recipe,
+				);
+
 				if ('string' === typeof ingredient) {
 					continue;
 				}
 
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass,
-				);
-
-				assert.strictEqual(
-					(
-						Desc_C in ammo
-						|| Desc_C in biomass
-						|| Desc_C in consumable
-						|| Desc_C in equipment
-						|| Desc_C in items
-						|| Desc_C in resources
-						|| (power_shards && Desc_C in power_shards)
-					),
-					true,
-					new NoMatchError(
-						{
-							recipe,
-							ingredient: ingredient.ItemClass.right,
-							expected: Desc_C,
-						},
-						`Supported ingredient found (${Desc_C}) but missing item!`,
-					),
 				);
 
 				const {

@@ -29,6 +29,9 @@ import {
 	production_request,
 } from '../../lib/types';
 import {
+	Root,
+} from '../../lib/production-chain';
+import {
 	amount_string,
 } from '@signpostmarv/intermediary-number';
 
@@ -191,5 +194,21 @@ void describe('Power Shards\' existence in production data', () => {
 				},
 			),
 		);
+
+		const get_result = () => {
+			const chain = new Root(
+				v1_production_data,
+				'Desc_CrystalShard_C',
+				{
+					Desc_CrystalShard_C: 'Recipe_SyntheticPowerShard_C',
+				},
+			);
+
+			console.debug({
+				result: chain.result,
+			})
+		};
+
+		assert.doesNotThrow(get_result);
 	});
 })

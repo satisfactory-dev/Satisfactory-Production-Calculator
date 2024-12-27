@@ -1,4 +1,3 @@
-import assert from 'assert';
 import {
 	ProductionData,
 } from './production-data';
@@ -10,20 +9,8 @@ import {
 	faux_recipe,
 } from './faux-recipe';
 import {
-	number_arg,
-} from '@signpostmarv/intermediary-number';
-import {
-	amend_ItemClass_amount,
-} from './amend-itemclass-amount';
-import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
-import {
-	GenerateSchemas,
-} from './generate-schemas';
 import {
 	object_has_property,
 } from '@satisfactory-dev/predicates.ts';
@@ -35,6 +22,9 @@ import {
 	FGItemDescriptorPowerBoosterFuel__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+import {
+	ProductionResolver,
+} from './production-resolver';
 
 class Item<
 	FGPowerShardDescriptor extends (
@@ -89,19 +79,10 @@ class Item<
 	private calculate(): Item[]
 	{
 		const {
-			ammo,
-			biomass,
-			consumable,
-			equipment,
-			items,
 			known_not_sourced_from_recipe,
 			recipes,
 			resources,
 		} = this.production_data.data;
-
-		const {
-			recipe_selection: recipe_selection_schema,
-		} = GenerateSchemas.factory(this.production_data);
 
 		if ((known_not_sourced_from_recipe as string[]).includes(this.item)) {
 			return [];
@@ -109,23 +90,13 @@ class Item<
 
 		const ingredients:production_item[] = [];
 
-		let maybe_recipe:string|undefined = undefined;
-
-		if (this.item in this.recipe_selection) {
-			maybe_recipe = this.recipe_selection[this.item];
-		} else if (this.item in recipe_selection_schema.properties) {
-			maybe_recipe = recipe_selection_schema.properties[
-				this.item as keyof typeof recipe_selection_schema.properties
-			].default;
-		}
-
-		assert.strictEqual(
-			undefined !== maybe_recipe,
-			true,
-			new Error(`Could not find recipe for ${this.item}`),
+		const production_resolver = new ProductionResolver(
+			this.production_data,
+			this.item,
+			this.recipe_selection,
 		);
 
-		const recipe = maybe_recipe as string;
+		const recipe = production_resolver.recipe
 
 		if (undefined === recipes[recipe]) {
 			if (
@@ -146,102 +117,20 @@ class Item<
 		} else {
 			const {
 				mIngredients,
-				mProduct,
-			} = recipes[recipe];
+			} = production_resolver.amended_amounts;
 
-			if ('' === mIngredients) {
-				throw new Error('Empty ingredient found!');
-			}
+			for (const maybe_ingredient of mIngredients) {
+				const ingredient = ProductionResolver.verify_ingredient(
+					this.production_data,
+					maybe_ingredient,
+					recipe,
+				);
 
-			const ingredient_amounts = mIngredients.map(
-				({
-					ItemClass,
-					Amount,
-				}) => {
-					if (undefined === Amount) {
-						throw new Error('No amount found!');
-					}
-
-					return amend_ItemClass_amount(
-						this.production_data,
-						{
-							ItemClass,
-							Amount,
-						},
-					).Amount;
-				},
-			);
-
-			const mapped_product_amounts = Object.fromEntries(
-				mProduct.map(
-					(e): [string, number_arg] => [
-						UnrealEngineString_right_x_C_suffix(
-							e.ItemClass,
-						),
-						amend_ItemClass_amount(
-							this.production_data,
-							e,
-						).Amount,
-					],
-				),
-			);
-
-			assert.strictEqual(
-				this.item in mapped_product_amounts,
-				true,
-				new NoMatchError(
-					{
-						production: this.item,
-						mapped_product_amounts,
-					},
-					'Production item not found in mapped product amounts!',
-				),
-			);
-
-			const product_amounts = Object.values(mapped_product_amounts);
-
-			const amounts = [
-				...ingredient_amounts,
-				...product_amounts,
-			];
-
-			assert.strictEqual(
-				amounts.length >= 2,
-				true,
-				new NoMatchError(
-					{
-						amounts,
-					},
-					'Expected at least two numbers!',
-				),
-			);
-
-			for (const ingredient of mIngredients) {
 				if (!object_has_property(ingredient, 'ItemClass')) {
 					continue;
 				}
 				const Desc_C = UnrealEngineString_right_x_C_suffix(
 					ingredient.ItemClass,
-				);
-
-				assert.strictEqual(
-					(
-						Desc_C in ammo
-						|| Desc_C in biomass
-						|| Desc_C in consumable
-						|| Desc_C in equipment
-						|| Desc_C in items
-						|| Desc_C in resources
-					),
-					true,
-					new NoMatchError(
-						{
-							recipe,
-							ingredient: ingredient.ItemClass.right,
-							expected: Desc_C,
-						},
-						`Supported ingredient found (${Desc_C}) but missing item!`,
-					),
 				);
 
 				if (!ingredients.includes(Desc_C)) {

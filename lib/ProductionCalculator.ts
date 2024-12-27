@@ -854,12 +854,17 @@ export class ProductionCalculator<
 								check_deeper_amount
 							)
 						).toFraction();
+						const comparison = b.compare(a);
 
-						recursive_multiplier = 1 === b.compare(a)
+						recursive_multiplier = 1 === comparison
 							? IntermediaryNumberInfinity.One
+							: (
+								0 === comparison && 0 === b.compare(1)
+									? new Fraction(1)
 							: Numbers.sum_series_fraction(
 								Numbers.divide_if_not_one(a, lcm, true),
 								Numbers.divide_if_not_one(b, lcm, true),
+									)
 							);
 
 						avoid_checking_further.add(check_deeper_item);

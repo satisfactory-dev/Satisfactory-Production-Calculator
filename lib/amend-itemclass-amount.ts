@@ -48,7 +48,7 @@ export function amend_ItemClass_amount<
 	>,
 	ItemClass:{
 		ItemClass: UnrealEngineString;
-		Amount: integer_string__type;
+		Amount?: integer_string__type|undefined;
 	},
 ): {
 	ItemClass: UnrealEngineString;
@@ -65,7 +65,7 @@ export function amend_ItemClass_amount<
 
 	return {
 		ItemClass: ItemClass.ItemClass,
-		Amount: (
+		Amount: undefined === ItemClass.Amount ? 0 : (
 			(
 				(
 					Desc_c in resources

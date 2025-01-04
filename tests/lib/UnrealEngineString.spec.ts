@@ -41,6 +41,8 @@ void describe('is_UnrealEngineString_right', () => {
 	const data_set:[string, boolean][] = [
 		// eslint-disable-next-line max-len
 		['/Game/FactoryGame/Buildable/-Shared/WorkBench/BP_WorkBenchComponent.BP_WorkBenchComponent_C', true],
+		// eslint-disable-next-line max-len
+		['/Game/FactoryGame/Buildable/Factory/ConstructorMk1/Build_ConstructorMk1.Build_ConstructorMk1_C', true],
 		['/Script/FactoryGame.FGBuildGun', false],
 		['nope', false],
 	];

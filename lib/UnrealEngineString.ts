@@ -11,10 +11,10 @@ import {
 import assert from 'assert';
 
 export type UnrealEngineString_right_x_C_suffix =
-	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'}_${string}_C`;
+	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'|'Build'}_${string}_C`;
 
 const UnrealEngineString_right_x_C_suffix_regex_prefixes =
-	'(?:Desc|BP|Foundation|Recipe|SC)'
+	'(?:Desc|BP|Foundation|Recipe|SC|Build)'
 
 const UnrealEngineString_right_x_C_suffix_regex = new RegExp(
 	`^${UnrealEngineString_right_x_C_suffix_regex_prefixes}_[^.]+_C$`,

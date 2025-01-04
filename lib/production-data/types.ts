@@ -311,6 +311,7 @@ export type data<
 		| `Foundation_${string}_C`
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
+		| `Build_${string}_C`
 	)>,
 	products: Set<(
 		| `Desc_${string}_C`
@@ -318,6 +319,7 @@ export type data<
 		| `Foundation_${string}_C`
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
+		| `Build_${string}_C`
 	)>,
 	resource_keys: string[],
 	known_byproduct: (
@@ -329,6 +331,7 @@ export type data<
 		| `Foundation_${string}_C`
 		| `Recipe_${string}_C`
 		| `SC_${string}_C`
+		| `Build_${string}_C`
 	)[],
 	recipe_selection_enums: recipe_selection_properties_with_defaults,
 	faux_ingredients_list: string[],

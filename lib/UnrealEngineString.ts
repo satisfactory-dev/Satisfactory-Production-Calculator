@@ -36,6 +36,17 @@ const UnrealEngineString_right_x_C_suffix_extraction_regex = new RegExp(
 		UnrealEngineString_right_x_C_suffix_regex_prefixes
 	}_[^.]+)_C)$`);
 
+export function is_UnrealEngineString_right(
+	maybe: unknown,
+): maybe is UnrealEngineString['right'] {
+	return (
+		is_string(maybe)
+		&& UnrealEngineString_right_x_C_suffix_extraction_regex.test(
+			maybe,
+		)
+	);
+}
+
 export function UnrealEngineString_right_x_C_suffix(
 	value:UnrealEngineString,
 ) : UnrealEngineString_right_x_C_suffix {

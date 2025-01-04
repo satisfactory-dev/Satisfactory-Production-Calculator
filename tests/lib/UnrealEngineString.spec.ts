@@ -5,6 +5,7 @@ import {
 import assert from 'assert/strict';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
+	is_UnrealEngineString_right,
 } from "../../lib/UnrealEngineString";
 
 void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
@@ -29,6 +30,32 @@ void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
 			() => {
 				assert.equal(
 					filter_UnrealEngineString_right_x_C_suffix(input),
+					expectation,
+				);
+			},
+		);
+	}
+})
+
+void describe('is_UnrealEngineString_right', () => {
+	const data_set:[string, boolean][] = [
+		// eslint-disable-next-line max-len
+		['/Game/FactoryGame/Buildable/-Shared/WorkBench/BP_WorkBenchComponent.BP_WorkBenchComponent_C', true],
+		['/Script/FactoryGame.FGBuildGun', false],
+		['nope', false],
+	];
+
+	for (const entry of data_set) {
+		const [input, expectation] = entry;
+		void it(
+			`is_UnrealEngineString_right(${
+				input
+			}) returns ${
+				expectation
+			}`,
+			() => {
+				assert.equal(
+					is_UnrealEngineString_right(input),
 					expectation,
 				);
 			},

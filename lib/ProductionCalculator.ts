@@ -120,9 +120,15 @@ export class ProductionCalculator<
 		this.allowed_empty_ingredients = allowed_empty_ingredients;
 	}
 
-	calculate(data:unknown): production_result
+	async calculate({
+		data,
+	}:{
+		data:unknown,
+	}): Promise<production_result>
 	{
-		return this.calculate_validated(this.validate(data));
+		return this.calculate_validated({
+			data: this.validate(data),
+		});
 	}
 
 	validate(
@@ -145,7 +151,10 @@ export class ProductionCalculator<
 		return data;
 	}
 
-	protected calculate_precisely(
+	protected async calculate_precisely({
+		data,
+		surplus,
+	}: {
 		data:production_request<
 			(
 				| amount_string
@@ -159,9 +168,9 @@ export class ProductionCalculator<
 		surplus?:production_set<
 			| operand_types
 		>,
-	): production_result<
+	}): Promise<production_result<
 		| operand_types
-	> {
+	>> {
 		const {
 			ammo,
 			biomass,
@@ -603,13 +612,17 @@ export class ProductionCalculator<
 			]));
 		}
 
-		return result;
+		return Promise.resolve(result);
 	}
 
-	protected calculate_validated(
+	protected async calculate_validated({
+		data,
+	}: {
 		data:production_request,
-	): production_result {
-		const deferred = this.calculate_validated_deferred(data);
+	}): Promise<production_result> {
+		const deferred = await this.calculate_validated_deferred({
+			data,
+		});
 
 		const result:production_result = {
 			ingredients: {...deferred.ingredients},
@@ -625,7 +638,9 @@ export class ProductionCalculator<
 		return result;
 	}
 
-	protected calculate_validated_deferred(
+	protected async calculate_validated_deferred({
+		data,
+	}: {
 		data:production_request<
 			(
 				| amount_string
@@ -636,9 +651,9 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
-	): production_result<
+	}): Promise<production_result<
 		| operand_types
-	> {
+	>> {
 		const {
 			known_not_sourced_from_recipe,
 			known_byproduct,
@@ -649,7 +664,9 @@ export class ProductionCalculator<
 			recipe_selection: recipe_selection_schema,
 		} = GenerateSchemas.factory(this.production_data);
 
-		const initial_result = this.calculate_precisely(data);
+		const initial_result = await this.calculate_precisely({
+			data,
+		});
 		const results = [initial_result];
 		let surplus:production_set<
 			| operand_types
@@ -777,13 +794,13 @@ export class ProductionCalculator<
 					),
 				};
 
-				const deeper_result = this.calculate_precisely(
-					{
+				const deeper_result = await this.calculate_precisely({
+					data: {
 						...data,
 						pool: deeper_result_pool,
 					},
 					surplus,
-				);
+				});
 				surplus = deeper_result.surplus || {};
 
 				const self_output = deeper_result.output[

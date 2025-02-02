@@ -33,7 +33,7 @@ const v1_validators = await GenerateValidators.fromStandalone(
 );
 
 void describe('Allowed Empty Ingredients', () => {
-	void it('Behaves as expected on 1.0', () => {
+	void it('Behaves as expected on 1.0', async () => {
 		const calculator = new ProductionCalculator(
 			v1_production_data,
 			v1_validators,
@@ -51,7 +51,9 @@ void describe('Allowed Empty Ingredients', () => {
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
-				calculator.calculate(excited_photonic_matter),
+				await calculator.calculate({
+					data: excited_photonic_matter,
+				}),
 			),
 			flattened_production_ingredients_request_result(
 				{

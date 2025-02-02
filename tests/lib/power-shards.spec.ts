@@ -52,7 +52,7 @@ const v1_validators = await GenerateValidators.fromStandalone(
 );
 
 void describe('Power Shards\' existence in production data', () => {
-	void it('Behaves as expected on Update 8', () => {
+	void it('Behaves as expected on Update 8', async () => {
 		assert.strictEqual(
 			(
 				! ('power_shards' in u8_production_data.data)
@@ -80,11 +80,11 @@ void describe('Power Shards\' existence in production data', () => {
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
-				calculator.calculate({
+				await calculator.calculate({data: {
 					pool: {
 						'Desc_CrystalShard_C': '1',
 					},
-				}),
+				}}),
 			),
 			flattened_production_ingredients_request_result(
 				{
@@ -100,7 +100,7 @@ void describe('Power Shards\' existence in production data', () => {
 		);
 	});
 
-	void it('Behaves as expected on 1.0', () => {
+	void it('Behaves as expected on 1.0', async () => {
 		const {data} = v1_production_data;
 
 		assert.strictEqual(
@@ -137,7 +137,9 @@ void describe('Power Shards\' existence in production data', () => {
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
-				calculator.calculate(power_shard_data),
+				await calculator.calculate({
+					data: power_shard_data,
+				}),
 			),
 			flattened_production_ingredients_request_result(
 				{
@@ -164,7 +166,9 @@ void describe('Power Shards\' existence in production data', () => {
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
-				calculator.calculate(ionized_fuel_data),
+				await calculator.calculate({
+					data: ionized_fuel_data,
+				}),
 			),
 			flattened_production_ingredients_request_result(
 				{

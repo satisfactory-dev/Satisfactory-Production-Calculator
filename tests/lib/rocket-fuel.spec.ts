@@ -37,7 +37,7 @@ const v1_validators = await GenerateValidators.fromStandalone(
 );
 
 void describe('Power Booster Fuel', () => {
-	void it('Behaves as expected on 1.0', () => {
+	void it('Behaves as expected on 1.0', async () => {
 		const calculator = new ProductionCalculator(
 			v1_production_data,
 			v1_validators,
@@ -58,7 +58,9 @@ void describe('Power Booster Fuel', () => {
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
-				calculator.calculate(unpackaged_rocket_fuel),
+				await calculator.calculate({
+					data: unpackaged_rocket_fuel,
+				}),
 			),
 			flattened_production_ingredients_request_result(
 				{

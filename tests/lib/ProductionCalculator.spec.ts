@@ -125,12 +125,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					instance.constructor.name
 				}.calculate({pool: {${Desc_C}: 1}}) behaves`,
-				() => {
-					const result = instance.calculate({
+				async () => {
+					const result = await instance.calculate({data: {
 						pool: {
 							[Desc_C]: '1' as amount_string,
 						},
-					});
+					}});
 
 					assert.strictEqual(
 						Desc_C in result.output,
@@ -1123,7 +1123,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`${
 					expectation ? 'behaves' : 'throws'
 				} with ${JSON.stringify(data)}`,
-				() => {
+				async () => {
 					const get_result = () => instance.validate(
 						data,
 					);
@@ -1135,7 +1135,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 						assert.deepEqual(
 							flattened_production_ingredients_request_result(
-								instance.calculate(data),
+								await instance.calculate({data}),
 							),
 							flattened_production_ingredients_request_result(
 								expectation,
@@ -1153,7 +1153,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				`behaves with a typed version of ${
 					JSON.stringify(data)
 				}`,
-				() => {
+				async () => {
 					const request = new Request<
 						| amount_string
 						| operand_types
@@ -1171,7 +1171,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request),
+							await instance.calculate({
+								data: request,
+							}),
 						),
 						flattened_production_ingredients_request_result(
 							expectation,
@@ -1180,7 +1182,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					assert.deepEqual(
 						flattened_production_ingredients_request_result(
-							instance.calculate(request.toData()),
+							await instance.calculate({
+								data: request.toData(),
+							}),
 						),
 						flattened_production_ingredients_request_result(
 							expectation,

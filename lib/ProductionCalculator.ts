@@ -122,12 +122,17 @@ export class ProductionCalculator<
 
 	async calculate({
 		data,
+		signal,
 	}:{
 		data:unknown,
+		signal?: AbortSignal,
 	}): Promise<production_result>
 	{
+		CalculationAborted.maybe_throw(signal);
+
 		return this.calculate_validated({
 			data: this.validate(data),
+			signal,
 		});
 	}
 
@@ -154,6 +159,7 @@ export class ProductionCalculator<
 	protected async calculate_precisely({
 		data,
 		surplus,
+		signal,
 	}: {
 		data:production_request<
 			(
@@ -168,9 +174,12 @@ export class ProductionCalculator<
 		surplus?:production_set<
 			| operand_types
 		>,
+		signal?: AbortSignal,
 	}): Promise<production_result<
 		| operand_types
 	>> {
+		CalculationAborted.maybe_throw(signal);
+
 		const {
 			ammo,
 			biomass,
@@ -617,11 +626,16 @@ export class ProductionCalculator<
 
 	protected async calculate_validated({
 		data,
+		signal,
 	}: {
 		data:production_request,
+		signal?: AbortSignal,
 	}): Promise<production_result> {
+		CalculationAborted.maybe_throw(signal);
+
 		const deferred = await this.calculate_validated_deferred({
 			data,
+			signal,
 		});
 
 		const result:production_result = {
@@ -640,6 +654,7 @@ export class ProductionCalculator<
 
 	protected async calculate_validated_deferred({
 		data,
+		signal,
 	}: {
 		data:production_request<
 			(
@@ -651,9 +666,11 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
+		signal?: AbortSignal,
 	}): Promise<production_result<
 		| operand_types
 	>> {
+		CalculationAborted.maybe_throw(signal);
 		const {
 			known_not_sourced_from_recipe,
 			known_byproduct,
@@ -666,6 +683,7 @@ export class ProductionCalculator<
 
 		const initial_result = await this.calculate_precisely({
 			data,
+			signal,
 		});
 		const results = [initial_result];
 		let surplus:production_set<
@@ -693,6 +711,7 @@ export class ProductionCalculator<
 		);
 
 		while (checking_recursively.length > 0) {
+			CalculationAborted.maybe_throw(signal);
 			const when_done:production_set<
 				(
 					| operand_types
@@ -703,6 +722,7 @@ export class ProductionCalculator<
 				check_deeper_item,
 				check_deeper_amount,
 			] of checking_recursively) {
+				CalculationAborted.maybe_throw(signal);
 				assert.strictEqual(
 					(
 						check_deeper_item in recipe_selection_schema[
@@ -800,6 +820,7 @@ export class ProductionCalculator<
 						pool: deeper_result_pool,
 					},
 					surplus,
+					signal,
 				});
 				surplus = deeper_result.surplus || {};
 
@@ -1019,5 +1040,15 @@ export class ProductionCalculator<
 		}
 
 		return result;
+	}
+}
+
+export class CalculationAborted extends Error
+{
+	static maybe_throw(signal:AbortSignal|undefined)
+	{
+		if (signal?.aborted) {
+			throw new this();
+		}
 	}
 }

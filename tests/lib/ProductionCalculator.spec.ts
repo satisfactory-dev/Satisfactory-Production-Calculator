@@ -4,6 +4,7 @@ import {
 } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+	CalculationAborted,
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator';
 import {
@@ -56,6 +57,9 @@ import {
 import {
 	flattened_production_ingredients_request_result,
 } from '../utilities/flattened-production-ingredients-request-result';
+import {
+	is_instanceof,
+} from '@satisfactory-dev/custom-assert';
 
 // eslint-disable-next-line max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
@@ -1207,6 +1211,46 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					});
 
 					assert.doesNotThrow(get_result);
+				},
+			)
+		}
+
+		for (const Desc_C of does_not_throw_cases) {
+			void it(
+				`${
+					instance.constructor.name
+				}.calculate({pool: {${Desc_C}: 1}}) behaves with AbortSignal`,
+				async () => {
+					const get_result = () => instance.calculate({
+						data: instance.validate({
+							pool:{
+								[Desc_C]: '1' as amount_string,
+							},
+						}),
+					});
+
+					const controller = new AbortController();
+					const {signal} = controller;
+
+					controller.abort();
+
+					const get_aborted_result = () => instance.calculate({
+						data: instance.validate({
+							pool:{
+								[Desc_C]: '1' as amount_string,
+							},
+						}),
+						signal,
+					});
+
+					await assert.doesNotReject(get_result);
+					await assert.rejects(get_aborted_result);
+					is_instanceof(
+						await (new Promise((yup) => {
+							get_aborted_result().then(yup).catch(yup);
+						})),
+						CalculationAborted,
+					);
 				},
 			)
 		}

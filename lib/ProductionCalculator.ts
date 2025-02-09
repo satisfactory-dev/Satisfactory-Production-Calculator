@@ -60,6 +60,7 @@ import {
 	GenerateValidators,
 } from './generate-validators';
 import {
+	DeferredProductionResolver,
 	ProductionResolver,
 } from './production-resolver';
 
@@ -130,8 +131,16 @@ export class ProductionCalculator<
 	{
 		CalculationAborted.maybe_throw(signal);
 
+		const validated = this.validate(data);
+
+		const deferred_production_resolver = new DeferredProductionResolver(
+			this.production_data,
+			validated.recipe_selection || {},
+		);
+
 		return this.calculate_validated({
-			data: this.validate(data),
+			data: validated,
+			deferred_production_resolver,
 			signal,
 		});
 	}
@@ -158,6 +167,7 @@ export class ProductionCalculator<
 
 	protected async calculate_precisely({
 		data,
+		deferred_production_resolver,
 		surplus,
 		signal,
 	}: {
@@ -171,6 +181,7 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
+		deferred_production_resolver: DeferredProductionResolver,
 		surplus?:production_set<
 			| operand_types
 		>,
@@ -274,10 +285,8 @@ export class ProductionCalculator<
 				continue;
 			}
 
-			const production_resolver = new ProductionResolver(
-				this.production_data,
+			const production_resolver = deferred_production_resolver.resolve(
 				production,
-				data.recipe_selection || {},
 			);
 
 			const recipe = production_resolver.recipe;
@@ -626,15 +635,18 @@ export class ProductionCalculator<
 
 	protected async calculate_validated({
 		data,
+		deferred_production_resolver,
 		signal,
 	}: {
 		data:production_request,
+		deferred_production_resolver: DeferredProductionResolver,
 		signal?: AbortSignal,
 	}): Promise<production_result> {
 		CalculationAborted.maybe_throw(signal);
 
 		const deferred = await this.calculate_validated_deferred({
 			data,
+			deferred_production_resolver,
 			signal,
 		});
 
@@ -654,6 +666,7 @@ export class ProductionCalculator<
 
 	protected async calculate_validated_deferred({
 		data,
+		deferred_production_resolver,
 		signal,
 	}: {
 		data:production_request<
@@ -666,6 +679,7 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
+		deferred_production_resolver: DeferredProductionResolver,
 		signal?: AbortSignal,
 	}): Promise<production_result<
 		| operand_types
@@ -683,6 +697,7 @@ export class ProductionCalculator<
 
 		const initial_result = await this.calculate_precisely({
 			data,
+			deferred_production_resolver,
 			signal,
 		});
 		const results = [initial_result];
@@ -819,6 +834,7 @@ export class ProductionCalculator<
 						...data,
 						pool: deeper_result_pool,
 					},
+					deferred_production_resolver,
 					surplus,
 					signal,
 				});

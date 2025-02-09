@@ -63,6 +63,60 @@ type amended_amounts = {
 	product_amounts: operand_types[],
 };
 
+export class DeferredProductionResolver<
+	FGPowerShardDescriptor extends (
+		| FGPowerShardDescriptor__type
+		| undefined
+	) = (
+		| FGPowerShardDescriptor__type
+		| undefined
+	),
+	FGItemDescriptorPowerBoosterFuel extends (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	) = (
+		| FGItemDescriptorPowerBoosterFuel__type
+		| undefined
+	),
+> {
+	#production_data: ProductionData<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>;
+	#recipe_selection: recipe_selection;
+
+	#resolves:{[key: string]: ProductionResolver<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	>} = {};
+
+	constructor(
+		production_data: ProductionData<
+			FGPowerShardDescriptor,
+			FGItemDescriptorPowerBoosterFuel
+		>,
+		recipe_selection: recipe_selection,
+	) {
+		this.#production_data = production_data;
+		this.#recipe_selection = recipe_selection;
+	}
+
+	resolve(item: production_item): ProductionResolver<
+		FGPowerShardDescriptor,
+		FGItemDescriptorPowerBoosterFuel
+	> {
+		if (!(item in this.#resolves)) {
+			this.#resolves[item] = new ProductionResolver(
+				this.#production_data,
+				item,
+				this.#recipe_selection,
+			);
+		}
+
+		return this.#resolves[item];
+	}
+}
+
 export class ProductionResolver<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type

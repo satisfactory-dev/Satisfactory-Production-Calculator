@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@satisfactory-dev/custom-assert": "^0.2.3",
-    "@satisfactory-dev/docs.json.ts": "^0.15.0",
+    "@satisfactory-dev/docs.json.ts": "^0.16.0",
     "@satisfactory-dev/predicates.ts": "^0.1.1",
     "@signpostmarv/intermediary-number": "^0.6.2",
     "bignumber.js": "^9.1.2",

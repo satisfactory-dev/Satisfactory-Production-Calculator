@@ -367,20 +367,20 @@ export class GenerateSchemas<
 	}
 
 	static factory<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+		FGPowerShardDescriptor extends (
+			| FGPowerShardDescriptor__type
+			| undefined
+		) = (
+			| FGPowerShardDescriptor__type
+			| undefined
+		),
+		FGItemDescriptorPowerBoosterFuel extends (
+			| FGItemDescriptorPowerBoosterFuel__type
+			| undefined
+		) = (
+			| FGItemDescriptorPowerBoosterFuel__type
+			| undefined
+		),
 	>(production_data: ProductionData<
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel

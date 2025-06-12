@@ -77,6 +77,9 @@ import {
 } from '../UnrealEngineString';
 import {
 	class__no_description_or_display_name__type,
+	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
+	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
+	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
 	common_base__FGBuildableResourceExtractor__miner_mk3__type,
 	NativeClass__type,
 // eslint-disable-next-line max-len
@@ -89,6 +92,10 @@ import {
 	FGItemDescriptorPowerBoosterFuel__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+import {
+	FGAmmoTypeProjectile__base__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile';
 
 export type FGVehicleDescriptor__type = (
 	| common_base__FGVehicleDescriptor__powered_no_inventory__type
@@ -97,7 +104,7 @@ export type FGVehicleDescriptor__type = (
 );
 
 export type imports_dict = {
-	[key: string]: NativeClass__type,
+	[key: string]: NativeClass__type | undefined,
 };
 
 export type NativeClass__type__wrapper<
@@ -115,17 +122,25 @@ export type imports<
 		| FGItemDescriptorPowerBoosterFuel__type
 		| undefined
 	) = undefined,
-	// eslint-disable-next-line max-len
-	FGAmmoTypeProjectile extends common_base__FGAmmoTypeProjectile__type = common_base__FGAmmoTypeProjectile__type,
+	FGAmmoTypeProjectile extends (
+		| common_base__FGAmmoTypeProjectile__type
+		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
+	) = common_base__FGAmmoTypeProjectile__type,
 	FGAmmoTypeInstantHit extends (
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
+		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
 	) = (
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
 	),
-	// eslint-disable-next-line max-len
-	FGAmmoTypeSpreadshot extends common_base__FGAmmoTypeSpreadshot__type = common_base__FGAmmoTypeSpreadshot__type,
+	FGAmmoTypeSpreadshot extends (
+		| common_base__FGAmmoTypeSpreadshot__type
+		| (
+			& FGAmmoTypeProjectile__base__type
+			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
+		)
+	) = common_base__FGAmmoTypeSpreadshot__type,
 	// eslint-disable-next-line max-len
 	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
 	// eslint-disable-next-line max-len
@@ -144,8 +159,9 @@ export type imports<
 	) = (
 		| common_base__FGItemDescriptor__FGResourceDescriptor__type
 	),
-	// eslint-disable-next-line max-len
-	FGPoleDescriptor extends common_base__FGPoleDescriptor__type = common_base__FGPoleDescriptor__type,
+	FGPoleDescriptor extends (
+		| common_base__FGPoleDescriptor__type
+	) = common_base__FGPoleDescriptor__type,
 	FGRecipe extends common_base__FGRecipe__type = common_base__FGRecipe__type,
 	// eslint-disable-next-line max-len
 	FGResourceDescriptor extends common_base__FGResourceDescriptor__type = common_base__FGResourceDescriptor__type,
@@ -195,7 +211,7 @@ export type imports<
 		FGItemDescriptorNuclearFuel
 	>,
 	FGItemDescriptor: NativeClass__type__wrapper<FGItemDescriptor>,
-	FGPoleDescriptor: NativeClass__type__wrapper<FGPoleDescriptor>,
+	FGPoleDescriptor: undefined | NativeClass__type__wrapper<FGPoleDescriptor>,
 	FGRecipe: NativeClass__type__wrapper<FGRecipe>,
 	FGResourceDescriptor: NativeClass__type__wrapper<FGResourceDescriptor>,
 	FGVehicleDescriptor: NativeClass__type__wrapper<FGVehicleDescriptor>,
@@ -256,6 +272,12 @@ export type data<
 		| common_base__FGAmmoTypeInstantHit__chaos__type
 		| common_base__FGAmmoTypeInstantHit__standard__type
 		| common_base__FGAmmoTypeSpreadshot__type
+		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
+		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
+		| (
+			& FGAmmoTypeProjectile__base__type
+			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
+		)
 	) = (
 		| common_base__FGAmmoTypeProjectile__type
 		| common_base__FGAmmoTypeInstantHit__chaos__type

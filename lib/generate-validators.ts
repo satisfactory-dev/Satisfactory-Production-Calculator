@@ -11,6 +11,61 @@ import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+import {
+	FGItemDescriptorPowerBoosterFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+import {
+	common_base__FGAmmoTypeProjectile__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile';
+import {
+	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
+	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
+	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
+import {
+	common_base__FGAmmoTypeInstantHit__chaos__type,
+	common_base__FGAmmoTypeInstantHit__standard__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit';
+import {
+	common_base__FGAmmoTypeSpreadshot__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot';
+import {
+	FGAmmoTypeProjectile__base__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile';
+import {
+	common_base__FGItemDescriptorBiomass__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass';
+import {
+	common_base__FGBuildingDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor';
+import {
+	common_base__FGConsumableDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor';
+import {
+	common_base__FGEquipmentDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor';
+import {
+	common_base__FGItemDescriptorNuclearFuel__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel';
+import {
+	common_base__FGItemDescriptor__FGResourceDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor';
+import {
+	common_base__FGPoleDescriptor__type,
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor';
 
 import type {
 	GenerateSchemas,
@@ -43,10 +98,45 @@ export class GenerateValidators
 	}
 
 	static #compile(
-		schemas:GenerateSchemas<(
-			| FGPowerShardDescriptor__type
-			| undefined
-		)>,
+		schemas:GenerateSchemas<
+			(
+				| FGPowerShardDescriptor__type
+				| undefined
+			),
+			(
+				| FGItemDescriptorPowerBoosterFuel__type
+				| undefined
+			),
+			(
+				| common_base__FGAmmoTypeProjectile__type
+				| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
+			),
+			(
+				| common_base__FGAmmoTypeInstantHit__chaos__type
+				| common_base__FGAmmoTypeInstantHit__standard__type
+				| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
+			),
+			(
+				| common_base__FGAmmoTypeSpreadshot__type
+				| (
+					& FGAmmoTypeProjectile__base__type
+					& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
+				)
+			),
+			common_base__FGItemDescriptorBiomass__type,
+			common_base__FGBuildingDescriptor__type,
+			common_base__FGConsumableDescriptor__type,
+			common_base__FGEquipmentDescriptor__type,
+			(
+				| common_base__FGItemDescriptorNuclearFuel__type
+			),
+			(
+				| common_base__FGItemDescriptor__FGResourceDescriptor__type
+			),
+			(
+				| common_base__FGPoleDescriptor__type
+			)
+		>,
 		ajv: Ajv,
 	) {
 		const {
@@ -87,10 +177,45 @@ export class GenerateValidators
 	}
 
 	static toStandalone(
-		schemas:GenerateSchemas<(
-			| FGPowerShardDescriptor__type
-			| undefined
-		)>,
+		schemas:GenerateSchemas<
+			(
+				| FGPowerShardDescriptor__type
+				| undefined
+			),
+			(
+				| FGItemDescriptorPowerBoosterFuel__type
+				| undefined
+			),
+			(
+				| common_base__FGAmmoTypeProjectile__type
+				| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
+			),
+			(
+				| common_base__FGAmmoTypeInstantHit__chaos__type
+				| common_base__FGAmmoTypeInstantHit__standard__type
+				| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
+			),
+			(
+				| common_base__FGAmmoTypeSpreadshot__type
+				| (
+					& FGAmmoTypeProjectile__base__type
+					& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
+				)
+			),
+			common_base__FGItemDescriptorBiomass__type,
+			common_base__FGBuildingDescriptor__type,
+			common_base__FGConsumableDescriptor__type,
+			common_base__FGEquipmentDescriptor__type,
+			(
+				| common_base__FGItemDescriptorNuclearFuel__type
+			),
+			(
+				| common_base__FGItemDescriptor__FGResourceDescriptor__type
+			),
+			(
+				| common_base__FGPoleDescriptor__type
+			)
+		>,
 		ajv: Ajv,
 	): string {
 		return esmify(standalone(

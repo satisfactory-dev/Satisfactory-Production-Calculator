@@ -40,7 +40,7 @@ export const docs = new DocsTsGenerator({
 			),
 			UnrealEngineString_quote_mode: 'original',
 		}),
-		version_1_1_1_0: new DocsTsGeneratorVersion({
+		version_1_1_1_1: new DocsTsGeneratorVersion({
 			docs_path: `${__dirname}/data/1.1/en-US.json`,
 			cache_path: `${__dirname}/data/1.1/`,
 			types_from_module: (
@@ -55,7 +55,7 @@ const perf = setup_PerformanceObserver();
 
 try {
 	performance.mark('start');
-	const bar = new TypeDefinitionWriter(docs, 'version_1_1_1_0');
+	const bar = new TypeDefinitionWriter(docs, 'version_1_1_1_1');
 	performance.measure('bootstrap', 'start');
 	performance.mark('bootstrap done');
 	await bar.write(`${__dirname}/generated-types/1.1/`);

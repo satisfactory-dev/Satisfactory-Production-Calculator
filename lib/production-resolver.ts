@@ -1,12 +1,4 @@
 import {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
-import {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
-import {
 	UnrealEngineString,
 } from '../generated-types/common/utils/validators';
 import {
@@ -33,7 +25,7 @@ import {
 import assert from 'assert';
 
 import {
-	ProductionData,
+	ProductionData_Type,
 } from './production-data';
 import {
 	GenerateSchemas,
@@ -64,37 +56,17 @@ type amended_amounts = {
 };
 
 export class DeferredProductionResolver<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type,
 > {
-	#production_data: ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>;
+	#production_data: T_ProductionData;
 	#recipe_selection: recipe_selection;
 
 	#resolves:{[key: string]: ProductionResolver<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
+		T_ProductionData
 	>} = {};
 
 	constructor(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		recipe_selection: recipe_selection,
 	) {
 		this.#production_data = production_data;
@@ -102,8 +74,7 @@ export class DeferredProductionResolver<
 	}
 
 	resolve(item: production_item): ProductionResolver<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
+		T_ProductionData
 	> {
 		if (!(item in this.#resolves)) {
 			this.#resolves[item] = new ProductionResolver(
@@ -118,47 +89,19 @@ export class DeferredProductionResolver<
 }
 
 export class ProductionResolver<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type,
 > {
 	private item: production_item;
-	private production_data: ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>;
+	private production_data: T_ProductionData;
 	private recipe_selection: recipe_selection;
 
 	private static allowed_empty_ingredients = new WeakMap<
-		ProductionData<
-			(
-				| FGPowerShardDescriptor__type
-				| undefined
-			),
-			(
-				| FGItemDescriptorPowerBoosterFuel__type
-				| undefined
-			)
-		>,
+		ProductionData_Type,
 		`Recipe_${string}_C`[]
 	>();
 
 	constructor(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
@@ -321,25 +264,9 @@ export class ProductionResolver<
 	}
 
 	static get_allowed_empty_ingredients<
-		FGPowerShardDescriptor extends (
-			| FGPowerShardDescriptor__type
-			| undefined
-		) = (
-			| FGPowerShardDescriptor__type
-			| undefined
-		),
-		FGItemDescriptorPowerBoosterFuel extends (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		) = (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		),
+		T_ProductionData extends ProductionData_Type
 	> (
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 	): string[] {
 		let allowed_empty_ingredients:(undefined|(`Recipe_${string}_C`[])) = this.allowed_empty_ingredients.get(production_data);
 
@@ -368,25 +295,9 @@ export class ProductionResolver<
 	}
 
 	static verify_ingredient<
-		FGPowerShardDescriptor extends (
-			| FGPowerShardDescriptor__type
-			| undefined
-		) = (
-			| FGPowerShardDescriptor__type
-			| undefined
-		),
-		FGItemDescriptorPowerBoosterFuel extends (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		) = (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		),
+		T_ProductionData extends ProductionData_Type
 	>(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		ingredient: string|ItemClass__type__item,
 		recipe: string,
 	): string|ItemClass__type__item {

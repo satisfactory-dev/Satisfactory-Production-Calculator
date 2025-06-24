@@ -1,5 +1,5 @@
 import {
-	ProductionData,
+	ProductionData_Type,
 } from './production-data';
 import type {
 	production_item,
@@ -15,48 +15,21 @@ import {
 	object_has_property,
 } from '@satisfactory-dev/predicates.ts';
 import {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
-import {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
-import {
 	ProductionResolver,
 } from './production-resolver';
 
 class Item<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type
 >
 {
 	readonly item:production_item;
 	readonly parents:production_item[];
-	readonly production_data:ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>;
+	readonly production_data:T_ProductionData;
 	readonly recipe_selection:recipe_selection;
-	readonly result: Item[] = []
+	readonly result: Item<T_ProductionData>[] = []
 
 	constructor(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
 		parents:production_item[],
@@ -76,7 +49,7 @@ class Item<
 		return !!this.result.find(maybe => maybe.is_recursive());
 	}
 
-	private calculate(): Item[]
+	private calculate(): Item<T_ProductionData>[]
 	{
 		const {
 			known_not_sourced_from_recipe,
@@ -167,7 +140,9 @@ class Item<
 	}
 }
 
-class Recursive extends Item
+class Recursive<
+	T_ProductionData extends ProductionData_Type
+> extends Item<T_ProductionData>
 {
 	is_recursive()
 	{
@@ -176,21 +151,8 @@ class Recursive extends Item
 }
 
 export class Root<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
-> extends Item
+	T_ProductionData extends ProductionData_Type
+> extends Item<T_ProductionData>
 {
 	private static cache:WeakMap<
 		recipe_selection,
@@ -198,10 +160,7 @@ export class Root<
 	> = new WeakMap();
 
 	constructor(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	) {
@@ -214,25 +173,9 @@ export class Root<
 	}
 
 	static is_recursive<
-		FGPowerShardDescriptor extends (
-			| FGPowerShardDescriptor__type
-			| undefined
-		) = (
-			| FGPowerShardDescriptor__type
-			| undefined
-		),
-		FGItemDescriptorPowerBoosterFuel extends (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		) = (
-			| FGItemDescriptorPowerBoosterFuel__type
-			| undefined
-		),
+		T_ProductionData extends ProductionData_Type
 	>(
-		production_data: ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		item:production_item,
 		recipe_selection:recipe_selection,
 	): boolean {

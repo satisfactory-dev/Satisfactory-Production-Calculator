@@ -10,42 +10,18 @@ import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString';
 import {
-	ProductionData,
+	ProductionData_Type,
 } from "./production-data";
 import {
 	IntermediaryNumber,
 	number_arg,
 	operand_types,
 } from '@signpostmarv/intermediary-number';
-import {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
-import {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
 
 export function amend_ItemClass_amount<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type,
 >(
-	production_data: ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>,
+	production_data: T_ProductionData,
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount?: integer_string__type|undefined;
@@ -83,25 +59,9 @@ export function amend_ItemClass_amount<
 }
 
 export function amend_ItemClass_amount_deferred<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type,
 >(
-	production_data: ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>,
+	production_data: T_ProductionData,
 	ItemClass:{
 		ItemClass: UnrealEngineString;
 		Amount: integer_string__type;

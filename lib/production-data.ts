@@ -76,6 +76,48 @@ import {
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile';
 
+export type ProductionData_Type = ProductionData<
+	(
+		| FGPowerShardDescriptor__type
+		| FGPowerShardDescriptor__type_1p1
+		| undefined
+	),
+	(
+		| FGItemDescriptorPowerBoosterFuel__type
+		| FGItemDescriptorPowerBoosterFuel__type_1p1
+		| undefined
+	),
+	(
+		| common_base__FGAmmoTypeProjectile__type
+		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
+	),
+	(
+		| common_base__FGAmmoTypeInstantHit__chaos__type
+		| common_base__FGAmmoTypeInstantHit__standard__type
+		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
+	),
+	(
+		| common_base__FGAmmoTypeSpreadshot__type
+		| (
+			& FGAmmoTypeProjectile__base__type
+			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
+		)
+	),
+	common_base__FGItemDescriptorBiomass__type,
+	common_base__FGBuildingDescriptor__type,
+	common_base__FGConsumableDescriptor__type,
+	common_base__FGEquipmentDescriptor__type,
+	(
+		| common_base__FGItemDescriptorNuclearFuel__type
+	),
+	(
+		| common_base__FGItemDescriptor__FGResourceDescriptor__type
+	),
+	(
+		| common_base__FGPoleDescriptor__type
+	)
+>;
+
 export class ProductionData<
 	FGPowerShardDescriptor extends (
 		| FGPowerShardDescriptor__type

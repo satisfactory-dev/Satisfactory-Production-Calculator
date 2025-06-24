@@ -6,14 +6,6 @@ import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index';
 import {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
-import {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
-import {
 	amount_string,
 	IntermediaryNumberInfinity,
 	number_arg,
@@ -26,7 +18,7 @@ import {
 	not_undefined,
 } from '@satisfactory-dev/custom-assert';
 import {
-	ProductionData,
+	ProductionData_Type,
 } from './production-data';
 import {
 	faux_recipe,
@@ -65,20 +57,7 @@ import {
 } from './production-resolver';
 
 export class ProductionCalculator<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| undefined
-	) = (
-		| FGPowerShardDescriptor__type
-		| undefined
-	),
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	) = (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| undefined
-	),
+	T_ProductionData extends ProductionData_Type
 > {
 	top_level_only:boolean = false;
 
@@ -86,17 +65,11 @@ export class ProductionCalculator<
 	private input:production_set<
 		| operand_types
 	> = {};
-	private production_data:ProductionData<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel
-	>;
+	private production_data: T_ProductionData;
 	protected readonly check:ValidateFunction<production_request>;
 
 	constructor(
-		production_data:ProductionData<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel
-		>,
+		production_data: T_ProductionData,
 		generator_validators:GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
@@ -181,7 +154,9 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
-		deferred_production_resolver: DeferredProductionResolver,
+		deferred_production_resolver: DeferredProductionResolver<
+			T_ProductionData
+		>,
 		surplus?:production_set<
 			| operand_types
 		>,
@@ -296,7 +271,7 @@ export class ProductionCalculator<
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
 				) {
-					const faux_result = faux_recipe(
+					const faux_result = faux_recipe<T_ProductionData>(
 						this.production_data,
 						recipe,
 					);
@@ -639,7 +614,9 @@ export class ProductionCalculator<
 		signal,
 	}: {
 		data:production_request,
-		deferred_production_resolver: DeferredProductionResolver,
+		deferred_production_resolver: DeferredProductionResolver<
+			T_ProductionData
+		>,
 		signal?: AbortSignal,
 	}): Promise<production_result> {
 		CalculationAborted.maybe_throw(signal);
@@ -679,7 +656,9 @@ export class ProductionCalculator<
 				| operand_types
 			)
 		>,
-		deferred_production_resolver: DeferredProductionResolver,
+		deferred_production_resolver: DeferredProductionResolver<
+			T_ProductionData
+		>,
 		signal?: AbortSignal,
 	}): Promise<production_result<
 		| operand_types

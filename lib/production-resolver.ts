@@ -1,6 +1,7 @@
 import {
 	UnrealEngineString,
-} from '../generated-types/common/utils/validators';
+// eslint-disable-next-line max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/utils/validators';
 import {
 	integer_string__type,
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar';

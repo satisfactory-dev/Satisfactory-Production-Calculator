@@ -4,19 +4,19 @@ import {
 } from 'node:fs/promises';
 import {
 	GenerateSchemas,
-} from './lib/generate-schemas';
+} from './lib/generate-schemas.ts';
 import {
 	GenerateValidators,
-} from './lib/generate-validators';
+} from './lib/generate-validators.ts';
 import {
 	instance as u8_production_data,
-} from './tests/utilities/production-data';
+} from './tests/utilities/production-data.ts';
 import {
 	instance as v1_production_data,
-} from './tests/utilities/production-data-1.0';
+} from './tests/utilities/production-data-1.0.ts';
 import {
 	instance as v1p1_production_data,
-} from './tests/utilities/production-data-1.1';
+} from './tests/utilities/production-data-1.1.ts';
 
 const __dirname = import.meta.dirname;
 

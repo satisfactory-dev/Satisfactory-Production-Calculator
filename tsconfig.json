@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"allowImportingTsExtensions": true,
+		"erasableSyntaxOnly": true,
+		"noEmit": true,
 		"noEmitHelpers": true,
 		"sourceMap": true,
 		"newLine": "lf",
@@ -11,10 +14,6 @@
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
 		"isolatedModules": true
-	},
-	"ts-node": {
-		"esm": true,
-		"experimentalSpecifierResolution": "node"
 	},
 	"lib": ["esnext"]
 }

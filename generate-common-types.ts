@@ -1,15 +1,15 @@
 import {
 	TypeDefinitionWriter,
-} from '@satisfactory-dev/docs.json.ts/lib/TypeDefinitionWriter';
+} from '@satisfactory-dev/docs.json.ts/lib/TypeDefinitionWriter.js';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/Exceptions';
+} from '@satisfactory-dev/docs.json.ts/lib/Exceptions.js';
 import {
 	writeFile,
 } from 'node:fs/promises';
 import {
 	docs,
-} from '@satisfactory-dev/docs.json.ts/lib/helpers';
+} from '@satisfactory-dev/docs.json.ts/lib/helpers.js';
 
 try {
 	performance.mark('start');

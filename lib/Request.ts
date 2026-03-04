@@ -8,7 +8,7 @@ import type {
 	production_request,
 	production_set,
 	recipe_selection,
-} from './types';
+} from './types.ts';
 
 export class Request<
 	NumberTypes extends (

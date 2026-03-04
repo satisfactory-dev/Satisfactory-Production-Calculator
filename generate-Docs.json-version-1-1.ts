@@ -1,21 +1,21 @@
 import {
 	writeFile,
 } from 'node:fs/promises';
-import Ajv from 'ajv/dist/2020';
+import Ajv from 'ajv/dist/2020.js';
 import {
 	configure_ajv,
-} from '@satisfactory-dev/docs.json.ts/lib/generator';
+} from '@satisfactory-dev/docs.json.ts/lib/generator.js';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
+} from '@satisfactory-dev/docs.json.ts/lib/index.js';
 import {
 	setup_PerformanceObserver,
-} from '@satisfactory-dev/docs.json.ts/setup_PerformanceObserver';
+} from '@satisfactory-dev/docs.json.ts/setup_PerformanceObserver.js';
 import {
 	DocsTsGenerator,
 	DocsTsGeneratorVersion,
 	TypeDefinitionWriter,
-} from '@satisfactory-dev/docs.json.ts/lib/generator';
+} from '@satisfactory-dev/docs.json.ts/lib/generator.js';
 
 const __dirname = import.meta.dirname;
 const ajv = new Ajv({

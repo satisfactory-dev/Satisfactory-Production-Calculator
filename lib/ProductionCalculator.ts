@@ -1,10 +1,10 @@
 import assert from 'assert';
 import {
 	ValidateFunction,
-} from 'ajv/dist/2020';
+} from 'ajv/dist/2020.js';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
+} from '@satisfactory-dev/docs.json.ts/lib/index.js';
 import {
 	amount_string,
 	IntermediaryNumberInfinity,
@@ -13,22 +13,22 @@ import {
 } from '@signpostmarv/intermediary-number';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString';
+} from './UnrealEngineString.ts';
 import {
 	not_undefined,
 } from '@satisfactory-dev/custom-assert';
 import {
 	ProductionData_Type,
-} from './production-data';
+} from './production-data.ts';
 import {
 	faux_recipe,
-} from './faux-recipe';
+} from './faux-recipe.ts';
 import {
 	amend_ItemClass_amount_deferred,
-} from './amend-itemclass-amount';
+} from './amend-itemclass-amount.ts';
 import {
 	Root,
-} from './production-chain';
+} from './production-chain.ts';
 import {
 	IntermediaryNumber,
 	operand_types,
@@ -41,20 +41,20 @@ import type {
 	production_request,
 	production_result,
 	production_set,
-} from './types';
+} from './types.ts';
 import {
 	Request,
-} from './Request';
+} from './Request.ts';
 import {
 	GenerateSchemas,
-} from './generate-schemas';
+} from './generate-schemas.ts';
 import {
 	GenerateValidators,
-} from './generate-validators';
+} from './generate-validators.ts';
 import {
 	DeferredProductionResolver,
 	ProductionResolver,
-} from './production-resolver';
+} from './production-resolver.ts';
 
 export class ProductionCalculator<
 	T_ProductionData extends ProductionData_Type

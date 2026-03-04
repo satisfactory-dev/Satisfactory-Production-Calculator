@@ -1,22 +1,22 @@
 import {
 	ProductionData_Type,
-} from './production-data';
+} from './production-data.ts';
 import type {
 	production_item,
 	recipe_selection,
-} from './types';
+} from './types.ts';
 import {
 	faux_recipe,
-} from './faux-recipe';
+} from './faux-recipe.ts';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString';
+} from './UnrealEngineString.ts';
 import {
 	object_has_property,
 } from '@satisfactory-dev/predicates.ts';
 import {
 	ProductionResolver,
-} from './production-resolver';
+} from './production-resolver.ts';
 
 class Item<
 	T_ProductionData extends ProductionData_Type

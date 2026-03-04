@@ -1,63 +1,71 @@
 import {
 	FGAmmoTypeProjectile,
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeProjectile';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeProjectile.ts';
 import {
 	FGAmmoTypeInstantHit,
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeInstantHit';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeInstantHit.ts';
 import {
 	FGAmmoTypeSpreadshot,
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot.ts';
 import {
 	FGItemDescriptorBiomass,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorBiomass';
+} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorBiomass.ts';
 import {
 	FGBuildingDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGBuildingDescriptor';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGBuildingDescriptor.ts';
 import {
 	FGConsumableDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGConsumableDescriptor';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGConsumableDescriptor.ts';
 import {
 	FGEquipmentDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGEquipmentDescriptor';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGEquipmentDescriptor.ts';
 import {
 	FGItemDescriptorNuclearFuel,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel';
+} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel.ts';
 import {
 	FGItemDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptor';
+} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptor.ts';
 import {
 	FGPoleDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGPoleDescriptor';
+} from '../../generated-types/update8/data/CoreUObject/FGPoleDescriptor.ts';
 import {
 	FGRecipe,
-} from '../../generated-types/update8/data/CoreUObject/FGRecipe';
+} from '../../generated-types/update8/data/CoreUObject/FGRecipe.ts';
 import {
 	FGResourceDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor.ts';
 import {
 	FGVehicleDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGVehicleDescriptor';
+} from '../../generated-types/update8/data/CoreUObject/FGVehicleDescriptor.ts';
 import {
 	FGBuildableGeneratorNuclear,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear';
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear.ts';
 
 import {
 	ProductionData,
-} from '../../lib/production-data';
+} from '../../lib/production-data.ts';
 import {
 	FGBuildableFrackingActivator,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator.ts';
 import {
 	FGBuildableWaterPump,
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump.ts';
 import {
 	FGBuildableResourceExtractor,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor.ts';
 
 export const instance = new ProductionData<
 	undefined

@@ -60,7 +60,7 @@ import {
 import {
 	v1_0_base__FGItemDescriptorPowerBoosterFuel__type,
 	v1_0_base__FGPowerShardDescriptor__type,
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned.js';
 import {
 	FGItemDescriptorPowerBoosterFuel,
 // eslint-disable-next-line max-len
@@ -68,44 +68,44 @@ import {
 import {
 	FGAmmoTypeProjectile__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
 import {
 	FGAmmoTypeInstantHit__chaos__type,
 	FGAmmoTypeInstantHit__standard__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeInstantHit';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeInstantHit.js';
 import {
 	FGAmmoTypeSpreadshot__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeSpreadshot';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
 import {
 	common_base__FGItemDescriptorBiomass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
 import {
 	common_base__FGBuildingDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
 import {
 	common_base__FGConsumableDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
 import {
 	common_base__FGEquipmentDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
 import {
 	common_base__FGItemDescriptorNuclearFuel__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
 import {
 	common_base__FGItemDescriptor__FGResourceDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
 import {
 	common_base__FGPoleDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
 
 export const instance = new ProductionData<
 	v1_0_base__FGPowerShardDescriptor__type,

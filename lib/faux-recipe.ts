@@ -1,16 +1,16 @@
 import assert from 'assert';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
+} from '@satisfactory-dev/docs.json.ts/lib/index.js';
 import type {
 	production_set,
-} from './types';
+} from './types.ts';
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
 import {
 	ProductionData_Type,
-} from './production-data';
+} from './production-data.ts';
 
 export function faux_recipe<
 	T_ProductionData extends ProductionData_Type,

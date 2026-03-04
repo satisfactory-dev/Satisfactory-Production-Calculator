@@ -1,18 +1,18 @@
 import {
 	UnrealEngineString,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/utils/validators';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/utils/validators.js';
 import {
 	integer_string__type,
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js';
 import {
 	ItemClass__amount_required__type,
 	ItemClass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
 import {
 	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index';
+} from '@satisfactory-dev/docs.json.ts/lib/index.js';
 
 import {
 	object_has_property,
@@ -27,21 +27,21 @@ import assert from 'assert';
 
 import {
 	ProductionData_Type,
-} from './production-data';
+} from './production-data.ts';
 import {
 	GenerateSchemas,
-} from './generate-schemas';
+} from './generate-schemas.ts';
 import {
 	production_item,
 	recipe_selection,
-} from './types';
+} from './types.ts';
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString';
+} from './UnrealEngineString.ts';
 import {
 	amend_ItemClass_amount,
 	amend_ItemClass_amount_deferred,
-} from './amend-itemclass-amount';
+} from './amend-itemclass-amount.ts';
 
 type ItemClass__type__item = {
 	ItemClass: UnrealEngineString;

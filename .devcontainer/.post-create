@@ -1,1 +1,0 @@
-export NODE_OPTIONS='--enable-source-maps --no-warnings=ExperimentalWarning --loader ts-node/esm'

@@ -4,7 +4,7 @@
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"postCreateCommand": "npm config set git-tag-version=false && npm install",
-	"remoteUser": "node",
+	"remoteUser": "vscode",
 	"updateRemoteUserUID": true,
 	"customizations": {
 		"vscode": {
@@ -27,6 +27,11 @@
 				"chat.disableAIFeatures": true,
 				"chat.agent.enabled": false
 			}
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "25"
 		}
 	}
 }

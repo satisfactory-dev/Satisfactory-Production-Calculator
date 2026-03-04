@@ -6,7 +6,7 @@ import assert from 'assert/strict';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	is_UnrealEngineString_right,
-} from "../../lib/UnrealEngineString";
+} from "../../lib/UnrealEngineString.ts";
 
 void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
 	const data_set:[string, boolean][] = [

@@ -6,11 +6,11 @@ import assert from 'node:assert/strict';
 
 import {
 	instance as production_data,
-} from '../utilities/production-data';
+} from '../utilities/production-data.ts';
 
 import {
 	faux_recipe,
-} from '../../lib/faux-recipe';
+} from '../../lib/faux-recipe.ts';
 
 void describe('faux_recipe', () => {
 	void it('returns an empty object', () => {

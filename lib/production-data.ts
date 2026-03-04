@@ -1,80 +1,80 @@
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString';
+} from './UnrealEngineString.ts';
 import {
 	data,
 	imports,
-} from './production-data/types';
+} from './production-data/types.ts';
 import {
 	recipe_selection_enums,
-} from './production-data/recipe-selection-enums';
+} from './production-data/recipe-selection-enums.ts';
 import {
 	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
 	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
 	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
 	ItemClass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
 import {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
 import {
 	FGItemDescriptorPowerBoosterFuel__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
 
 import {
 	// eslint-disable-next-line max-len
 	v1_0_base__FGItemDescriptorPowerBoosterFuel__type as FGItemDescriptorPowerBoosterFuel__type_1p1,
 	// eslint-disable-next-line max-len
 	v1_0_base__FGPowerShardDescriptor__type as FGPowerShardDescriptor__type_1p1,
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned.js';
 import {
 	common_base__FGAmmoTypeProjectile__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
 import {
 	common_base__FGAmmoTypeInstantHit__chaos__type,
 	common_base__FGAmmoTypeInstantHit__standard__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
 import {
 	common_base__FGAmmoTypeSpreadshot__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
 import {
 	common_base__FGItemDescriptorBiomass__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
 import {
 	common_base__FGBuildingDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
 import {
 	common_base__FGConsumableDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
 import {
 	common_base__FGItemDescriptorNuclearFuel__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
 import {
 	common_base__FGEquipmentDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
 import {
 	common_base__FGItemDescriptor__FGResourceDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
 import {
 	common_base__FGPoleDescriptor__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor';
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
 import {
 	FGAmmoTypeProjectile__base__type,
 // eslint-disable-next-line max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile';
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
 
 export type ProductionData_Type = ProductionData<
 	(

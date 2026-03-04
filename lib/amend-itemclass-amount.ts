@@ -1,17 +1,18 @@
 import BigNumber from "bignumber.js";
 import {
 	integer_string__type,
-} from "@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar";
+// eslint-disable-next-line max-len
+} from "@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js";
 import {
 	UnrealEngineString,
 // eslint-disable-next-line max-len
-} from "@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators";
+} from "@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators.js";
 import {
 	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString';
+} from './UnrealEngineString.ts';
 import {
 	ProductionData_Type,
-} from "./production-data";
+} from "./production-data.ts";
 import {
 	IntermediaryNumber,
 	number_arg,

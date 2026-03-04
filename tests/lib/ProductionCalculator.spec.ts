@@ -6,32 +6,34 @@ import assert from 'node:assert/strict';
 import {
 	CalculationAborted,
 	ProductionCalculator,
-} from '../../lib/ProductionCalculator';
+} from '../../lib/ProductionCalculator.ts';
 import {
 	production_request,
 	production_result,
-} from '../../lib/types';
+} from '../../lib/types.ts';
 import {
 	FGRecipe,
-} from '../../generated-types/update8/data/CoreUObject/FGRecipe';
+} from '../../generated-types/update8/data/CoreUObject/FGRecipe.ts';
 import {
 	FGBuildableFrackingActivator,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator';
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator.ts';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	UnrealEngineString_right_x_C_suffix,
-} from '../../lib/UnrealEngineString';
+} from '../../lib/UnrealEngineString.ts';
 import {
 	FGResourceDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor.ts';
 import {
 	FGBuildableWaterPump,
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump';
+// eslint-disable-next-line max-len
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump.ts';
 import {
 	FGBuildableResourceExtractor,
 // eslint-disable-next-line max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor';
+} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor.ts';
 import {
 	amount_string,
 	IntermediaryCalculation,
@@ -44,19 +46,19 @@ import {
 import BigNumber from 'bignumber.js';
 import {
 	Request,
-} from '../../lib/Request';
+} from '../../lib/Request.ts';
 import {
 	instance as production_data,
-} from '../utilities/production-data';
+} from '../utilities/production-data.ts';
 import {
 	GenerateValidators,
-} from '../../lib/generate-validators';
+} from '../../lib/generate-validators.ts';
 import {
 	ValidateFunction,
 } from 'ajv';
 import {
 	flattened_production_ingredients_request_result,
-} from '../utilities/flattened-production-ingredients-request-result';
+} from '../utilities/flattened-production-ingredients-request-result.ts';
 import {
 	is_instanceof,
 } from '@satisfactory-dev/custom-assert';

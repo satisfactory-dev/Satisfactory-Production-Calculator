@@ -1,6 +1,6 @@
 import {
 	production_result,
-} from '../../lib/types';
+} from '../../lib/types.ts';
 import {
 	amount_string,
 	IntermediaryNumber,

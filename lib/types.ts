@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 
 import {
 	recipe_selection_properties_with_defaults,
-} from './production-data/types';
+} from './production-data/types.ts';
 
 export type recipe_selection_schema_key = (
 	keyof recipe_selection_properties_with_defaults

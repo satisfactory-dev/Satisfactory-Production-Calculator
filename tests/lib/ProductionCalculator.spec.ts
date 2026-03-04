@@ -42,7 +42,7 @@ import {
 } from '@signpostmarv/intermediary-number';
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
-} from '../docs_dot_json_not_yet_bundled';
+} from '../docs_dot_json_not_yet_bundled.ts';
 import BigNumber from 'bignumber.js';
 import {
 	Request,

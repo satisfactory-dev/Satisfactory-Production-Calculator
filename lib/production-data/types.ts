@@ -75,7 +75,7 @@ import {
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from '../UnrealEngineString.ts';
-import {
+import type {
 	class__no_description_or_display_name__type,
 	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
 	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
@@ -84,15 +84,15 @@ import {
 	NativeClass__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import {
+import type {
 	FGPowerShardDescriptor__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
-import {
+import type {
 	FGItemDescriptorPowerBoosterFuel__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
-import {
+import type {
 	FGAmmoTypeProjectile__base__type,
 // eslint-disable-next-line max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';

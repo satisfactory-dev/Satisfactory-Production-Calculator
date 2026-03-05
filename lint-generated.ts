@@ -1,6 +1,6 @@
 import {
 	eslint_generated_types,
-} from "@satisfactory-dev/docs.json.ts/lib/DocsTsGenerator";
+} from '@satisfactory-dev/docs.json.ts/lib/DocsTsGenerator.js';
 
 const __dirname = import.meta.dirname;
 

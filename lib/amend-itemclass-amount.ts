@@ -1,35 +1,37 @@
-import BigNumber from "bignumber.js";
-import {
+import BigNumber from 'bignumber.js';
+import type {
 	integer_string__type,
-// eslint-disable-next-line max-len
-} from "@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js";
-import {
+// eslint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js';
+import type {
 	UnrealEngineString,
-// eslint-disable-next-line max-len
-} from "@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators.js";
+// eslint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators.js';
 import {
 	UnrealEngineString_right_x_C_suffix,
 } from './UnrealEngineString.ts';
-import {
+import type {
 	ProductionData_Type,
-} from "./production-data.ts";
-import {
-	IntermediaryNumber,
+} from './production-data.ts';
+import type {
 	number_arg,
 	operand_types,
+} from '@signpostmarv/intermediary-number';
+import {
+	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
 
 export function amend_ItemClass_amount<
 	T_ProductionData extends ProductionData_Type,
 >(
 	production_data: T_ProductionData,
-	ItemClass:{
-		ItemClass: UnrealEngineString;
-		Amount?: integer_string__type|undefined;
+	ItemClass: {
+		ItemClass: UnrealEngineString,
+		Amount?: integer_string__type|undefined,
 	},
 ): {
-	ItemClass: UnrealEngineString;
-	Amount: number_arg;
+	ItemClass: UnrealEngineString,
+	Amount: number_arg,
 } {
 	const {
 		items,
@@ -42,20 +44,22 @@ export function amend_ItemClass_amount<
 
 	return {
 		ItemClass: ItemClass.ItemClass,
-		Amount: undefined === ItemClass.Amount ? 0 : (
-			(
+		Amount: undefined === ItemClass.Amount
+			? 0
+			: (
 				(
-					Desc_c in resources
-					&& 'RF_SOLID' !== resources[Desc_c].mForm
+					(
+						Desc_c in resources
+						&& 'RF_SOLID' !== resources[Desc_c].mForm
+					)
+					|| (
+						Desc_c in items
+						&& 'RF_SOLID' !== items[Desc_c].mForm
+					)
 				)
-				|| (
-					Desc_c in items
-					&& 'RF_SOLID' !== items[Desc_c].mForm
-				)
-			)
-				? BigNumber(ItemClass.Amount).dividedBy(1000)
-				: ItemClass.Amount
-		),
+					? BigNumber(ItemClass.Amount).dividedBy(1000)
+					: ItemClass.Amount
+			),
 	};
 }
 
@@ -63,15 +67,15 @@ export function amend_ItemClass_amount_deferred<
 	T_ProductionData extends ProductionData_Type,
 >(
 	production_data: T_ProductionData,
-	ItemClass:{
-		ItemClass: UnrealEngineString;
-		Amount: integer_string__type;
+	ItemClass: {
+		ItemClass: UnrealEngineString,
+		Amount: integer_string__type,
 	},
 ): {
-	ItemClass: UnrealEngineString;
+	ItemClass: UnrealEngineString,
 	Amount: (
 		| operand_types
-	);
+	),
 } {
 	const {
 		items,

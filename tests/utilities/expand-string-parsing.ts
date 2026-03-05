@@ -1,5 +1,4 @@
-export function random_ignore_string()
-{
+export function random_ignore_string() {
 	const length = Math.max(
 		1,
 		Math.min(
@@ -13,7 +12,7 @@ export function random_ignore_string()
 	let result = '';
 
 	for (let index = 0; index < length; ++index) {
-		result += Math.random() > .5 ? '\t': ' ';
+		result += Math.random() > 0.5 ? '\t' : ' ';
 	}
 
 	return result;
@@ -40,9 +39,9 @@ export type from_string_data_set = [
 ];
 
 function expand_nesting(
-	input:from_string_data_set,
+	input: from_string_data_set,
 ): [from_string_data_set, ...from_string_data_set[]] {
-	const result:[from_string_data_set, ...from_string_data_set[]] = [input];
+	const result: [from_string_data_set, ...from_string_data_set[]] = [input];
 
 	const additional_nesting = Math.ceil(Math.random() * 10);
 
@@ -63,9 +62,9 @@ function expand_nesting(
 }
 
 function maybe_expand_whitspace(
-	input:from_string_data_set,
+	input: from_string_data_set,
 ): from_string_data_set[] {
-	const result:from_string_data_set[] = [];
+	const result: from_string_data_set[] = [];
 
 	const regex = /([\t ]+)/g;
 
@@ -95,9 +94,9 @@ export const regex_has_recursives = (
 );
 
 export function expand_ignore_characters(
-	input:from_string_data_set,
+	input: from_string_data_set,
 ): [from_string_data_set, ...from_string_data_set[]] {
-	const result:[from_string_data_set, ...from_string_data_set[]] = [
+	const result: [from_string_data_set, ...from_string_data_set[]] = [
 		...expand_nesting(input),
 		...maybe_expand_whitspace(input),
 	];
@@ -132,7 +131,7 @@ export function expand_ignore_characters(
 }
 
 export function expand_fraction_string(
-	fraction_string:`${number}.${number}(${number})`,
+	fraction_string: `${number}.${number}(${number})`,
 ): [from_string_data_set, ...from_string_data_set[]] {
 	return [
 		...expand_ignore_characters([

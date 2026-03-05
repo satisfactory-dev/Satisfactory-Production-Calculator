@@ -20,6 +20,6 @@ void describe('faux_recipe', () => {
 				'not a faux recipe',
 			),
 			{},
-		)
-	})
-})
+		);
+	});
+});

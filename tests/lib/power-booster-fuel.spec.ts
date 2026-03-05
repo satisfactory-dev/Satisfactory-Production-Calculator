@@ -1,4 +1,4 @@
-import {
+import type {
 	amount_string,
 } from '@signpostmarv/intermediary-number';
 
@@ -13,18 +13,18 @@ import {
 	it,
 } from 'node:test';
 import assert from 'node:assert/strict';
-import {
+import type {
 	ValidateFunction,
 } from 'ajv';
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
 import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
-import {
+import type {
 	production_request,
 } from '../../lib/types.ts';
 
@@ -51,7 +51,7 @@ void describe('Power Booster Fuel', () => {
 
 		assert.doesNotThrow(() => {
 			calculator.validate(excited_photonic_matter);
-		})
+		});
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
@@ -107,4 +107,4 @@ void describe('Power Booster Fuel', () => {
 			),
 		);
 	});
-})
+});

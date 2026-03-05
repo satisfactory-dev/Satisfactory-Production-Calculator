@@ -1,4 +1,4 @@
-import {
+import type {
 	ProductionData_Type,
 } from './production-data.ts';
 import type {
@@ -19,20 +19,23 @@ import {
 } from './production-resolver.ts';
 
 class Item<
-	T_ProductionData extends ProductionData_Type
->
-{
-	readonly item:production_item;
-	readonly parents:production_item[];
-	readonly production_data:T_ProductionData;
-	readonly recipe_selection:recipe_selection;
-	readonly result: Item<T_ProductionData>[] = []
+	T_ProductionData extends ProductionData_Type,
+> {
+	readonly item: production_item;
+
+	readonly parents: production_item[];
+
+	readonly production_data: T_ProductionData;
+
+	readonly recipe_selection: recipe_selection;
+
+	readonly result: Item<T_ProductionData>[] = [];
 
 	constructor(
 		production_data: T_ProductionData,
-		item:production_item,
-		recipe_selection:recipe_selection,
-		parents:production_item[],
+		item: production_item,
+		recipe_selection: recipe_selection,
+		parents: production_item[],
 	) {
 		this.production_data = production_data;
 		this.item = item;
@@ -44,13 +47,11 @@ class Item<
 		}
 	}
 
-	is_recursive(): boolean
-	{
-		return !!this.result.find(maybe => maybe.is_recursive());
+	is_recursive(): boolean {
+		return !!this.result.find((maybe) => maybe.is_recursive());
 	}
 
-	private calculate(): Item<T_ProductionData>[]
-	{
+	private calculate(): Item<T_ProductionData>[] {
 		const {
 			known_not_sourced_from_recipe,
 			recipes,
@@ -61,7 +62,7 @@ class Item<
 			return [];
 		}
 
-		const ingredients:production_item[] = [];
+		const ingredients: production_item[] = [];
 
 		const production_resolver = new ProductionResolver(
 			this.production_data,
@@ -69,7 +70,7 @@ class Item<
 			this.recipe_selection,
 		);
 
-		const recipe = production_resolver.recipe
+		const recipe = production_resolver.recipe;
 
 		if (undefined === recipes[recipe]) {
 			if (
@@ -119,8 +120,8 @@ class Item<
 		}
 
 		return ingredients.filter(
-			maybe => !(maybe in resources),
-		).map(item => {
+			(maybe) => !(maybe in resources),
+		).map((item) => {
 			if (next_parents.includes(item)) {
 				return new Recursive(
 					this.production_data,
@@ -141,28 +142,25 @@ class Item<
 }
 
 class Recursive<
-	T_ProductionData extends ProductionData_Type
-> extends Item<T_ProductionData>
-{
-	is_recursive()
-	{
+	T_ProductionData extends ProductionData_Type,
+> extends Item<T_ProductionData> {
+	is_recursive() {
 		return true;
 	}
 }
 
 export class Root<
-	T_ProductionData extends ProductionData_Type
-> extends Item<T_ProductionData>
-{
-	private static cache:WeakMap<
+	T_ProductionData extends ProductionData_Type,
+> extends Item<T_ProductionData> {
+	private static cache: WeakMap<
 		recipe_selection,
 		{[key: string]: boolean}
 	> = new WeakMap();
 
 	constructor(
 		production_data: T_ProductionData,
-		item:production_item,
-		recipe_selection:recipe_selection,
+		item: production_item,
+		recipe_selection: recipe_selection,
 	) {
 		super(
 			production_data,
@@ -173,18 +171,18 @@ export class Root<
 	}
 
 	static is_recursive<
-		T_ProductionData extends ProductionData_Type
+		T_ProductionData extends ProductionData_Type,
 	>(
 		production_data: T_ProductionData,
-		item:production_item,
-		recipe_selection:recipe_selection,
+		item: production_item,
+		recipe_selection: recipe_selection,
 	): boolean {
 		if (!this.cache.has(recipe_selection)) {
 			this.cache.set(recipe_selection, {});
 		}
 
 		if (
-			! (item in (
+			!(item in (
 				this.cache.get(recipe_selection) as {[key: string]: boolean}
 			))
 		) {

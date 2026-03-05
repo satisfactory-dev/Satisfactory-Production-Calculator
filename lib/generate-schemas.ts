@@ -1,4 +1,4 @@
-import {
+import type {
 	SchemaObject,
 } from 'ajv/dist/2020.js';
 
@@ -6,78 +6,79 @@ import {
 	object_keys,
 } from '@satisfactory-dev/predicates.ts';
 
-import {
+import type {
 	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
-import {
+import type {
 	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
 
-import {
-	// eslint-disable-next-line max-len
+import type {
+	// eslint-disable-next-line @stylistic/max-len
 	v1_0_base__FGItemDescriptorPowerBoosterFuel__type as FGItemDescriptorPowerBoosterFuel__type_1p1,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	v1_0_base__FGPowerShardDescriptor__type as FGPowerShardDescriptor__type_1p1,
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned.js';
 
-import {
+import type {
 	ProductionData,
 } from './production-data.ts';
-import {
+import type {
 	recipe_selection_properties_with_defaults,
 } from './production-data/types.ts';
-import {
+import type {
 	common_base__FGAmmoTypeProjectile__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import {
+import type {
 	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
 	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
 	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import {
+import type {
 	common_base__FGAmmoTypeInstantHit__chaos__type,
 	common_base__FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import {
+import type {
 	common_base__FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import {
+import type {
 	FGAmmoTypeProjectile__base__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import {
+import type {
 	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import {
+import type {
 	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import {
+import type {
 	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import {
+import type {
 	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import {
+import type {
 	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import {
+import type {
 	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import {
+import type {
 	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
 
 type recipe_selection = SchemaObject & {
@@ -193,7 +194,7 @@ type production_request = SchemaObject & {
 			type: 'object',
 			minProperties: 1,
 			patternProperties: {
-				"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+				'^(?:Desc|BP|Foundation)_[^.]+_C$': {
 					$ref: '#/$defs/number_arg',
 				},
 			},
@@ -241,13 +242,13 @@ export class GenerateSchemas<
 			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
 		)
 	) = common_base__FGAmmoTypeSpreadshot__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
 	FGItemDescriptorNuclearFuel extends (
 		| common_base__FGItemDescriptorNuclearFuel__type
@@ -262,9 +263,8 @@ export class GenerateSchemas<
 	FGPoleDescriptor extends (
 		| common_base__FGPoleDescriptor__type
 	) = common_base__FGPoleDescriptor__type,
->
-{
-	#data:ProductionData<
+> {
+	#data: ProductionData<
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel,
 		FGAmmoTypeProjectile,
@@ -280,9 +280,10 @@ export class GenerateSchemas<
 	>;
 
 	readonly production_request: production_request;
+
 	readonly recipe_selection: recipe_selection;
 
-	static #instances:WeakMap<
+	static #instances: WeakMap<
 		ProductionData<
 			(
 				| FGPowerShardDescriptor__type
@@ -378,8 +379,7 @@ export class GenerateSchemas<
 			FGItemDescriptor,
 			FGPoleDescriptor
 		>,
-	)
-	{
+	) {
 		this.#data = production_data;
 		const {
 			recipe_selection,
@@ -398,19 +398,18 @@ export class GenerateSchemas<
 		};
 	}
 
-	#generate_schemas()
-	{
+	#generate_schemas() {
 		const {
 			recipe_selection_enums,
 		} = this.#data.data;
 
-		const recipe_selection:recipe_selection = {
+		const recipe_selection: recipe_selection = {
 			type: 'object',
 			additionalProperties: false,
 			properties: recipe_selection_enums,
 		};
 
-		const production_request:production_request = {
+		const production_request: production_request = {
 			type: 'object',
 			required: ['pool'],
 			additionalProperties: false,
@@ -469,8 +468,9 @@ export class GenerateSchemas<
 								{$ref: '#/$defs/numeric_string'},
 								{
 									type: 'string',
-									// eslint-disable-next-line max-len
-									pattern: '^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$',
+									pattern: (
+										'^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$'
+									),
 								},
 							],
 						},
@@ -522,7 +522,7 @@ export class GenerateSchemas<
 					type: 'object',
 					minProperties: 1,
 					patternProperties: {
-						"^(?:Desc|BP|Foundation)_[^.]+_C$": {
+						'^(?:Desc|BP|Foundation)_[^.]+_C$': {
 							$ref: '#/$defs/number_arg',
 						},
 					},
@@ -578,13 +578,13 @@ export class GenerateSchemas<
 				& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
 			)
 		) = common_base__FGAmmoTypeSpreadshot__type,
-		// eslint-disable-next-line max-len
+		// eslint-disable-next-line @stylistic/max-len
 		FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-		// eslint-disable-next-line max-len
+		// eslint-disable-next-line @stylistic/max-len
 		FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-		// eslint-disable-next-line max-len
+		// eslint-disable-next-line @stylistic/max-len
 		FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-		// eslint-disable-next-line max-len
+		// eslint-disable-next-line @stylistic/max-len
 		FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
 		FGItemDescriptorNuclearFuel extends (
 			| common_base__FGItemDescriptorNuclearFuel__type
@@ -612,8 +612,7 @@ export class GenerateSchemas<
 		FGItemDescriptorNuclearFuel,
 		FGItemDescriptor,
 		FGPoleDescriptor
-	>)
-	{
+	>) {
 		let existing = this.#instances.get(production_data);
 
 		if (!existing) {

@@ -1,12 +1,14 @@
-import {
+import type {
 	production_result,
 } from '../../lib/types.ts';
-import {
+import type {
 	amount_string,
-	IntermediaryNumber,
 	operand_types,
 } from '@signpostmarv/intermediary-number';
-import BigNumber from 'bignumber.js';
+import {
+	IntermediaryNumber,
+} from '@signpostmarv/intermediary-number';
+import type BigNumber from 'bignumber.js';
 
 export type flattened_result = {
 	ingredients: {[key: string]: string},
@@ -15,21 +17,21 @@ export type flattened_result = {
 };
 
 export function flattened_production_ingredients_request_result(
-	input:production_result<
+	input: production_result<
 		(
 			| amount_string
 			| BigNumber
 			| operand_types
 		)
 	>,
-) : flattened_result {
-	const calculating:{
+): flattened_result {
+	const calculating: {
 		ingredients: {[key: string]: operand_types},
 		output: {[key: string]: operand_types},
 		surplus: {[key: string]: operand_types},
 	} = {
 		ingredients: Object.fromEntries(
-			Object.entries(input.ingredients).map(e => [
+			Object.entries(input.ingredients).map((e) => [
 				e[0],
 				IntermediaryNumber.reuse_or_create(e[1]),
 			]),
@@ -58,7 +60,6 @@ export function flattened_production_ingredients_request_result(
 				IntermediaryNumber.reuse_or_create(amount)
 			);
 		} else {
-
 			calculating.surplus[
 				item
 			] = calculating.surplus[
@@ -74,16 +75,16 @@ export function flattened_production_ingredients_request_result(
 		parseFloat(e[1].toAmountString()).toString(),
 	]);
 
-	const result:flattened_result = {
+	const result: flattened_result = {
 		ingredients: Object.fromEntries(
 			Object.entries(
 				calculating.ingredients,
-			).map(e => [e[0], parseFloat(e[1].toAmountString()).toString()]),
+			).map((e) => [e[0], parseFloat(e[1].toAmountString()).toString()]),
 		),
 		output: Object.fromEntries(
 			Object.entries(
 				calculating.output,
-			).map(e => [
+			).map((e) => [
 				e[0],
 				parseFloat(e[1].toAmountString()).toString(),
 			]),

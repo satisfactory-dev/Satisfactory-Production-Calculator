@@ -1,14 +1,16 @@
 import assert from 'assert';
-import {
+import type {
 	ValidateFunction,
 } from 'ajv/dist/2020.js';
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import {
+import type {
 	amount_string,
-	IntermediaryNumberInfinity,
 	number_arg,
+} from '@signpostmarv/intermediary-number';
+import {
+	IntermediaryNumberInfinity,
 	Numbers,
 } from '@signpostmarv/intermediary-number';
 import {
@@ -17,7 +19,7 @@ import {
 import {
 	not_undefined,
 } from '@satisfactory-dev/custom-assert';
-import {
+import type {
 	ProductionData_Type,
 } from './production-data.ts';
 import {
@@ -29,9 +31,11 @@ import {
 import {
 	Root,
 } from './production-chain.ts';
+import type {
+	operand_types,
+} from '@signpostmarv/intermediary-number';
 import {
 	IntermediaryNumber,
-	operand_types,
 } from '@signpostmarv/intermediary-number';
 import Fraction from 'fraction.js';
 
@@ -48,7 +52,7 @@ import {
 import {
 	GenerateSchemas,
 } from './generate-schemas.ts';
-import {
+import type {
 	GenerateValidators,
 } from './generate-validators.ts';
 import {
@@ -57,28 +61,29 @@ import {
 } from './production-resolver.ts';
 
 export class ProductionCalculator<
-	T_ProductionData extends ProductionData_Type
+	T_ProductionData extends ProductionData_Type,
 > {
-	top_level_only:boolean = false;
+	top_level_only: boolean = false;
 
-	private allowed_empty_ingredients:string[];
-	private input:production_set<
+	private allowed_empty_ingredients: string[];
+
+	private input: production_set<
 		| operand_types
 	> = {};
+
 	private production_data: T_ProductionData;
-	protected readonly check:ValidateFunction<production_request>;
+
+	protected readonly check: ValidateFunction<production_request>;
 
 	constructor(
 		production_data: T_ProductionData,
-		generator_validators:GenerateValidators,
+		generator_validators: GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
 		this.production_data = production_data;
 
-
-
-		const allowed_empty_ingredients:`Recipe_${string}_C`[] = [];
-		const supported_empty_ingredient_recipes:`Recipe_${string}_C`[] = [
+		const allowed_empty_ingredients: `Recipe_${string}_C`[] = [];
+		const supported_empty_ingredient_recipes: `Recipe_${string}_C`[] = [
 			'Recipe_QuantumEnergy_C',
 		];
 
@@ -97,11 +102,10 @@ export class ProductionCalculator<
 	async calculate({
 		data,
 		signal,
-	}:{
-		data:unknown,
+	}: {
+		data: unknown,
 		signal?: AbortSignal,
-	}): Promise<production_result>
-	{
+	}): Promise<production_result> {
 		CalculationAborted.maybe_throw(signal);
 
 		const validated = this.validate(data);
@@ -144,7 +148,7 @@ export class ProductionCalculator<
 		surplus,
 		signal,
 	}: {
-		data:production_request<
+		data: production_request<
 			(
 				| amount_string
 				| operand_types
@@ -157,7 +161,7 @@ export class ProductionCalculator<
 		deferred_production_resolver: DeferredProductionResolver<
 			T_ProductionData
 		>,
-		surplus?:production_set<
+		surplus?: production_set<
 			| operand_types
 		>,
 		signal?: AbortSignal,
@@ -182,20 +186,20 @@ export class ProductionCalculator<
 			power_booster_fuel,
 		} = this.production_data.data;
 
-		const ingredients:{
+		const ingredients: {
 			[key in keyof typeof items]: (
 				| operand_types
 			);
 		} = {};
-		const input:{
+		const input: {
 			[key: string]: (
 				| operand_types
-			)
+			),
 		} = {
 			...this.input,
 		};
 
-		let additional_input:production_set<operand_types> = {};
+		let additional_input: production_set<operand_types> = {};
 
 		if (undefined !== surplus) {
 			additional_input = surplus;
@@ -222,7 +226,7 @@ export class ProductionCalculator<
 				);
 			}
 		}
-		const output:{
+		const output: {
 			[key in string]: operand_types;
 		} = {};
 
@@ -287,7 +291,10 @@ export class ProductionCalculator<
 								recipe,
 								expected: production,
 							},
-							`Supported ingredient found but missing production item (${production})!`,
+							// eslint-disable-next-line @stylistic/max-len
+							`Supported ingredient found but missing production item (${
+								production
+							})!`,
 						),
 					);
 
@@ -485,7 +492,9 @@ export class ProductionCalculator<
 							product: product.ItemClass.right,
 							expected: Desc_C,
 						},
-						`Supported product found (${Desc_C}) but missing item!`,
+						`Supported product found (${
+							Desc_C
+						}) but missing item!`,
 					),
 				);
 
@@ -513,7 +522,7 @@ export class ProductionCalculator<
 			}
 		}
 
-		const surplus_entries = Object.entries(input).map(e => {
+		const surplus_entries = Object.entries(input).map((e) => {
 			return {
 				item: e[0],
 				amount: e[1]
@@ -528,9 +537,9 @@ export class ProductionCalculator<
 					))
 					.minus(output[e[0]] || 0),
 			};
-		}).filter(maybe => maybe.amount.isGreaterThan(0));
+		}).filter((maybe) => maybe.amount.isGreaterThan(0));
 
-		const output_entries = Object.entries(output).map(e => {
+		const output_entries = Object.entries(output).map((e) => {
 			return {
 				item: e[0],
 				amount: e[1],
@@ -543,7 +552,7 @@ export class ProductionCalculator<
 					was[is.item] = {
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
-					}
+					};
 				}
 
 				was[is.item].output = was[is.item].output.do_math_then_dispose(
@@ -559,7 +568,7 @@ export class ProductionCalculator<
 						was[is.item] = {
 							output: IntermediaryNumber.Zero,
 							surplus: IntermediaryNumber.Zero,
-						}
+						};
 					}
 
 					was[is.item].surplus = was[
@@ -575,7 +584,7 @@ export class ProductionCalculator<
 			),
 		);
 
-		const result:production_result<
+		const result: production_result<
 			| operand_types
 		> = {
 			ingredients: Object.fromEntries(
@@ -592,14 +601,14 @@ export class ProductionCalculator<
 							),
 						];
 					},
-				).filter(maybe => maybe[1].isGreaterThan(0)),
+				).filter((maybe) => maybe[1].isGreaterThan(0)),
 			),
 			output,
 			combined,
 		};
 
 		if (surplus_entries.length > 0) {
-			result.surplus = Object.fromEntries(surplus_entries.map(e => [
+			result.surplus = Object.fromEntries(surplus_entries.map((e) => [
 				e.item,
 				e.amount,
 			]));
@@ -613,7 +622,7 @@ export class ProductionCalculator<
 		deferred_production_resolver,
 		signal,
 	}: {
-		data:production_request,
+		data: production_request,
 		deferred_production_resolver: DeferredProductionResolver<
 			T_ProductionData
 		>,
@@ -627,7 +636,7 @@ export class ProductionCalculator<
 			signal,
 		});
 
-		const result:production_result = {
+		const result: production_result = {
 			ingredients: {...deferred.ingredients},
 			output: deferred.output,
 			combined: deferred.combined,
@@ -646,7 +655,7 @@ export class ProductionCalculator<
 		deferred_production_resolver,
 		signal,
 	}: {
-		data:production_request<
+		data: production_request<
 			(
 				| amount_string
 				| operand_types
@@ -680,33 +689,33 @@ export class ProductionCalculator<
 			signal,
 		});
 		const results = [initial_result];
-		let surplus:production_set<
+		let surplus: production_set<
 			| operand_types
 		> = initial_result.surplus || {};
 
 		let checking_recursively = this.top_level_only
 			? []
 			: Object.entries(initial_result.ingredients).filter(
-				maybe => !(maybe[0] in resources),
+				(maybe) => !(maybe[0] in resources),
 			);
 		const avoid_checking_further = new Set<string>();
 
 		const production_items = Object.fromEntries(
-			Object.entries(data.pool).map(e => [
+			Object.entries(data.pool).map((e) => [
 				e[0],
 				(
 					IntermediaryNumber.reuse_or_create(
 						e[1] as Exclude<
-						typeof e[1],
-						undefined
-					>)
+							typeof e[1],
+							undefined
+						>)
 				),
 			]),
 		);
 
 		while (checking_recursively.length > 0) {
 			CalculationAborted.maybe_throw(signal);
-			const when_done:production_set<
+			const when_done: production_set<
 				(
 					| operand_types
 				)
@@ -734,7 +743,9 @@ export class ProductionCalculator<
 					true,
 					new NoMatchError(
 						check_deeper_item,
-						`Item (${check_deeper_item}) not found in recipe selection!`,
+						`Item (${
+							check_deeper_item
+						}) not found in recipe selection!`,
 					),
 				);
 
@@ -749,14 +760,13 @@ export class ProductionCalculator<
 					continue;
 				}
 
-				let possibly_recursive = false;
 				let recursive_multiplier:(
 					| Fraction
 					| IntermediaryNumberInfinity
 				) = new Fraction(1);
 
 				if (check_deeper_item in production_items) {
-					possibly_recursive = Root.is_recursive(
+					const possibly_recursive = Root.is_recursive(
 						this.production_data,
 						check_deeper_item,
 						data.recipe_selection || {},
@@ -771,7 +781,7 @@ export class ProductionCalculator<
 
 						const a = production_items[
 							check_deeper_item
-						].toFraction()
+						].toFraction();
 						const b = (
 							(
 								check_deeper_amount
@@ -802,7 +812,7 @@ export class ProductionCalculator<
 					}
 				}
 
-				const deeper_result_pool:production_request['pool'] = {
+				const deeper_result_pool: production_request['pool'] = {
 					[check_deeper_item]: check_deeper_amount.times(
 						recursive_multiplier,
 					),
@@ -835,7 +845,7 @@ export class ProductionCalculator<
 				const maybe_check_further = Object.entries(
 					deeper_result.ingredients,
 				).filter(
-					maybe => (
+					(maybe) => (
 						!(maybe[0] in resources)
 						&& !avoid_checking_further.has(maybe[0])
 					),
@@ -869,12 +879,16 @@ export class ProductionCalculator<
 			checking_recursively = Object.entries(when_done);
 		}
 
-		const ingredients:{[key: string]: (
-			| operand_types
-		)} = {};
-		const output:{[key: string]: (
-			| operand_types
-		)} = {};
+		const ingredients: {
+			[key: string]: (
+				| operand_types
+			),
+		} = {};
+		const output: {
+			[key: string]: (
+				| operand_types
+			),
+		} = {};
 
 		for (const entry of results) {
 			for (const [item, amount] of Object.entries(entry.ingredients)) {
@@ -936,7 +950,7 @@ export class ProductionCalculator<
 
 		const output_entries = Object.entries(output);
 		const negative_outputs = output_entries.filter(
-			maybe => maybe[1].isLessThan(0),
+			(maybe) => maybe[1].isLessThan(0),
 		);
 
 		for (const entry of negative_outputs) {
@@ -953,12 +967,12 @@ export class ProductionCalculator<
 		}
 
 		const output_entries_filtered = output_entries.filter(
-			maybe => maybe[1].isGreaterThan(0),
+			(maybe) => maybe[1].isGreaterThan(0),
 		);
 
 		const surplus_filtered = Object.entries(surplus).filter(
-			maybe => maybe[1].isGreaterThan(0),
-		).map(e => {
+			(maybe) => maybe[1].isGreaterThan(0),
+		).map((e) => {
 			return {
 				item: e[0],
 				amount: e[1],
@@ -972,7 +986,7 @@ export class ProductionCalculator<
 						item: item,
 						output: IntermediaryNumber.Zero,
 						surplus: IntermediaryNumber.Zero,
-					}
+					};
 				}
 
 				was[item].output = was[item].output.do_math_then_dispose(
@@ -989,7 +1003,7 @@ export class ProductionCalculator<
 							item: is.item,
 							output: IntermediaryNumber.Zero,
 							surplus: IntermediaryNumber.Zero,
-						}
+						};
 					}
 
 					was[is.item].surplus = was[
@@ -1015,19 +1029,19 @@ export class ProductionCalculator<
 			),
 		);
 
-		const result:production_result<
+		const result: production_result<
 			| operand_types
 		> = {
 			ingredients,
 			output: Object.fromEntries(output_entries_filtered.filter(
-				maybe => !maybe[1].isZero(),
+				(maybe) => !maybe[1].isZero(),
 			)),
 			combined,
 		};
 
 		if (surplus_filtered.length > 0) {
 			result.surplus = Object.fromEntries(
-				surplus_filtered.map(e => [
+				surplus_filtered.map((e) => [
 					e.item,
 					e.amount,
 				]),
@@ -1038,10 +1052,8 @@ export class ProductionCalculator<
 	}
 }
 
-export class CalculationAborted extends Error
-{
-	static maybe_throw(signal:AbortSignal|undefined)
-	{
+export class CalculationAborted extends Error {
+	static maybe_throw(signal: AbortSignal|undefined) {
 		if (signal?.aborted) {
 			throw new this();
 		}

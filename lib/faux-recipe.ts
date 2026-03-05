@@ -8,7 +8,7 @@ import type {
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
-import {
+import type {
 	ProductionData_Type,
 } from './production-data.ts';
 
@@ -16,7 +16,7 @@ export function faux_recipe<
 	T_ProductionData extends ProductionData_Type,
 >(
 	production_data: T_ProductionData,
-	recipe:string,
+	recipe: string,
 ): production_set {
 	if (
 		!/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
@@ -45,7 +45,9 @@ export function faux_recipe<
 				recipe,
 				faux_ingredient,
 			},
-			`Supported faux-recipe found, but missing item (${faux_ingredient})!`,
+			`Supported faux-recipe found, but missing item (${
+				faux_ingredient
+			})!`,
 		),
 	);
 

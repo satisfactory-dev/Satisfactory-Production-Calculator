@@ -1,15 +1,15 @@
 import {
 	describe,
 	it,
-} from "node:test";
+} from 'node:test';
 import assert from 'assert/strict';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
 	is_UnrealEngineString_right,
-} from "../../lib/UnrealEngineString.ts";
+} from '../../lib/UnrealEngineString.ts';
 
 void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
-	const data_set:[string, boolean][] = [
+	const data_set: [string, boolean][] = [
 		['Desc_Foo_C', true],
 		['Desc_Foo_c', false],
 		['BP_Foo_C', true],
@@ -35,13 +35,13 @@ void describe('filter_UnrealEngineString_right_x_C_suffix', () => {
 			},
 		);
 	}
-})
+});
 
 void describe('is_UnrealEngineString_right', () => {
-	const data_set:[string, boolean][] = [
-		// eslint-disable-next-line max-len
+	const data_set: [string, boolean][] = [
+		// eslint-disable-next-line @stylistic/max-len
 		['/Game/FactoryGame/Buildable/-Shared/WorkBench/BP_WorkBenchComponent.BP_WorkBenchComponent_C', true],
-		// eslint-disable-next-line max-len
+		// eslint-disable-next-line @stylistic/max-len
 		['/Game/FactoryGame/Buildable/Factory/ConstructorMk1/Build_ConstructorMk1.Build_ConstructorMk1_C', true],
 		['/Script/FactoryGame.FGBuildGun', false],
 		['nope', false],
@@ -63,4 +63,4 @@ void describe('is_UnrealEngineString_right', () => {
 			},
 		);
 	}
-})
+});

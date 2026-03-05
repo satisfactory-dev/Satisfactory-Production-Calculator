@@ -7,7 +7,7 @@ import {
 	CalculationAborted,
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
-import {
+import type {
 	production_request,
 	production_result,
 } from '../../lib/types.ts';
@@ -16,7 +16,7 @@ import {
 } from '../../generated-types/update8/data/CoreUObject/FGRecipe.ts';
 import {
 	FGBuildableFrackingActivator,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator.ts';
 import {
 	filter_UnrealEngineString_right_x_C_suffix,
@@ -24,26 +24,28 @@ import {
 } from '../../lib/UnrealEngineString.ts';
 import {
 	FGResourceDescriptor,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor.ts';
 import {
 	FGBuildableWaterPump,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump.ts';
 import {
 	FGBuildableResourceExtractor,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor.ts';
-import {
+import type {
 	amount_string,
+	operand_types,
+} from '@signpostmarv/intermediary-number';
+import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
-	operand_types,
 } from '@signpostmarv/intermediary-number';
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled.ts';
-import BigNumber from 'bignumber.js';
+import type BigNumber from 'bignumber.js';
 import {
 	Request,
 } from '../../lib/Request.ts';
@@ -53,7 +55,7 @@ import {
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
-import {
+import type {
 	ValidateFunction,
 } from 'ajv';
 import {
@@ -63,11 +65,11 @@ import {
 	is_instanceof,
 } from '@satisfactory-dev/custom-assert';
 
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
 	const validators = await GenerateValidators.fromStandalone(
 		import(
-			'../../validator/update8/production_request_schema.mjs'
+			'../../validator/update8/production_request_schema.mjs',
 		) as unknown as Promise<{
 			default: ValidateFunction<production_request>,
 		}>,
@@ -77,7 +79,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		validators,
 	);
 
-	let does_not_throw_cases:UnrealEngineString_right_x_C_suffix[] =
+	let does_not_throw_cases: UnrealEngineString_right_x_C_suffix[] = (
 		FGRecipe.Classes.reduce(
 			(was, is) => {
 				for (const product of is.mProduct) {
@@ -99,8 +101,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						maybe.ClassName,
 					)
 				),
-			).map(e => e.ClassName as UnrealEngineString_right_x_C_suffix),
-		);
+			).map((e) => e.ClassName as UnrealEngineString_right_x_C_suffix),
+		)
+	);
 
 	does_not_throw_cases = [
 		...FGBuildableFrackingActivator.Classes,
@@ -141,14 +144,14 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					assert.strictEqual(
 						Desc_C in result.output,
 						true,
-					)
+					);
 				},
-			)
+			);
 		}
-	})
+	});
 
 	void describe('validates', () => {
-		const result_1:production_result = {
+		const result_1: production_result = {
 			ingredients: {
 				Desc_ModularFrame_C: IntermediaryNumber.create('15'),
 				Desc_Cable_C: IntermediaryNumber.create('25'),
@@ -177,7 +180,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				},
 			},
 		};
-		const result_1000001:production_result = {
+		const result_1000001: production_result = {
 			ingredients: {
 				Desc_ModularFrame_C: IntermediaryNumber.create('15.000015'),
 				Desc_Cable_C: IntermediaryNumber.create('25.000025'),
@@ -211,7 +214,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			},
 		};
 
-		const test_cases:[
+		const test_cases: [
 			production_request<
 				(
 					| amount_string
@@ -230,8 +233,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						| BigNumber
 						| operand_types
 					)
+				// eslint-disable-next-line @stylistic/comma-dangle
 				>
-			)
+			),
 		][] = [
 			[
 				{
@@ -753,12 +757,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_Cement_C: IntermediaryNumber.create('45'),
-						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @stylistic/max-len
 						Desc_CircuitBoardHighSpeed_C: IntermediaryNumber.create('5'),
 						Desc_Coal_C: IntermediaryNumber.create('81.75'),
 						Desc_CopperIngot_C: IntermediaryNumber.create('80'),
 						Desc_CopperSheet_C: IntermediaryNumber.create('25'),
-						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @stylistic/max-len
 						Desc_ElectromagneticControlRod_C: IntermediaryNumber.create('5'),
 						Desc_GoldIngot_C: IntermediaryNumber.create('20'),
 						Desc_HighSpeedWire_C: IntermediaryNumber.create('100'),
@@ -805,12 +809,12 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				{
 					ingredients: {
 						Desc_Cement_C: IntermediaryNumber.create('0.9'),
-						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @stylistic/max-len
 						Desc_CircuitBoardHighSpeed_C: IntermediaryNumber.create('0.1'),
 						Desc_Coal_C: IntermediaryNumber.create('1.635'),
 						Desc_CopperIngot_C: IntermediaryNumber.create('1.6'),
 						Desc_CopperSheet_C: IntermediaryNumber.create('0.5'),
-						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @stylistic/max-len
 						Desc_ElectromagneticControlRod_C: IntermediaryNumber.create('0.1'),
 						Desc_GoldIngot_C: IntermediaryNumber.create('0.4'),
 						Desc_HighSpeedWire_C: IntermediaryNumber.create('2'),
@@ -824,7 +828,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						Desc_Stator_C: IntermediaryNumber.create('0.15'),
 						Desc_SteelIngot_C: IntermediaryNumber.create('1.635'),
 						Desc_SteelPipe_C: IntermediaryNumber.create('0.45'),
-						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @stylistic/max-len
 						Desc_SteelPlateReinforced_C: IntermediaryNumber.create('0.06'),
 						Desc_SteelPlate_C: IntermediaryNumber.create('0.24'),
 						Desc_Stone_C: IntermediaryNumber.create('2.7'),
@@ -1108,7 +1112,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 					),
 					output: result_1.output,
 					combined: Object.fromEntries(
-						Object.entries(result_1.output).map(e => {
+						Object.entries(result_1.output).map((e) => {
 							return [
 								e[0],
 								{
@@ -1149,7 +1153,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						);
 					}
 				},
-			)
+			);
 
 			if (false === expectation) {
 				continue;
@@ -1197,7 +1201,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						),
 					);
 				},
-			)
+			);
 		}
 
 		for (const Desc_C of does_not_throw_cases) {
@@ -1207,14 +1211,14 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				}.validate({pool: {${Desc_C}: 1}}) behaves`,
 				() => {
 					const get_result = () => instance.validate({
-						pool:{
+						pool: {
 							[Desc_C]: '1' as amount_string,
 						},
 					});
 
 					assert.doesNotThrow(get_result);
 				},
-			)
+			);
 		}
 
 		for (const Desc_C of does_not_throw_cases) {
@@ -1225,7 +1229,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 				async () => {
 					const get_result = () => instance.calculate({
 						data: instance.validate({
-							pool:{
+							pool: {
 								[Desc_C]: '1' as amount_string,
 							},
 						}),
@@ -1238,7 +1242,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 					const get_aborted_result = () => instance.calculate({
 						data: instance.validate({
-							pool:{
+							pool: {
 								[Desc_C]: '1' as amount_string,
 							},
 						}),
@@ -1254,7 +1258,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						CalculationAborted,
 					);
 				},
-			)
+			);
 		}
-	})
-})
+	});
+});

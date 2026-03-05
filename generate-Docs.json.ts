@@ -17,7 +17,6 @@ import {
 	TypeDefinitionWriter,
 } from '@satisfactory-dev/docs.json.ts/lib/generator.js';
 
-const __dirname = import.meta.dirname;
 const ajv = new Ajv({
 	verbose: true,
 	code: {
@@ -33,16 +32,19 @@ export const docs = new DocsTsGenerator({
 	ajv,
 	docs_versions: {
 		common: new DocsTsGeneratorVersion({
-			docs_path: `${__dirname}/node_modules/@satisfactory-dev/docs.json.ts/data/common/faux.json`,
-			cache_path: `${__dirname}/data/common/`,
+			docs_path: `${
+				import.meta.dirname
+			// eslint-disable-next-line @stylistic/max-len
+			}/node_modules/@satisfactory-dev/docs.json.ts/data/common/faux.json`,
+			cache_path: `${import.meta.dirname}/data/common/`,
 			types_from_module: (
 				'@satisfactory-dev/docs.json.ts/generated-types/common'
 			),
 			UnrealEngineString_quote_mode: 'original',
 		}),
 		update8: new DocsTsGeneratorVersion({
-			docs_path: `${__dirname}/data/update8/Docs.json`,
-			cache_path: `${__dirname}/data/update8/`,
+			docs_path: `${import.meta.dirname}/data/update8/Docs.json`,
+			cache_path: `${import.meta.dirname}/data/update8/`,
 			types_from_module: (
 				'@satisfactory-dev/docs.json.ts/generated-types/update8'
 			),
@@ -58,7 +60,7 @@ try {
 	const bar = new TypeDefinitionWriter(docs, 'update8');
 	performance.measure('bootstrap', 'start');
 	performance.mark('bootstrap done');
-	await bar.write(`${__dirname}/generated-types/update8/`);
+	await bar.write(`${import.meta.dirname}/generated-types/update8/`);
 	performance.measure('types generated', 'bootstrap done');
 	const discovery = await bar.discovery;
 	const result = await discovery.discover_type_$defs();
@@ -73,12 +75,12 @@ try {
 		'Missing Classes': result.missing_classes.length,
 	});
 	await writeFile(
-		`${__dirname}/discover-types.perf.json`,
+		`${import.meta.dirname}/discover-types.perf.json`,
 		`${JSON.stringify(perf(), null, '\t')}`,
 	);
 } catch (err) {
 	await writeFile(
-		`${__dirname}/discover-types.perf.json`,
+		`${import.meta.dirname}/discover-types.perf.json`,
 		`${JSON.stringify(perf(), null, '\t')}`,
 	);
 	if (err instanceof NoMatchError) {

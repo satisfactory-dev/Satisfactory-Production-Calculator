@@ -21,7 +21,7 @@ import {
 } from '../../generated-types/1.0/data/CoreUObject/FGEquipmentDescriptor.ts';
 import {
 	FGItemDescriptorNuclearFuel,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGItemDescriptorNuclearFuel.ts';
 import {
 	FGItemDescriptor,
@@ -40,7 +40,7 @@ import {
 } from '../../generated-types/1.0/data/CoreUObject/FGVehicleDescriptor.ts';
 import {
 	FGBuildableGeneratorNuclear,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGBuildableGeneratorNuclear.ts';
 
 import {
@@ -48,29 +48,29 @@ import {
 } from '../../lib/production-data.ts';
 import {
 	FGBuildableFrackingActivator,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGBuildableFrackingActivator.ts';
 import {
 	FGBuildableWaterPump,
 } from '../../generated-types/1.0/data/CoreUObject/FGBuildableWaterPump.ts';
 import {
 	FGBuildableResourceExtractor,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGBuildableResourceExtractor.ts';
 import {
 	FGPowerShardDescriptor,
 } from '../../generated-types/1.0/data/CoreUObject/FGPowerShardDescriptor.ts';
-import {
+import type {
 	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
 import {
 	FGItemDescriptorPowerBoosterFuel,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '../../generated-types/1.0/data/CoreUObject/FGItemDescriptorPowerBoosterFuel.ts';
-import {
+import type {
 	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
 
 export const instance = new ProductionData<

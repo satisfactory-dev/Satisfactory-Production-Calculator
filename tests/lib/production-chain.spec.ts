@@ -19,7 +19,7 @@ import {
 
 void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 	void describe('is_recursive', () => {
-		const data_sets:[
+		const data_sets: [
 			production_item,
 			recipe_selection,
 			boolean,
@@ -76,12 +76,12 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 						expectation,
 					);
 				},
-			)
+			);
 		}
 	});
 
 	void describe('throws', () => {
-		const data_sets:[
+		const data_sets: [
 			production_item,
 			recipe_selection,
 		][] = [

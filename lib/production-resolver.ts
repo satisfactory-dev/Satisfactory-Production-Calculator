@@ -1,14 +1,15 @@
-import {
+import type {
 	UnrealEngineString,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/utils/validators.js';
-import {
+import type {
 	integer_string__type,
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js';
-import {
+import type {
 	ItemClass__amount_required__type,
 	ItemClass__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
 import {
 	NoMatchError,
@@ -18,20 +19,20 @@ import {
 	object_has_property,
 } from '@satisfactory-dev/predicates.ts';
 
-import {
+import type {
 	number_arg,
 	operand_types,
 } from '@signpostmarv/intermediary-number';
 
 import assert from 'assert';
 
-import {
+import type {
 	ProductionData_Type,
 } from './production-data.ts';
 import {
 	GenerateSchemas,
 } from './generate-schemas.ts';
-import {
+import type {
 	production_item,
 	recipe_selection,
 } from './types.ts';
@@ -44,8 +45,8 @@ import {
 } from './amend-itemclass-amount.ts';
 
 type ItemClass__type__item = {
-	ItemClass: UnrealEngineString;
-	Amount?: integer_string__type;
+	ItemClass: UnrealEngineString,
+	Amount?: integer_string__type,
 };
 
 type amended_amounts = {
@@ -60,11 +61,12 @@ export class DeferredProductionResolver<
 	T_ProductionData extends ProductionData_Type,
 > {
 	#production_data: T_ProductionData;
+
 	#recipe_selection: recipe_selection;
 
-	#resolves:{[key: string]: ProductionResolver<
+	#resolves: {[key: string]: ProductionResolver<
 		T_ProductionData
-	>} = {};
+	>,} = {};
 
 	constructor(
 		production_data: T_ProductionData,
@@ -93,7 +95,9 @@ export class ProductionResolver<
 	T_ProductionData extends ProductionData_Type,
 > {
 	private item: production_item;
+
 	private production_data: T_ProductionData;
+
 	private recipe_selection: recipe_selection;
 
 	private static allowed_empty_ingredients = new WeakMap<
@@ -170,9 +174,13 @@ export class ProductionResolver<
 
 		const mapped_product_amounts = Object.fromEntries(
 			mProduct.map(
-				(e): [string, (
+				(e): [
+					string,
+					(
+						// eslint-disable-next-line @stylistic/comma-dangle
 						| operand_types
-				)] => [
+					)
+				] => [
 					UnrealEngineString_right_x_C_suffix(e.ItemClass),
 					amend_ItemClass_amount_deferred(
 						this.production_data,
@@ -210,13 +218,13 @@ export class ProductionResolver<
 			assert.strictEqual(
 				ingredient_amounts.length,
 				0,
-				// eslint-disable-next-line max-len
+				// eslint-disable-next-line @stylistic/max-len
 				'Recipes with no ingredients should have no ingredient amounts!',
 			);
 			assert.strictEqual(
 				product_amounts.length >= 1,
 				true,
-				// eslint-disable-next-line max-len
+				// eslint-disable-next-line @stylistic/max-len
 				'Recipes with no ingredients should have at least one product!',
 			);
 		} else {
@@ -241,13 +249,12 @@ export class ProductionResolver<
 		};
 	}
 
-	get recipe(): string
-	{
+	get recipe(): string {
 		const {
 			recipe_selection: recipe_selection_schema,
 		} = GenerateSchemas.factory(this.production_data);
 
-		let maybe_recipe:string|undefined = undefined;
+		let maybe_recipe: string|undefined = undefined;
 
 		if (this.item in this.recipe_selection) {
 			maybe_recipe = this.recipe_selection[this.item];
@@ -265,15 +272,20 @@ export class ProductionResolver<
 	}
 
 	static get_allowed_empty_ingredients<
-		T_ProductionData extends ProductionData_Type
-	> (
+		T_ProductionData extends ProductionData_Type,
+	>(
 		production_data: T_ProductionData,
 	): string[] {
-		let allowed_empty_ingredients:(undefined|(`Recipe_${string}_C`[])) = this.allowed_empty_ingredients.get(production_data);
+		let allowed_empty_ingredients: (
+			| undefined
+			| (`Recipe_${string}_C`[])
+		) = this.allowed_empty_ingredients.get(production_data);
 
 		if (!allowed_empty_ingredients) {
 			allowed_empty_ingredients = [];
-			const supported_empty_ingredient_recipes:`Recipe_${string}_C`[] = [
+			const supported_empty_ingredient_recipes: (
+				`Recipe_${string}_C`[]
+			) = [
 				'Recipe_QuantumEnergy_C',
 			];
 
@@ -296,7 +308,7 @@ export class ProductionResolver<
 	}
 
 	static verify_ingredient<
-		T_ProductionData extends ProductionData_Type
+		T_ProductionData extends ProductionData_Type,
 	>(
 		production_data: T_ProductionData,
 		ingredient: string|ItemClass__type__item,

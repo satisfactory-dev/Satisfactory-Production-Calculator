@@ -1,4 +1,4 @@
-import Ajv from "ajv/dist/2020";
+import Ajv from 'ajv/dist/2020.js';
 import {
 	writeFile,
 } from 'node:fs/promises';

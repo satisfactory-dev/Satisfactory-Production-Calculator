@@ -12,26 +12,26 @@ import {
 	it,
 } from 'node:test';
 import assert from 'node:assert/strict';
-import {
+import type {
 	ValidateFunction,
 } from 'ajv';
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 import update8_production_request_schema from '../../validator/update8/production_request_schema.mjs';
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
 import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
-import {
+import type {
 	production_request,
 } from '../../lib/types.ts';
 import {
 	Root,
 } from '../../lib/production-chain.ts';
-import {
+import type {
 	amount_string,
 } from '@signpostmarv/intermediary-number';
 
@@ -55,7 +55,7 @@ void describe('Power Shards\' existence in production data', () => {
 	void it('Behaves as expected on Update 8', async () => {
 		assert.strictEqual(
 			(
-				! ('power_shards' in u8_production_data.data)
+				!('power_shards' in u8_production_data.data)
 				|| undefined === u8_production_data.data.power_shards
 			),
 			true,
@@ -73,16 +73,16 @@ void describe('Power Shards\' existence in production data', () => {
 		assert.doesNotThrow(() => {
 			calculator.validate({
 				pool: {
-					'Desc_CrystalShard_C': '1',
+					Desc_CrystalShard_C: '1',
 				},
 			});
-		})
+		});
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
 				await calculator.calculate({data: {
 					pool: {
-						'Desc_CrystalShard_C': '1',
+						Desc_CrystalShard_C: '1',
 					},
 				}}),
 			),
@@ -127,13 +127,13 @@ void describe('Power Shards\' existence in production data', () => {
 
 		const power_shard_data = {
 			pool: {
-				'Desc_CrystalShard_C': '1',
+				Desc_CrystalShard_C: '1',
 			},
 		};
 
 		assert.doesNotThrow(() => {
 			calculator.validate(power_shard_data);
-		})
+		});
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
@@ -162,7 +162,7 @@ void describe('Power Shards\' existence in production data', () => {
 
 		assert.doesNotThrow(() => {
 			calculator.validate(ionized_fuel_data);
-		})
+		});
 
 		assert.deepEqual(
 			flattened_production_ingredients_request_result(
@@ -210,9 +210,9 @@ void describe('Power Shards\' existence in production data', () => {
 
 			console.debug({
 				result: chain.result,
-			})
+			});
 		};
 
 		assert.doesNotThrow(get_result);
 	});
-})
+});

@@ -4,24 +4,26 @@ import {
 import {
 	NoMatchError,
 } from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import {
+import type {
 	UnrealEngineString,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/update8/utils/validators.js';
 import assert from 'assert';
 
-export type UnrealEngineString_right_x_C_suffix =
-	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'|'Build'}_${string}_C`;
+export type UnrealEngineString_right_x_C_suffix = (
+	`${'Desc'|'BP'|'Foundation'|'Recipe'|'SC'|'Build'}_${string}_C`
+);
 
-const UnrealEngineString_right_x_C_suffix_regex_prefixes =
+const UnrealEngineString_right_x_C_suffix_regex_prefixes = (
 	'(?:Desc|BP|Foundation|Recipe|SC|Build)'
+);
 
 const UnrealEngineString_right_x_C_suffix_regex = new RegExp(
 	`^${UnrealEngineString_right_x_C_suffix_regex_prefixes}_[^.]+_C$`,
 );
 
 export function filter_UnrealEngineString_right_x_C_suffix(
-	maybe:unknown,
+	maybe: unknown,
 ): maybe is UnrealEngineString_right_x_C_suffix {
 	return (
 		is_string(maybe)
@@ -48,12 +50,13 @@ export function is_UnrealEngineString_right(
 }
 
 export function UnrealEngineString_right_x_C_suffix(
-	value:UnrealEngineString,
-) : UnrealEngineString_right_x_C_suffix {
-	const maybe_match =
+	value: UnrealEngineString,
+): UnrealEngineString_right_x_C_suffix {
+	const maybe_match = (
 		UnrealEngineString_right_x_C_suffix_extraction_regex.exec(
 			value.right,
-		);
+		)
+	);
 
 	assert.notStrictEqual(maybe_match, null, new NoMatchError(
 		value,

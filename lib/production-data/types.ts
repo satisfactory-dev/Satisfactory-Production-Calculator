@@ -1,78 +1,78 @@
-import {
+import type {
 	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import {
+import type {
 	common_base__FGRecipe__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGRecipe.js';
-import {
+import type {
 	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import {
+import type {
 	common_base__FGResourceDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGResourceDescriptor.js';
-import {
+import type {
 	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import {
+import type {
 	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
-import {
+import type {
 	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import {
+import type {
 	common_base__FGVehicleDescriptor__fueled_with_inventory__type,
 	common_base__FGVehicleDescriptor__powered_no_inventory__type,
 	common_base__FGVehicleDescriptor__with_inventory__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGVehicleDescriptor.js';
-import {
+import type {
 	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import {
+import type {
 	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import {
+import type {
 	common_base__FGAmmoTypeProjectile__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import {
+import type {
 	common_base__FGAmmoTypeInstantHit__chaos__type,
 	common_base__FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import {
+import type {
 	common_base__FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import {
+import type {
 	common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
 	common_base__FGBuildableGeneratorNuclear__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableGeneratorNuclear.js';
-import {
+import type {
 	common_base__FGBuildableFrackingActivator__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableFrackingActivator.js';
-import {
+import type {
 	common_base__FGBuildableWaterPump__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableWaterPump.js';
-import {
+import type {
 	common_base__FGBuildableResourceExtractor__miner__type,
 	common_base__FGBuildableResourceExtractor__oil_extractor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildableResourceExtractor.js';
 
-import {
+import type {
 	UnrealEngineString_right_x_C_suffix,
 } from '../UnrealEngineString.ts';
 import type {
@@ -82,19 +82,19 @@ import type {
 	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
 	common_base__FGBuildableResourceExtractor__miner_mk3__type,
 	NativeClass__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
 import type {
 	FGPowerShardDescriptor__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
 import type {
 	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
 import type {
 	FGAmmoTypeProjectile__base__type,
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
 
 export type FGVehicleDescriptor__type = (
@@ -108,7 +108,7 @@ export type imports_dict = {
 };
 
 export type NativeClass__type__wrapper<
-	T extends class__no_description_or_display_name__type
+	T extends class__no_description_or_display_name__type,
 > = NativeClass__type & {
 	Classes: [T, ...T[]],
 };
@@ -141,13 +141,13 @@ export type imports<
 			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
 		)
 	) = common_base__FGAmmoTypeSpreadshot__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
 	FGItemDescriptorNuclearFuel extends (
 		| common_base__FGItemDescriptorNuclearFuel__type
@@ -163,7 +163,7 @@ export type imports<
 		| common_base__FGPoleDescriptor__type
 	) = common_base__FGPoleDescriptor__type,
 	FGRecipe extends common_base__FGRecipe__type = common_base__FGRecipe__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGResourceDescriptor extends common_base__FGResourceDescriptor__type = common_base__FGResourceDescriptor__type,
 	FGVehicleDescriptor extends (
 		| common_base__FGVehicleDescriptor__fueled_with_inventory__type
@@ -184,7 +184,7 @@ export type imports<
 	) = (
 		| common_base__FGBuildableFrackingActivator__type
 	),
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	FGBuildableWaterPump extends common_base__FGBuildableWaterPump__type = common_base__FGBuildableWaterPump__type,
 	FGBuildableResourceExtractor extends (
 		| common_base__FGBuildableResourceExtractor__oil_extractor__type
@@ -239,26 +239,25 @@ export type imports<
 				Exclude<FGItemDescriptorPowerBoosterFuel, undefined>
 			>
 	),
-}
+};
 
 export type recipe_selection_properties = {
 	[key: UnrealEngineString_right_x_C_suffix]: {
 		type: 'string',
 		enum: [string, ...string[]],
-	}
+	},
 };
 
 export type recipe_selection_properties_with_default = (
 	& recipe_selection_properties[UnrealEngineString_right_x_C_suffix]
 	& {
-		default:string,
+		default: string,
 	}
 );
 
 export type recipe_selection_properties_with_defaults = {
-	[
-		key: UnrealEngineString_right_x_C_suffix
-	]: recipe_selection_properties_with_default
+	[key: UnrealEngineString_right_x_C_suffix
+	]: recipe_selection_properties_with_default,
 };
 
 export type data<
@@ -284,26 +283,26 @@ export type data<
 		| common_base__FGAmmoTypeInstantHit__standard__type
 		| common_base__FGAmmoTypeSpreadshot__type
 	),
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_biomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_buildings extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_consumable extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_equipment extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_fuel_nuclear extends common_base__FGItemDescriptorNuclearFuel__type = common_base__FGItemDescriptorNuclearFuel__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_items extends common_base__FGItemDescriptor__FGResourceDescriptor__type = common_base__FGItemDescriptor__FGResourceDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_poles extends common_base__FGPoleDescriptor__type = common_base__FGPoleDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_recipes extends common_base__FGRecipe__type = common_base__FGRecipe__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_resources extends common_base__FGResourceDescriptor__type = common_base__FGResourceDescriptor__type,
 	T_vehicles extends FGVehicleDescriptor__type = FGVehicleDescriptor__type,
-	// eslint-disable-next-line max-len
+	// eslint-disable-next-line @stylistic/max-len
 	T_NuclearByproduct extends common_base__FGBuildableGeneratorNuclear__mFuel__base__type = common_base__FGBuildableGeneratorNuclear__mFuel__base__type,
 > = {
 	ammo: {[k: string]: T_ammo},

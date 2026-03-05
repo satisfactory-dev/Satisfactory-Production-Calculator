@@ -12,18 +12,22 @@ generate--skip-checks: generate--skip-checks--common generate--skip-checks--upda
 generate--skip-checks--common:
 	@echo 'running ./generate-common-types.ts'
 	@node ./generate-common-types.ts
+	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/common/.eslintcache' --cache './generated-types/common/**/*.ts'
 
 generate--skip-checks--update8:
 	@echo 'running ./generate-Docs.json.ts'
 	@node ./generate-Docs.json.ts
+	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/update8/.eslintcache' --cache './generated-types/update8/**/*.ts'
 
 generate--skip-checks--version-1:
 	@echo 'running ./generate-Docs.json-version-1.ts'
 	@node ./generate-Docs.json-version-1.ts
+	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/1.0/.eslintcache' --cache './generated-types/1.0/**/*.ts'
 
 generate--skip-checks--version-1-1:
 	@echo 'running ./generate-Docs.json-version-1-1.ts'
 	@node ./generate-Docs.json-version-1-1.ts
+	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/1.1/.eslintcache' --cache './generated-types/1.1/**/*.ts'
 
 generate--post-build:
 	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json

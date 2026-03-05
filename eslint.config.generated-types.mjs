@@ -9,10 +9,11 @@ export default [
 			},
 		},
 		rules: {
-			'comma-dangle': 'warn',
-			'max-len': 'off',
+			'@stylistic/comma-dangle': 'off',
+			'@stylistic/max-len': 'off',
 			'object-curly-newline': 'off',
 			'sort-imports': 'off',
+			'@typescript-eslint/consistent-type-imports': 'error',
 		},
 		ignores: ['**/*.js'],
 	},

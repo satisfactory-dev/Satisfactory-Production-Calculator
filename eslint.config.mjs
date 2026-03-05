@@ -1,4 +1,6 @@
-import config from '@signpostmarv/eslint-config';
+import {
+	typescript as config,
+} from '@signpostmarv/eslint-config';
 import parser from '@typescript-eslint/parser';
 
 export default [
@@ -19,5 +21,19 @@ export default [
 			'**/*.mjs',
 			'./generated-types/**/*.*',
 		],
+	},
+	{
+		rules: {
+			'@stylistic/type-annotation-spacing': ['error', {
+				before: false,
+				after: true,
+				overrides: {
+					arrow: {
+						before: true,
+						after: true,
+					},
+				},
+			}],
+		},
 	},
 ];

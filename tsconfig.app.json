@@ -1,4 +1,11 @@
 {
 	"extends": "./tsconfig",
+	"compilerOptions": {
+		"noEmit": false,
+		"declaration": true,
+		"emitDeclarationOnly": false,
+		"rewriteRelativeImportExtensions": true,
+		"sourceMap": true
+	},
 	"include": ["./*.ts", "./lib/**/*.ts", "./tests/**/*.ts"]
 }

@@ -4,6 +4,6 @@
 	"exclude": ["./generated-types/*/data/**/*.ts"],
 	"compilerOptions": {
 		"declaration": true,
-		"sourceMap": false
+		"sourceMap": true
 	}
 }

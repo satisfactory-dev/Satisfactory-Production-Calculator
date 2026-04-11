@@ -10,6 +10,14 @@
   "funding": "https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git?sponsor=1",
   "exports": "./index.js",
   "types": "./index.d.ts",
+  "files": [
+    "./index.ts",
+    "./index.js",
+    "./index.js.map",
+    "./lib/**/*.ts",
+    "./lib/**/*.js",
+    "./lib/**/*.js.map"
+  ],
   "devDependencies": {
     "@signpostmarv/json-schema-typescript-codegen": "^0.8.1",
     "@signpostmarv/oxlint-config": "^0.3.0",

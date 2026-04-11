@@ -13,8 +13,7 @@
 		"module": "esnext",
 		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
-		"allowSyntheticDefaultImports": true,
-		"isolatedModules": true
+		"allowSyntheticDefaultImports": true
 	},
 	"lib": ["esnext"]
 }

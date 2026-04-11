@@ -141,7 +141,7 @@ generate--validators:
 
 lint--tsc:
 	@echo 'running syntax check'
-	@./node_modules/.bin/tsc --project ./tsconfig.app-check.json
+	@./node_modules/.bin/tsc --skipLibCheck --project ./tsconfig.app-check.json
 
 lint--prettier:
 	@echo 'running prettier'

@@ -602,7 +602,7 @@ export class ProductionCalculator<
 			result.surplus = Object.fromEntries(surplus_entries.map((e) => [
 				e.item,
 				e.amount,
-			]));
+			])) as Exclude<typeof result.surplus, undefined>;
 		}
 
 		return Promise.resolve(result);
@@ -1040,7 +1040,7 @@ export class ProductionCalculator<
 					e.item,
 					e.amount,
 				]),
-			);
+			) as Exclude<typeof result.surplus, undefined>;
 		}
 
 		return result;

@@ -8,6 +8,10 @@ import type {
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
+
+import type {
+} from '@signpostmarv/json-schema-typescript-codegen/javascript-overrides';
+
 import type BigNumber from 'bignumber.js';
 
 export type flattened_result = {
@@ -92,7 +96,9 @@ export function flattened_production_ingredients_request_result(
 	};
 
 	if (surplus_entries.length > 0) {
-		result.surplus = Object.fromEntries(surplus_entries);
+		result.surplus = Object.fromEntries(
+			surplus_entries,
+		) as Exclude<typeof result.surplus, undefined>;
 	}
 
 	return result;

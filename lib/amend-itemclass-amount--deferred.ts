@@ -1,7 +1,8 @@
-import BigNumber from 'bignumber.js';
-
 import type {
-	number_arg,
+	operand_types,
+} from '@signpostmarv/intermediary-number';
+import {
+	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
 
 import type {
@@ -20,14 +21,14 @@ import {
 	get_string_C,
 } from './utilities/get_string_C.ts';
 
-export function amend_ItemClass_amount<
+export function amend_ItemClass_amount_deferred<
 	T_Imports extends supported_imports,
 >(
 	production_data: ProductionData<T_Imports>,
 	ItemClass: ItemClass_Amount_list_item<T_Imports>,
 ): {
 	ItemClass: ItemClass_Amount_list_item<T_Imports>['ItemClass'],
-	Amount: number_arg,
+	Amount: operand_types,
 } {
 	const {
 		items,
@@ -40,21 +41,19 @@ export function amend_ItemClass_amount<
 
 	return {
 		ItemClass: ItemClass.ItemClass,
-		Amount: null === ItemClass.Amount
-			? 0
-			: (
+		Amount: (
+			(
 				(
-					(
-						Desc_c in resources
-						&& 'RF_SOLID' !== resources[Desc_c].mForm
-					)
-					|| (
-						Desc_c in items
-						&& 'RF_SOLID' !== items[Desc_c].mForm
-					)
+					Desc_c in resources
+					&& 'RF_SOLID' !== resources[Desc_c].mForm
 				)
-					? BigNumber(ItemClass.Amount).dividedBy(1000)
-					: (ItemClass.Amount as number_arg)
-			),
+				|| (
+					Desc_c in items
+					&& 'RF_SOLID' !== items[Desc_c].mForm
+				)
+			)
+				? IntermediaryNumber.create(ItemClass.Amount).divide(1000)
+				: IntermediaryNumber.create(ItemClass.Amount)
+		),
 	};
 }

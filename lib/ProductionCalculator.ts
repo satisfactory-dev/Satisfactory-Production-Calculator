@@ -1,43 +1,36 @@
-import assert from 'assert';
 import type {
 	ValidateFunction,
 } from 'ajv/dist/2020.js';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import type {
-	amount_string,
-	number_arg,
-} from '@signpostmarv/intermediary-number';
-import {
-	IntermediaryNumberInfinity,
-	Numbers,
-} from '@signpostmarv/intermediary-number';
-import {
-	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString.ts';
+
+import assert from 'assert';
+
+import Fraction from 'fraction.js';
+
 import {
 	not_undefined,
 } from '@satisfactory-dev/custom-assert';
+
 import type {
-	ProductionData_Type,
-} from './production-data.ts';
-import {
-	faux_recipe,
-} from './faux-recipe.ts';
-import {
-	amend_ItemClass_amount_deferred,
-} from './amend-itemclass-amount.ts';
-import {
-	Root,
-} from './production-chain.ts';
-import type {
+	amount_string,
+	number_arg,
 	operand_types,
 } from '@signpostmarv/intermediary-number';
 import {
 	IntermediaryNumber,
+	IntermediaryNumberInfinity,
+	Numbers,
 } from '@signpostmarv/intermediary-number';
-import Fraction from 'fraction.js';
+
+import type {
+} from '@signpostmarv/json-schema-typescript-codegen/javascript-overrides';
+
+import type {
+	ProductionData,
+} from './production-data.ts';
+
+import type {
+	supported_imports,
+} from './production-data/types.ts';
 
 import type {
 	combined_production_entry,
@@ -46,22 +39,46 @@ import type {
 	production_result,
 	production_set,
 } from './types.ts';
-import {
-	Request,
-} from './Request.ts';
-import {
-	GenerateSchemas,
-} from './generate-schemas.ts';
+
 import type {
 	GenerateValidators,
 } from './generate-validators.ts';
+
 import {
 	DeferredProductionResolver,
+} from './production-resolver--deferred.ts';
+
+import {
+	faux_recipe,
+} from './faux-recipe.ts';
+
+import {
 	ProductionResolver,
 } from './production-resolver.ts';
 
+import {
+	get_string_C,
+} from './utilities/get_string_C.ts';
+
+// oxlint-disable-next-line @stylistic/max-len
+import {
+	amend_ItemClass_amount_deferred,
+} from './amend-itemclass-amount--deferred.ts';
+
+import {
+	GenerateSchemas,
+} from './generate-schemas.ts';
+
+import {
+	Root,
+} from './production-chain.ts';
+
+import {
+	Request,
+} from './Request.ts';
+
 export class ProductionCalculator<
-	T_ProductionData extends ProductionData_Type,
+	T_Imports extends supported_imports,
 > {
 	top_level_only: boolean = false;
 
@@ -71,12 +88,12 @@ export class ProductionCalculator<
 		| operand_types
 	> = {};
 
-	private production_data: T_ProductionData;
+	private production_data: ProductionData<T_Imports>;
 
 	protected readonly check: ValidateFunction<production_request>;
 
 	constructor(
-		production_data: T_ProductionData,
+		production_data: ProductionData<T_Imports>,
 		generator_validators: GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
@@ -90,7 +107,7 @@ export class ProductionCalculator<
 		for (const recipe of supported_empty_ingredient_recipes) {
 			if (
 				recipe in production_data.data.recipes
-				&& '' === production_data.data.recipes[recipe].mIngredients
+				&& null === production_data.data.recipes[recipe].mIngredients
 			) {
 				allowed_empty_ingredients.push(recipe);
 			}
@@ -130,11 +147,7 @@ export class ProductionCalculator<
 		}
 
 		if (!this.check(data)) {
-			throw new NoMatchError(
-				{
-					data,
-					errors: this.check.errors,
-				},
+			throw new Error(
 				'Data not a supported request!',
 			);
 		}
@@ -159,7 +172,7 @@ export class ProductionCalculator<
 			)
 		>,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_ProductionData
+			T_Imports
 		>,
 		surplus?: production_set<
 			| operand_types
@@ -192,7 +205,7 @@ export class ProductionCalculator<
 			);
 		} = {};
 		const input: {
-			[key: string]: (
+			[key: `${string}_C`]: (
 				| operand_types
 			),
 		} = {
@@ -217,7 +230,7 @@ export class ProductionCalculator<
 		for (const [item, amount] of Object.entries(additional_input)) {
 			if (!(item in input)) {
 				input[
-					item as keyof typeof input
+					item
 				] = IntermediaryNumber.reuse_or_create(amount);
 			} else {
 				input[item] = input[item].do_math_then_dispose(
@@ -227,7 +240,7 @@ export class ProductionCalculator<
 			}
 		}
 		const output: {
-			[key in string]: operand_types;
+			[key in `${string}_C`]: operand_types;
 		} = {};
 
 		for (const [production, output_amount] of Object.entries(data.pool)) {
@@ -275,7 +288,7 @@ export class ProductionCalculator<
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
 				) {
-					const faux_result = faux_recipe<T_ProductionData>(
+					const faux_result = faux_recipe<T_Imports>(
 						this.production_data,
 						recipe,
 					);
@@ -286,11 +299,7 @@ export class ProductionCalculator<
 							|| production in resources
 						),
 						true,
-						new NoMatchError(
-							{
-								recipe,
-								expected: production,
-							},
+						new Error(
 							// eslint-disable-next-line @stylistic/max-len
 							`Supported ingredient found but missing production item (${
 								production
@@ -334,12 +343,7 @@ export class ProductionCalculator<
 				assert.strictEqual(
 					recipe.startsWith('Build_'),
 					true,
-					new NoMatchError(
-						{
-							production,
-							amount,
-							recipe,
-						},
+					new Error(
 						'Expecting to find a building recipe!',
 					),
 				);
@@ -347,11 +351,7 @@ export class ProductionCalculator<
 				assert.strictEqual(
 					production in resources,
 					true,
-					new NoMatchError(
-						{
-							recipe,
-							expected: production,
-						},
+					new Error(
 						`Supported ingredient found but missing item!`,
 					),
 				);
@@ -409,25 +409,24 @@ export class ProductionCalculator<
 				true,
 			);
 
-			for (const maybe_ingredient of mIngredients) {
+			for (const maybe_ingredient of mIngredients || []) {
 				const ingredient = ProductionResolver.verify_ingredient(
 					this.production_data,
 					maybe_ingredient,
-					recipe,
 				);
 
 				if ('string' === typeof ingredient) {
 					continue;
 				}
 
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					ingredient.ItemClass,
-				);
-
 				const {
 					ItemClass,
 					Amount,
 				} = ingredient;
+
+				const Desc_C = get_string_C(
+					ItemClass,
+				);
 
 				if (undefined === Amount) {
 					throw new Error('No amount found!');
@@ -435,10 +434,7 @@ export class ProductionCalculator<
 
 				const ammended_amount = amend_ItemClass_amount_deferred(
 					this.production_data,
-					{
-						ItemClass,
-						Amount,
-					},
+					ingredient,
 				).Amount;
 
 				const multiplied = amount.times(
@@ -461,8 +457,8 @@ export class ProductionCalculator<
 				}
 			}
 
-			for (const product of mProduct) {
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
+			for (const product of mProduct || []) {
+				const Desc_C = get_string_C(
 					product.ItemClass,
 				);
 
@@ -486,12 +482,7 @@ export class ProductionCalculator<
 						)
 					),
 					true,
-					new NoMatchError(
-						{
-							recipe,
-							product: product.ItemClass.right,
-							expected: Desc_C,
-						},
+					new Error(
 						`Supported product found (${
 							Desc_C
 						}) but missing item!`,
@@ -547,7 +538,7 @@ export class ProductionCalculator<
 		});
 
 		const combined = output_entries.reduce(
-			(was, is) => {
+			(was, is): combined_production_entry<operand_types> => {
 				if (!(is.item in was)) {
 					was[is.item] = {
 						output: IntermediaryNumber.Zero,
@@ -624,7 +615,7 @@ export class ProductionCalculator<
 	}: {
 		data: production_request,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_ProductionData
+			T_Imports
 		>,
 		signal?: AbortSignal,
 	}): Promise<production_result> {
@@ -666,7 +657,7 @@ export class ProductionCalculator<
 			)
 		>,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_ProductionData
+			T_Imports
 		>,
 		signal?: AbortSignal,
 	}): Promise<production_result<
@@ -700,8 +691,13 @@ export class ProductionCalculator<
 			);
 		const avoid_checking_further = new Set<string>();
 
-		const production_items = Object.fromEntries(
-			Object.entries(data.pool).map((e) => [
+		const production_items: {
+			[key in `${string}_C`]: operand_types;
+		} = Object.fromEntries(
+			Object.entries(data.pool).map((e): [
+				`${string}_C`,
+				operand_types,
+			] => [
 				e[0],
 				(
 					IntermediaryNumber.reuse_or_create(
@@ -741,8 +737,7 @@ export class ProductionCalculator<
 						)
 					),
 					true,
-					new NoMatchError(
-						check_deeper_item,
+					new Error(
 						`Item (${
 							check_deeper_item
 						}) not found in recipe selection!`,
@@ -880,12 +875,12 @@ export class ProductionCalculator<
 		}
 
 		const ingredients: {
-			[key: string]: (
+			[key: `${string}_C`]: (
 				| operand_types
 			),
 		} = {};
 		const output: {
-			[key: string]: (
+			[key: `${string}_C`]: (
 				| operand_types
 			),
 		} = {};

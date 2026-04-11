@@ -1,7 +1,8 @@
 import type {
+	Ajv2020,
 	ValidateFunction,
 } from 'ajv/dist/2020.js';
-import type Ajv from 'ajv/dist/2020.js';
+
 import standalone from 'ajv/dist/standalone/index.js';
 
 import {
@@ -9,72 +10,16 @@ import {
 } from '@satisfactory-dev/ajv-utilities';
 
 import type {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
-import type {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
-import type {
-	common_base__FGAmmoTypeProjectile__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import type {
-	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
-	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
-	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import type {
-	common_base__FGAmmoTypeInstantHit__chaos__type,
-	common_base__FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import type {
-	common_base__FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import type {
-	FGAmmoTypeProjectile__base__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import type {
-	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import type {
-	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import type {
-	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import type {
-	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import type {
-	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import type {
-	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import type {
-	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
+	production_request,
+} from './types.ts';
 
 import type {
 	GenerateSchemas,
 } from './generate-schemas.ts';
 
 import type {
-	production_request,
-} from './types.ts';
+	supported_imports,
+} from './production-data/types.ts';
 
 export class GenerateValidators {
 	readonly validation_function: ValidateFunction<
@@ -82,9 +27,9 @@ export class GenerateValidators {
 	>;
 
 	static #ajv_instances: WeakMap<
-		GenerateSchemas,
+		GenerateSchemas<supported_imports>,
 		WeakMap<
-			Ajv,
+			Ajv2020,
 			GenerateValidators
 		>
 	> = new WeakMap();
@@ -98,46 +43,8 @@ export class GenerateValidators {
 	}
 
 	static #compile(
-		schemas: GenerateSchemas<
-			(
-				| FGPowerShardDescriptor__type
-				| undefined
-			),
-			(
-				| FGItemDescriptorPowerBoosterFuel__type
-				| undefined
-			),
-			(
-				| common_base__FGAmmoTypeProjectile__type
-				| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
-			),
-			(
-				| common_base__FGAmmoTypeInstantHit__chaos__type
-				| common_base__FGAmmoTypeInstantHit__standard__type
-				| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
-			),
-			(
-				| common_base__FGAmmoTypeSpreadshot__type
-				| (
-					& FGAmmoTypeProjectile__base__type
-					& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
-				)
-			),
-			common_base__FGItemDescriptorBiomass__type,
-			common_base__FGBuildingDescriptor__type,
-			common_base__FGConsumableDescriptor__type,
-			common_base__FGEquipmentDescriptor__type,
-			(
-				| common_base__FGItemDescriptorNuclearFuel__type
-			),
-			(
-				| common_base__FGItemDescriptor__FGResourceDescriptor__type
-			),
-			(
-				| common_base__FGPoleDescriptor__type
-			)
-		>,
-		ajv: Ajv,
+		schemas: GenerateSchemas<supported_imports>,
+		ajv: Ajv2020,
 	) {
 		const {
 			production_request,
@@ -150,8 +57,8 @@ export class GenerateValidators {
 	}
 
 	static fromCompile(
-		schemas: GenerateSchemas,
-		ajv: Ajv,
+		schemas: GenerateSchemas<supported_imports>,
+		ajv: Ajv2020,
 	): GenerateValidators {
 		let existing_outter = this.#ajv_instances.get(schemas);
 
@@ -177,46 +84,8 @@ export class GenerateValidators {
 	}
 
 	static toStandalone(
-		schemas: GenerateSchemas<
-			(
-				| FGPowerShardDescriptor__type
-				| undefined
-			),
-			(
-				| FGItemDescriptorPowerBoosterFuel__type
-				| undefined
-			),
-			(
-				| common_base__FGAmmoTypeProjectile__type
-				| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
-			),
-			(
-				| common_base__FGAmmoTypeInstantHit__chaos__type
-				| common_base__FGAmmoTypeInstantHit__standard__type
-				| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
-			),
-			(
-				| common_base__FGAmmoTypeSpreadshot__type
-				| (
-					& FGAmmoTypeProjectile__base__type
-					& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
-				)
-			),
-			common_base__FGItemDescriptorBiomass__type,
-			common_base__FGBuildingDescriptor__type,
-			common_base__FGConsumableDescriptor__type,
-			common_base__FGEquipmentDescriptor__type,
-			(
-				| common_base__FGItemDescriptorNuclearFuel__type
-			),
-			(
-				| common_base__FGItemDescriptor__FGResourceDescriptor__type
-			),
-			(
-				| common_base__FGPoleDescriptor__type
-			)
-		>,
-		ajv: Ajv,
+		schemas: GenerateSchemas<supported_imports>,
+		ajv: Ajv2020,
 	): string {
 		return esmify(standalone(
 			ajv,

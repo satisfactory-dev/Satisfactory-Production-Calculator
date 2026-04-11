@@ -1,244 +1,71 @@
-import {
-	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString.ts';
 import type {
-	data,
-	imports,
+	supported_imports,
+	update8_data,
+	update8_imports,
+	version_1p0_data,
+	version_1p0_imports,
+	version_1p1_data,
 } from './production-data/types.ts';
+
+import {
+	get_string_C,
+} from './utilities/get_string_C.ts';
+
 import {
 	recipe_selection_enums,
 } from './production-data/recipe-selection-enums.ts';
-import type {
-	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
-	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
-	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
-	ItemClass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import type {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
-import type {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
 
-import type {
-	// eslint-disable-next-line @stylistic/max-len
-	v1_0_base__FGItemDescriptorPowerBoosterFuel__type as FGItemDescriptorPowerBoosterFuel__type_1p1,
-	// eslint-disable-next-line @stylistic/max-len
-	v1_0_base__FGPowerShardDescriptor__type as FGPowerShardDescriptor__type_1p1,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned.js';
-import type {
-	common_base__FGAmmoTypeProjectile__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import type {
-	common_base__FGAmmoTypeInstantHit__chaos__type,
-	common_base__FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import type {
-	common_base__FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import type {
-	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import type {
-	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import type {
-	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import type {
-	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import type {
-	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import type {
-	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import type {
-	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
-import type {
-	FGAmmoTypeProjectile__base__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
-
-export type ProductionData_Type = ProductionData<
-	(
-		| FGPowerShardDescriptor__type
-		| FGPowerShardDescriptor__type_1p1
-		| undefined
-	),
-	(
-		| FGItemDescriptorPowerBoosterFuel__type
-		| FGItemDescriptorPowerBoosterFuel__type_1p1
-		| undefined
-	),
-	(
-		| common_base__FGAmmoTypeProjectile__type
-		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
-	),
-	(
-		| common_base__FGAmmoTypeInstantHit__chaos__type
-		| common_base__FGAmmoTypeInstantHit__standard__type
-		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
-	),
-	(
-		| common_base__FGAmmoTypeSpreadshot__type
-		| (
-			& FGAmmoTypeProjectile__base__type
-			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
-		)
-	),
-	common_base__FGItemDescriptorBiomass__type,
-	common_base__FGBuildingDescriptor__type,
-	common_base__FGConsumableDescriptor__type,
-	common_base__FGEquipmentDescriptor__type,
-	(
-		| common_base__FGItemDescriptorNuclearFuel__type
-	),
-	(
-		| common_base__FGItemDescriptor__FGResourceDescriptor__type
-	),
-	(
-		| common_base__FGPoleDescriptor__type
-	)
->;
-
-export class ProductionData<
-	FGPowerShardDescriptor extends (
-		| FGPowerShardDescriptor__type
-		| FGPowerShardDescriptor__type_1p1
-		| undefined
-	) = undefined,
-	FGItemDescriptorPowerBoosterFuel extends (
-		| FGItemDescriptorPowerBoosterFuel__type
-		| FGItemDescriptorPowerBoosterFuel__type_1p1
-		| undefined
-	) = undefined,
-	FGAmmoTypeProjectile extends (
-		| common_base__FGAmmoTypeProjectile__type
-		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
-	) = common_base__FGAmmoTypeProjectile__type,
-	FGAmmoTypeInstantHit extends (
-		| common_base__FGAmmoTypeInstantHit__chaos__type
-		| common_base__FGAmmoTypeInstantHit__standard__type
-		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
-	) = (
-		| common_base__FGAmmoTypeInstantHit__chaos__type
-		| common_base__FGAmmoTypeInstantHit__standard__type
-	),
-	FGAmmoTypeSpreadshot extends (
-		| common_base__FGAmmoTypeSpreadshot__type
-		| (
-			& FGAmmoTypeProjectile__base__type
-			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
-		)
-	) = common_base__FGAmmoTypeSpreadshot__type,
-	// eslint-disable-next-line @stylistic/max-len
-	FGItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-	// eslint-disable-next-line @stylistic/max-len
-	FGBuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-	// eslint-disable-next-line @stylistic/max-len
-	FGConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-	// eslint-disable-next-line @stylistic/max-len
-	FGEquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
-	FGItemDescriptorNuclearFuel extends (
-		| common_base__FGItemDescriptorNuclearFuel__type
-	) = (
-		| common_base__FGItemDescriptorNuclearFuel__type
-	),
-	FGItemDescriptor extends (
-		| common_base__FGItemDescriptor__FGResourceDescriptor__type
-	) = (
-		| common_base__FGItemDescriptor__FGResourceDescriptor__type
-	),
-	FGPoleDescriptor extends (
-		| common_base__FGPoleDescriptor__type
-	) = common_base__FGPoleDescriptor__type,
+class ProductionData<
+	T_Imports extends supported_imports,
 > {
-	#imports: imports<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel,
-		FGAmmoTypeProjectile,
-		FGAmmoTypeInstantHit,
-		FGAmmoTypeSpreadshot,
-		FGItemDescriptorBiomass,
-		FGBuildingDescriptor,
-		FGConsumableDescriptor,
-		FGEquipmentDescriptor,
-		FGItemDescriptorNuclearFuel,
-		FGItemDescriptor,
-		FGPoleDescriptor
-	>;
+	#data: (
+		T_Imports extends update8_imports
+			? update8_data
+			: (
+				T_Imports extends version_1p0_imports
+					? version_1p0_data
+					: version_1p1_data
+			)
+	);
 
-	#data: data<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel,
-		(
-			| FGAmmoTypeProjectile
-			| FGAmmoTypeInstantHit
-			| FGAmmoTypeSpreadshot
-		)
-	>;
+	#imports: T_Imports;
 
-	constructor(imports: () => imports<
-		FGPowerShardDescriptor,
-		FGItemDescriptorPowerBoosterFuel,
-		FGAmmoTypeProjectile,
-		FGAmmoTypeInstantHit,
-		FGAmmoTypeSpreadshot,
-		FGItemDescriptorBiomass,
-		FGBuildingDescriptor,
-		FGConsumableDescriptor,
-		FGEquipmentDescriptor,
-		FGItemDescriptorNuclearFuel,
-		FGItemDescriptor,
-		FGPoleDescriptor
-	>) {
+	constructor(imports: () => T_Imports) {
 		this.#imports = imports();
 		this.#data = this.#get_data();
 	}
 
 	get data(): (
-		data<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel,
-			(
-				| FGAmmoTypeProjectile
-				| FGAmmoTypeInstantHit
-				| FGAmmoTypeSpreadshot
+		T_Imports extends update8_imports
+			? update8_data
+			: (
+				T_Imports extends version_1p0_imports
+					? version_1p0_data
+					: version_1p1_data
 			)
-		>
 	) {
 		return this.#data;
 	}
 
 	#get_data(): (
-		data<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel,
-			(
-				| FGAmmoTypeProjectile
-				| FGAmmoTypeInstantHit
-				| FGAmmoTypeSpreadshot
+		T_Imports extends update8_imports
+			? update8_data
+			: (
+				T_Imports extends version_1p0_imports
+					? version_1p0_data
+					: version_1p1_data
 			)
-		>
 	) {
+		type result = (
+			T_Imports extends update8_imports
+				? update8_data
+				: (
+					T_Imports extends version_1p0_imports
+						? version_1p0_data
+						: version_1p1_data
+				)
+		);
+
 		const {
 			FGAmmoTypeProjectile,
 			FGAmmoTypeInstantHit,
@@ -268,185 +95,291 @@ export class ProductionData<
 				: undefined
 		);
 
-		const resources = Object.fromEntries(
-			FGResourceDescriptor.Classes.map(
-				(e) => [e.ClassName, e],
-			),
+		const ammo: result['ammo'] = [
+			FGAmmoTypeProjectile,
+			FGAmmoTypeInstantHit,
+			FGAmmoTypeSpreadshot,
+		].reduce(
+			(was, is): result['ammo'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
 		);
 
-		const ingredients = (new Set(FGRecipe.Classes.map(
+		const biomass: result['biomass'] = [
+			FGItemDescriptorBiomass,
+		].reduce(
+			(was, is): result['biomass'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const buildings: result['buildings'] = [
+			FGBuildingDescriptor,
+		].reduce(
+			(was, is): result['buildings'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const consumable: result['consumable'] = [
+			FGConsumableDescriptor,
+		].reduce(
+			(was, is): result['consumable'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const equipment: result['equipment'] = [
+			FGEquipmentDescriptor,
+		].reduce(
+			(was, is): result['equipment'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const fuel_nuclear: result['fuel_nuclear'] = [
+			FGItemDescriptorNuclearFuel,
+		].reduce(
+			(was, is): result['fuel_nuclear'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const items: result['items'] = [
+			FGItemDescriptor,
+		].reduce(
+			(was, is): result['items'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const poles: result['poles'] = [
+			FGPoleDescriptor,
+		].reduce(
+			(was, is): result['poles'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const power_booster_fuel: result['power_booster_fuel'] = [
+			FGItemDescriptorPowerBoosterFuel,
+		].reduce(
+			(was, is): result['power_booster_fuel'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const power_shards: result['power_shards'] = [
+			FGPowerShardDescriptor,
+		].reduce(
+			(was, is): result['power_shards'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const recipes: result['recipes'] = [
+			FGRecipe,
+		].reduce(
+			(was, is): result['recipes'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const resources: result['resources'] = [
+			FGResourceDescriptor,
+		].reduce(
+			(was, is): result['resources'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const vehicles: result['vehicles'] = [
+			FGVehicleDescriptor,
+		].reduce(
+			(was, is): result['vehicles'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const ingredients: result[
+			'ingredients'
+		] = (new Set(FGRecipe.Classes.map(
 			(e) => e.mIngredients,
 		).filter(
 			(
-				maybe: '' | ItemClass__type,
-			): maybe is ItemClass__type => '' !== maybe,
+				maybe,
+			): maybe is Exclude<typeof maybe, null> => null !== maybe,
 		).flatMap(
 			(e) => e.map(
-				(e) => UnrealEngineString_right_x_C_suffix(e.ItemClass),
+				(e) => get_string_C(e.ItemClass),
 			),
 		)));
 
-		const products = (new Set(FGRecipe.Classes.flatMap(
-			(e) => e.mProduct.map(
-				(e) => UnrealEngineString_right_x_C_suffix(e.ItemClass),
-			),
+		const products: result['products'] = (new Set(FGRecipe.Classes.flatMap(
+			(e) => (
+				!e.mProduct
+					? []
+					: e.mProduct.map(
+						(e) => get_string_C(e.ItemClass),
+					)),
 		)));
 
-		const resource_keys = Object.keys(resources);
+		const resource_keys: result['resource_keys'] = Object.keys(resources);
 
-		const known_byproduct = FGBuildableGeneratorNuclear.Classes.flatMap(
-			(e) => e.mFuel,
-		).map(
-			(e) => e.mByproduct,
-		);
-
-		const ammo = Object.fromEntries(
-			[
-				...FGAmmoTypeProjectile.Classes,
-				...FGAmmoTypeInstantHit.Classes,
-				...FGAmmoTypeSpreadshot.Classes,
-			].map((e) => [e.ClassName, e]),
-		);
-
-		const biomass = Object.fromEntries(
-			FGItemDescriptorBiomass.Classes.map(
-				(e) => [e.ClassName, e],
-			),
-		);
-
-		const consumable = Object.fromEntries(
-			FGConsumableDescriptor.Classes.map(
-				(e) => [e.ClassName, e],
-			),
-		);
-
-		const equipment = Object.fromEntries(
-			FGEquipmentDescriptor.Classes.map(
-				(e) => [e.ClassName, e],
-			),
-		);
-
-		const fuel_nuclear = Object.fromEntries(
-			FGItemDescriptorNuclearFuel.Classes.map(
-				(e) => [e.ClassName, e],
-			),
-		);
-
-		const items = Object.fromEntries(
-			FGItemDescriptor.Classes.map(
-				(e) => [e.ClassName, e],
-			),
-		);
-
-		const power_shards:(
-			FGPowerShardDescriptor extends undefined
-				? undefined
-				: {
-					[key: string]: FGPowerShardDescriptor,
-				}
-		) = (
-			undefined === FGPowerShardDescriptor
-				? undefined
-				: Object.fromEntries(
-					FGPowerShardDescriptor.Classes.map(
-						(e) => [e.ClassName, e],
-					),
-				)
-		) as (
-			FGPowerShardDescriptor extends undefined
-				? undefined
-				: {
-					[key: string]: FGPowerShardDescriptor,
-				}
-		);
-
-		const power_booster_fuel:(
-			FGItemDescriptorPowerBoosterFuel extends undefined
-				? undefined
-				: {
-					[key: string]: FGItemDescriptorPowerBoosterFuel,
-				}
-		) = (
-			undefined === FGItemDescriptorPowerBoosterFuel
-				? undefined
-				: Object.fromEntries(
-					FGItemDescriptorPowerBoosterFuel.Classes.map(
-						(e) => [e.ClassName, e],
-					),
-				)
-		) as (
-			FGItemDescriptorPowerBoosterFuel extends undefined
-				? undefined
-				: {
-					[key: string]: FGItemDescriptorPowerBoosterFuel,
-				}
-		);
-
-		const result: data<
-			FGPowerShardDescriptor,
-			FGItemDescriptorPowerBoosterFuel,
-			(
-				| FGAmmoTypeProjectile
-				| FGAmmoTypeInstantHit
-				| FGAmmoTypeSpreadshot
+		const known_byproduct: result[
+			'known_byproduct'
+		] = FGBuildableGeneratorNuclear.Classes
+			.flatMap(
+				(e) => e.mFuel,
+			).map(
+				(e) => e.mByproduct,
 			)
-		> = {
+			.filter((maybe) => !!maybe);
+
+		const known_not_sourced_from_recipe: result[
+			'known_not_sourced_from_recipe'
+		] = [
+			...ingredients,
+		].filter(
+			(maybe) => (
+				!products.has(maybe)
+				&& !resource_keys.includes(maybe)
+				&& !(known_byproduct as string[]).includes(maybe as string)
+			),
+		);
+
+		const recipe_selection_enums_value: result[
+			'recipe_selection_enums'
+		] = recipe_selection_enums(this.#imports);
+
+		const faux_ingredients_list: result[
+			'faux_ingredients_list'
+		] = [
+			...Object.keys(ammo),
+			...Object.keys(biomass),
+			...Object.keys(consumable),
+			...Object.keys(equipment),
+			...Object.keys(fuel_nuclear),
+			...Object.keys(items),
+			...Object.keys(resources),
+		];
+
+		return {
 			ammo,
 			biomass,
-			buildings: Object.fromEntries(
-				FGBuildingDescriptor.Classes.map(
-					(e) => [e.ClassName, e],
-				),
-			),
+			buildings,
 			consumable,
 			equipment,
 			fuel_nuclear,
 			items,
-			poles: undefined === FGPoleDescriptor
-				? {}
-				: Object.fromEntries(
-					FGPoleDescriptor.Classes.map(
-						(e) => [e.ClassName, e],
-					),
-				),
-			recipes: Object.fromEntries(
-				FGRecipe.Classes.map(
-					(e) => [e.ClassName, e],
-				),
-			),
-			resources,
-			vehicles: Object.fromEntries(
-				FGVehicleDescriptor.Classes.map(
-					(e) => [e.ClassName, e],
-				),
-			),
-			power_shards,
+			poles,
 			power_booster_fuel,
+			power_shards,
+			recipes,
+			resources,
+			vehicles,
 			ingredients,
 			products,
 			resource_keys,
 			known_byproduct,
-			known_not_sourced_from_recipe: [
-				...ingredients.values(),
-			].filter(
-				(maybe) => (
-					!products.has(maybe)
-					&& !resource_keys.includes(maybe)
-					&& !known_byproduct.includes(maybe as string)
-				),
-			),
-			recipe_selection_enums: recipe_selection_enums(this.#imports),
-			faux_ingredients_list: [
-				...Object.keys(ammo),
-				...Object.keys(biomass),
-				...Object.keys(consumable),
-				...Object.keys(equipment),
-				...Object.keys(fuel_nuclear),
-				...Object.keys(items),
-				...Object.keys(resources),
-			],
-		};
-
-		return result;
+			known_not_sourced_from_recipe,
+			recipe_selection_enums: recipe_selection_enums_value,
+			faux_ingredients_list,
+		} as result;
 	}
 }
+
+export {
+	ProductionData,
+};

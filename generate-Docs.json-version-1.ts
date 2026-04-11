@@ -1,105 +1,43 @@
 import {
-	writeFile,
-} from 'node:fs/promises';
-import Ajv from 'ajv/dist/2020.js';
+	generation_factory,
+
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/src/version-specific/1.0.1.4/generation_factory.js';
+
 import {
-	configure_ajv,
-} from '@satisfactory-dev/docs.json.ts/lib/generator.js';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import {
-	setup_PerformanceObserver,
-} from '@satisfactory-dev/docs.json.ts/setup_PerformanceObserver.js';
-import {
-	DocsTsGenerator,
-	DocsTsGeneratorVersion,
-	TypeDefinitionWriter,
-} from '@satisfactory-dev/docs.json.ts/lib/generator.js';
+	is_supported,
 
-const ajv = new Ajv({
-	verbose: true,
-	code: {
-		source: true,
-		es5: false,
-		esm: true,
-		optimize: true,
-	},
-});
-configure_ajv(ajv);
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/src/version-specific/1.0.1.4/supported_lang.js';
 
-export const docs = new DocsTsGenerator({
-	ajv,
-	docs_versions: {
-		common: new DocsTsGeneratorVersion({
-			docs_path: `${
-				import.meta.dirname
-			// eslint-disable-next-line @stylistic/max-len
-			}/node_modules/@satisfactory-dev/docs.json.ts/data/common/faux.json`,
-			cache_path: `${import.meta.dirname}/data/common/`,
-			types_from_module: (
-				'@satisfactory-dev/docs.json.ts/generated-types/common'
-			),
-			UnrealEngineString_quote_mode: 'original',
-		}),
-		version_1_0_1_4: new DocsTsGeneratorVersion({
-			docs_path: `${import.meta.dirname}/data/1.0/en-US.json`,
-			cache_path: `${import.meta.dirname}/data/1.0/`,
-			types_from_module: (
-				'@satisfactory-dev/docs.json.ts/generated-types/1.0'
-			),
-			UnrealEngineString_quote_mode: 'double',
-		}),
-	},
-});
+const [,, ...remaining] = process.argv;
 
-const perf = setup_PerformanceObserver();
+const lang = remaining.filter((maybe) => !maybe.startsWith('--'))[0];
 
-try {
-	performance.mark('start');
-	const bar = new TypeDefinitionWriter(docs, 'version_1_0_1_4');
-	performance.measure('bootstrap', 'start');
-	performance.mark('bootstrap done');
-	await bar.write(`${import.meta.dirname}/generated-types/1.0/`);
-	performance.measure('types generated', 'bootstrap done');
-	const discovery = await bar.discovery;
-	const result = await discovery.discover_type_$defs();
+const process_generation = {
+	types: false,
+	data: true,
+};
 
-	process.stdout.write(
-		`${JSON.stringify(result.missing_classes, null, '\t')}\n`,
-	);
-	console.table({
-		'Found Types': Object.keys(result.found_types).length,
-		'Missing Types': result.missing_types.length,
-		'Found Classes': result.found_classes.length,
-		'Missing Classes': result.missing_classes.length,
-	});
-	await writeFile(
-		`${import.meta.dirname}/discover-types.perf.json`,
-		`${JSON.stringify(perf(), null, '\t')}`,
-	);
-} catch (err) {
-	await writeFile(
-		`${import.meta.dirname}/discover-types.perf.json`,
-		`${JSON.stringify(perf(), null, '\t')}`,
-	);
-	if (err instanceof NoMatchError) {
-		console.error('ran into an issue');
-		await writeFile(
-			'./discovery-types.failure.json',
-			JSON.stringify(
-				{
-					property: err.property as unknown,
-					message: err.message,
-					stack: err.stack?.split('\n'),
-				},
-				null,
-				'\t',
-			),
-		);
-
-		console.error(err.message, err.stack);
-	} else {
-		throw err;
-	}
+if (!is_supported(lang)) {
+	throw new Error('Unsupported language');
 }
+
+const {
+	default: release_data,
+} = await import(
+	`${import.meta.dirname}/data/1.0.1.4/Docs/${lang}.utf8.json`,
+	{
+		with: {
+			type: 'json',
+		},
+	},
+) as {
+	default: unknown,
+};
+
+await generation_factory(release_data, lang, process_generation, {
+	// oxlint-disable-next-line @stylistic/max-len
+	alternate_source: '@satisfactory-dev/docs.json.ts/generated-types/1.0.1.4/',
+	root_directory: `${import.meta.dirname}/`,
+});

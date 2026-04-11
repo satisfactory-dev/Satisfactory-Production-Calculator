@@ -2,17 +2,22 @@ import {
 	describe,
 	it,
 } from 'node:test';
+
 import assert from 'node:assert/strict';
+
 import {
 	Root,
 } from '../../lib/production-chain.ts';
+
 import type {
 	production_item,
 	recipe_selection,
 } from '../../lib/types.ts';
+
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled.ts';
+
 import {
 	instance as production_data,
 } from '../utilities/production-data.ts';
@@ -86,7 +91,7 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
 			recipe_selection,
 		][] = [
 			[
-				'foo',
+				'foo_C',
 				{},
 			],
 		];

@@ -1,74 +1,172 @@
 import {
-	FGAmmoTypeProjectile,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeProjectile.ts';
-import {
-	FGAmmoTypeInstantHit,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeInstantHit.ts';
-import {
-	FGAmmoTypeSpreadshot,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGAmmoTypeSpreadshot.ts';
-import {
-	FGItemDescriptorBiomass,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorBiomass.ts';
-import {
-	FGBuildingDescriptor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildingDescriptor.ts';
-import {
-	FGConsumableDescriptor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGConsumableDescriptor.ts';
-import {
-	FGEquipmentDescriptor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGEquipmentDescriptor.ts';
-import {
-	FGItemDescriptorNuclearFuel,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptorNuclearFuel.ts';
-import {
-	FGItemDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGItemDescriptor.ts';
-import {
-	FGPoleDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGPoleDescriptor.ts';
-import {
-	FGRecipe,
-} from '../../generated-types/update8/data/CoreUObject/FGRecipe.ts';
-import {
-	FGResourceDescriptor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor.ts';
-import {
-	FGVehicleDescriptor,
-} from '../../generated-types/update8/data/CoreUObject/FGVehicleDescriptor.ts';
-import {
-	FGBuildableGeneratorNuclear,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableGeneratorNuclear.ts';
+	update8,
+} from '../../generated-types/0.8.3.3/data.ts';
+
+import type {
+	update8_imports,
+} from '../../lib/production-data/types.ts';
 
 import {
 	ProductionData,
 } from '../../lib/production-data.ts';
-import {
+
+import type {
+	FGAmmoTypeInstantHit_Desc_CartridgeChaos_C,
+	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C,
+	FGAmmoTypeProjectile,
+	FGAmmoTypeSpreadshot,
 	FGBuildableFrackingActivator,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator.ts';
-import {
+	FGBuildableGeneratorNuclear,
+	FGBuildableResourceExtractor_miner_mk1,
+	FGBuildableResourceExtractor_miner_mk2,
+	FGBuildableResourceExtractor_miner_mk3,
+	FGBuildableResourceExtractor_oil,
 	FGBuildableWaterPump,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump.ts';
+	FGItemDescriptorNuclearFuel,
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.8.3.3/classes.ts';
+
+import type {
+	FGBuildingDescriptor,
+	FGConsumableDescriptor,
+	FGPoleDescriptor,
+	FGRecipe,
+	FGVehicleDescriptor_Desc_CyberWagon_C,
+	FGVehicleDescriptor_Desc_DroneTransport_C,
+	FGVehicleDescriptor_Desc_Explorer_C,
+	FGVehicleDescriptor_Desc_FreightWagon_C,
+	FGVehicleDescriptor_Desc_Locomotive_C,
+	FGVehicleDescriptor_Desc_Tractor_C,
+	FGVehicleDescriptor_Desc_Truck_C,
+
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.6.1.5/classes/Base.0.8.3.3.js';
+
+import type {
+	FGEquipmentDescriptor,
+	FGItemDescriptor,
+	FGItemDescriptorBiomass,
+	FGResourceDescriptor,
+
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.6.1.5/classes.js';
+
 import {
-	FGBuildableResourceExtractor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor.ts';
+	find,
+} from '../../lib/version-specific/0.8.3.3/find.ts';
+
+const FGAmmoTypeProjectile: update8_imports['FGAmmoTypeProjectile'] = find<
+	FGAmmoTypeProjectile,
+	'FGAmmoTypeProjectile'
+>('FGAmmoTypeProjectile', update8);
+
+const FGAmmoTypeInstantHit: update8_imports['FGAmmoTypeInstantHit'] = find<
+	(
+		| FGAmmoTypeInstantHit_Desc_CartridgeChaos_C
+		| FGAmmoTypeInstantHit_Desc_CartridgeStandard_C
+	),
+	'FGAmmoTypeInstantHit'
+>('FGAmmoTypeInstantHit', update8);
+
+const FGAmmoTypeSpreadshot: update8_imports['FGAmmoTypeSpreadshot'] = find<
+	FGAmmoTypeSpreadshot,
+	'FGAmmoTypeSpreadshot'
+>('FGAmmoTypeSpreadshot', update8);
+
+const FGItemDescriptorBiomass: update8_imports[
+	'FGItemDescriptorBiomass'
+] = find<
+	FGItemDescriptorBiomass,
+	'FGItemDescriptorBiomass'
+>('FGItemDescriptorBiomass', update8);
+
+const FGBuildingDescriptor: update8_imports['FGBuildingDescriptor'] = find<
+	FGBuildingDescriptor,
+	'FGBuildingDescriptor'
+>('FGBuildingDescriptor', update8);
+
+const FGConsumableDescriptor: update8_imports['FGConsumableDescriptor'] = find<
+	FGConsumableDescriptor,
+	'FGConsumableDescriptor'
+>('FGConsumableDescriptor', update8);
+
+const FGEquipmentDescriptor: update8_imports['FGEquipmentDescriptor'] = find<
+	FGEquipmentDescriptor,
+	'FGEquipmentDescriptor'
+>('FGEquipmentDescriptor', update8);
+
+const FGItemDescriptorNuclearFuel: update8_imports[
+	'FGItemDescriptorNuclearFuel'
+] = find<
+	FGItemDescriptorNuclearFuel,
+	'FGItemDescriptorNuclearFuel'
+>('FGItemDescriptorNuclearFuel', update8);
+
+const FGItemDescriptor: update8_imports['FGItemDescriptor'] = find<
+	FGItemDescriptor,
+	'FGItemDescriptor'
+>('FGItemDescriptor', update8);
+
+const FGPoleDescriptor: update8_imports['FGPoleDescriptor'] = find<
+	FGPoleDescriptor,
+	'FGPoleDescriptor'
+>('FGPoleDescriptor', update8);
+
+const FGRecipe: update8_imports['FGRecipe'] = find<
+	FGRecipe,
+	'FGRecipe'
+>('FGRecipe', update8);
+
+const FGResourceDescriptor: update8_imports['FGResourceDescriptor'] = find<
+	FGResourceDescriptor,
+	'FGResourceDescriptor'
+>('FGResourceDescriptor', update8);
+
+const FGVehicleDescriptor: update8_imports['FGVehicleDescriptor'] = find<
+	(
+		| FGVehicleDescriptor_Desc_CyberWagon_C
+		| FGVehicleDescriptor_Desc_DroneTransport_C
+		| FGVehicleDescriptor_Desc_Explorer_C
+		| FGVehicleDescriptor_Desc_FreightWagon_C
+		| FGVehicleDescriptor_Desc_Locomotive_C
+		| FGVehicleDescriptor_Desc_Tractor_C
+		| FGVehicleDescriptor_Desc_Truck_C
+	),
+	'FGVehicleDescriptor'
+>('FGVehicleDescriptor', update8);
+
+const FGBuildableGeneratorNuclear: update8_imports[
+	'FGBuildableGeneratorNuclear'
+] = find<
+	FGBuildableGeneratorNuclear,
+	'FGBuildableGeneratorNuclear'
+>('FGBuildableGeneratorNuclear', update8);
+
+const FGBuildableFrackingActivator: update8_imports[
+	'FGBuildableFrackingActivator'
+] = find<
+	FGBuildableFrackingActivator,
+	'FGBuildableFrackingActivator'
+>('FGBuildableFrackingActivator', update8);
+
+const FGBuildableWaterPump: update8_imports['FGBuildableWaterPump'] = find<
+	FGBuildableWaterPump,
+	'FGBuildableWaterPump'
+>('FGBuildableWaterPump', update8);
+
+const FGBuildableResourceExtractor: update8_imports[
+	'FGBuildableResourceExtractor'
+] = find<
+	(
+		| FGBuildableResourceExtractor_miner_mk1
+		| FGBuildableResourceExtractor_miner_mk2
+		| FGBuildableResourceExtractor_miner_mk3
+		| FGBuildableResourceExtractor_oil
+	),
+	'FGBuildableResourceExtractor'
+>('FGBuildableResourceExtractor', update8);
 
 export const instance = new ProductionData<
-	undefined
+	update8_imports
 >(() => ({
 	FGAmmoTypeProjectile,
 	FGAmmoTypeInstantHit,
@@ -87,4 +185,6 @@ export const instance = new ProductionData<
 	FGBuildableFrackingActivator,
 	FGBuildableWaterPump,
 	FGBuildableResourceExtractor,
+	FGPowerShardDescriptor: undefined,
+	FGItemDescriptorPowerBoosterFuel: undefined,
 }));

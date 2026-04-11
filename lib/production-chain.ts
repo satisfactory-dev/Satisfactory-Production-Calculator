@@ -1,38 +1,47 @@
-import type {
-	ProductionData_Type,
-} from './production-data.ts';
+import {
+	object_has_property,
+} from '@satisfactory-dev/predicates.ts';
+
 import type {
 	production_item,
 	recipe_selection,
 } from './types.ts';
-import {
-	faux_recipe,
-} from './faux-recipe.ts';
-import {
-	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString.ts';
-import {
-	object_has_property,
-} from '@satisfactory-dev/predicates.ts';
+
+import type {
+	ProductionData,
+} from './production-data.ts';
+
+import type {
+	supported_imports,
+} from './production-data/types.ts';
+
 import {
 	ProductionResolver,
 } from './production-resolver.ts';
 
+import {
+	get_string_C,
+} from './utilities/get_string_C.ts';
+
+import {
+	faux_recipe,
+} from './faux-recipe.ts';
+
 class Item<
-	T_ProductionData extends ProductionData_Type,
+	T_Imports extends supported_imports,
 > {
 	readonly item: production_item;
 
 	readonly parents: production_item[];
 
-	readonly production_data: T_ProductionData;
+	readonly production_data: ProductionData<T_Imports>;
 
 	readonly recipe_selection: recipe_selection;
 
-	readonly result: Item<T_ProductionData>[] = [];
+	readonly result: Item<T_Imports>[] = [];
 
 	constructor(
-		production_data: T_ProductionData,
+		production_data: Item<T_Imports>['production_data'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 		parents: production_item[],
@@ -43,7 +52,7 @@ class Item<
 		this.parents = parents;
 
 		if (!(this instanceof Recursive)) {
-			this.result = this.calculate();
+			this.result = this.#calculate();
 		}
 	}
 
@@ -51,7 +60,7 @@ class Item<
 		return !!this.result.find((maybe) => maybe.is_recursive());
 	}
 
-	private calculate(): Item<T_ProductionData>[] {
+	#calculate(): Item<T_Imports>[] {
 		const {
 			known_not_sourced_from_recipe,
 			recipes,
@@ -93,17 +102,16 @@ class Item<
 				mIngredients,
 			} = production_resolver.amended_amounts;
 
-			for (const maybe_ingredient of mIngredients) {
+			for (const maybe_ingredient of mIngredients || []) {
 				const ingredient = ProductionResolver.verify_ingredient(
 					this.production_data,
 					maybe_ingredient,
-					recipe,
 				);
 
 				if (!object_has_property(ingredient, 'ItemClass')) {
 					continue;
 				}
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
+				const Desc_C = get_string_C(
 					ingredient.ItemClass,
 				);
 
@@ -142,23 +150,23 @@ class Item<
 }
 
 class Recursive<
-	T_ProductionData extends ProductionData_Type,
-> extends Item<T_ProductionData> {
+	T_Imports extends supported_imports,
+> extends Item<T_Imports> {
 	is_recursive() {
 		return true;
 	}
 }
 
 export class Root<
-	T_ProductionData extends ProductionData_Type,
-> extends Item<T_ProductionData> {
+	T_Imports extends supported_imports,
+> extends Item<T_Imports> {
 	private static cache: WeakMap<
 		recipe_selection,
 		{[key: string]: boolean}
 	> = new WeakMap();
 
 	constructor(
-		production_data: T_ProductionData,
+		production_data: ProductionData<T_Imports>,
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
@@ -171,9 +179,9 @@ export class Root<
 	}
 
 	static is_recursive<
-		T_ProductionData extends ProductionData_Type,
+		T_Imports extends supported_imports,
 	>(
-		production_data: T_ProductionData,
+		production_data: ProductionData<T_Imports>,
 		item: production_item,
 		recipe_selection: recipe_selection,
 	): boolean {

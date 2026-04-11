@@ -1,19 +1,25 @@
 import Ajv from 'ajv/dist/2020.js';
+
 import {
 	writeFile,
 } from 'node:fs/promises';
+
 import {
 	GenerateSchemas,
 } from './lib/generate-schemas.ts';
+
 import {
 	GenerateValidators,
 } from './lib/generate-validators.ts';
+
 import {
 	instance as u8_production_data,
 } from './tests/utilities/production-data.ts';
+
 import {
 	instance as v1_production_data,
 } from './tests/utilities/production-data-1.0.ts';
+
 import {
 	instance as v1p1_production_data,
 } from './tests/utilities/production-data-1.1.ts';

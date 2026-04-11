@@ -1,36 +1,48 @@
 import {
 	instance as u8_production_data,
 } from '../utilities/production-data.ts';
+
 import {
 	instance as v1_production_data,
 } from '../utilities/production-data-1.0.ts';
+
 import {
 	flattened_production_ingredients_request_result,
 } from '../utilities/flattened-production-ingredients-request-result.ts';
+
 import {
 	describe,
 	it,
 } from 'node:test';
+
 import assert from 'node:assert/strict';
+
 import type {
 	ValidateFunction,
 } from 'ajv';
+
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
+
 // eslint-disable-next-line @stylistic/max-len
 import update8_production_request_schema from '../../validator/update8/production_request_schema.mjs';
+
 // eslint-disable-next-line @stylistic/max-len
 import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
+
 import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
+
 import type {
 	production_request,
 } from '../../lib/types.ts';
+
 import {
 	Root,
 } from '../../lib/production-chain.ts';
+
 import type {
 	amount_string,
 } from '@signpostmarv/intermediary-number';
@@ -56,7 +68,9 @@ void describe('Power Shards\' existence in production data', () => {
 		assert.strictEqual(
 			(
 				!('power_shards' in u8_production_data.data)
-				|| undefined === u8_production_data.data.power_shards
+				|| 0 === Object.keys(
+					u8_production_data.data.power_shards,
+				).length
 			),
 			true,
 		);
@@ -111,7 +125,7 @@ void describe('Power Shards\' existence in production data', () => {
 		const {power_shards} = data;
 		assert.strictEqual(
 			'Desc_CrystalShard_C' in (
-				power_shards as Exclude<typeof power_shards, undefined>
+				power_shards
 			),
 			true,
 		);

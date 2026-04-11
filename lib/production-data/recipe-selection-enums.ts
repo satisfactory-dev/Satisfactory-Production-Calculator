@@ -1,138 +1,70 @@
 import BigNumber from 'bignumber.js';
 
-import {
-	filter_UnrealEngineString_right_x_C_suffix,
-	UnrealEngineString_right_x_C_suffix,
-} from '../UnrealEngineString.ts';
 import type {
-	imports,
-	recipe_selection_properties,
-	recipe_selection_properties_with_default,
-	recipe_selection_properties_with_defaults,
-} from './types.ts';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import type {
-	FGPowerShardDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGPowerShardDescriptor.js';
-import type {
-	FGItemDescriptorPowerBoosterFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.0/classes/CoreUObject/FGItemDescriptorPowerBoosterFuel.js';
-import type {
-	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
-import type {
-	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import type {
-	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import type {
-	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import type {
-	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import type {
-	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import type {
-	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import type {
-	common_base__FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import type {
-	FGAmmoTypeProjectile__base__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import type {
-	common_base__FGAmmoTypeInstantHit__base__pre_1_1__type,
-	common_base__FGAmmoTypeProjectile__base__pre_1_1__type,
-	common_base__FGAmmoTypeSpreadshot__pre_1_1__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import type {
-	common_base__FGAmmoTypeInstantHit__chaos__type,
-	common_base__FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import type {
-	common_base__FGAmmoTypeProjectile__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGAmmoTypeProjectile.js';
 
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_only_allow_certain_resources as FGBuildableResourceExtractor_only_allow_certain_resources__update8,
+
+	// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/classes/Base.overridable--0.8.3.3.js';
+
+import type {
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_only_allow_certain_resources as FGBuildableResourceExtractor_only_allow_certain_resources__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/classes/Base.overridable--1.0.1.4.js';
+
+import type {
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_only_allow_certain_resources as FGBuildableResourceExtractor_only_allow_certain_resources__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/classes/Base.overridable--1.1.2.2.js';
+
+import type {
+	recipe_selection_properties,
+	recipe_selection_properties_with_defaults,
+	update8_imports,
+	version_1p0_imports,
+	version_1p1_imports,
+} from './types.ts';
+
+import type {
+	FGBuildableFrackingActivator,
+	FGBuildableResourceExtractor,
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes.ts';
+
+import {
+	get_string_C,
+} from '../utilities/get_string_C.ts';
+
+function FGBuildableResourceExtractor_only_allow_certain_resources(
+	maybe: (
+		| FGBuildableResourceExtractor
+		| FGBuildableFrackingActivator
+		| FGBuildableResourceExtractor_only_allow_certain_resources__update8
+		| FGBuildableResourceExtractor_only_allow_certain_resources__v1p0
+		| FGBuildableResourceExtractor_only_allow_certain_resources__v1p1
+	),
+): maybe is (
+	| FGBuildableResourceExtractor_only_allow_certain_resources__update8
+	| FGBuildableResourceExtractor_only_allow_certain_resources__v1p0
+	| FGBuildableResourceExtractor_only_allow_certain_resources__v1p1
+) {
+	return 'mAllowedResources' in maybe;
+}
 
 export function recipe_selection_enums<
-	T_PowerShard extends undefined|FGPowerShardDescriptor__type = undefined,
-	// eslint-disable-next-line @stylistic/max-len
-	T_PowerBoosterFuel extends undefined|FGItemDescriptorPowerBoosterFuel__type = undefined,
-	T_AmmoTypeProjectile extends (
-		| common_base__FGAmmoTypeProjectile__type
-		| common_base__FGAmmoTypeProjectile__base__pre_1_1__type
-	) = common_base__FGAmmoTypeProjectile__type,
-	T_AmmoTypeInstantHit extends (
-		| common_base__FGAmmoTypeInstantHit__chaos__type
-		| common_base__FGAmmoTypeInstantHit__standard__type
-		| common_base__FGAmmoTypeInstantHit__base__pre_1_1__type
-	) = (
-		| common_base__FGAmmoTypeInstantHit__chaos__type
-		| common_base__FGAmmoTypeInstantHit__standard__type
+	T_import extends (
+		| update8_imports
+		| version_1p0_imports
+		| version_1p1_imports
 	),
-	T_AmmoTypeSpreadshot extends (
-		| common_base__FGAmmoTypeSpreadshot__type
-		| (
-			& FGAmmoTypeProjectile__base__type
-			& common_base__FGAmmoTypeSpreadshot__pre_1_1__type
-		)
-	) = common_base__FGAmmoTypeSpreadshot__type,
-	// eslint-disable-next-line @stylistic/max-len
-	T_ItemDescriptorBiomass extends common_base__FGItemDescriptorBiomass__type = common_base__FGItemDescriptorBiomass__type,
-	// eslint-disable-next-line @stylistic/max-len
-	T_BuildingDescriptor extends common_base__FGBuildingDescriptor__type = common_base__FGBuildingDescriptor__type,
-	// eslint-disable-next-line @stylistic/max-len
-	T_ConsumableDescriptor extends common_base__FGConsumableDescriptor__type = common_base__FGConsumableDescriptor__type,
-	// eslint-disable-next-line @stylistic/max-len
-	T_EquipmentDescriptor extends common_base__FGEquipmentDescriptor__type = common_base__FGEquipmentDescriptor__type,
-	T_ItemDescriptorNuclearFuel extends (
-		| common_base__FGItemDescriptorNuclearFuel__type
-	) = (
-		| common_base__FGItemDescriptorNuclearFuel__type
-	),
-	T_ItemDescriptor extends (
-		| common_base__FGItemDescriptor__FGResourceDescriptor__type
-	) = (
-		| common_base__FGItemDescriptor__FGResourceDescriptor__type
-	),
-	T_PoleDescriptor extends (
-		| common_base__FGPoleDescriptor__type
-	) = common_base__FGPoleDescriptor__type,
 >(
-	imports: imports<
-		T_PowerShard,
-		T_PowerBoosterFuel,
-		T_AmmoTypeProjectile,
-		T_AmmoTypeInstantHit,
-		T_AmmoTypeSpreadshot,
-		T_ItemDescriptorBiomass,
-		T_BuildingDescriptor,
-		T_ConsumableDescriptor,
-		T_EquipmentDescriptor,
-		T_ItemDescriptorNuclearFuel,
-		T_ItemDescriptor,
-		T_PoleDescriptor
-	>,
+	imports: T_import,
 ): recipe_selection_properties_with_defaults {
 	const {
 		FGRecipe,
@@ -143,20 +75,23 @@ export function recipe_selection_enums<
 		FGBuildableResourceExtractor,
 	} = imports;
 
-	let recipe_selection_enums = FGRecipe.Classes.reduce(
+	// oxlint-disable-next-line @stylistic/max-len
+	let recipe_selection_enums: recipe_selection_properties = FGRecipe.Classes.reduce(
 		(
 			was: recipe_selection_properties,
 			is,
 		): recipe_selection_properties => {
-			for (const product of is.mProduct) {
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
-					product.ItemClass,
-				);
+			if (is.mProduct) {
+				for (const product of is.mProduct) {
+					const Desc_C = get_string_C(
+						product.ItemClass,
+					);
 
-				if (!(Desc_C in was)) {
-					was[Desc_C] = {type: 'string', enum: [is.ClassName]};
-				} else {
-					was[Desc_C].enum.push(is.ClassName);
+					if (!(Desc_C in was)) {
+						was[Desc_C] = {type: 'string', enum: [is.ClassName]};
+					} else {
+						was[Desc_C].enum.push(is.ClassName);
+					}
 				}
 			}
 
@@ -168,18 +103,16 @@ export function recipe_selection_enums<
 	const RF_SOLID = FGResourceDescriptor.Classes.filter(
 		(maybe) => (
 			'RF_SOLID' === maybe.mForm
-			&& filter_UnrealEngineString_right_x_C_suffix(
-				maybe.ClassName,
-			)
+			&& maybe.ClassName
 		),
-	).map((e) => e.ClassName as UnrealEngineString_right_x_C_suffix);
+	).map((e) => e.ClassName);
 
 	for (
 		const nuke_gen_fuel of FGBuildableGeneratorNuclear.Classes[0].mFuel
 	) {
 		const fuel = nuke_gen_fuel.mFuelClass;
 		const byproduct = nuke_gen_fuel.mByproduct;
-		const faux_recipe = `Recipe_--faux--${
+		const faux_recipe: `${string}_C` = `Recipe_--faux--${
 			FGBuildableGeneratorNuclear.Classes[0].ClassName
 		}--${
 			fuel
@@ -203,48 +136,69 @@ export function recipe_selection_enums<
 		}
 	}
 
-	recipe_selection_enums = [
+	for (const is of [
 		...FGBuildableFrackingActivator.Classes,
 		...FGBuildableWaterPump.Classes,
 		...FGBuildableResourceExtractor.Classes,
-	].reduce(
-		(
-			was: recipe_selection_properties,
-			is,
-		): recipe_selection_properties => {
-			if (!(is.mAllowedResources instanceof Array)) {
-				for (const Desc_C of RF_SOLID) {
-					if (!(Desc_C in was)) {
-						was[Desc_C] = {
-							type: 'string',
-							enum: [is.ClassName],
-						};
-					} else {
-						was[Desc_C].enum.push(is.ClassName);
-					}
-				}
-
-				return was;
-			}
-
+	] as (
+		| FGBuildableFrackingActivator
+		| FGBuildableResourceExtractor
+	)[]) {
+		if (FGBuildableResourceExtractor_only_allow_certain_resources(is)) {
 			for (const resource of is.mAllowedResources) {
-				const Desc_C = UnrealEngineString_right_x_C_suffix(
+				const Desc_C = get_string_C(
 					resource,
 				);
 
-				if (!(Desc_C in was)) {
-					was[Desc_C] = {type: 'string', enum: [is.ClassName]};
+				if (!(Desc_C in recipe_selection_enums)) {
+					recipe_selection_enums[Desc_C] = {
+						type: 'string',
+						enum: [is.ClassName],
+					};
 				} else {
-					was[Desc_C].enum.push(is.ClassName);
+					recipe_selection_enums[Desc_C].enum.push(is.ClassName);
 				}
 			}
+		} else {
+			for (const Desc_C of RF_SOLID) {
+				if (!(Desc_C in recipe_selection_enums)) {
+					recipe_selection_enums[Desc_C] = {
+						type: 'string',
+						enum: [is.ClassName],
+					};
+				} else {
+					recipe_selection_enums[Desc_C].enum.push(is.ClassName);
+				}
+			}
+		}
+	}
 
-			return was;
-		},
-		recipe_selection_enums,
-	);
+	for (const extractor of FGBuildableResourceExtractor.Classes) {
+		if (!('mParticleMap' in extractor)) {
+			continue;
+		}
 
-	const preferred_defaults = [
+		for (const {
+			ResourceNode_16_2100B5C34EE8DF7958D78A974512F3C3,
+		} of extractor.mParticleMap) {
+			const resource_C = get_string_C(
+				ResourceNode_16_2100B5C34EE8DF7958D78A974512F3C3,
+			);
+
+			if (!(resource_C in recipe_selection_enums)) {
+				recipe_selection_enums[resource_C] = {
+					type: 'string',
+					enum: [extractor.ClassName],
+				};
+			} else {
+				recipe_selection_enums[resource_C].enum.push(
+					extractor.ClassName,
+				);
+			}
+		}
+	}
+
+	const preferred_defaults: `${string}_C`[] = [
 		'Build_MinerMk1_C',
 		'Build_OilPump_C',
 		'Build_WaterPump_C',
@@ -257,7 +211,7 @@ export function recipe_selection_enums<
 		'Recipe_PowerCrystalShard_1_C',
 	];
 
-	const permitted_first_match = [
+	const permitted_first_match: `${string}_C`[] = [
 		'Desc_AlienProtein_C',
 		'Desc_GenericBiomass_C',
 		'Desc_Medkit_C',
@@ -265,151 +219,146 @@ export function recipe_selection_enums<
 		'Desc_CrystalShard_C',
 	];
 
-	for (const entry of Object.entries(recipe_selection_enums)) {
-		const [key, value] = entry;
-
-		const default_value = (
-			1 === value.enum.length
-				? value.enum[0]
-				: (
-					preferred_defaults.find(
-						(maybe) => value.enum.includes(maybe),
-					)
-					|| value.enum.find(
-						(maybe) => maybe === key.replace(/^Desc_/, 'Recipe_'),
-					)
-					|| (
-						value.enum.find((
-							maybe,
-						) => maybe.includes('_Alternate_'))
-							? value.enum.find(
-								(maybe) => (
-									!maybe.includes('_Alternate_')
-									&& !maybe.includes('_Unpackage')
-								),
+	return Object.fromEntries(
+		Object.entries(recipe_selection_enums)
+			.map(([key, value]) => {
+				const default_value = (
+					1 === value.enum.length
+						? value.enum[0]
+						: (
+							preferred_defaults.find(
+								(maybe) => value.enum.includes(maybe),
 							)
-							: undefined
-					)
-					|| (
-						(
-							value.enum.find(
-								(maybe) => maybe.includes('_Alternate_'),
-							)
-							&& !value.enum.find(
-								(maybe) => (
-									!maybe.includes('_Alternate_')
-									&& !maybe.includes('_Unpackage')
-								),
-							)
-						)
-							? [...value.enum.filter(
-								(maybe) => maybe.includes('_Alternate_'),
-							)].sort((a, b) => a.length - b.length)[0]
-							: undefined
-					)
-					|| (
-						(
-							value.enum.find(
-								(maybe) => maybe.startsWith('Recipe_Liquid'),
-							)
-							&& value.enum.find((
+							|| value.enum.find((
 								maybe,
-							) => maybe.startsWith('Recipe_Unpackage'))
+							) => maybe === key.replace(/^Desc_/, 'Recipe_'))
+							|| (
+								value.enum.find((
+									maybe,
+								) => maybe.includes('_Alternate_'))
+									? value.enum.find(
+										(maybe) => (
+											!maybe.includes('_Alternate_')
+											&& !maybe.includes('_Unpackage')
+										),
+									)
+									: undefined
+							)
+							|| (
+								(
+									value.enum.find((
+										maybe,
+									) => maybe.includes('_Alternate_'))
+									&& !value.enum.find(
+										(maybe) => (
+											!maybe.includes('_Alternate_')
+											&& !maybe.includes('_Unpackage')
+										),
+									)
+								)
+									? [...value.enum.filter((
+										maybe,
+									) => maybe.includes('_Alternate_'))]
+										.sort((a, b) => a.length - b.length)[0]
+									: undefined
+							)
+							|| (
+								(
+									value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Liquid'))
+									&& value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Unpackage'))
+								)
+									? value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Liquid'))
+									: undefined
+							) || (
+								(
+									value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Ingot'))
+									&& value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Pure'))
+								)
+									? value.enum.find((
+										maybe,
+									) => maybe.startsWith('Recipe_Ingot'))
+									: undefined
+							) || (
+								key.startsWith('Desc_')
+									? value.enum.find(
+										(maybe) => `Recipe_${
+											key.substring(5)
+										}` === maybe,
+									)
+									: undefined
+							) || (
+								permitted_first_match.includes(key)
+									? value.enum[0]
+									: undefined
+							) || (
+								value.enum.every(
+									(maybe) => /^Recipe_.+_\d+_C$/.test(maybe),
+								)
+									? value.enum.find((
+										maybe,
+									) => maybe.endsWith('_1_C'))
+									: undefined
+							)
 						)
-							? value.enum.find(
-								(maybe) => maybe.startsWith('Recipe_Liquid'),
-							)
-							: undefined
-					) || (
-						(
-							value.enum.find(
-								(maybe) => maybe.startsWith('Recipe_Ingot'),
-							)
-							&& value.enum.find(
-								(maybe) => maybe.startsWith('Recipe_Pure'),
-							)
-						)
-							? value.enum.find(
-								(maybe) => maybe.startsWith('Recipe_Ingot'),
-							)
-							: undefined
-					) || (
-						key.startsWith('Desc_')
-							? value.enum.find(
-								(maybe) => `Recipe_${
-									key.substring(5)
-								}` === maybe,
-							)
-							: undefined
-					) || (
-						permitted_first_match.includes(key)
-							? value.enum[0]
-							: undefined
-					) || (
-						value.enum.every(
-							(maybe) => /^Recipe_.+_\d+_C$/.test(maybe),
-						)
-							? value.enum.find((
-								maybe,
-							) => maybe.endsWith('_1_C'))
-							: undefined
-					)
-				)
-		);
+				);
 
-		if (undefined === default_value) {
-			throw new NoMatchError(
-				{
-					[key]: value,
-				},
-				'Could not find default!',
-			);
-		}
+				if (undefined === default_value) {
+					throw new Error(
+						`Could not find default for ${key}`,
+					);
+				}
 
-		(
-			value as unknown as recipe_selection_properties_with_default
-		).default = default_value;
+				// oxlint-disable-next-line @stylistic/max-len
+				const replacement_value = {
+					...value,
+					default: default_value,
+				};
 
-		value.enum = value.enum.sort((a, b) => {
-			if (
-				a === (
-					// eslint-disable-next-line @stylistic/max-len
-					value as unknown as recipe_selection_properties_with_default
-				).default
-			) {
-				return -1;
-			} else if (
-				b === (
-					// eslint-disable-next-line @stylistic/max-len
-					value as unknown as recipe_selection_properties_with_default
-				).default
-			) {
-				return 1;
-			}
+				replacement_value.enum = value.enum.sort((a, b) => {
+					if (
+						a === replacement_value.default
+					) {
+						return -1;
+					} else if (
+						b === replacement_value.default
+					) {
+						return 1;
+					}
 
-			if (a.startsWith('Build_')) {
-				if (b.startsWith('Build_')) {
+					if (a.startsWith('Build_')) {
+						if (b.startsWith('Build_')) {
+							return 0;
+						}
+
+						return -1;
+					} else if (b.startsWith('Build_')) {
+						return 1;
+					} else if (
+						a.startsWith('Recipe_')
+						&& !a.startsWith('Recipe_Alternate_')
+					) {
+						if (
+							b.startsWith('Recipe_')
+							&& b.startsWith('Recipe_Alternate')
+						) {
+							return -1;
+						}
+					}
+
 					return 0;
-				}
+				});
 
-				return -1;
-			} else if (b.startsWith('Build_')) {
-				return 1;
-			} else if (
-				a.startsWith('Recipe_')
-				&& !a.startsWith('Recipe_Alternate_')
-			) {
-				if (
-					b.startsWith('Recipe_')
-					&& b.startsWith('Recipe_Alternate')
-				) {
-					return -1;
-				}
-			}
-
-			return 0;
-		});
-	}
-
-	return recipe_selection_enums as recipe_selection_properties_with_defaults;
+				return [key, replacement_value];
+			}),
+	);
 }

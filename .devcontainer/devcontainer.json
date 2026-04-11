@@ -11,7 +11,8 @@
 			"extensions": [
 				"-GitHub.copilot",
 				"EditorConfig.EditorConfig",
-				"dbaeumer.vscode-eslint",
+				"-dbaeumer.vscode-eslint",
+				"oxc.oxc-vscode",
 				"github.vscode-github-actions",
 				"ms-azuretools.vscode-docker",
 				"ms-vscode.makefile-tools"

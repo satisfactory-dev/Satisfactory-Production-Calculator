@@ -2,59 +2,72 @@ import {
 	describe,
 	it,
 } from 'node:test';
+
 import assert from 'node:assert/strict';
+
+import type {
+	FGBuildableFrackingActivator,
+	FGBuildableResourceExtractor_miner_mk1,
+	FGBuildableResourceExtractor_miner_mk2,
+	FGBuildableResourceExtractor_miner_mk3,
+	FGBuildableResourceExtractor_oil,
+	FGBuildableWaterPump,
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.8.3.3/classes.ts';
+
+import type {
+	FGRecipe,
+
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.6.1.5/classes/Base.0.8.3.3.js';
+
+import type {
+	FGResourceDescriptor,
+
+// oxlint-disable-next-line @stylistic/max-len
+} from '@satisfactory-dev/docs.json.ts/generated-types/0.6.1.5/classes.js';
+
 import {
 	CalculationAborted,
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
+
 import type {
 	production_request,
 	production_result,
 } from '../../lib/types.ts';
+
 import {
-	FGRecipe,
-} from '../../generated-types/update8/data/CoreUObject/FGRecipe.ts';
-import {
-	FGBuildableFrackingActivator,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableFrackingActivator.ts';
-import {
-	filter_UnrealEngineString_right_x_C_suffix,
-	UnrealEngineString_right_x_C_suffix,
-} from '../../lib/UnrealEngineString.ts';
-import {
-	FGResourceDescriptor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGResourceDescriptor.ts';
-import {
-	FGBuildableWaterPump,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableWaterPump.ts';
-import {
-	FGBuildableResourceExtractor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/update8/data/CoreUObject/FGBuildableResourceExtractor.ts';
+	update8,
+} from '../../generated-types/0.8.3.3/data.ts';
+
 import type {
 	amount_string,
 	operand_types,
 } from '@signpostmarv/intermediary-number';
+
 import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
+
 import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled.ts';
+
 import type BigNumber from 'bignumber.js';
+
 import {
 	Request,
 } from '../../lib/Request.ts';
+
 import {
 	instance as production_data,
 } from '../utilities/production-data.ts';
+
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
+
 import type {
 	ValidateFunction,
 } from 'ajv';
@@ -64,6 +77,45 @@ import {
 import {
 	is_instanceof,
 } from '@satisfactory-dev/custom-assert';
+
+import {
+	get_string_C,
+	has_string_C,
+} from '../../lib/utilities/get_string_C.ts';
+
+import {
+	find,
+} from '../../lib/version-specific/0.8.3.3/find.ts';
+
+const FGRecipe = find<
+	FGRecipe,
+	'FGRecipe'
+>('FGRecipe', update8);
+
+const FGResourceDescriptor = find<
+	FGResourceDescriptor,
+	'FGResourceDescriptor'
+>('FGResourceDescriptor', update8);
+
+const FGBuildableFrackingActivator = find<
+	FGBuildableFrackingActivator,
+	'FGBuildableFrackingActivator'
+>('FGBuildableFrackingActivator', update8);
+
+const FGBuildableWaterPump = find<
+	FGBuildableWaterPump,
+	'FGBuildableWaterPump'
+>('FGBuildableWaterPump', update8);
+
+const FGBuildableResourceExtractor = find<
+	(
+		| FGBuildableResourceExtractor_miner_mk1
+		| FGBuildableResourceExtractor_miner_mk2
+		| FGBuildableResourceExtractor_miner_mk3
+		| FGBuildableResourceExtractor_oil
+	),
+	'FGBuildableResourceExtractor'
+>('FGBuildableResourceExtractor', update8);
 
 // eslint-disable-next-line @stylistic/max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
@@ -79,11 +131,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		validators,
 	);
 
-	let does_not_throw_cases: UnrealEngineString_right_x_C_suffix[] = (
+	let does_not_throw_cases: `${string}_C`[] = (
 		FGRecipe.Classes.reduce(
 			(was, is) => {
-				for (const product of is.mProduct) {
-					const Desc_C = UnrealEngineString_right_x_C_suffix(
+				for (const product of is.mProduct || []) {
+					const Desc_C = get_string_C(
 						product.ItemClass,
 					);
 
@@ -97,11 +149,11 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 			FGResourceDescriptor.Classes.filter(
 				(maybe) => (
 					'RF_SOLID' === maybe.mForm
-					&& filter_UnrealEngineString_right_x_C_suffix(
+					&& has_string_C(
 						maybe.ClassName,
 					)
 				),
-			).map((e) => e.ClassName as UnrealEngineString_right_x_C_suffix),
+			).map((e) => e.ClassName as `${string}_C`),
 		)
 	);
 
@@ -113,7 +165,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		(was, is) => {
 			if (is.mAllowedResources instanceof Array) {
 				for (const resource of is.mAllowedResources) {
-					const Desc_C = UnrealEngineString_right_x_C_suffix(
+					const Desc_C = get_string_C(
 						resource,
 					);
 
@@ -233,9 +285,8 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 						| BigNumber
 						| operand_types
 					)
-				// eslint-disable-next-line @stylistic/comma-dangle
-				>
-			),
+
+				>),
 		][] = [
 			[
 				{

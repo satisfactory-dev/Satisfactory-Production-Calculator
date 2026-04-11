@@ -1,19 +1,4 @@
-import type {
-	UnrealEngineString,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/utils/validators.js';
-import type {
-	integer_string__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/scalar.js';
-import type {
-	ItemClass__amount_required__type,
-	ItemClass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/common/unassigned.js';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index.js';
+import assert from 'assert';
 
 import {
 	object_has_property,
@@ -24,89 +9,65 @@ import type {
 	operand_types,
 } from '@signpostmarv/intermediary-number';
 
-import assert from 'assert';
-
 import type {
-	ProductionData_Type,
-} from './production-data.ts';
-import {
-	GenerateSchemas,
-} from './generate-schemas.ts';
+	supported_imports,
+} from './production-data/types.ts';
+
 import type {
 	production_item,
 	recipe_selection,
 } from './types.ts';
+
+import type {
+	ProductionData,
+} from './production-data.ts';
+
 import {
-	UnrealEngineString_right_x_C_suffix,
-} from './UnrealEngineString.ts';
+	get_string_C,
+} from './utilities/get_string_C.ts';
+
+import type {
+	ItemClass_Amount_list_item,
+} from './types.ts';
+
 import {
 	amend_ItemClass_amount,
-	amend_ItemClass_amount_deferred,
 } from './amend-itemclass-amount.ts';
 
-type ItemClass__type__item = {
-	ItemClass: UnrealEngineString,
-	Amount?: integer_string__type,
-};
+import {
+	amend_ItemClass_amount_deferred,
+} from './amend-itemclass-amount--deferred.ts';
 
-type amended_amounts = {
+import {
+	GenerateSchemas,
+} from './generate-schemas.ts';
+
+type amended_amounts<
+	T_Imports extends supported_imports,
+> = {
 	ingredient_amounts: number_arg[],
 	mapped_product_amounts: {[key: string]: operand_types},
-	mIngredients: ''|ItemClass__type,
-	mProduct: ('' | ItemClass__type) & ItemClass__amount_required__type,
+	mIngredients: null|(ItemClass_Amount_list_item<T_Imports>[]),
+	mProduct: null|(ItemClass_Amount_list_item<T_Imports>[]),
 	product_amounts: operand_types[],
 };
 
-export class DeferredProductionResolver<
-	T_ProductionData extends ProductionData_Type,
-> {
-	#production_data: T_ProductionData;
-
-	#recipe_selection: recipe_selection;
-
-	#resolves: {[key: string]: ProductionResolver<
-		T_ProductionData
-	>,} = {};
-
-	constructor(
-		production_data: T_ProductionData,
-		recipe_selection: recipe_selection,
-	) {
-		this.#production_data = production_data;
-		this.#recipe_selection = recipe_selection;
-	}
-
-	resolve(item: production_item): ProductionResolver<
-		T_ProductionData
-	> {
-		if (!(item in this.#resolves)) {
-			this.#resolves[item] = new ProductionResolver(
-				this.#production_data,
-				item,
-				this.#recipe_selection,
-			);
-		}
-
-		return this.#resolves[item];
-	}
-}
-
 export class ProductionResolver<
-	T_ProductionData extends ProductionData_Type,
+	T_Imports extends supported_imports,
 > {
 	private item: production_item;
 
-	private production_data: T_ProductionData;
+	private production_data: ProductionData<T_Imports>;
 
 	private recipe_selection: recipe_selection;
 
 	private static allowed_empty_ingredients = new WeakMap<
-		ProductionData_Type,
+		ProductionData<supported_imports>,
 		`Recipe_${string}_C`[]
 	>();
 
 	constructor(
-		production_data: T_ProductionData,
+		production_data: ProductionData<T_Imports>,
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
@@ -115,7 +76,9 @@ export class ProductionResolver<
 		this.recipe_selection = recipe_selection;
 	}
 
-	get amended_amounts(): amended_amounts {
+	get amended_amounts(): amended_amounts<
+		T_Imports
+	> {
 		const recipe = this.recipe;
 		const production = this.item;
 
@@ -126,11 +89,7 @@ export class ProductionResolver<
 		assert.strictEqual(
 			object_has_property(recipes, recipe),
 			true,
-			new NoMatchError(
-				{
-					recipes,
-					recipe,
-				},
+			new Error(
 				`Unsupported recipe found! (${recipe})`,
 			),
 		);
@@ -141,7 +100,7 @@ export class ProductionResolver<
 		} = recipes[recipe];
 
 		if (
-			'' === mIngredients
+			null === mIngredients
 			&& !ProductionResolver.get_allowed_empty_ingredients(
 				this.production_data,
 			).includes(recipe)
@@ -150,38 +109,37 @@ export class ProductionResolver<
 		}
 
 		const ingredient_amounts = (
-			'' === mIngredients
-				? []
-				: mIngredients
+			(
+				null === mIngredients
+					? []
+					: mIngredients
+			) as ItemClass_Amount_list_item<T_Imports>[]
 		).map(
-			({
-				ItemClass,
-				Amount,
-			}) => {
-				if (undefined === Amount) {
-					throw new Error('No amount found!');
-				}
-
-				return amend_ItemClass_amount(
+			(item) => {
+				return amend_ItemClass_amount<
+					T_Imports
+				>(
 					this.production_data,
-					{
-						ItemClass,
-						Amount,
-					},
+					item,
 				).Amount;
 			},
 		);
 
-		const mapped_product_amounts = Object.fromEntries(
-			mProduct.map(
+		const mapped_product_amounts: {
+			[key: string]: operand_types,
+		} = Object.fromEntries(
+			(
+				(
+					mProduct
+						? mProduct
+						: []
+				) as ItemClass_Amount_list_item<T_Imports>[]
+			).map(
 				(e): [
 					string,
-					(
-						// eslint-disable-next-line @stylistic/comma-dangle
-						| operand_types
-					)
+					operand_types,
 				] => [
-					UnrealEngineString_right_x_C_suffix(e.ItemClass),
+					get_string_C(e.ItemClass),
 					amend_ItemClass_amount_deferred(
 						this.production_data,
 						e,
@@ -193,16 +151,14 @@ export class ProductionResolver<
 		assert.strictEqual(
 			production in mapped_product_amounts,
 			true,
-			new NoMatchError(
-				{
-					production,
-					mapped_product_amounts,
-				},
+			new Error(
 				'Production item not found in mapped product amounts!',
 			),
 		);
 
-		const product_amounts = Object.values(mapped_product_amounts);
+		const product_amounts: operand_types[] = Object.values(
+			mapped_product_amounts,
+		);
 
 		const amounts = [
 			...ingredient_amounts,
@@ -213,7 +169,7 @@ export class ProductionResolver<
 			ProductionResolver.get_allowed_empty_ingredients(
 				this.production_data,
 			).includes(recipe)
-			&& '' === recipes[recipe].mIngredients
+			&& null === recipes[recipe].mIngredients
 		) {
 			assert.strictEqual(
 				ingredient_amounts.length,
@@ -231,10 +187,7 @@ export class ProductionResolver<
 			assert.strictEqual(
 				amounts.length >= 2,
 				true,
-				new NoMatchError(
-					{
-						amounts,
-					},
+				new Error(
 					'Expected at least two numbers!',
 				),
 			);
@@ -243,24 +196,28 @@ export class ProductionResolver<
 		return {
 			ingredient_amounts,
 			mapped_product_amounts,
-			mIngredients,
-			mProduct,
+			mIngredients: mIngredients as amended_amounts<T_Imports>[
+				'mIngredients'
+			],
+			mProduct: mProduct as amended_amounts<T_Imports>[
+				'mProduct'
+			],
 			product_amounts,
 		};
 	}
 
-	get recipe(): string {
+	get recipe(): `${string}_C` {
 		const {
 			recipe_selection: recipe_selection_schema,
 		} = GenerateSchemas.factory(this.production_data);
 
-		let maybe_recipe: string|undefined = undefined;
+		let maybe_recipe: `${string}_C`|undefined = undefined;
 
 		if (this.item in this.recipe_selection) {
 			maybe_recipe = this.recipe_selection[this.item];
 		} else if (this.item in recipe_selection_schema.properties) {
 			maybe_recipe = recipe_selection_schema.properties[
-				this.item as keyof typeof recipe_selection_schema.properties
+				this.item
 			].default;
 		}
 
@@ -272,9 +229,9 @@ export class ProductionResolver<
 	}
 
 	static get_allowed_empty_ingredients<
-		T_ProductionData extends ProductionData_Type,
+		T_Imports extends supported_imports,
 	>(
-		production_data: T_ProductionData,
+		production_data: ProductionData<T_Imports>,
 	): string[] {
 		let allowed_empty_ingredients: (
 			| undefined
@@ -292,7 +249,9 @@ export class ProductionResolver<
 			for (const recipe of supported_empty_ingredient_recipes) {
 				if (
 					recipe in production_data.data.recipes
-					&& '' === production_data.data.recipes[recipe].mIngredients
+					&& null === production_data.data.recipes[
+						recipe
+					].mIngredients
 				) {
 					allowed_empty_ingredients.push(recipe);
 				}
@@ -308,17 +267,16 @@ export class ProductionResolver<
 	}
 
 	static verify_ingredient<
-		T_ProductionData extends ProductionData_Type,
+		T_Imports extends supported_imports,
 	>(
-		production_data: T_ProductionData,
-		ingredient: string|ItemClass__type__item,
-		recipe: string,
-	): string|ItemClass__type__item {
+		production_data: ProductionData<T_Imports>,
+		ingredient: string|ItemClass_Amount_list_item<T_Imports>,
+	): string|ItemClass_Amount_list_item<T_Imports> {
 		if ('string' === typeof ingredient) {
 			return ingredient;
 		}
 
-		const Desc_C = UnrealEngineString_right_x_C_suffix(
+		const Desc_C = get_string_C(
 			ingredient.ItemClass,
 		);
 		const {
@@ -342,12 +300,7 @@ export class ProductionResolver<
 				|| (power_shards && Desc_C in power_shards)
 			),
 			true,
-			new NoMatchError(
-				{
-					recipe,
-					ingredient: ingredient.ItemClass.right,
-					expected: Desc_C,
-				},
+			new Error(
 				`Supported ingredient found (${Desc_C}) but missing item!`,
 			),
 		);

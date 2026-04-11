@@ -1,129 +1,179 @@
 import {
-	FGAmmoTypeProjectile,
-} from '../../generated-types/1.1/data/CoreUObject/FGAmmoTypeProjectile';
-import {
-	FGAmmoTypeInstantHit,
-} from '../../generated-types/1.1/data/CoreUObject/FGAmmoTypeInstantHit';
-import {
-	FGAmmoTypeSpreadshot,
-} from '../../generated-types/1.1/data/CoreUObject/FGAmmoTypeSpreadshot';
-import {
-	FGItemDescriptorBiomass,
-} from '../../generated-types/1.1/data/CoreUObject/FGItemDescriptorBiomass';
-import {
-	FGBuildingDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGBuildingDescriptor';
-import {
-	FGConsumableDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGConsumableDescriptor';
-import {
-	FGEquipmentDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGEquipmentDescriptor';
-import {
-	FGItemDescriptorNuclearFuel,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/1.1/data/CoreUObject/FGItemDescriptorNuclearFuel';
-import {
-	FGItemDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGItemDescriptor';
-import {
-	FGRecipe,
-} from '../../generated-types/1.1/data/CoreUObject/FGRecipe';
-import {
-	FGResourceDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGResourceDescriptor';
-import {
-	FGVehicleDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGVehicleDescriptor';
-import {
-	FGBuildableGeneratorNuclear,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/1.1/data/CoreUObject/FGBuildableGeneratorNuclear';
+	release_1_1,
+} from '../../generated-types/1.1.2.2/en-US.data.ts';
+
+import type {
+	version_1p1_imports,
+} from '../../lib/production-data/types.ts';
 
 import {
 	ProductionData,
-} from '../../lib/production-data';
-import {
-	FGBuildableFrackingActivator,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/1.1/data/CoreUObject/FGBuildableFrackingActivator';
-import {
-	FGBuildableWaterPump,
-} from '../../generated-types/1.1/data/CoreUObject/FGBuildableWaterPump';
-import {
-	FGBuildableResourceExtractor,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/1.1/data/CoreUObject/FGBuildableResourceExtractor';
-import {
-	FGPowerShardDescriptor,
-} from '../../generated-types/1.1/data/CoreUObject/FGPowerShardDescriptor';
+} from '../../lib/production-data.ts';
+
 import type {
-	v1_0_base__FGItemDescriptorPowerBoosterFuel__type,
-	v1_0_base__FGPowerShardDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/common/unassigned.js';
-import {
+	FGConsumableDescriptor,
+	FGEquipmentDescriptor,
+	FGItemDescriptor,
+	FGItemDescriptorBiomass,
+	FGItemDescriptorNuclearFuel,
 	FGItemDescriptorPowerBoosterFuel,
-// eslint-disable-next-line @stylistic/max-len
-} from '../../generated-types/1.1/data/CoreUObject/FGItemDescriptorPowerBoosterFuel';
+	FGPowerShardDescriptor,
+	FGRecipe,
+	FGResourceDescriptor,
+	FGVehicleDescriptor_Desc_CyberWagon_C,
+	FGVehicleDescriptor_Desc_DroneTransport_C,
+	FGVehicleDescriptor_Desc_Explorer_C,
+	FGVehicleDescriptor_Desc_FreightWagon_C,
+	FGVehicleDescriptor_Desc_Locomotive_C,
+	FGVehicleDescriptor_Desc_Tractor_C,
+	FGVehicleDescriptor_Desc_Truck_C,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.0.1.4/classes.ts';
+
 import type {
-	FGAmmoTypeProjectile__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeProjectile.js';
-import type {
-	FGAmmoTypeInstantHit__chaos__type,
-	FGAmmoTypeInstantHit__standard__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeInstantHit.js';
-import type {
-	FGAmmoTypeSpreadshot__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.1/classes/CoreUObject/FGAmmoTypeSpreadshot.js';
-import type {
-	common_base__FGItemDescriptorBiomass__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorBiomass.js';
-import type {
-	common_base__FGBuildingDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGBuildingDescriptor.js';
-import type {
-	common_base__FGConsumableDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGConsumableDescriptor.js';
-import type {
-	common_base__FGEquipmentDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGEquipmentDescriptor.js';
-import type {
-	common_base__FGItemDescriptorNuclearFuel__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptorNuclearFuel.js';
-import type {
-	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGItemDescriptor.js';
-import type {
-	common_base__FGPoleDescriptor__type,
-// eslint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/CoreUObject/FGPoleDescriptor.js';
+	FGAmmoTypeInstantHit_Desc_CartridgeChaos_C,
+	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C,
+	FGAmmoTypeProjectile,
+	FGAmmoTypeSpreadshot,
+	FGBuildableFrackingActivator,
+	FGBuildableGeneratorNuclear,
+	FGBuildableResourceExtractor_miner_mk1,
+	FGBuildableResourceExtractor_miner_mk2,
+	FGBuildableResourceExtractor_miner_mk3,
+	FGBuildableResourceExtractor_oil,
+	FGBuildableWaterPump,
+	FGBuildingDescriptor,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.1.2.2/classes.ts';
+
+import {
+	find,
+} from '../../lib/version-specific/1.1.2.2/find.ts';
+
+const FGAmmoTypeProjectile: version_1p1_imports['FGAmmoTypeProjectile'] = find<
+	FGAmmoTypeProjectile,
+	'FGAmmoTypeProjectile'
+>('FGAmmoTypeProjectile', release_1_1);
+
+const FGAmmoTypeInstantHit: version_1p1_imports['FGAmmoTypeInstantHit'] = find<
+	(
+		| FGAmmoTypeInstantHit_Desc_CartridgeChaos_C
+		| FGAmmoTypeInstantHit_Desc_CartridgeStandard_C
+	),
+	'FGAmmoTypeInstantHit'
+>('FGAmmoTypeInstantHit', release_1_1);
+
+const FGAmmoTypeSpreadshot: version_1p1_imports['FGAmmoTypeSpreadshot'] = find<
+	FGAmmoTypeSpreadshot,
+	'FGAmmoTypeSpreadshot'
+>('FGAmmoTypeSpreadshot', release_1_1);
+
+const FGItemDescriptorBiomass: version_1p1_imports[
+	'FGItemDescriptorBiomass'
+] = find<
+	FGItemDescriptorBiomass,
+	'FGItemDescriptorBiomass'
+>('FGItemDescriptorBiomass', release_1_1);
+
+const FGBuildingDescriptor: version_1p1_imports['FGBuildingDescriptor'] = find<
+	FGBuildingDescriptor,
+	'FGBuildingDescriptor'
+>('FGBuildingDescriptor', release_1_1);
+
+const FGConsumableDescriptor: version_1p1_imports[
+	'FGConsumableDescriptor'
+] = find<
+	FGConsumableDescriptor,
+	'FGConsumableDescriptor'
+>('FGConsumableDescriptor', release_1_1);
+
+const FGEquipmentDescriptor: version_1p1_imports[
+	'FGEquipmentDescriptor'
+] = find<
+	FGEquipmentDescriptor,
+	'FGEquipmentDescriptor'
+>('FGEquipmentDescriptor', release_1_1);
+
+const FGItemDescriptorNuclearFuel: version_1p1_imports[
+	'FGItemDescriptorNuclearFuel'
+] = find<
+	FGItemDescriptorNuclearFuel,
+	'FGItemDescriptorNuclearFuel'
+>('FGItemDescriptorNuclearFuel', release_1_1);
+
+const FGItemDescriptor: version_1p1_imports['FGItemDescriptor'] = find<
+	FGItemDescriptor,
+	'FGItemDescriptor'
+>('FGItemDescriptor', release_1_1);
+
+const FGItemDescriptorPowerBoosterFuel: version_1p1_imports[
+	'FGItemDescriptorPowerBoosterFuel'
+] = find<
+	FGItemDescriptorPowerBoosterFuel,
+	'FGItemDescriptorPowerBoosterFuel'
+>('FGItemDescriptorPowerBoosterFuel', release_1_1);
+
+const FGPowerShardDescriptor: version_1p1_imports[
+	'FGPowerShardDescriptor'
+] = find<
+	FGPowerShardDescriptor,
+	'FGPowerShardDescriptor'
+>('FGPowerShardDescriptor', release_1_1);
+
+const FGRecipe: version_1p1_imports['FGRecipe'] = find<
+	FGRecipe,
+	'FGRecipe'
+>('FGRecipe', release_1_1);
+
+const FGResourceDescriptor: version_1p1_imports['FGResourceDescriptor'] = find<
+	FGResourceDescriptor,
+	'FGResourceDescriptor'
+>('FGResourceDescriptor', release_1_1);
+
+const FGVehicleDescriptor: version_1p1_imports['FGVehicleDescriptor'] = find<
+	(
+		| FGVehicleDescriptor_Desc_CyberWagon_C
+		| FGVehicleDescriptor_Desc_DroneTransport_C
+		| FGVehicleDescriptor_Desc_Explorer_C
+		| FGVehicleDescriptor_Desc_FreightWagon_C
+		| FGVehicleDescriptor_Desc_Locomotive_C
+		| FGVehicleDescriptor_Desc_Tractor_C
+		| FGVehicleDescriptor_Desc_Truck_C
+	),
+	'FGVehicleDescriptor'
+>('FGVehicleDescriptor', release_1_1);
+
+const FGBuildableGeneratorNuclear: version_1p1_imports[
+	'FGBuildableGeneratorNuclear'
+] = find<
+	FGBuildableGeneratorNuclear,
+	'FGBuildableGeneratorNuclear'
+>('FGBuildableGeneratorNuclear', release_1_1);
+
+const FGBuildableFrackingActivator: version_1p1_imports[
+	'FGBuildableFrackingActivator'
+] = find<
+	FGBuildableFrackingActivator,
+	'FGBuildableFrackingActivator'
+>('FGBuildableFrackingActivator', release_1_1);
+
+const FGBuildableWaterPump: version_1p1_imports['FGBuildableWaterPump'] = find<
+	FGBuildableWaterPump,
+	'FGBuildableWaterPump'
+>('FGBuildableWaterPump', release_1_1);
+
+const FGBuildableResourceExtractor: version_1p1_imports[
+	'FGBuildableResourceExtractor'
+] = find<
+	(
+		| FGBuildableResourceExtractor_miner_mk1
+		| FGBuildableResourceExtractor_miner_mk2
+		| FGBuildableResourceExtractor_miner_mk3
+		| FGBuildableResourceExtractor_oil
+	),
+	'FGBuildableResourceExtractor'
+>('FGBuildableResourceExtractor', release_1_1);
 
 export const instance = new ProductionData<
-	v1_0_base__FGPowerShardDescriptor__type,
-	v1_0_base__FGItemDescriptorPowerBoosterFuel__type,
-	FGAmmoTypeProjectile__type,
-	(
-		| FGAmmoTypeInstantHit__chaos__type
-		| FGAmmoTypeInstantHit__standard__type
-	),
-	FGAmmoTypeSpreadshot__type,
-	common_base__FGItemDescriptorBiomass__type,
-	common_base__FGBuildingDescriptor__type,
-	common_base__FGConsumableDescriptor__type,
-	common_base__FGEquipmentDescriptor__type,
-	common_base__FGItemDescriptorNuclearFuel__type,
-	common_base__FGItemDescriptor__FGResourceDescriptor__type,
-	common_base__FGPoleDescriptor__type
+	version_1p1_imports
 >(() => ({
 	FGAmmoTypeProjectile,
 	FGAmmoTypeInstantHit,

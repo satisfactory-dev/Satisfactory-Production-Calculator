@@ -3,63 +3,155 @@ install:
 
 build:
 	@echo 'building from ./tsconfig.app.json'
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app.json
+	@./node_modules/.bin/tsc --project ./tsconfig.app.json
 
 generate: generate--skip-checks lint generate--post-build build
 
-generate--skip-checks: generate--skip-checks--common generate--skip-checks--update8 generate--skip-checks--version-1 generate--skip-checks--version-1-1 build
-
-generate--skip-checks--common:
-	@echo 'running ./generate-common-types.ts'
-	@node ./generate-common-types.ts
-	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/common/.eslintcache' --cache './generated-types/common/**/*.ts'
+generate--skip-checks: generate--skip-checks--update8 generate--skip-checks--version-1 generate--skip-checks--version-1-1 build
 
 generate--skip-checks--update8:
 	@echo 'running ./generate-Docs.json.ts'
-	@node ./generate-Docs.json.ts
-	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/update8/.eslintcache' --cache './generated-types/update8/**/*.ts'
+	@node ./generate-Docs.json.ts en-US --skip-types
 
 generate--skip-checks--version-1:
 	@echo 'running ./generate-Docs.json-version-1.ts'
-	@node ./generate-Docs.json-version-1.ts
-	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/1.0/.eslintcache' --cache './generated-types/1.0/**/*.ts'
+#	@node ./generate-Docs.json-version-1.ts af --skip-types
+#	@node ./generate-Docs.json-version-1.ts ar --skip-types
+#	@node ./generate-Docs.json-version-1.ts bg --skip-types
+#	@node ./generate-Docs.json-version-1.ts ca --skip-types
+#	@node ./generate-Docs.json-version-1.ts cs --skip-types
+#	@node ./generate-Docs.json-version-1.ts da --skip-types
+#	@node ./generate-Docs.json-version-1.ts de --skip-types
+#	@node ./generate-Docs.json-version-1.ts el --skip-types
+#	@node ./generate-Docs.json-version-1.ts en-AE --skip-types
+#	@node ./generate-Docs.json-version-1.ts en-AU --skip-types
+#	@node ./generate-Docs.json-version-1.ts en-CA --skip-types
+#	@node ./generate-Docs.json-version-1.ts en-GB --skip-types
+	@node ./generate-Docs.json-version-1.ts en-US --skip-types
+#	@node ./generate-Docs.json-version-1.ts eo --skip-types
+#	@node ./generate-Docs.json-version-1.ts es-419 --skip-types
+#	@node ./generate-Docs.json-version-1.ts es-ES --skip-types
+#	@node ./generate-Docs.json-version-1.ts et --skip-types
+#	@node ./generate-Docs.json-version-1.ts fa --skip-types
+#	@node ./generate-Docs.json-version-1.ts fi --skip-types
+#	@node ./generate-Docs.json-version-1.ts fr --skip-types
+#	@node ./generate-Docs.json-version-1.ts he --skip-types
+#	@node ./generate-Docs.json-version-1.ts hi --skip-types
+#	@node ./generate-Docs.json-version-1.ts hr --skip-types
+#	@node ./generate-Docs.json-version-1.ts hu --skip-types
+#	@node ./generate-Docs.json-version-1.ts ia-001 --skip-types
+#	@node ./generate-Docs.json-version-1.ts id --skip-types
+#	@node ./generate-Docs.json-version-1.ts ie --skip-types
+#	@node ./generate-Docs.json-version-1.ts io --skip-types
+#	@node ./generate-Docs.json-version-1.ts it --skip-types
+#	@node ./generate-Docs.json-version-1.ts ja --skip-types
+#	@node ./generate-Docs.json-version-1.ts ko --skip-types
+#	@node ./generate-Docs.json-version-1.ts kw --skip-types
+#	@node ./generate-Docs.json-version-1.ts lb --skip-types
+#	@node ./generate-Docs.json-version-1.ts lt --skip-types
+#	@node ./generate-Docs.json-version-1.ts lv --skip-types
+#	@node ./generate-Docs.json-version-1.ts mt --skip-types
+#	@node ./generate-Docs.json-version-1.ts nl --skip-types
+#	@node ./generate-Docs.json-version-1.ts no --skip-types
+#	@node ./generate-Docs.json-version-1.ts pl --skip-types
+#	@node ./generate-Docs.json-version-1.ts pt-BR --skip-types
+#	@node ./generate-Docs.json-version-1.ts pt-PT --skip-types
+#	@node ./generate-Docs.json-version-1.ts ro --skip-types
+#	@node ./generate-Docs.json-version-1.ts ru --skip-types
+#	@node ./generate-Docs.json-version-1.ts sk --skip-types
+#	@node ./generate-Docs.json-version-1.ts sr-Cyrl --skip-types
+#	@node ./generate-Docs.json-version-1.ts sr-Latn --skip-types
+#	@node ./generate-Docs.json-version-1.ts sv --skip-types
+#	@node ./generate-Docs.json-version-1.ts th --skip-types
+#	@node ./generate-Docs.json-version-1.ts tr --skip-types
+#	@node ./generate-Docs.json-version-1.ts uk --skip-types
+#	@node ./generate-Docs.json-version-1.ts vi --skip-types
+#	@node ./generate-Docs.json-version-1.ts vo --skip-types
+#	@node ./generate-Docs.json-version-1.ts vun --skip-types
+#	@node ./generate-Docs.json-version-1.ts zh-Hans --skip-types
+#	@node ./generate-Docs.json-version-1.ts zh-Hant --skip-types
 
 generate--skip-checks--version-1-1:
 	@echo 'running ./generate-Docs.json-version-1-1.ts'
-	@node ./generate-Docs.json-version-1-1.ts
-	@./node_modules/.bin/eslint --fix --config ./generated-types/eslint.config.mjs --cache-file './generated-types/1.1/.eslintcache' --cache './generated-types/1.1/**/*.ts'
+#	@node ./generate-Docs.json-version-1-1.ts af --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ar --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts bg --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ca --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts cs --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts da --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts de --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts el --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts en-AE --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts en-AU --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts en-CA --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts en-GB --skip-types
+	@node ./generate-Docs.json-version-1-1.ts en-US --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts eo --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts es-419 --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts es-ES --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts et --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts fa --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts fi --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts fr --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts he --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts hi --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts hr --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts hu --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ia-001 --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts id --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ie --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts io --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts it --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ja --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ko --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts kw --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts lb --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts lt --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts lv --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts mt --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts nl --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts no --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts pl --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts pt-BR --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts pt-PT --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ro --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts ru --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts sk --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts sr-Cyrl --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts sr-Latn --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts sv --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts th --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts tr --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts uk --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts vi --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts vo --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts vun --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts zh-Hans --skip-types
+#	@node ./generate-Docs.json-version-1-1.ts zh-Hant --skip-types
 
 generate--post-build:
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json
-	@./node_modules/.bin/eslint \
-		--config ./eslint.config.generated-types.mjs \
-		--cache-location ./generated-types/.eslintcache \
-		--cache-strategy content \
-		--cache \
-		'./generated-types/**/*.ts'
+	@./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json
+	@./node_modules/.bin/oxlint --fix--quiet
 
-generate--validators: build
+generate--validators:
 	@node ./generate-validators.ts
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/update8/production_request_schema.mjs --outDir ./validator/update8/
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/1.0/production_request_schema.mjs --outDir ./validator/1.0/
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly ./validator/1.1/production_request_schema.mjs --outDir ./validator/1.1/
+	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/update8/production_request_schema.mjs --outDir ./validator/update8/
+	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/1.0/production_request_schema.mjs --outDir ./validator/1.0/
+	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/1.1/production_request_schema.mjs --outDir ./validator/1.1/
 
 lint--tsc:
 	@echo 'running syntax check'
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-check.json
+	@./node_modules/.bin/tsc --project ./tsconfig.app-check.json
 
 lint--prettier:
 	@echo 'running prettier'
 	@./node_modules/.bin/prettier . --check
 
-lint--eslint:
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.eslint.json
-	@echo 'checking eslint for all issues with config'
-	@./node_modules/.bin/eslint --config eslint.config.js.mjs --cache './**/eslint.config*.mjs'
-	@echo 'checking eslint for all issues'
-	@./node_modules/.bin/eslint --cache './**/*.ts' --ignore-pattern 'generated-types'
+lint--oxlint:
+	@echo 'checking oxlint for all issues'
+	@./node_modules/.bin/oxlint
 
-lint: lint--prettier lint--tsc lint--eslint
+lint: lint--prettier lint--tsc lint--oxlint
 
 .PHONY: tests
 tests: build
@@ -77,5 +169,5 @@ coverage--only-unstaged: build
 
 npm-prep: lint tests
 	@echo 'building from ./tsconfig.app-npm.json'
-	@NODE_OPTIONS='' ./node_modules/.bin/tsc --project ./tsconfig.app-npm.json
+	@./node_modules/.bin/tsc --project ./tsconfig.app-npm.json
 	@npm publish --dry-run

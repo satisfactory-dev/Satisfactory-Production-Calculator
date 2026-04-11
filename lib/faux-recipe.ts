@@ -1,21 +1,25 @@
 import assert from 'assert';
-import {
-	NoMatchError,
-} from '@satisfactory-dev/docs.json.ts/lib/index.js';
-import type {
-	production_set,
-} from './types.ts';
+
 import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
+
 import type {
-	ProductionData_Type,
+	ProductionData,
 } from './production-data.ts';
 
+import type {
+	supported_imports,
+} from './production-data/types.ts';
+
+import type {
+	production_set,
+} from './types.ts';
+
 export function faux_recipe<
-	T_ProductionData extends ProductionData_Type,
+	T_Imports extends supported_imports,
 >(
-	production_data: T_ProductionData,
+	production_data: ProductionData<T_Imports>,
 	recipe: string,
 ): production_set {
 	if (
@@ -40,11 +44,7 @@ export function faux_recipe<
 	assert.strictEqual(
 		faux_recipe_keys.includes(faux_ingredient),
 		true,
-		new NoMatchError(
-			{
-				recipe,
-				faux_ingredient,
-			},
+		new Error(
 			`Supported faux-recipe found, but missing item (${
 				faux_ingredient
 			})!`,

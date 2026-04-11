@@ -154,18 +154,12 @@ lint--oxlint:
 lint: lint--prettier lint--tsc lint--oxlint
 
 .PHONY: tests
-tests: build
-	@node ./tests.ts
-
-tests--only-unstaged: build
-	@node ./tests--only-these.ts '$(shell git diff HEAD --name-only)'
+tests:
+	@node --test
 
 .PHONY: coverage
-coverage: build
-	@./node_modules/.bin/c8 node ./tests.ts
-
-coverage--only-unstaged: build
-	@./node_modules/.bin/c8 node ./tests--only-these.ts '$(shell git diff HEAD --name-only)'
+coverage:
+	@node --experimental-test-coverage --test-coverage-include='${PWD}/lib/**/*.ts' --test
 
 npm-prep: lint tests
 	@echo 'building from ./tsconfig.app-npm.json'

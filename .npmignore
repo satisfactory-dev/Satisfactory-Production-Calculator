@@ -7,7 +7,6 @@
 !/index.js
 !/index.d.ts
 /coverage/
-/.c8rc*.json
 /.devcontainer/
 /.github/
 /.idea/

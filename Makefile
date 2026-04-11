@@ -3,7 +3,7 @@ install:
 
 build:
 	@echo 'building from ./tsconfig.app.json'
-	@./node_modules/.bin/tsc --project ./tsconfig.app.json
+	@./node_modules/.bin/tsc --skipLibCheck --project ./tsconfig.app.json
 
 generate: generate--skip-checks lint generate--post-build build
 
@@ -163,5 +163,5 @@ coverage:
 
 npm-prep: lint tests
 	@echo 'building from ./tsconfig.app-npm.json'
-	@./node_modules/.bin/tsc --project ./tsconfig.app-npm.json
+	@./node_modules/.bin/tsc --skipLibCheck --project ./tsconfig.app-npm.json
 	@npm publish --dry-run

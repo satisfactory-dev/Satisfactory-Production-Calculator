@@ -131,7 +131,7 @@ generate--skip-checks--version-1-1:
 
 generate--post-build:
 	@./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json
-	@./node_modules/.bin/oxlint --fix--quiet
+	@./node_modules/.bin/oxlint --fix --quiet
 
 generate--validators:
 	@node ./generate-validators.ts

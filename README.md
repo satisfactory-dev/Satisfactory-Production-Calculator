@@ -6,9 +6,9 @@ Production Calculator for Satisfactory built upon [Docs.json.ts](https://github.
 
 ### Requirements
 
--   Docker
-    -   vscode recommended to use devcontainer support
--   A copy of Update 's `Docs.json` file
+- Docker
+    - vscode recommended to use devcontainer support
+- A copy of Update 's `Docs.json` file
 
 ### Setup
 
@@ -34,4 +34,4 @@ Issue tracker for both the calculator and the UI built atop the calculator are [
 
 ## Implementations
 
--   [SignpostMarv's Experimental Production Planner](https://u8.satisfactory.dev/planner/)
+- [SignpostMarv's Experimental Production Planner](https://u8.satisfactory.dev/planner/)

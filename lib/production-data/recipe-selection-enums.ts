@@ -112,6 +112,15 @@ export function recipe_selection_enums<
 	) {
 		const fuel = nuke_gen_fuel.mFuelClass;
 		const byproduct = nuke_gen_fuel.mByproduct;
+
+		if ('' === byproduct) {
+			continue;
+		}
+
+		if ('' === nuke_gen_fuel.mByproductAmount) {
+			throw new Error(`${fuel} has empty mByproductAmount`);
+		}
+
 		const faux_recipe: `${string}_C` = `Recipe_--faux--${
 			FGBuildableGeneratorNuclear.Classes[0].ClassName
 		}--${

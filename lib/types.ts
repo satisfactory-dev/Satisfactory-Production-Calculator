@@ -22,6 +22,8 @@ import type {
 	operand_types,
 } from '@signpostmarv/intermediary-number';
 
+import type BigNumber from 'bignumber.js';
+
 import type {
 	recipe_selection_properties_with_defaults,
 	supported_imports,

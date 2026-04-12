@@ -32,10 +32,10 @@
     "@satisfactory-dev/custom-assert": "^0.3.0",
     "@satisfactory-dev/docs.json.ts": "^1.1.1",
     "@satisfactory-dev/predicates.ts": "^0.3.0",
-    "@signpostmarv/intermediary-number": "^0.7.0",
+    "@signpostmarv/intermediary-number": "^0.7.1",
     "@signpostmarv/js-types": "^0.1.0",
-    "bignumber.js": "^9.1.2",
-    "fraction.js": "^4.3.7",
+    "bignumber.js": "^10.0.2",
+    "fraction.js": "^5.3.4",
     "typescript": "^6.0.2"
   }
 }

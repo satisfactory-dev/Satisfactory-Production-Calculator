@@ -10,7 +10,7 @@ import {
 } from '@signpostmarv/intermediary-number';
 
 import type {
-} from '@signpostmarv/json-schema-typescript-codegen/javascript-overrides';
+} from '@signpostmarv/js-types';
 
 import type BigNumber from 'bignumber.js';
 

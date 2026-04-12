@@ -1,9 +1,4 @@
-/**/*.ts
-/**/*.js.map
-!/**/*.d.ts
 /tests/**/*.*
-/*.js
-/*.d.ts
 !/index.js
 !/index.d.ts
 /coverage/

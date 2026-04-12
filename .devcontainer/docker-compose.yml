@@ -5,4 +5,9 @@ services:
         restart: always
         command: sleep infinity
         volumes:
-            - ../../:/workspaces:cached
+            - ../:/app/:cached
+            - npm-cache:/home/vscode/.npm
+
+volumes:
+    npm-cache:
+        external: true

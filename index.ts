@@ -11,6 +11,7 @@ import {
 export * from './lib/amend-itemclass-amount.ts';
 export * from './lib/types.ts';
 export * from './lib/production-data.ts';
+export * from './lib/production-data/types.ts';
 export * from './lib/ProductionCalculator.ts';
 export * from './lib/Request.ts';
 export * from './lib/faux-recipe.ts';

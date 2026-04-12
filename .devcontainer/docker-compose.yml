@@ -7,7 +7,10 @@ services:
         volumes:
             - ../:/app/:cached
             - npm-cache:/home/vscode/.npm
+            - satisfactory-dev_docsdotjsonts_generated_data_only:/app/generated-types/
 
 volumes:
     npm-cache:
+        external: true
+    satisfactory-dev_docsdotjsonts_generated_data_only:
         external: true

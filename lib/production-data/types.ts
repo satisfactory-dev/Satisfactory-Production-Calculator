@@ -1,4 +1,32 @@
 import type {
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_AssemblerMk1_C as FGBuildableManufacturer_Build_AssemblerMk1_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Blender_C as FGBuildableManufacturer_Build_Blender_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ConstructorMk1_C as FGBuildableManufacturer_Build_ConstructorMk1_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_FoundryMk1_C as FGBuildableManufacturer_Build_FoundryMk1_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_HadronCollider_C as FGBuildableManufacturer_Build_HadronCollider_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ManufacturerMk1_C as FGBuildableManufacturer_Build_ManufacturerMk1_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_OilRefinery_C as FGBuildableManufacturer_Build_OilRefinery_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Packager_C as FGBuildableManufacturer_Build_Packager_C__update6,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__update6,
+
 	FGEquipmentDescriptor as FGEquipmentDescriptor__update6,
 
 	FGItemDescriptor as FGItemDescriptor__update6,
@@ -82,6 +110,39 @@ import type {
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p0,
 
 	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_AssemblerMk1_C as FGBuildableManufacturer_Build_AssemblerMk1_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Blender_C as FGBuildableManufacturer_Build_Blender_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ConstructorMk1_C as FGBuildableManufacturer_Build_ConstructorMk1_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Converter_C as FGBuildableManufacturer_Build_Converter_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_FoundryMk1_C as FGBuildableManufacturer_Build_FoundryMk1_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_HadronCollider_C as FGBuildableManufacturer_Build_HadronCollider_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ManufacturerMk1_C as FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_OilRefinery_C as FGBuildableManufacturer_Build_OilRefinery_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Packager_C as FGBuildableManufacturer_Build_Packager_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_QuantumEncoder_C as FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p0,
 
 	// oxlint-disable-next-line @stylistic/max-len
@@ -140,6 +201,39 @@ import type {
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p1,
 
 	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_AssemblerMk1_C as FGBuildableManufacturer_Build_AssemblerMk1_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Blender_C as FGBuildableManufacturer_Build_Blender_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ConstructorMk1_C as FGBuildableManufacturer_Build_ConstructorMk1_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Converter_C as FGBuildableManufacturer_Build_Converter_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_FoundryMk1_C as FGBuildableManufacturer_Build_FoundryMk1_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_HadronCollider_C as FGBuildableManufacturer_Build_HadronCollider_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ManufacturerMk1_C as FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_OilRefinery_C as FGBuildableManufacturer_Build_OilRefinery_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Packager_C as FGBuildableManufacturer_Build_Packager_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_QuantumEncoder_C as FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p1,
 
 	// oxlint-disable-next-line @stylistic/max-len
@@ -164,6 +258,8 @@ import type {
 	FGAmmoTypeSpreadshot,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
+	FGBuildableManufacturer,
+	FGBuildableManufacturerVariablePower,
 	FGBuildableResourceExtractor,
 	FGBuildingDescriptor,
 	FGConsumableDescriptor,
@@ -241,6 +337,11 @@ type imports<
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableGeneratorNuclear extends FGBuildableGeneratorNuclear | undefined,
 
+	T_FGBuildableManufacturer extends FGBuildableManufacturer | undefined,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	T_FGBuildableManufacturerVariablePower extends FGBuildableManufacturerVariablePower | undefined,
+
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableResourceExtractor extends FGBuildableResourceExtractor | undefined,
 
@@ -295,6 +396,14 @@ type imports<
 	FGItemDescriptorBiomass: NativeClass__type<
 		'FGItemDescriptorBiomass',
 		T_FGItemDescriptorBiomass
+	>,
+	FGBuildableManufacturer: NativeClass__type<
+		'FGBuildableManufacturer',
+		T_FGBuildableManufacturer
+	>,
+	FGBuildableManufacturerVariablePower: NativeClass__type<
+		'FGBuildableManufacturerVariablePower',
+		T_FGBuildableManufacturerVariablePower
 	>,
 	FGBuildingDescriptor: NativeClass__type<
 		'FGBuildingDescriptor',
@@ -379,6 +488,11 @@ type data<
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGAmmoTypeSpreadshot extends FGAmmoTypeSpreadshot | undefined,
 
+	T_FGBuildableManufacturer extends FGBuildableManufacturer | undefined,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	T_FGBuildableManufacturerVariablePower extends FGBuildableManufacturerVariablePower | undefined,
+
 	T_FGBuildingDescriptor extends FGBuildingDescriptor | undefined,
 
 	T_FGConsumableDescriptor extends FGConsumableDescriptor | undefined,
@@ -440,6 +554,18 @@ type data<
 		>,
 	},
 	items: {[key: `${string}_C`]: Exclude<T_FGItemDescriptor, undefined>},
+	manufacturers: {
+		[key: `${string}_C`]: (
+			| Exclude<
+				T_FGBuildableManufacturer,
+				undefined
+			>
+			| Exclude<
+				T_FGBuildableManufacturerVariablePower,
+				undefined
+			>
+		),
+	},
 	poles: {[key: `${string}_C`]: Exclude<T_FGPoleDescriptor, undefined>},
 	power_booster_fuel: {
 		[key: `${string}_C`]: Exclude<
@@ -475,6 +601,18 @@ type update8_data = data<
 	),
 	FGAmmoTypeProjectile__update8,
 	FGAmmoTypeSpreadshot__update8,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__update6
+		| FGBuildableManufacturer_Build_Blender_C__update6
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__update6
+		| FGBuildableManufacturer_Build_FoundryMk1_C__update6
+		| FGBuildableManufacturer_Build_HadronCollider_C__update6
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__update6
+		| FGBuildableManufacturer_Build_OilRefinery_C__update6
+		| FGBuildableManufacturer_Build_Packager_C__update6
+		| FGBuildableManufacturer_Build_SmelterMk1_C__update6
+	),
+	undefined,
 	FGBuildingDescriptor__update8,
 	FGConsumableDescriptor__update8,
 	FGEquipmentDescriptor__update6,
@@ -506,6 +644,18 @@ type update8_imports = imports<
 	FGAmmoTypeSpreadshot__update8,
 	FGBuildableFrackingActivator__update8,
 	FGBuildableGeneratorNuclear__update8,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__update6
+		| FGBuildableManufacturer_Build_Blender_C__update6
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__update6
+		| FGBuildableManufacturer_Build_FoundryMk1_C__update6
+		| FGBuildableManufacturer_Build_HadronCollider_C__update6
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__update6
+		| FGBuildableManufacturer_Build_OilRefinery_C__update6
+		| FGBuildableManufacturer_Build_Packager_C__update6
+		| FGBuildableManufacturer_Build_SmelterMk1_C__update6
+	),
+	undefined,
 	(
 		| FGBuildableResourceExtractor_miner_mk1__update8
 		| FGBuildableResourceExtractor_miner_mk2__update8
@@ -542,6 +692,21 @@ type version_1p0_data = data<
 	),
 	FGAmmoTypeProjectile__v1p0,
 	FGAmmoTypeSpreadshot__v1p0,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p0
+		| FGBuildableManufacturer_Build_Blender_C__v1p0
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p0
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p0
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p0
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p0
+		| FGBuildableManufacturer_Build_Packager_C__v1p0
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p0
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p0
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p0
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0
+	),
 	FGBuildingDescriptor__v1p0,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -573,6 +738,21 @@ type version_1p0_imports = imports<
 	FGAmmoTypeSpreadshot__v1p0,
 	FGBuildableFrackingActivator__v1p0,
 	FGBuildableGeneratorNuclear__v1p0,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p0
+		| FGBuildableManufacturer_Build_Blender_C__v1p0
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p0
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p0
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p0
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p0
+		| FGBuildableManufacturer_Build_Packager_C__v1p0
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p0
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p0
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p0
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0
+	),
 	(
 		| FGBuildableResourceExtractor_miner_mk1__v1p0
 		| FGBuildableResourceExtractor_miner_mk2__v1p0
@@ -609,6 +789,21 @@ type version_1p1_data = data<
 	),
 	FGAmmoTypeProjectile__v1p1,
 	FGAmmoTypeSpreadshot__v1p1,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p1
+		| FGBuildableManufacturer_Build_Blender_C__v1p1
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p1
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p1
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p1
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p1
+		| FGBuildableManufacturer_Build_Packager_C__v1p1
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p1
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p1
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p1
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1
+	),
 	FGBuildingDescriptor__v1p1,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -640,6 +835,21 @@ type version_1p1_imports = imports<
 	FGAmmoTypeSpreadshot__v1p1,
 	FGBuildableFrackingActivator__v1p1,
 	FGBuildableGeneratorNuclear__v1p1,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p1
+		| FGBuildableManufacturer_Build_Blender_C__v1p1
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p1
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p1
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p1
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p1
+		| FGBuildableManufacturer_Build_Packager_C__v1p1
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p1
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p1
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p1
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1
+	),
 	(
 		| FGBuildableResourceExtractor_miner_mk1__v1p1
 		| FGBuildableResourceExtractor_miner_mk2__v1p1

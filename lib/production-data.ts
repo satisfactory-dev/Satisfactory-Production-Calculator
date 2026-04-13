@@ -83,6 +83,18 @@ class ProductionData<
 			FGBuildableGeneratorNuclear,
 		} = this.#imports;
 
+		const FGBuildableManufacturer = (
+			('FGBuildableManufacturer' in this.#imports)
+				? this.#imports.FGBuildableManufacturer
+				: undefined
+		);
+
+		const FGBuildableManufacturerVariablePower = (
+			('FGBuildableManufacturerVariablePower' in this.#imports)
+				? this.#imports.FGBuildableManufacturerVariablePower
+				: undefined
+		);
+
 		const FGPowerShardDescriptor = (
 			('FGPowerShardDescriptor' in this.#imports)
 				? this.#imports.FGPowerShardDescriptor
@@ -191,6 +203,22 @@ class ProductionData<
 			FGItemDescriptor,
 		].reduce(
 			(was, is): result['items'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const manufacturers: result['manufacturers'] = [
+			FGBuildableManufacturer,
+			FGBuildableManufacturerVariablePower,
+		].reduce(
+			(was, is): result['manufacturers'] => {
 				if (is) {
 					for (const item of is.Classes) {
 						was[item.ClassName] = item;
@@ -363,6 +391,7 @@ class ProductionData<
 			equipment,
 			fuel_nuclear,
 			items,
+			manufacturers,
 			poles,
 			power_booster_fuel,
 			power_shards,

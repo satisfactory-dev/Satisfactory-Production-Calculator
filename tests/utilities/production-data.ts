@@ -42,6 +42,15 @@ import type {
 } from '@satisfactory-dev/docs.json.ts/generated-types/0.6.1.5/classes/Base.0.8.3.3.js';
 
 import type {
+	FGBuildableManufacturer_Build_AssemblerMk1_C,
+	FGBuildableManufacturer_Build_Blender_C,
+	FGBuildableManufacturer_Build_ConstructorMk1_C,
+	FGBuildableManufacturer_Build_FoundryMk1_C,
+	FGBuildableManufacturer_Build_HadronCollider_C,
+	FGBuildableManufacturer_Build_ManufacturerMk1_C,
+	FGBuildableManufacturer_Build_OilRefinery_C,
+	FGBuildableManufacturer_Build_Packager_C,
+	FGBuildableManufacturer_Build_SmelterMk1_C,
 	FGEquipmentDescriptor,
 	FGItemDescriptor,
 	FGItemDescriptorBiomass,
@@ -78,6 +87,23 @@ const FGItemDescriptorBiomass: update8_imports[
 	FGItemDescriptorBiomass,
 	'FGItemDescriptorBiomass'
 >('FGItemDescriptorBiomass', update8);
+
+const FGBuildableManufacturer: update8_imports[
+	'FGBuildableManufacturer'
+] = find<
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C
+		| FGBuildableManufacturer_Build_Blender_C
+		| FGBuildableManufacturer_Build_ConstructorMk1_C
+		| FGBuildableManufacturer_Build_FoundryMk1_C
+		| FGBuildableManufacturer_Build_HadronCollider_C
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C
+		| FGBuildableManufacturer_Build_OilRefinery_C
+		| FGBuildableManufacturer_Build_Packager_C
+		| FGBuildableManufacturer_Build_SmelterMk1_C
+	),
+	'FGBuildableManufacturer'
+>('FGBuildableManufacturer', update8);
 
 const FGBuildingDescriptor: update8_imports['FGBuildingDescriptor'] = find<
 	FGBuildingDescriptor,
@@ -172,6 +198,8 @@ export const instance = new ProductionData<
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeSpreadshot,
 	FGItemDescriptorBiomass,
+	FGBuildableManufacturer,
+	FGBuildableManufacturerVariablePower: undefined,
 	FGBuildingDescriptor,
 	FGConsumableDescriptor,
 	FGEquipmentDescriptor,

@@ -36,6 +36,17 @@ import type {
 	FGAmmoTypeSpreadshot,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
+	FGBuildableManufacturer_Build_AssemblerMk1_C,
+	FGBuildableManufacturer_Build_Blender_C,
+	FGBuildableManufacturer_Build_ConstructorMk1_C,
+	FGBuildableManufacturer_Build_Converter_C,
+	FGBuildableManufacturer_Build_FoundryMk1_C,
+	FGBuildableManufacturer_Build_HadronCollider_C,
+	FGBuildableManufacturer_Build_ManufacturerMk1_C,
+	FGBuildableManufacturer_Build_OilRefinery_C,
+	FGBuildableManufacturer_Build_Packager_C,
+	FGBuildableManufacturer_Build_QuantumEncoder_C,
+	FGBuildableManufacturer_Build_SmelterMk1_C,
 	FGBuildableResourceExtractor_miner_mk1,
 	FGBuildableResourceExtractor_miner_mk2,
 	FGBuildableResourceExtractor_miner_mk3,
@@ -72,6 +83,34 @@ const FGItemDescriptorBiomass: version_1p1_imports[
 	FGItemDescriptorBiomass,
 	'FGItemDescriptorBiomass'
 >('FGItemDescriptorBiomass', release_1_1);
+
+const FGBuildableManufacturer: version_1p1_imports[
+	'FGBuildableManufacturer'
+] = find<
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C
+		| FGBuildableManufacturer_Build_Blender_C
+		| FGBuildableManufacturer_Build_ConstructorMk1_C
+		| FGBuildableManufacturer_Build_FoundryMk1_C
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C
+		| FGBuildableManufacturer_Build_OilRefinery_C
+		| FGBuildableManufacturer_Build_Packager_C
+		| FGBuildableManufacturer_Build_QuantumEncoder_C
+		| FGBuildableManufacturer_Build_SmelterMk1_C
+	),
+	'FGBuildableManufacturer'
+>('FGBuildableManufacturer', release_1_1);
+
+const FGBuildableManufacturerVariablePower: version_1p1_imports[
+	'FGBuildableManufacturerVariablePower'
+] = find<
+	(
+		| FGBuildableManufacturer_Build_Converter_C
+		| FGBuildableManufacturer_Build_HadronCollider_C
+		| FGBuildableManufacturer_Build_QuantumEncoder_C
+	),
+	'FGBuildableManufacturerVariablePower'
+>('FGBuildableManufacturerVariablePower', release_1_1);
 
 const FGBuildingDescriptor: version_1p1_imports['FGBuildingDescriptor'] = find<
 	FGBuildingDescriptor,
@@ -179,6 +218,8 @@ export const instance = new ProductionData<
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeSpreadshot,
 	FGItemDescriptorBiomass,
+	FGBuildableManufacturer,
+	FGBuildableManufacturerVariablePower,
 	FGBuildingDescriptor,
 	FGConsumableDescriptor,
 	FGEquipmentDescriptor,

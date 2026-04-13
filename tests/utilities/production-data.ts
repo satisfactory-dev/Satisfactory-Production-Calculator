@@ -15,6 +15,9 @@ import type {
 	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C,
 	FGAmmoTypeProjectile,
 	FGAmmoTypeSpreadshot,
+	FGBuildable_occupied,
+	FGBuildable_tiered,
+	FGBuildable_unoccupied_and_untiered,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
 	FGBuildableResourceExtractor_miner_mk1,
@@ -87,6 +90,17 @@ const FGItemDescriptorBiomass: update8_imports[
 	FGItemDescriptorBiomass,
 	'FGItemDescriptorBiomass'
 >('FGItemDescriptorBiomass', update8);
+
+const FGBuildable: update8_imports[
+	'FGBuildable'
+] = find<
+	(
+		| FGBuildable_occupied
+		| FGBuildable_tiered
+		| FGBuildable_unoccupied_and_untiered
+	),
+	'FGBuildable'
+>('FGBuildable', update8);
 
 const FGBuildableManufacturer: update8_imports[
 	'FGBuildableManufacturer'
@@ -198,6 +212,7 @@ export const instance = new ProductionData<
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeSpreadshot,
 	FGItemDescriptorBiomass,
+	FGBuildable,
 	FGBuildableManufacturer,
 	FGBuildableManufacturerVariablePower: undefined,
 	FGBuildingDescriptor,

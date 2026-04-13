@@ -34,6 +34,9 @@ import type {
 	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C,
 	FGAmmoTypeProjectile,
 	FGAmmoTypeSpreadshot,
+	FGBuildable_occupied,
+	FGBuildable_tiered,
+	FGBuildable_unoccupied_and_untiered,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
 	FGBuildableManufacturer_Build_AssemblerMk1_C,
@@ -180,6 +183,17 @@ const FGVehicleDescriptor: version_1p1_imports['FGVehicleDescriptor'] = find<
 	'FGVehicleDescriptor'
 >('FGVehicleDescriptor', release_1_1);
 
+const FGBuildable: version_1p1_imports[
+	'FGBuildable'
+] = find<
+	(
+		| FGBuildable_occupied
+		| FGBuildable_tiered
+		| FGBuildable_unoccupied_and_untiered
+	),
+	'FGBuildable'
+>('FGBuildable', release_1_1);
+
 const FGBuildableGeneratorNuclear: version_1p1_imports[
 	'FGBuildableGeneratorNuclear'
 ] = find<
@@ -218,6 +232,7 @@ export const instance = new ProductionData<
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeSpreadshot,
 	FGItemDescriptorBiomass,
+	FGBuildable,
 	FGBuildableManufacturer,
 	FGBuildableManufacturerVariablePower,
 	FGBuildingDescriptor,

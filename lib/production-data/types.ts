@@ -79,6 +79,11 @@ import type {
 	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C as FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__update8,
 	FGAmmoTypeProjectile as FGAmmoTypeProjectile__update8,
 	FGAmmoTypeSpreadshot as FGAmmoTypeSpreadshot__update8,
+	FGBuildable_occupied as FGBuildable_occupied__update8,
+	FGBuildable_tiered as FGBuildable_tiered__update8,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__update8,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__update8,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__update8,
 
@@ -106,6 +111,11 @@ import type {
 	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C as FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__v1p0,
 	FGAmmoTypeProjectile as FGAmmoTypeProjectile__v1p0,
 	FGAmmoTypeSpreadshot as FGAmmoTypeSpreadshot__v1p0,
+	FGBuildable_occupied as FGBuildable_occupied__v1p0,
+	FGBuildable_tiered as FGBuildable_tiered__v1p0,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p0,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p0,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p0,
 
@@ -197,6 +207,11 @@ import type {
 	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C as FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__v1p1,
 	FGAmmoTypeProjectile as FGAmmoTypeProjectile__v1p1,
 	FGAmmoTypeSpreadshot as FGAmmoTypeSpreadshot__v1p1,
+	FGBuildable_occupied as FGBuildable_occupied__v1p1,
+	FGBuildable_tiered as FGBuildable_tiered__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p1,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p1,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p1,
 
@@ -256,6 +271,9 @@ import type {
 	FGAmmoTypeInstantHit,
 	FGAmmoTypeProjectile,
 	FGAmmoTypeSpreadshot,
+	FGBuildable_occupied,
+	FGBuildable_tiered,
+	FGBuildable_unoccupied_and_untiered,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
 	FGBuildableManufacturer,
@@ -331,6 +349,12 @@ type imports<
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGAmmoTypeSpreadshot extends FGAmmoTypeSpreadshot | undefined,
 
+	T_FGBuildable extends (
+		| FGBuildable_occupied
+		| FGBuildable_tiered
+		| FGBuildable_unoccupied_and_untiered
+	) | undefined,
+
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableFrackingActivator extends FGBuildableFrackingActivator | undefined,
 
@@ -396,6 +420,10 @@ type imports<
 	FGItemDescriptorBiomass: NativeClass__type<
 		'FGItemDescriptorBiomass',
 		T_FGItemDescriptorBiomass
+	>,
+	FGBuildable: NativeClass__type<
+		'FGBuildable',
+		T_FGBuildable
 	>,
 	FGBuildableManufacturer: NativeClass__type<
 		'FGBuildableManufacturer',
@@ -488,6 +516,15 @@ type data<
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGAmmoTypeSpreadshot extends FGAmmoTypeSpreadshot | undefined,
 
+	T_FGBuildable extends (
+		| (
+			| FGBuildable_occupied
+			| FGBuildable_tiered
+			| FGBuildable_unoccupied_and_untiered
+		)
+		| undefined
+	),
+
 	T_FGBuildableManufacturer extends FGBuildableManufacturer | undefined,
 
 	// oxlint-disable-next-line @stylistic/max-len
@@ -537,6 +574,9 @@ type data<
 	},
 	biomass: {
 		[key: `${string}_C`]: Exclude<T_FGItemDescriptorBiomass, undefined>,
+	},
+	buildable: {
+		[key: `${string}_C`]: Exclude<T_FGBuildable, undefined>,
 	},
 	buildings: {
 		[key: `${string}_C`]: Exclude<T_FGBuildingDescriptor, undefined>,
@@ -602,6 +642,11 @@ type update8_data = data<
 	FGAmmoTypeProjectile__update8,
 	FGAmmoTypeSpreadshot__update8,
 	(
+		| FGBuildable_occupied__update8
+		| FGBuildable_tiered__update8
+		| FGBuildable_unoccupied_and_untiered__update8
+	),
+	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__update6
 		| FGBuildableManufacturer_Build_Blender_C__update6
 		| FGBuildableManufacturer_Build_ConstructorMk1_C__update6
@@ -642,6 +687,11 @@ type update8_imports = imports<
 	),
 	FGAmmoTypeProjectile__update8,
 	FGAmmoTypeSpreadshot__update8,
+	(
+		| FGBuildable_occupied__update8
+		| FGBuildable_tiered__update8
+		| FGBuildable_unoccupied_and_untiered__update8
+	),
 	FGBuildableFrackingActivator__update8,
 	FGBuildableGeneratorNuclear__update8,
 	(
@@ -693,6 +743,11 @@ type version_1p0_data = data<
 	FGAmmoTypeProjectile__v1p0,
 	FGAmmoTypeSpreadshot__v1p0,
 	(
+		| FGBuildable_occupied__v1p0
+		| FGBuildable_tiered__v1p0
+		| FGBuildable_unoccupied_and_untiered__v1p0
+	),
+	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p0
 		| FGBuildableManufacturer_Build_Blender_C__v1p0
 		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p0
@@ -736,6 +791,11 @@ type version_1p0_imports = imports<
 	),
 	FGAmmoTypeProjectile__v1p0,
 	FGAmmoTypeSpreadshot__v1p0,
+	(
+		| FGBuildable_occupied__v1p0
+		| FGBuildable_tiered__v1p0
+		| FGBuildable_unoccupied_and_untiered__v1p0
+	),
 	FGBuildableFrackingActivator__v1p0,
 	FGBuildableGeneratorNuclear__v1p0,
 	(
@@ -790,6 +850,11 @@ type version_1p1_data = data<
 	FGAmmoTypeProjectile__v1p1,
 	FGAmmoTypeSpreadshot__v1p1,
 	(
+		| FGBuildable_occupied__v1p1
+		| FGBuildable_tiered__v1p1
+		| FGBuildable_unoccupied_and_untiered__v1p1
+	),
+	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p1
 		| FGBuildableManufacturer_Build_Blender_C__v1p1
 		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p1
@@ -833,6 +898,11 @@ type version_1p1_imports = imports<
 	),
 	FGAmmoTypeProjectile__v1p1,
 	FGAmmoTypeSpreadshot__v1p1,
+	(
+		| FGBuildable_occupied__v1p1
+		| FGBuildable_tiered__v1p1
+		| FGBuildable_unoccupied_and_untiered__v1p1
+	),
 	FGBuildableFrackingActivator__v1p1,
 	FGBuildableGeneratorNuclear__v1p1,
 	(

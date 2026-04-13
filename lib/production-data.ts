@@ -71,6 +71,7 @@ class ProductionData<
 			FGAmmoTypeInstantHit,
 			FGAmmoTypeSpreadshot,
 			FGItemDescriptorBiomass,
+			FGBuildable,
 			FGBuildingDescriptor,
 			FGConsumableDescriptor,
 			FGEquipmentDescriptor,
@@ -128,6 +129,21 @@ class ProductionData<
 			FGItemDescriptorBiomass,
 		].reduce(
 			(was, is): result['biomass'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const buildable: result['buildable'] = [
+			FGBuildable,
+		].reduce(
+			(was, is): result['buildable'] => {
 				if (is) {
 					for (const item of is.Classes) {
 						was[item.ClassName] = item;
@@ -386,6 +402,7 @@ class ProductionData<
 		return {
 			ammo,
 			biomass,
+			buildable,
 			buildings,
 			consumable,
 			equipment,

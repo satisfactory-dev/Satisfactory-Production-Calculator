@@ -37,6 +37,7 @@ export {
 	factory_in_update8,
 	factory_in_release_1_0,
 	factory_in_release_1_1,
+	factory_in_release_1_2,
 	find_in_update8,
 	find_in_release_1_0,
 	find_in_release_1_1,

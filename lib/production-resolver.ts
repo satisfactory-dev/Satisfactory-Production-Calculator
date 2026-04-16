@@ -244,6 +244,11 @@ export class ProductionResolver<
 				`Recipe_${string}_C`[]
 			) = [
 				'Recipe_QuantumEnergy_C',
+				'Recipe_VehiclePath_Universal_C',
+				'Recipe_VehiclePath_FactoryCart_C',
+				'Recipe_VehiclePath_Explorer_C',
+				'Recipe_VehiclePath_Truck_C',
+				'Recipe_VehiclePath_Tractor_C',
 			];
 
 			for (const recipe of supported_empty_ingredient_recipes) {

@@ -33,7 +33,7 @@ const data_set: (
 		true,
 		'Build_ConstructorMk1_C',
 	],
-	['/Script/FactoryGame.FGBuildGun', false],
+	['/Script/FactoryGame.FGBuildGun', false, 'BP_BuildGun_C'],
 	['nope', false],
 ];
 

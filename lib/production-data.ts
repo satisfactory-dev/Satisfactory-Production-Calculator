@@ -5,6 +5,8 @@ import type {
 	version_1p0_data,
 	version_1p0_imports,
 	version_1p1_data,
+	version_1p1_imports,
+	version_1p2_data,
 } from './production-data/types.ts';
 
 import {
@@ -24,7 +26,11 @@ class ProductionData<
 			: (
 				T_Imports extends version_1p0_imports
 					? version_1p0_data
-					: version_1p1_data
+					: (
+						T_Imports extends version_1p1_imports
+							? version_1p1_data
+							: version_1p2_data
+					)
 			)
 	);
 
@@ -41,7 +47,11 @@ class ProductionData<
 			: (
 				T_Imports extends version_1p0_imports
 					? version_1p0_data
-					: version_1p1_data
+					: (
+						T_Imports extends version_1p1_imports
+							? version_1p1_data
+							: version_1p2_data
+					)
 			)
 	) {
 		return this.#data;
@@ -53,7 +63,11 @@ class ProductionData<
 			: (
 				T_Imports extends version_1p0_imports
 					? version_1p0_data
-					: version_1p1_data
+					: (
+						T_Imports extends version_1p1_imports
+							? version_1p1_data
+							: version_1p2_data
+					)
 			)
 	) {
 		type result = (
@@ -62,7 +76,11 @@ class ProductionData<
 				: (
 					T_Imports extends version_1p0_imports
 						? version_1p0_data
-						: version_1p1_data
+						: (
+							T_Imports extends version_1p1_imports
+								? version_1p1_data
+								: version_1p2_data
+						)
 				)
 		);
 

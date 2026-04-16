@@ -264,6 +264,102 @@ import type {
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1.2.2/classes.js';
 
 import type {
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGAmmoTypeInstantHit_Desc_CartridgeChaos_C as FGAmmoTypeInstantHit_Desc_CartridgeChaos_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGAmmoTypeInstantHit_Desc_CartridgeStandard_C as FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__v1p2,
+	FGAmmoTypeProjectile as FGAmmoTypeProjectile__v1p2,
+	FGAmmoTypeSpreadshot as FGAmmoTypeSpreadshot__v1p2,
+	FGBuildable_occupied as FGBuildable_occupied__v1p2,
+	FGBuildable_tiered as FGBuildable_tiered__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p2,
+	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p2,
+	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_AssemblerMk1_C as FGBuildableManufacturer_Build_AssemblerMk1_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Blender_C as FGBuildableManufacturer_Build_Blender_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ConstructorMk1_C as FGBuildableManufacturer_Build_ConstructorMk1_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Converter_C as FGBuildableManufacturer_Build_Converter_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_FoundryMk1_C as FGBuildableManufacturer_Build_FoundryMk1_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_HadronCollider_C as FGBuildableManufacturer_Build_HadronCollider_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_ManufacturerMk1_C as FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_OilRefinery_C as FGBuildableManufacturer_Build_OilRefinery_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_Packager_C as FGBuildableManufacturer_Build_Packager_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_QuantumEncoder_C as FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_miner_mk2 as FGBuildableResourceExtractor_miner_mk2__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_miner_mk3 as FGBuildableResourceExtractor_miner_mk3__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGBuildableResourceExtractor_oil as FGBuildableResourceExtractor_oil__v1p2,
+	FGBuildableWaterPump as FGBuildableWaterPump__v1p2,
+	FGBuildingDescriptor as FGBuildingDescriptor__v1p2,
+	FGConsumableDescriptor as FGConsumableDescriptor__v1p2,
+	FGEquipmentDescriptor as FGEquipmentDescriptor__v1p2,
+	FGItemDescriptor_non_sinkable as FGItemDescriptor_non_sinkable__v1p2,
+	FGItemDescriptor_sinkable as FGItemDescriptor_sinkable__v1p2,
+	FGItemDescriptorBiomass as FGItemDescriptorBiomass__v1p2,
+	FGItemDescriptorNuclearFuel as FGItemDescriptorNuclearFuel__v1p2,
+	FGItemDescriptorPowerBoosterFuel as FGItemDescriptorPowerBoosterFuel_v1p2,
+	FGPowerShardDescriptor as FGPowerShardDescriptor__v1p2,
+	FGRecipe as FGRecipe__v1p2,
+	FGResourceDescriptor as FGResourceDescriptor__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_CyberWagon_C as FGVehicleDescriptor_Desc_CyberWagon_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_DroneTransport_C as FGVehicleDescriptor_Desc_DroneTransport_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_Explorer_C as FGVehicleDescriptor_Desc_Explorer_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_FreightWagon_C as FGVehicleDescriptor_Desc_FreightWagon_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_Locomotive_C as FGVehicleDescriptor_Desc_Locomotive_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_Tractor_C as FGVehicleDescriptor_Desc_Tractor_C__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGVehicleDescriptor_Desc_Truck_C as FGVehicleDescriptor_Desc_Truck_C__v1p2,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.0.0/classes.js';
+
+import type {
 	hasClassName,
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/Base.js';
 
@@ -949,10 +1045,125 @@ type version_1p1_imports = imports<
 	)
 >;
 
+
+type version_1p2_data = data<
+	(
+		| FGAmmoTypeInstantHit_Desc_CartridgeChaos_C__v1p2
+		| FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__v1p2
+	),
+	FGAmmoTypeProjectile__v1p2,
+	FGAmmoTypeSpreadshot__v1p2,
+	(
+		| FGBuildable_occupied__v1p2
+		| FGBuildable_tiered__v1p2
+		| FGBuildable_unoccupied_and_untiered__v1p2
+	),
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p2
+		| FGBuildableManufacturer_Build_Blender_C__v1p2
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p2
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p2
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p2
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p2
+		| FGBuildableManufacturer_Build_Packager_C__v1p2
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p2
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p2
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p2
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2
+	),
+	FGBuildingDescriptor__v1p2,
+	FGConsumableDescriptor__v1p2,
+	FGEquipmentDescriptor__v1p2,
+	(
+		| FGItemDescriptor_non_sinkable__v1p2
+		| FGItemDescriptor_sinkable__v1p2
+	),
+	FGItemDescriptorBiomass__v1p2,
+	FGItemDescriptorNuclearFuel__v1p2,
+	FGItemDescriptorPowerBoosterFuel_v1p2,
+	undefined,
+	FGPowerShardDescriptor__v1p2,
+	FGRecipe__v1p2,
+	FGResourceDescriptor__v1p2,
+	(
+		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p2
+		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p2
+		| FGVehicleDescriptor_Desc_Explorer_C__v1p2
+		| FGVehicleDescriptor_Desc_FreightWagon_C__v1p2
+		| FGVehicleDescriptor_Desc_Locomotive_C__v1p2
+		| FGVehicleDescriptor_Desc_Tractor_C__v1p2
+		| FGVehicleDescriptor_Desc_Truck_C__v1p2
+	)
+>;
+
+type version_1p2_imports = imports<
+	(
+		| FGAmmoTypeInstantHit_Desc_CartridgeChaos_C__v1p2
+		| FGAmmoTypeInstantHit_Desc_CartridgeStandard_C__v1p2
+	),
+	FGAmmoTypeProjectile__v1p2,
+	FGAmmoTypeSpreadshot__v1p2,
+	(
+		| FGBuildable_occupied__v1p2
+		| FGBuildable_tiered__v1p2
+		| FGBuildable_unoccupied_and_untiered__v1p2
+	),
+	FGBuildableFrackingActivator__v1p2,
+	FGBuildableGeneratorNuclear__v1p2,
+	(
+		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p2
+		| FGBuildableManufacturer_Build_Blender_C__v1p2
+		| FGBuildableManufacturer_Build_ConstructorMk1_C__v1p2
+		| FGBuildableManufacturer_Build_FoundryMk1_C__v1p2
+		| FGBuildableManufacturer_Build_ManufacturerMk1_C__v1p2
+		| FGBuildableManufacturer_Build_OilRefinery_C__v1p2
+		| FGBuildableManufacturer_Build_Packager_C__v1p2
+		| FGBuildableManufacturer_Build_SmelterMk1_C__v1p2
+	),
+	(
+		| FGBuildableManufacturer_Build_Converter_C__v1p2
+		| FGBuildableManufacturer_Build_HadronCollider_C__v1p2
+		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2
+	),
+	(
+		| FGBuildableResourceExtractor_miner_mk1__v1p2
+		| FGBuildableResourceExtractor_miner_mk2__v1p2
+		| FGBuildableResourceExtractor_miner_mk3__v1p2
+		| FGBuildableResourceExtractor_oil__v1p2
+	),
+	FGBuildableWaterPump__v1p2,
+	FGBuildingDescriptor__v1p2,
+	FGConsumableDescriptor__v1p2,
+	FGEquipmentDescriptor__v1p2,
+	(
+		| FGItemDescriptor_non_sinkable__v1p2
+		| FGItemDescriptor_sinkable__v1p2
+	),
+	FGItemDescriptorBiomass__v1p2,
+	FGItemDescriptorNuclearFuel__v1p2,
+	FGItemDescriptorPowerBoosterFuel_v1p2,
+	undefined,
+	FGPowerShardDescriptor__v1p2,
+	FGRecipe__v1p2,
+	FGResourceDescriptor__v1p2,
+	(
+		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p2
+		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p2
+		| FGVehicleDescriptor_Desc_Explorer_C__v1p2
+		| FGVehicleDescriptor_Desc_FreightWagon_C__v1p2
+		| FGVehicleDescriptor_Desc_Locomotive_C__v1p2
+		| FGVehicleDescriptor_Desc_Tractor_C__v1p2
+		| FGVehicleDescriptor_Desc_Truck_C__v1p2
+	)
+>;
+
 type supported_imports = (
 	| update8_imports
 	| version_1p0_imports
 	| version_1p1_imports
+	| version_1p2_imports
 );
 
 export type {
@@ -968,4 +1179,6 @@ export type {
 	version_1p0_imports,
 	version_1p1_data,
 	version_1p1_imports,
+	version_1p2_data,
+	version_1p2_imports,
 };

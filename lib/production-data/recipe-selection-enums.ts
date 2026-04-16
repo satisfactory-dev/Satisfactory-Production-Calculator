@@ -30,6 +30,7 @@ import type {
 	update8_imports,
 	version_1p0_imports,
 	version_1p1_imports,
+	version_1p2_imports,
 } from './types.ts';
 
 import type {
@@ -62,6 +63,7 @@ export function recipe_selection_enums<
 		| update8_imports
 		| version_1p0_imports
 		| version_1p1_imports
+		| version_1p2_imports
 	),
 >(
 	imports: T_import,

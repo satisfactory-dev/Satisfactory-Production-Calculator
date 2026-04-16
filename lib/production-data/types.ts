@@ -795,13 +795,14 @@ type update8_imports = imports<
 		| FGBuildableManufacturer_Build_Blender_C__update6
 		| FGBuildableManufacturer_Build_ConstructorMk1_C__update6
 		| FGBuildableManufacturer_Build_FoundryMk1_C__update6
-		| FGBuildableManufacturer_Build_HadronCollider_C__update6
 		| FGBuildableManufacturer_Build_ManufacturerMk1_C__update6
 		| FGBuildableManufacturer_Build_OilRefinery_C__update6
 		| FGBuildableManufacturer_Build_Packager_C__update6
 		| FGBuildableManufacturer_Build_SmelterMk1_C__update6
 	),
-	undefined,
+	(
+		| FGBuildableManufacturer_Build_HadronCollider_C__update6
+	),
 	(
 		| FGBuildableResourceExtractor_miner_mk1__update8
 		| FGBuildableResourceExtractor_miner_mk2__update8

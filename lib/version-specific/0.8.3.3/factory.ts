@@ -114,7 +114,6 @@ export default (update8: update8_docs): ProductionData<
 			| FGBuildableManufacturer_Build_Blender_C
 			| FGBuildableManufacturer_Build_ConstructorMk1_C
 			| FGBuildableManufacturer_Build_FoundryMk1_C
-			| FGBuildableManufacturer_Build_HadronCollider_C
 			| FGBuildableManufacturer_Build_ManufacturerMk1_C
 			| FGBuildableManufacturer_Build_OilRefinery_C
 			| FGBuildableManufacturer_Build_Packager_C
@@ -122,6 +121,15 @@ export default (update8: update8_docs): ProductionData<
 		),
 		'FGBuildableManufacturer'
 	>('FGBuildableManufacturer', update8);
+
+	const FGBuildableManufacturerVariablePower: update8_imports[
+		'FGBuildableManufacturerVariablePower'
+	] = find<
+		(
+			| FGBuildableManufacturer_Build_HadronCollider_C
+		),
+		'FGBuildableManufacturerVariablePower'
+	>('FGBuildableManufacturerVariablePower', update8);
 
 	const FGBuildingDescriptor: update8_imports['FGBuildingDescriptor'] = find<
 		FGBuildingDescriptor,
@@ -222,7 +230,7 @@ export default (update8: update8_docs): ProductionData<
 		FGItemDescriptorBiomass,
 		FGBuildable,
 		FGBuildableManufacturer,
-		FGBuildableManufacturerVariablePower: undefined,
+		FGBuildableManufacturerVariablePower,
 		FGBuildingDescriptor,
 		FGConsumableDescriptor,
 		FGEquipmentDescriptor,

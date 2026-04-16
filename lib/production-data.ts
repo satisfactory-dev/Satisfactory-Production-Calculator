@@ -17,22 +17,26 @@ import {
 	recipe_selection_enums,
 } from './production-data/recipe-selection-enums.ts';
 
+type data<
+	T_Imports extends supported_imports,
+> = (
+	T_Imports extends update8_imports
+		? update8_data
+		: (
+			T_Imports extends version_1p0_imports
+				? version_1p0_data
+				: (
+					T_Imports extends version_1p1_imports
+						? version_1p1_data
+						: version_1p2_data
+				)
+		)
+);
+
 class ProductionData<
 	T_Imports extends supported_imports,
 > {
-	#data: (
-		T_Imports extends update8_imports
-			? update8_data
-			: (
-				T_Imports extends version_1p0_imports
-					? version_1p0_data
-					: (
-						T_Imports extends version_1p1_imports
-							? version_1p1_data
-							: version_1p2_data
-					)
-			)
-	);
+	#data: data<T_Imports>;
 
 	#imports: T_Imports;
 
@@ -41,48 +45,12 @@ class ProductionData<
 		this.#data = this.#get_data();
 	}
 
-	get data(): (
-		T_Imports extends update8_imports
-			? update8_data
-			: (
-				T_Imports extends version_1p0_imports
-					? version_1p0_data
-					: (
-						T_Imports extends version_1p1_imports
-							? version_1p1_data
-							: version_1p2_data
-					)
-			)
-	) {
+	get data(): data<T_Imports> {
 		return this.#data;
 	}
 
-	#get_data(): (
-		T_Imports extends update8_imports
-			? update8_data
-			: (
-				T_Imports extends version_1p0_imports
-					? version_1p0_data
-					: (
-						T_Imports extends version_1p1_imports
-							? version_1p1_data
-							: version_1p2_data
-					)
-			)
-	) {
-		type result = (
-			T_Imports extends update8_imports
-				? update8_data
-				: (
-					T_Imports extends version_1p0_imports
-						? version_1p0_data
-						: (
-							T_Imports extends version_1p1_imports
-								? version_1p1_data
-								: version_1p2_data
-						)
-				)
-		);
+	#get_data(): data<T_Imports> {
+		type result = data<T_Imports>;
 
 		const {
 			FGAmmoTypeProjectile,

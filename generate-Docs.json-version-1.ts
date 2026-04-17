@@ -14,11 +14,6 @@ const [,, ...remaining] = process.argv;
 
 const lang = remaining.filter((maybe) => !maybe.startsWith('--'))[0];
 
-const process_generation = {
-	types: false,
-	data: true,
-};
-
 if (!is_supported(lang)) {
 	throw new Error('Unsupported language');
 }
@@ -36,7 +31,14 @@ const {
 	default: unknown,
 };
 
-await generation_factory(release_data, lang, process_generation, {
+await generation_factory(
+	release_data,
+	lang,
+	{
+		types: false,
+		data: true,
+	},
+	{
 	// oxlint-disable-next-line @stylistic/max-len
 	alternate_source: '@satisfactory-dev/docs.json.ts/generated-types/1.0.1.4/',
 	root_directory: `${import.meta.dirname}/`,

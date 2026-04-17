@@ -100,6 +100,7 @@ import type {
 	FGBuildableResourceExtractor_oil as FGBuildableResourceExtractor_oil__update8,
 	FGBuildableWaterPump as FGBuildableWaterPump__update8,
 	FGItemDescriptorNuclearFuel as FGItemDescriptorNuclearFuel__update8,
+	FGSchematic as FGSchematic__update8,
 } from '@satisfactory-dev/docs.json.ts/generated-types/0.8.3.3/classes.js';
 
 import type {
@@ -175,6 +176,7 @@ import type {
 	FGPowerShardDescriptor as FGPowerShardDescriptor__v1p0,
 	FGRecipe as FGRecipe__v1p0,
 	FGResourceDescriptor as FGResourceDescriptor__v1p0,
+	FGSchematic as FGSchematic__v1p0,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGVehicleDescriptor_Desc_CyberWagon_C as FGVehicleDescriptor_Desc_CyberWagon_C__v1p0,
@@ -261,6 +263,12 @@ import type {
 	FGBuildableResourceExtractor_oil as FGBuildableResourceExtractor_oil__v1p1,
 	FGBuildableWaterPump as FGBuildableWaterPump__v1p1,
 	FGBuildingDescriptor as FGBuildingDescriptor__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGSchematic_with_described_unlocks as FGSchematic_with_described_unlocks__v1p1,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGSchematic_without_described_unlocks as FGSchematic_without_described_unlocks__v1p1,
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1.2.2/classes.js';
 
 import type {
@@ -338,6 +346,12 @@ import type {
 	FGResourceDescriptor as FGResourceDescriptor__v1p2,
 
 	// oxlint-disable-next-line @stylistic/max-len
+	FGSchematic_with_described_unlocks as FGSchematic_with_described_unlocks__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
+	FGSchematic_without_described_unlocks as FGSchematic_without_described_unlocks__v1p2,
+
+	// oxlint-disable-next-line @stylistic/max-len
 	FGVehicleDescriptor_Desc_CyberWagon_C as FGVehicleDescriptor_Desc_CyberWagon_C__v1p2,
 
 	// oxlint-disable-next-line @stylistic/max-len
@@ -386,6 +400,7 @@ import type {
 	FGPowerShardDescriptor,
 	FGRecipe,
 	FGResourceDescriptor,
+	FGSchematic,
 	FGVehicleDescriptor,
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes.js';
 
@@ -491,6 +506,8 @@ type imports<
 
 	T_FGResourceDescriptor extends FGResourceDescriptor | undefined,
 
+	T_FGSchematic extends FGSchematic | undefined,
+
 	T_FGVehicleDescriptor extends FGVehicleDescriptor | undefined,
 > = {
 	FGPowerShardDescriptor: NativeClass__type<
@@ -580,6 +597,10 @@ type imports<
 	FGBuildableResourceExtractor: NativeClass__type<
 		'FGBuildableResourceExtractor',
 		T_FGBuildableResourceExtractor
+	>,
+	FGSchematic: NativeClass__type<
+		'FGSchematic',
+		T_FGSchematic
 	>,
 };
 
@@ -821,6 +842,7 @@ type update8_imports = imports<
 	undefined,
 	FGRecipe__update8,
 	FGResourceDescriptor__update6,
+	FGSchematic__update8,
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__update8
 		| FGVehicleDescriptor_Desc_DroneTransport_C__update8
@@ -928,6 +950,7 @@ type version_1p0_imports = imports<
 	FGPowerShardDescriptor__v1p0,
 	FGRecipe__v1p0,
 	FGResourceDescriptor__v1p0,
+	FGSchematic__v1p0,
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p0
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p0
@@ -1035,6 +1058,10 @@ type version_1p1_imports = imports<
 	FGPowerShardDescriptor__v1p0,
 	FGRecipe__v1p0,
 	FGResourceDescriptor__v1p0,
+	(
+		| FGSchematic_with_described_unlocks__v1p1
+		| FGSchematic_without_described_unlocks__v1p1
+	),
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p0
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p0
@@ -1149,6 +1176,10 @@ type version_1p2_imports = imports<
 	FGPowerShardDescriptor__v1p2,
 	FGRecipe__v1p2,
 	FGResourceDescriptor__v1p2,
+	(
+		| FGSchematic_with_described_unlocks__v1p2
+		| FGSchematic_without_described_unlocks__v1p2
+	),
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p2
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p2

@@ -48,6 +48,8 @@ import type {
 	FGBuildableResourceExtractor_oil,
 	FGBuildableWaterPump,
 	FGBuildingDescriptor,
+	FGSchematic_with_described_unlocks,
+	FGSchematic_without_described_unlocks,
 } from '@satisfactory-dev/docs.json.ts/generated-types/1.1.2.2/classes.ts';
 
 import type {
@@ -242,6 +244,14 @@ export default (
 		'FGBuildableResourceExtractor'
 	>('FGBuildableResourceExtractor', release_1_1);
 
+	const FGSchematic: version_1p1_imports['FGSchematic'] = find<
+		(
+			| FGSchematic_with_described_unlocks
+			| FGSchematic_without_described_unlocks
+		),
+		'FGSchematic'
+	>('FGSchematic', release_1_1);
+
 	return new ProductionData<
 		version_1p1_imports
 	>(() => ({
@@ -267,5 +277,6 @@ export default (
 		FGBuildableResourceExtractor,
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel,
+		FGSchematic,
 	}));
 };

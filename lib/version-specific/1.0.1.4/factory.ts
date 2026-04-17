@@ -39,6 +39,7 @@ import type {
 	FGPowerShardDescriptor,
 	FGRecipe,
 	FGResourceDescriptor,
+	FGSchematic,
 	FGVehicleDescriptor_Desc_CyberWagon_C,
 	FGVehicleDescriptor_Desc_DroneTransport_C,
 	FGVehicleDescriptor_Desc_Explorer_C,
@@ -245,6 +246,11 @@ export default (
 		'FGBuildableResourceExtractor'
 	>('FGBuildableResourceExtractor', release_1_0);
 
+	const FGSchematic: version_1p0_imports['FGSchematic'] = find<
+		FGSchematic,
+		'FGSchematic'
+	>('FGSchematic', release_1_0);
+
 	return new ProductionData<
 		version_1p0_imports
 	>(() => ({
@@ -270,5 +276,6 @@ export default (
 		FGBuildableResourceExtractor,
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel,
+		FGSchematic,
 	}));
 };

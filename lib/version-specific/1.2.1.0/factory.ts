@@ -40,6 +40,8 @@ import type {
 	FGPowerShardDescriptor,
 	FGRecipe,
 	FGResourceDescriptor,
+	FGSchematic_with_described_unlocks,
+	FGSchematic_without_described_unlocks,
 	FGVehicleDescriptor_Desc_CyberWagon_C,
 	FGVehicleDescriptor_Desc_DroneTransport_C,
 	FGVehicleDescriptor_Desc_Explorer_C,
@@ -244,6 +246,14 @@ export default (
 		'FGBuildableResourceExtractor'
 	>('FGBuildableResourceExtractor', release_1_2);
 
+	const FGSchematic: version_1p2_imports['FGSchematic'] = find<
+		(
+			| FGSchematic_with_described_unlocks
+			| FGSchematic_without_described_unlocks
+		),
+		'FGSchematic'
+	>('FGSchematic', release_1_2);
+
 	return new ProductionData<
 		version_1p2_imports
 	>(() => ({
@@ -269,5 +279,6 @@ export default (
 		FGBuildableResourceExtractor,
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel,
+		FGSchematic,
 	}));
 };

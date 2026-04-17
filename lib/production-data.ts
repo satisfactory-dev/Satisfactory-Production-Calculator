@@ -40,6 +40,8 @@ class ProductionData<
 
 	#imports: T_Imports;
 
+	#save_compatibility_targets: (`${string}_C`[]) | undefined = undefined;
+
 	constructor(imports: () => T_Imports) {
 		this.#imports = imports();
 		this.#data = this.#get_data();
@@ -47,6 +49,32 @@ class ProductionData<
 
 	get data(): data<T_Imports> {
 		return this.#data;
+	}
+
+	get save_compatibility_targets(): `${string}_C`[] {
+		if (undefined === this.#save_compatibility_targets) {
+			const result: `${string}_C`[] = [];
+
+			const schematics = this.#imports.FGSchematic;
+
+			if (schematics) {
+				const save_compatibility = schematics.Classes.find((
+					maybe,
+				) => 'Schematic_SaveCompatibility_C' === get_string_C(
+					maybe.ClassName,
+				));
+
+				if (save_compatibility) {
+					result.push(...save_compatibility.mUnlocks
+						.filter((maybe) => 'mRecipes' in maybe)
+						.flatMap((e) => e.mRecipes.map(get_string_C)));
+				}
+			}
+
+			this.#save_compatibility_targets = result;
+		}
+
+		return this.#save_compatibility_targets;
 	}
 
 	#get_data(): data<T_Imports> {

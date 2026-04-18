@@ -33,6 +33,7 @@
 		"./**/*.d.ts",
 		"./lib/**/*.ts",
 		"./tests/**/*.ts",
+		"./validator/**/*.d.mts",
 		"./generated-types/**/*.ts"
 	]
 }

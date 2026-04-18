@@ -1,3 +1,7 @@
+import type {
+	Options,
+} from 'ajv/dist/2020.js';
+
 import Ajv from 'ajv/dist/2020.js';
 
 import {
@@ -26,21 +30,23 @@ import {
 
 const __dirname = import.meta.dirname;
 
+const ajv_options: Options = {
+	verbose: false,
+	logger: false,
+	allErrors: true,
+	code: {
+		source: true,
+		esm: true,
+		lines: true,
+		optimize: 2,
+	},
+};
+
 await writeFile(
 	`${__dirname}/validator/update8/production_request_schema.mjs`,
 	GenerateValidators.toStandalone(
 		GenerateSchemas.factory(u8_production_data),
-		new Ajv({
-			verbose: false,
-			logger: false,
-			allErrors: true,
-			code: {
-				source: true,
-				esm: true,
-				lines: true,
-				optimize: 2,
-			},
-		}),
+		new Ajv(ajv_options),
 	),
 );
 
@@ -48,17 +54,7 @@ await writeFile(
 	`${__dirname}/validator/1.0/production_request_schema.mjs`,
 	GenerateValidators.toStandalone(
 		GenerateSchemas.factory(v1_production_data),
-		new Ajv({
-			verbose: false,
-			logger: false,
-			allErrors: true,
-			code: {
-				source: true,
-				esm: true,
-				lines: true,
-				optimize: 2,
-			},
-		}),
+		new Ajv(ajv_options),
 	),
 );
 
@@ -66,16 +62,6 @@ await writeFile(
 	`${__dirname}/validator/1.1/production_request_schema.mjs`,
 	GenerateValidators.toStandalone(
 		GenerateSchemas.factory(v1p1_production_data),
-		new Ajv({
-			verbose: false,
-			logger: false,
-			allErrors: true,
-			code: {
-				source: true,
-				esm: true,
-				lines: true,
-				optimize: 2,
-			},
-		}),
+		new Ajv(ajv_options),
 	),
 );

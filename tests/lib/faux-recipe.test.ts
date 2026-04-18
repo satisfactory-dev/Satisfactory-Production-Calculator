@@ -19,13 +19,13 @@ void describe('faux_recipe', () => {
 		void it(`returns an empty object with ${semver}`, async () => {
 			const production_data = await factory(semver, 'en-US');
 
-		assert.deepStrictEqual(
-			faux_recipe(
-				production_data,
-				'not a faux recipe',
-			),
-			{},
-		);
-	});
+			assert.deepStrictEqual(
+				faux_recipe(
+					production_data,
+					'not a faux recipe',
+				),
+				{},
+			);
+		});
 	}
 });

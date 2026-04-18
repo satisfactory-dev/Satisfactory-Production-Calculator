@@ -35,13 +35,13 @@ const ajv_options: Options = {
 };
 
 for (const semver of Object.keys(is_supported_from)) {
-await writeFile(
+	await writeFile(
 		`${import.meta.dirname}/validator/${semver}.mjs`,
-	GenerateValidators.toStandalone(
+		GenerateValidators.toStandalone(
 			GenerateSchemas.factory(
 				await production_data(semver, 'en-US'),
 			),
-		new Ajv(ajv_options),
-	),
-);
+			new Ajv(ajv_options),
+		),
+	);
 }

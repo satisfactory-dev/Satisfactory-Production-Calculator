@@ -66,7 +66,7 @@ import {
 
 export default (
 	release_1_1: release_1_1_docs,
-): ProductionData<version_1p1_imports> => {
+): ProductionData<'1.1.2.2'> => {
 	const FGAmmoTypeProjectile: version_1p1_imports[
 		'FGAmmoTypeProjectile'
 	] = find<
@@ -253,7 +253,7 @@ export default (
 	>('FGSchematic', release_1_1);
 
 	return new ProductionData<
-		version_1p1_imports
+		'1.1.2.2'
 	>(() => ({
 		FGAmmoTypeProjectile,
 		FGAmmoTypeInstantHit,

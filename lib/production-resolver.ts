@@ -10,25 +10,13 @@ import type {
 } from '@signpostmarv/intermediary-number';
 
 import type {
-	supported_imports,
-} from './production-data/types.ts';
-
-import type {
 	production_item,
 	recipe_selection,
 } from './types.ts';
 
-import type {
-	ProductionData,
-} from './production-data.ts';
-
 import {
 	get_string_C,
 } from './utilities/get_string_C.ts';
-
-import type {
-	ItemClass_Amount_list_item,
-} from './types.ts';
 
 import {
 	amend_ItemClass_amount,
@@ -42,32 +30,37 @@ import {
 	GenerateSchemas,
 } from './generate-schemas.ts';
 
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
+
 type amended_amounts<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > = {
 	ingredient_amounts: number_arg[],
 	mapped_product_amounts: {[key: string]: operand_types},
-	mIngredients: null|(ItemClass_Amount_list_item<T_Imports>[]),
-	mProduct: null|(ItemClass_Amount_list_item<T_Imports>[]),
+	mIngredients: null|(by_version[Version]['ItemClass_Amount_list_item'][]),
+	mProduct: null|(by_version[Version]['ItemClass_Amount_list_item'][]),
 	product_amounts: operand_types[],
 };
 
 export class ProductionResolver<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
 	private item: production_item;
 
-	private production_data: ProductionData<T_Imports>;
+	private production_data: by_version[Version]['ProductionData'];
 
 	private recipe_selection: recipe_selection;
 
 	private static allowed_empty_ingredients = new WeakMap<
-		ProductionData<supported_imports>,
+		by_version[supported_versions]['ProductionData'],
 		`Recipe_${string}_C`[]
 	>();
 
 	constructor(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
@@ -77,7 +70,7 @@ export class ProductionResolver<
 	}
 
 	get amended_amounts(): amended_amounts<
-		T_Imports
+		Version
 	> {
 		const recipe = this.recipe;
 		const production = this.item;
@@ -113,11 +106,11 @@ export class ProductionResolver<
 				null === mIngredients
 					? []
 					: mIngredients
-			) as ItemClass_Amount_list_item<T_Imports>[]
+			) as by_version[Version]['ItemClass_Amount_list_item'][]
 		).map(
 			(item) => {
 				return amend_ItemClass_amount<
-					T_Imports
+					Version
 				>(
 					this.production_data,
 					item,
@@ -133,7 +126,7 @@ export class ProductionResolver<
 					mProduct
 						? mProduct
 						: []
-				) as ItemClass_Amount_list_item<T_Imports>[]
+				) as by_version[Version]['ItemClass_Amount_list_item'][]
 			).map(
 				(e): [
 					string,
@@ -196,10 +189,10 @@ export class ProductionResolver<
 		return {
 			ingredient_amounts,
 			mapped_product_amounts,
-			mIngredients: mIngredients as amended_amounts<T_Imports>[
+			mIngredients: mIngredients as amended_amounts<Version>[
 				'mIngredients'
 			],
-			mProduct: mProduct as amended_amounts<T_Imports>[
+			mProduct: mProduct as amended_amounts<Version>[
 				'mProduct'
 			],
 			product_amounts,
@@ -229,9 +222,9 @@ export class ProductionResolver<
 	}
 
 	static get_allowed_empty_ingredients<
-		T_Imports extends supported_imports,
+		Version extends supported_versions,
 	>(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 	): string[] {
 		let allowed_empty_ingredients: (
 			| undefined
@@ -272,11 +265,11 @@ export class ProductionResolver<
 	}
 
 	static verify_ingredient<
-		T_Imports extends supported_imports,
+		Version extends supported_versions,
 	>(
-		production_data: ProductionData<T_Imports>,
-		ingredient: string|ItemClass_Amount_list_item<T_Imports>,
-	): string|ItemClass_Amount_list_item<T_Imports> {
+		production_data: by_version[Version]['ProductionData'],
+		ingredient: string|by_version[Version]['ItemClass_Amount_list_item'],
+	): string|by_version[Version]['ItemClass_Amount_list_item'] {
 		if ('string' === typeof ingredient) {
 			return ingredient;
 		}

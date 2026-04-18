@@ -1,14 +1,11 @@
-import type {
-	ProductionData,
-} from './production-data.ts';
-
-import type {
-	supported_imports,
-} from './production-data/types.ts';
-
 import {
 	ProductionResolver,
 } from './production-resolver.ts';
+
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
 
 import type {
 	production_item,
@@ -16,23 +13,23 @@ import type {
 } from './types.ts';
 
 export class DeferredProductionResolver<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
-	#production_data: ProductionData<T_Imports>;
+	#production_data: by_version[Version]['ProductionData'];
 
 	#recipe_selection: recipe_selection;
 
-	#resolves: {[key: string]: ProductionResolver<T_Imports>} = {};
+	#resolves: {[key: string]: ProductionResolver<Version>} = {};
 
 	constructor(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 		recipe_selection: recipe_selection,
 	) {
 		this.#production_data = production_data;
 		this.#recipe_selection = recipe_selection;
 	}
 
-	resolve(item: production_item): ProductionResolver<T_Imports> {
+	resolve(item: production_item): ProductionResolver<Version> {
 		if (!(item in this.#resolves)) {
 			this.#resolves[item] = new ProductionResolver(
 				this.#production_data,

@@ -5,29 +5,22 @@ import {
 	IntermediaryNumber,
 } from '@signpostmarv/intermediary-number';
 
-import type {
-	ProductionData,
-} from './production-data.ts';
-
-import type {
-	supported_imports,
-} from './production-data/types.ts';
-
-import type {
-	ItemClass_Amount_list_item,
-} from './types.ts';
-
 import {
 	get_string_C,
 } from './utilities/get_string_C.ts';
 
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
+
 export function amend_ItemClass_amount_deferred<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 >(
-	production_data: ProductionData<T_Imports>,
-	ItemClass: ItemClass_Amount_list_item<T_Imports>,
+	production_data: by_version[Version]['ProductionData'],
+	ItemClass: by_version[Version]['ItemClass_Amount_list_item'],
 ): {
-	ItemClass: ItemClass_Amount_list_item<T_Imports>['ItemClass'],
+	ItemClass: by_version[Version]['ItemClass_Amount_list_item']['ItemClass'],
 	Amount: operand_types,
 } {
 	const {

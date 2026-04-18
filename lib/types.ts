@@ -1,22 +1,4 @@
 import type {
-	ItemClass_Amount_list_item as ItemClass_Amount_list_item__update8,
-
-	// oxlint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/types/overridable--0.8.3.3.js';
-
-import type {
-	ItemClass_Amount_list_item as ItemClass_Amount_list_item__v1p0,
-
-	// oxlint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/types/overridable--1.0.1.4.js';
-
-import type {
-	ItemClass_Amount_list_item as ItemClass_Amount_list_item__v1p1,
-
-	// oxlint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/generated-types/0.3.7.7/types/overridable--1.1.2.2.js';
-
-import type {
 	amount_string,
 	number_arg,
 	operand_types,
@@ -26,9 +8,6 @@ import type BigNumber from 'bignumber.js';
 
 import type {
 	recipe_selection_properties_with_defaults,
-	supported_imports,
-	update8_imports,
-	version_1p0_imports,
 } from './production-data/types.ts';
 
 type recipe_selection_schema_key = (
@@ -98,22 +77,8 @@ type production_set<
 	) = operand_types,
 > = {[key in production_item]: T};
 
-
-type ItemClass_Amount_list_item<
-	T_Imports extends supported_imports,
-> = (
-	T_Imports extends update8_imports
-		? ItemClass_Amount_list_item__update8
-		: (
-			T_Imports extends version_1p0_imports
-				? ItemClass_Amount_list_item__v1p0
-				: ItemClass_Amount_list_item__v1p1
-		)
-);
-
 export type {
 	combined_production_entry,
-	ItemClass_Amount_list_item,
 	production_item,
 	production_pool,
 	production_result,

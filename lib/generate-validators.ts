@@ -18,8 +18,8 @@ import type {
 } from './generate-schemas.ts';
 
 import type {
-	supported_imports,
-} from './production-data/types.ts';
+	supported_versions,
+} from './supported.ts';
 
 export class GenerateValidators {
 	readonly validation_function: ValidateFunction<
@@ -27,7 +27,7 @@ export class GenerateValidators {
 	>;
 
 	static #ajv_instances: WeakMap<
-		GenerateSchemas<supported_imports>,
+		GenerateSchemas<supported_versions>,
 		WeakMap<
 			Ajv2020,
 			GenerateValidators
@@ -43,7 +43,7 @@ export class GenerateValidators {
 	}
 
 	static #compile(
-		schemas: GenerateSchemas<supported_imports>,
+		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
 	) {
 		const {
@@ -57,7 +57,7 @@ export class GenerateValidators {
 	}
 
 	static fromCompile(
-		schemas: GenerateSchemas<supported_imports>,
+		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
 	): GenerateValidators {
 		let existing_outter = this.#ajv_instances.get(schemas);
@@ -84,7 +84,7 @@ export class GenerateValidators {
 	}
 
 	static toStandalone(
-		schemas: GenerateSchemas<supported_imports>,
+		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
 	): string {
 		return esmify(standalone(

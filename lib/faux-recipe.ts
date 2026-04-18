@@ -5,21 +5,18 @@ import {
 } from '@signpostmarv/intermediary-number';
 
 import type {
-	ProductionData,
-} from './production-data.ts';
-
-import type {
-	supported_imports,
-} from './production-data/types.ts';
-
-import type {
 	production_set,
 } from './types.ts';
 
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
+
 export function faux_recipe<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 >(
-	production_data: ProductionData<T_Imports>,
+	production_data: by_version[Version]['ProductionData'],
 	recipe: string,
 ): production_set {
 	if (

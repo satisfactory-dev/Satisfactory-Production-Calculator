@@ -1,14 +1,3 @@
-import type {
-	supported_imports,
-	update8_data,
-	update8_imports,
-	version_1p0_data,
-	version_1p0_imports,
-	version_1p1_data,
-	version_1p1_imports,
-	version_1p2_data,
-} from './production-data/types.ts';
-
 import {
 	get_string_C,
 } from './utilities/get_string_C.ts';
@@ -17,37 +6,26 @@ import {
 	recipe_selection_enums,
 } from './production-data/recipe-selection-enums.ts';
 
-type data<
-	T_Imports extends supported_imports,
-> = (
-	T_Imports extends update8_imports
-		? update8_data
-		: (
-			T_Imports extends version_1p0_imports
-				? version_1p0_data
-				: (
-					T_Imports extends version_1p1_imports
-						? version_1p1_data
-						: version_1p2_data
-				)
-		)
-);
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
 
 class ProductionData<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
-	#data: data<T_Imports>;
+	#data: by_version[Version]['data'];
 
-	#imports: T_Imports;
+	#imports: by_version[Version]['imports'];
 
 	#save_compatibility_targets: (`${string}_C`[]) | undefined = undefined;
 
-	constructor(imports: () => T_Imports) {
+	constructor(imports: () => by_version[Version]['imports']) {
 		this.#imports = imports();
 		this.#data = this.#get_data();
 	}
 
-	get data(): data<T_Imports> {
+	get data(): by_version[Version]['data'] {
 		return this.#data;
 	}
 
@@ -77,8 +55,8 @@ class ProductionData<
 		return this.#save_compatibility_targets;
 	}
 
-	#get_data(): data<T_Imports> {
-		type result = data<T_Imports>;
+	#get_data(): by_version[Version]['data'] {
+		type result = by_version[Version]['data'];
 
 		const {
 			FGAmmoTypeProjectile,

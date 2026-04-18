@@ -69,7 +69,7 @@ import {
 } from './find.ts';
 
 export default (update8: update8_docs): ProductionData<
-	update8_imports
+	'0.8.3.3'
 > => {
 	const FGAmmoTypeProjectile: update8_imports['FGAmmoTypeProjectile'] = find<
 		FGAmmoTypeProjectile,
@@ -228,7 +228,7 @@ export default (update8: update8_docs): ProductionData<
 	>('FGSchematic', update8);
 
 	return new ProductionData<
-		update8_imports
+		'0.8.3.3'
 	>(() => ({
 		FGAmmoTypeProjectile,
 		FGAmmoTypeInstantHit,

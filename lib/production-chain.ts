@@ -7,14 +7,6 @@ import type {
 	recipe_selection,
 } from './types.ts';
 
-import type {
-	ProductionData,
-} from './production-data.ts';
-
-import type {
-	supported_imports,
-} from './production-data/types.ts';
-
 import {
 	ProductionResolver,
 } from './production-resolver.ts';
@@ -27,21 +19,26 @@ import {
 	faux_recipe,
 } from './faux-recipe.ts';
 
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
+
 class Item<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
 	readonly item: production_item;
 
 	readonly parents: production_item[];
 
-	readonly production_data: ProductionData<T_Imports>;
+	readonly production_data: by_version[Version]['ProductionData'];
 
 	readonly recipe_selection: recipe_selection;
 
-	readonly result: Item<T_Imports>[] = [];
+	readonly result: Item<Version>[] = [];
 
 	constructor(
-		production_data: Item<T_Imports>['production_data'],
+		production_data: Item<Version>['production_data'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 		parents: production_item[],
@@ -60,7 +57,7 @@ class Item<
 		return !!this.result.find((maybe) => maybe.is_recursive());
 	}
 
-	#calculate(): Item<T_Imports>[] {
+	#calculate(): Item<Version>[] {
 		const {
 			known_not_sourced_from_recipe,
 			recipes,
@@ -150,23 +147,23 @@ class Item<
 }
 
 class Recursive<
-	T_Imports extends supported_imports,
-> extends Item<T_Imports> {
+	Version extends supported_versions,
+> extends Item<Version> {
 	is_recursive() {
 		return true;
 	}
 }
 
 export class Root<
-	T_Imports extends supported_imports,
-> extends Item<T_Imports> {
+	Version extends supported_versions,
+> extends Item<Version> {
 	private static cache: WeakMap<
 		recipe_selection,
 		{[key: string]: boolean}
 	> = new WeakMap();
 
 	constructor(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
@@ -179,9 +176,9 @@ export class Root<
 	}
 
 	static is_recursive<
-		T_Imports extends supported_imports,
+		Version extends supported_versions,
 	>(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 	): boolean {

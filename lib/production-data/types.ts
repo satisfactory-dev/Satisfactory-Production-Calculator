@@ -1191,20 +1191,12 @@ type version_1p2_imports = imports<
 	)
 >;
 
-type supported_imports = (
-	| update8_imports
-	| version_1p0_imports
-	| version_1p1_imports
-	| version_1p2_imports
-);
-
 export type {
 	NativeClass__type,
 	NativeClass__type__wrapper,
 	recipe_selection_properties,
 	recipe_selection_properties_with_default,
 	recipe_selection_properties_with_defaults,
-	supported_imports,
 	update8_data,
 	update8_imports,
 	version_1p0_data,

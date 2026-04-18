@@ -25,14 +25,6 @@ import type {
 } from '@signpostmarv/js-types';
 
 import type {
-	ProductionData,
-} from './production-data.ts';
-
-import type {
-	supported_imports,
-} from './production-data/types.ts';
-
-import type {
 	combined_production_entry,
 	production_item,
 	production_request,
@@ -77,8 +69,13 @@ import {
 	Request,
 } from './Request.ts';
 
+import type {
+	by_version,
+	supported_versions,
+} from './supported.ts';
+
 export class ProductionCalculator<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
 	top_level_only: boolean = false;
 
@@ -88,12 +85,12 @@ export class ProductionCalculator<
 		| operand_types
 	> = {};
 
-	private production_data: ProductionData<T_Imports>;
+	private production_data: by_version[Version]['ProductionData'];
 
 	protected readonly check: ValidateFunction<production_request>;
 
 	constructor(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 		generator_validators: GenerateValidators,
 	) {
 		this.check = generator_validators.validation_function;
@@ -172,7 +169,7 @@ export class ProductionCalculator<
 			)
 		>,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_Imports
+			Version
 		>,
 		surplus?: production_set<
 			| operand_types
@@ -288,7 +285,7 @@ export class ProductionCalculator<
 					/^Recipe_--faux--Build_.+_C--Desc_.+_C--\d+(?:\.\d+)?--_C$/
 						.test(recipe)
 				) {
-					const faux_result = faux_recipe<T_Imports>(
+					const faux_result = faux_recipe<Version>(
 						this.production_data,
 						recipe,
 					);
@@ -615,7 +612,7 @@ export class ProductionCalculator<
 	}: {
 		data: production_request,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_Imports
+			Version
 		>,
 		signal?: AbortSignal,
 	}): Promise<production_result> {
@@ -657,7 +654,7 @@ export class ProductionCalculator<
 			)
 		>,
 		deferred_production_resolver: DeferredProductionResolver<
-			T_Imports
+			Version
 		>,
 		signal?: AbortSignal,
 	}): Promise<production_result<

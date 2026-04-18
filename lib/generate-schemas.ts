@@ -3,13 +3,13 @@ import type {
 } from 'ajv/dist/2020.js';
 
 import type {
-	ProductionData,
-} from './production-data.ts';
+	recipe_selection_properties_with_defaults,
+} from './production-data/types.ts';
 
 import type {
-	recipe_selection_properties_with_defaults,
-	supported_imports,
-} from './production-data/types.ts';
+	by_version,
+	supported_versions,
+} from './supported.ts';
 
 
 type recipe_selection = SchemaObject & {
@@ -140,21 +140,21 @@ type production_request = SchemaObject & {
 };
 
 export class GenerateSchemas<
-	T_Imports extends supported_imports,
+	Version extends supported_versions,
 > {
-	#data: ProductionData<T_Imports>;
+	#data: by_version[Version]['ProductionData'];
 
 	readonly production_request: production_request;
 
 	readonly recipe_selection: recipe_selection;
 
 	static #instances: WeakMap<
-		ProductionData<supported_imports>,
-		GenerateSchemas<supported_imports>
+		by_version[supported_versions]['ProductionData'],
+		GenerateSchemas<supported_versions>
 	> = new WeakMap();
 
 	private constructor(
-		production_data: ProductionData<T_Imports>,
+		production_data: by_version[Version]['ProductionData'],
 	) {
 		this.#data = production_data;
 
@@ -320,10 +320,10 @@ export class GenerateSchemas<
 	}
 
 	static factory<
-		T_Imports extends supported_imports,
+		Version extends supported_versions,
 	>(
-		production_data: ProductionData<T_Imports>,
-	): GenerateSchemas<T_Imports> {
+		production_data: by_version[Version]['ProductionData'],
+	): GenerateSchemas<Version> {
 		let existing = this.#instances.get(production_data);
 
 		if (!existing) {
@@ -331,6 +331,6 @@ export class GenerateSchemas<
 			this.#instances.set(production_data, existing);
 		}
 
-		return existing as GenerateSchemas<T_Imports>;
+		return existing as GenerateSchemas<Version>;
 	}
 }

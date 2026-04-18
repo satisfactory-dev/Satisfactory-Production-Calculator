@@ -18,11 +18,11 @@ import {
 	skip_because_docs_dot_json_not_yet_bundled,
 } from '../docs_dot_json_not_yet_bundled.ts';
 
-import {
-	instance as production_data,
-} from '../utilities/production-data.ts';
+import factory from '../utilities/production-data.ts';
 
-void describe('Root', skip_because_docs_dot_json_not_yet_bundled, () => {
+void describe('Root', skip_because_docs_dot_json_not_yet_bundled, async () => {
+	const production_data = await factory('0.8.3.3', 'en-US');
+
 	void describe('is_recursive', () => {
 		const data_sets: [
 			production_item,

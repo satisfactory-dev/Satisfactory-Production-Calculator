@@ -22,7 +22,7 @@ import {
 } from '../../lib/generate-validators.ts';
 
 // eslint-disable-next-line @stylistic/max-len
-import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
+import v1_production_request_schema from '../../validator/1.0.1.4.mjs';
 
 import {
 	ProductionCalculator,

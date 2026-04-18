@@ -142,7 +142,63 @@ type by_version = {
 
 type supported_versions = keyof by_version;
 
+const supported_semver: supported_versions[] = [
+	'0.8.3.3',
+	'1.0.1.4',
+	'1.1.2.2',
+	'1.2.1.0',
+];
+
+const is_supported_from: {
+	[key in supported_versions]: (
+		| supported_versions
+		| '0.3.7.7'
+		| '1.2.0.0'
+	);
+} = Object.freeze({
+	'0.8.3.3': '0.3.7.7',
+	'1.0.1.4': '1.0.1.4',
+	'1.1.2.2': '1.1.2.2',
+	'1.2.1.0': '1.2.0.0',
+});
+
+function is_supported_semver(
+	maybe: unknown,
+): asserts maybe is supported_versions {
+	if (!(supported_semver as unknown[]).includes(maybe)) {
+		throw new Error(`Unsupported semver specified!`);
+	}
+}
+
+function docs_filename<
+	Version extends supported_versions,
+	Lang extends string,
+>(
+	version: Version,
+	lang: Lang,
+) {
+	const docs_filename: {
+		[key in supported_versions]: (
+			| 'Docs.utf8.json'
+			| `${typeof lang}.utf8.json`
+		)
+	} = {
+		'0.8.3.3': 'Docs.utf8.json',
+		'1.0.1.4': `${lang}.utf8.json`,
+		'1.1.2.2': `${lang}.utf8.json`,
+		'1.2.1.0': `${lang}.utf8.json`,
+	};
+
+	return docs_filename[version];
+}
+
 export type {
 	by_version,
 	supported_versions,
+};
+
+export {
+	is_supported_from,
+	is_supported_semver,
+	docs_filename,
 };

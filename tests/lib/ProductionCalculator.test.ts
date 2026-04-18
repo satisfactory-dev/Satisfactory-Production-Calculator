@@ -60,9 +60,7 @@ import {
 	Request,
 } from '../../lib/Request.ts';
 
-import {
-	instance as production_data,
-} from '../utilities/production-data.ts';
+import factory from '../utilities/production-data.ts';
 
 import {
 	GenerateValidators,
@@ -119,9 +117,11 @@ const FGBuildableResourceExtractor = find<
 
 // eslint-disable-next-line @stylistic/max-len
 void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled, async () => {
+	const production_data = await factory('0.8.3.3', 'en-US');
+
 	const validators = await GenerateValidators.fromStandalone(
 		import(
-			'../../validator/update8/production_request_schema.mjs',
+			`${import.meta.dirname}/../../validator/0.8.3.3.mjs`,
 		) as unknown as Promise<{
 			default: ValidateFunction<production_request>,
 		}>,

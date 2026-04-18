@@ -27,10 +27,7 @@ generate--post-build:
 
 generate--validators:
 	@node ./generate-validators.ts
-	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/update8/production_request_schema.mjs --outDir ./validator/update8/
-	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/1.0/production_request_schema.mjs --outDir ./validator/1.0/
-	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/1.1/production_request_schema.mjs --outDir ./validator/1.1/
-	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck ./validator/1.2/production_request_schema.mjs --outDir ./validator/1.2/
+	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck --ignoreConfig ./validator/*.mjs
 
 lint--tsc:
 	@echo 'running syntax check'

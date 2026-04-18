@@ -16,19 +16,11 @@ import {
 	GenerateValidators,
 } from './lib/generate-validators.ts';
 
-import {
-	instance as u8_production_data,
-} from './tests/utilities/production-data.ts';
+import production_data from './tests/utilities/production-data.ts';
 
 import {
-	instance as v1_production_data,
-} from './tests/utilities/production-data-1.0.ts';
-
-import {
-	instance as v1p1_production_data,
-} from './tests/utilities/production-data-1.1.ts';
-
-const __dirname = import.meta.dirname;
+	is_supported_from,
+} from './lib/supported.ts';
 
 const ajv_options: Options = {
 	verbose: false,
@@ -42,26 +34,14 @@ const ajv_options: Options = {
 	},
 };
 
+for (const semver of Object.keys(is_supported_from)) {
 await writeFile(
-	`${__dirname}/validator/update8/production_request_schema.mjs`,
+		`${import.meta.dirname}/validator/${semver}.mjs`,
 	GenerateValidators.toStandalone(
-		GenerateSchemas.factory(u8_production_data),
+			GenerateSchemas.factory(
+				await production_data(semver, 'en-US'),
+			),
 		new Ajv(ajv_options),
 	),
 );
-
-await writeFile(
-	`${__dirname}/validator/1.0/production_request_schema.mjs`,
-	GenerateValidators.toStandalone(
-		GenerateSchemas.factory(v1_production_data),
-		new Ajv(ajv_options),
-	),
-);
-
-await writeFile(
-	`${__dirname}/validator/1.1/production_request_schema.mjs`,
-	GenerateValidators.toStandalone(
-		GenerateSchemas.factory(v1p1_production_data),
-		new Ajv(ajv_options),
-	),
-);
+}

@@ -1,12 +1,4 @@
 import {
-	instance as u8_production_data,
-} from '../utilities/production-data.ts';
-
-import {
-	instance as v1_production_data,
-} from '../utilities/production-data-1.0.ts';
-
-import {
 	flattened_production_ingredients_request_result,
 } from '../utilities/flattened-production-ingredients-request-result.ts';
 
@@ -26,10 +18,10 @@ import {
 } from '../../lib/generate-validators.ts';
 
 // eslint-disable-next-line @stylistic/max-len
-import update8_production_request_schema from '../../validator/update8/production_request_schema.mjs';
+import update8_production_request_schema from '../../validator/0.8.3.3.mjs';
 
 // eslint-disable-next-line @stylistic/max-len
-import v1_production_request_schema from '../../validator/1.0/production_request_schema.mjs';
+import v1_production_request_schema from '../../validator/1.0.1.4.mjs';
 
 import {
 	ProductionCalculator,
@@ -46,6 +38,7 @@ import {
 import type {
 	amount_string,
 } from '@signpostmarv/intermediary-number';
+import production_data from '../utilities/production-data.ts';
 
 const update8_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({
@@ -65,6 +58,8 @@ const v1_validators = await GenerateValidators.fromStandalone(
 
 void describe('Power Shards\' existence in production data', () => {
 	void it('Behaves as expected on Update 8', async () => {
+		const u8_production_data = await production_data('0.8.3.3', 'en-US');
+
 		assert.strictEqual(
 			(
 				!('power_shards' in u8_production_data.data)
@@ -115,6 +110,8 @@ void describe('Power Shards\' existence in production data', () => {
 	});
 
 	void it('Behaves as expected on 1.0', async () => {
+		const v1_production_data = await production_data('1.0.1.4', 'en-US');
+
 		const {data} = v1_production_data;
 
 		assert.strictEqual(

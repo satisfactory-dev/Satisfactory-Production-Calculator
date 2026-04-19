@@ -8,12 +8,24 @@
     "url": "git+https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git.git"
   },
   "funding": "https://github.com/satisfactory-dev/Satisfactory-Production-Calculator.git?sponsor=1",
-  "exports": "./index.js",
-  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./index.js",
+      "types": "./index.js"
+    },
+    "./schema/production-request": {
+      "default": "./schema/production-request.json"
+    },
+    "./schema/recipe-selection": {
+      "default": "./schema/recipe-selection.json"
+    }
+  },
   "files": [
     "./index.ts",
     "./index.js",
     "./index.js.map",
+    "./schema/production-request.json",
+    "./schema/recipe-selection.json",
     "./lib/**/*.ts",
     "./lib/**/*.js",
     "./lib/**/*.js.map"

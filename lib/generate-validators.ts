@@ -1,10 +1,12 @@
 import type {
 	Ajv2020,
-	ValidateFunction,
 } from 'ajv/dist/2020.js';
 
 import standalone from 'ajv/dist/standalone/index.js';
 
+import type {
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
 import {
 	esmify,
 } from '@satisfactory-dev/ajv-utilities';
@@ -22,7 +24,7 @@ import type {
 } from './supported.ts';
 
 export class GenerateValidators {
-	readonly validation_function: ValidateFunction<
+	readonly validation_function: Is<
 		production_request
 	>;
 
@@ -35,7 +37,7 @@ export class GenerateValidators {
 	> = new WeakMap();
 
 	private constructor(
-		validation_function: ValidateFunction<
+		validation_function: Is<
 			production_request
 		>,
 	) {
@@ -78,7 +80,7 @@ export class GenerateValidators {
 	}
 
 	static async fromStandalone(module: Promise<{
-		default: ValidateFunction<production_request>,
+		default: Is<production_request>,
 	}>) {
 		return new this((await module).default);
 	}

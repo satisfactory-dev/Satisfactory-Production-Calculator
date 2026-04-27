@@ -10,8 +10,8 @@ import {
 import assert from 'node:assert/strict';
 
 import type {
-	ValidateFunction,
-} from 'ajv';
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
 
 import {
 	GenerateValidators,
@@ -42,7 +42,7 @@ import production_data from '../utilities/production-data.ts';
 
 const update8_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({
-		default: update8_production_request_schema as ValidateFunction<
+		default: update8_production_request_schema as Is<
 			production_request
 		>,
 	}),
@@ -50,7 +50,7 @@ const update8_validators = await GenerateValidators.fromStandalone(
 
 const v1_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({
-		default: v1_production_request_schema as ValidateFunction<
+		default: v1_production_request_schema as Is<
 			production_request
 		>,
 	}),

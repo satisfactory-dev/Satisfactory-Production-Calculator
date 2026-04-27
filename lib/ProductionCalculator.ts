@@ -1,6 +1,6 @@
 import type {
-	ValidateFunction,
-} from 'ajv/dist/2020.js';
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
 
 import assert from 'assert';
 
@@ -87,7 +87,7 @@ export class ProductionCalculator<
 
 	private production_data: by_version[Version]['ProductionData'];
 
-	protected readonly check: ValidateFunction<production_request>;
+	protected readonly check: Is<production_request>;
 
 	constructor(
 		production_data: by_version[Version]['ProductionData'],

@@ -67,8 +67,9 @@ import {
 } from '../../lib/generate-validators.ts';
 
 import type {
-	ValidateFunction,
-} from 'ajv';
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
+
 import {
 	flattened_production_ingredients_request_result,
 } from '../utilities/flattened-production-ingredients-request-result.ts';
@@ -123,7 +124,7 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 		import(
 			`${import.meta.dirname}/../../validator/0.8.3.3.mjs`,
 		) as unknown as Promise<{
-			default: ValidateFunction<production_request>,
+			default: Is<production_request>,
 		}>,
 	);
 	const instance = new ProductionCalculator(

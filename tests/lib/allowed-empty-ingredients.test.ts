@@ -14,8 +14,8 @@ import {
 import assert from 'node:assert/strict';
 
 import type {
-	ValidateFunction,
-} from 'ajv';
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
 
 import {
 	GenerateValidators,
@@ -34,7 +34,7 @@ import type {
 
 const v1_validators = await GenerateValidators.fromStandalone(
 	Promise.resolve({
-		default: v1_production_request_schema as ValidateFunction<
+		default: v1_production_request_schema as Is<
 			production_request
 		>,
 	}),

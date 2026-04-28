@@ -24,6 +24,7 @@
     "./index.ts",
     "./index.js",
     "./index.js.map",
+    "./schema/CanConvertTypeJsonDefs.json",
     "./schema/production-request.json",
     "./schema/recipe-selection.json",
     "./lib/**/*.ts",

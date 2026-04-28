@@ -1,4 +1,8 @@
 import type {
+	integer_string__type,
+	StringPassedRegExp,
+} from '@signpostmarv/intermediary-number/Docs.json.ts';
+import type {
 	amount_string,
 	number_arg,
 	operand_types,
@@ -9,6 +13,16 @@ import type BigNumber from 'bignumber.js';
 import type {
 	recipe_selection_properties_with_defaults,
 } from './production-data/types.ts';
+
+type amount_string_flexible_maybe_float = StringPassedRegExp<
+	'^\\d*(?:\\.\\d{1,6})$'
+>;
+
+type amount_string_flexible = (
+	| amount_string
+	| amount_string_flexible_maybe_float
+	| integer_string__type
+);
 
 type numeric_triple = (
 	| amount_string
@@ -75,7 +89,53 @@ type production_set<
 	T extends numeric_triple = operand_types,
 > = {[key in production_item]: T};
 
+type IntermediaryNumber = {
+	type: 'IntermediaryNumber',
+	value: (
+		| amount_string_flexible
+		| `${number}`
+		| `${'-'|''}${number}e${'+'|'-'}${number}`
+	),
+};
+
+type IntermediaryCalculation = {
+	type: 'IntermediaryCalculation',
+	left: CanConvertTypeJson,
+	operation: (
+		| '+'
+		| '-'
+		| '*'
+		| 'x'
+		| '/'
+		| '%'
+	),
+	right: CanConvertTypeJson,
+};
+
+type TokenScan = {
+	type: 'TokenScan',
+	value: string,
+};
+
+type CanConvertTypeJson = (
+	| IntermediaryNumber
+	| IntermediaryCalculation
+	| TokenScan
+);
+
+type number_arg_json = (
+	| number
+	| amount_string
+	| CanConvertTypeJson
+);
+
 export type {
+	IntermediaryNumber,
+	IntermediaryCalculation,
+	TokenScan,
+	CanConvertTypeJson,
+	amount_string_flexible,
+	number_arg_json,
 	combined_production_entry,
 	production_item,
 	production_pool,

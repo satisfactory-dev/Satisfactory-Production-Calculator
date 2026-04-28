@@ -44,7 +44,7 @@
     "@satisfactory-dev/custom-assert": "^0.3.0",
     "@satisfactory-dev/docs.json.ts": "^1.2.3",
     "@satisfactory-dev/predicates.ts": "^0.3.0",
-    "@signpostmarv/intermediary-number": "^0.7.1",
+    "@signpostmarv/intermediary-number": "^0.8.0",
     "@signpostmarv/js-types": "^0.2.0",
     "bignumber.js": "^10.0.2",
     "fraction.js": "^5.3.4",

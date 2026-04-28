@@ -25,6 +25,11 @@ import type {
 	supported_versions,
 } from './supported.ts';
 
+// oxlint-disable-next-line @stylistic/max-len
+import CanConvertTypeJsonDefs from '../schema/CanConvertTypeJsonDefs.json' with {
+	type: 'json',
+};
+
 export class GenerateValidators {
 	readonly validation_function: Is<
 		production_request
@@ -55,6 +60,7 @@ export class GenerateValidators {
 			recipe_selection,
 		} = schemas;
 
+		ajv.addSchema(CanConvertTypeJsonDefs);
 		ajv.addSchema(recipe_selection);
 
 		return ajv.compile(production_request);
@@ -95,6 +101,7 @@ export class GenerateValidators {
 			'specify_types_by_validate_function_name'
 		],
 	): string {
+		ajv.addSchema(CanConvertTypeJsonDefs);
 		ajv.addSchema(schemas.recipe_selection);
 		ajv.addSchema(schemas.production_request);
 
@@ -106,9 +113,6 @@ export class GenerateValidators {
 
 					// oxlint-disable-next-line @stylistic/max-len
 					production_request_validator: schemas.production_request.$id,
-					item_amount_object_validator: `${
-						schemas.production_request.$id
-					}#/$defs/item_amount_object`,
 				},
 			),
 			{

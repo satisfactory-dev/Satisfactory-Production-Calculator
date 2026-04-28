@@ -11,7 +11,6 @@ import type {
 	supported_versions,
 } from './supported.ts';
 
-
 type recipe_selection<
 	Version extends supported_versions = supported_versions,
 > = SchemaObject & {
@@ -31,34 +30,6 @@ type production_request<
 	required: ['pool'],
 	additionalProperties: false,
 	$defs: {
-		amount_string: {
-			type: 'string',
-			pattern: string,
-		},
-		amount_string_flexible: {
-			oneOf: [
-				{$ref: '#/$defs/amount_string'},
-				{
-					type: 'string',
-					pattern: string,
-				},
-				{
-					type: 'string',
-					pattern: string,
-				},
-			],
-		},
-		numeric_string: {
-			type: 'string',
-			pattern: string,
-		},
-		number_arg: {
-			oneOf: [
-				{type: 'number', minimum: 0, multipleOf: 0.000001},
-				{$ref: '#/$defs/amount_string'},
-				{$ref: '#/$defs/CanConvertTypeJson'},
-			],
-		},
 		item_amount_object: {
 			type: 'object',
 			propertyNames: {
@@ -66,66 +37,10 @@ type production_request<
 				enum: (keyof recipe_selection_properties_with_defaults)[],
 			},
 			additionalProperties: {
-				$ref: '#/$defs/number_arg',
+
+				// oxlint-disable-next-line @stylistic/max-len
+				$ref: 'docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/number_arg',
 			},
-		},
-		IntermediaryNumber: {
-			type: 'object',
-			required: ['type', 'value'],
-			additionalProperties: false,
-			properties: {
-				type: {type: 'string', const: 'IntermediaryNumber'},
-				value: {
-					oneOf: [
-						{$ref: '#/$defs/amount_string_flexible'},
-						{$ref: '#/$defs/numeric_string'},
-						{
-							type: 'string',
-							pattern: string,
-						},
-					],
-				},
-			},
-		},
-		IntermediaryCalculation: {
-			type: 'object',
-			required: ['type', 'left', 'operation', 'right'],
-			additionalProperties: false,
-			properties: {
-				type: {
-					type: 'string',
-					const: 'IntermediaryCalculation',
-				},
-				left: {$ref: '#/$defs/CanConvertTypeJson'},
-				operation: {
-					type: 'string',
-					enum: [
-						'+',
-						'-',
-						'*',
-						'x',
-						'/',
-						'%',
-					],
-				},
-				right: {$ref: '#/$defs/CanConvertTypeJson'},
-			},
-		},
-		TokenScan: {
-			type: 'object',
-			required: ['type', 'value'],
-			additionalProperties: false,
-			properties: {
-				type: {type: 'string', const: 'TokenScan'},
-				value: {type: 'string'},
-			},
-		},
-		CanConvertTypeJson: {
-			oneOf: [
-				{$ref: '#/$defs/IntermediaryNumber'},
-				{$ref: '#/$defs/IntermediaryCalculation'},
-				{$ref: '#/$defs/TokenScan'},
-			],
 		},
 	},
 	properties: {
@@ -134,7 +49,9 @@ type production_request<
 			minProperties: 1,
 			patternProperties: {
 				'^(?:Desc|BP|Foundation)_[^.]+_C$': {
-					$ref: '#/$defs/number_arg',
+
+					// oxlint-disable-next-line @stylistic/max-len
+					$ref: 'docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/number_arg',
 				},
 			},
 		},
@@ -209,34 +126,6 @@ export class GenerateSchemas<
 			required: ['pool'],
 			additionalProperties: false,
 			$defs: {
-				amount_string: {
-					type: 'string',
-					pattern: '^\\d+(?:\\.\\d{1,6})?$',
-				},
-				amount_string_flexible: {
-					oneOf: [
-						{$ref: '#/$defs/amount_string'},
-						{
-							type: 'string',
-							pattern: '^\\d*(?:\\.\\d{1,6})$',
-						},
-						{
-							type: 'string',
-							pattern: '^\\d+$',
-						},
-					],
-				},
-				numeric_string: {
-					type: 'string',
-					pattern: '^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$',
-				},
-				number_arg: {
-					oneOf: [
-						{type: 'number', minimum: 0, multipleOf: 0.000001},
-						{$ref: '#/$defs/amount_string'},
-						{$ref: '#/$defs/CanConvertTypeJson'},
-					],
-				},
 				item_amount_object: {
 					type: 'object',
 					propertyNames: {
@@ -248,68 +137,10 @@ export class GenerateSchemas<
 						}),
 					},
 					additionalProperties: {
-						$ref: '#/$defs/number_arg',
+
+						// oxlint-disable-next-line @stylistic/max-len
+						$ref: 'docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/number_arg',
 					},
-				},
-				IntermediaryNumber: {
-					type: 'object',
-					required: ['type', 'value'],
-					additionalProperties: false,
-					properties: {
-						type: {type: 'string', const: 'IntermediaryNumber'},
-						value: {
-							oneOf: [
-								{$ref: '#/$defs/amount_string_flexible'},
-								{$ref: '#/$defs/numeric_string'},
-								{
-									type: 'string',
-									pattern: (
-										'^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$'
-									),
-								},
-							],
-						},
-					},
-				},
-				IntermediaryCalculation: {
-					type: 'object',
-					required: ['type', 'left', 'operation', 'right'],
-					additionalProperties: false,
-					properties: {
-						type: {
-							type: 'string',
-							const: 'IntermediaryCalculation',
-						},
-						left: {$ref: '#/$defs/CanConvertTypeJson'},
-						operation: {
-							type: 'string',
-							enum: [
-								'+',
-								'-',
-								'*',
-								'x',
-								'/',
-								'%',
-							],
-						},
-						right: {$ref: '#/$defs/CanConvertTypeJson'},
-					},
-				},
-				TokenScan: {
-					type: 'object',
-					required: ['type', 'value'],
-					additionalProperties: false,
-					properties: {
-						type: {type: 'string', const: 'TokenScan'},
-						value: {type: 'string'},
-					},
-				},
-				CanConvertTypeJson: {
-					oneOf: [
-						{$ref: '#/$defs/IntermediaryNumber'},
-						{$ref: '#/$defs/IntermediaryCalculation'},
-						{$ref: '#/$defs/TokenScan'},
-					],
 				},
 			},
 			properties: {
@@ -318,7 +149,9 @@ export class GenerateSchemas<
 					minProperties: 1,
 					patternProperties: {
 						'^(?:Desc|BP|Foundation)_[^.]+_C$': {
-							$ref: '#/$defs/number_arg',
+
+							// oxlint-disable-next-line @stylistic/max-len
+							$ref: 'docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/number_arg',
 						},
 					},
 				},

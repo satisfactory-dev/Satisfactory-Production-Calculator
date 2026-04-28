@@ -1,8 +1,4 @@
 import type {
-	TypeScriptifyConfig,
-} from '@satisfactory-dev/ajv-utilities';
-
-import type {
 	Options,
 } from 'ajv/dist/2020.js';
 
@@ -22,9 +18,6 @@ import {
 
 import production_data from './tests/utilities/production-data.ts';
 
-import type {
-	supported_versions,
-} from './lib/supported.ts';
 import {
 	is_supported_from,
 } from './lib/supported.ts';
@@ -41,35 +34,6 @@ const ajv_options: Options = {
 	},
 };
 
-const specify_types_by_validate_function_name: Partial<{
-	[key in supported_versions]: TypeScriptifyConfig[
-		'specify_types_by_validate_function_name'
-	];
-}> = {
-	'0.8.3.3': {
-		validate22: [
-			'numeric_triple',
-			'../lib/types.ts',
-		],
-		validate23: [
-			'operand_types',
-			'@signpostmarv/intermediary-number',
-		],
-		validate24: [
-			'IntermediaryNumber',
-			'@signpostmarv/intermediary-number',
-		],
-		validate25: [
-			'amount_string',
-			'@signpostmarv/intermediary-number',
-		],
-		validate28: [
-			'IntermediaryCalculation',
-			'@signpostmarv/intermediary-number',
-		],
-	},
-};
-
 for (const semver of Object.keys(is_supported_from)) {
 	await writeFile(
 		`${import.meta.dirname}/validator/${semver}.ts`,
@@ -79,7 +43,32 @@ for (const semver of Object.keys(is_supported_from)) {
 				await production_data(semver, 'en-US'),
 			),
 			new Ajv(ajv_options),
-			specify_types_by_validate_function_name[semver] || {},
+			{
+				validate23: [
+					'number_arg_json',
+					'../lib/types.ts',
+				],
+				validate24: [
+					'CanConvertTypeJson',
+					'../lib/types.ts',
+				],
+				validate25: [
+					'IntermediaryNumber',
+					'../lib/types.ts',
+				],
+				validate26: [
+					'amount_string_flexible',
+					'../lib/types.ts',
+				],
+				validate29: [
+					'IntermediaryCalculation',
+					'../lib/types.ts',
+				],
+				validate33: [
+					'production_pool',
+					'../lib/types.ts',
+				],
+			},
 		),
 	);
 }

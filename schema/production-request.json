@@ -42,62 +42,10 @@
 		"$defs": {
 			"type": "object",
 			"required": [
-				"amount_string",
-				"amount_string_flexible",
-				"numeric_string",
-				"number_arg",
-				"item_amount_object",
-				"IntermediaryNumber",
-				"IntermediaryCalculation",
-				"TokenScan",
-				"CanConvertTypeJson"
+				"item_amount_object"
 			],
 			"additionalProperties": false,
 			"properties": {
-				"amount_string": {
-					"type": "object",
-					"const": {
-						"type": "string",
-						"pattern": "^\\d+(?:\\.\\d{1,6})?$"
-					}
-				},
-				"amount_string_flexible": {
-					"type": "object",
-					"const": {
-						"oneOf": [
-							{"$ref": "#/$defs/amount_string"},
-							{
-								"type": "string",
-								"pattern": "^\\d*(?:\\.\\d{1,6})$"
-							},
-							{
-								"type": "string",
-								"pattern": "^\\d+$"
-							}
-						]
-					}
-				},
-				"numeric_string": {
-					"type": "object",
-					"const": {
-						"type": "string",
-						"pattern": "^-?(?:\\d*\\.\\d+|\\d+(?:\\.\\d+)?)$"
-					}
-				},
-				"number_arg": {
-					"type": "object",
-					"const": {
-						"oneOf": [
-							{
-								"type": "number",
-								"minimum": 0,
-								"multipleOf": 0.000001
-							},
-							{"$ref": "#/$defs/amount_string"},
-							{"$ref": "#/$defs/CanConvertTypeJson"}
-						]
-					}
-				},
 				"item_amount_object": {
 					"type": "object",
 					"required": [
@@ -130,89 +78,9 @@
 						"additionalProperties": {
 							"type": "object",
 							"const": {
-								"$ref": "#/$defs/number_arg"
+								"$ref": "docs.json.ts--production-planner--lib--CanConvertTypeJsonDefs#/$defs/number_arg"
 							}
 						}
-					}
-				},
-				"IntermediaryNumber": {
-					"type": "object",
-					"const": {
-						"type": "object",
-						"required": ["type", "value"],
-						"additionalProperties": false,
-						"properties": {
-							"type": {
-								"type": "string",
-								"const": "IntermediaryNumber"
-							},
-							"value": {
-								"oneOf": [
-									{
-										"$ref": "#/$defs/amount_string_flexible"
-									},
-									{
-										"$ref": "#/$defs/numeric_string"
-									},
-									{
-										"type": "string",
-										"pattern": "^(-?\\d+(?:\\.\\d+))e([+-])(\\d+)$"
-									}
-								]
-							}
-						}
-					}
-				},
-				"IntermediaryCalculation": {
-					"type": "object",
-					"const": {
-						"type": "object",
-						"required": ["type", "left", "operation", "right"],
-						"additionalProperties": false,
-						"properties": {
-							"type": {
-								"type": "string",
-								"const": "IntermediaryCalculation"
-							},
-							"left": {
-								"$ref": "#/$defs/CanConvertTypeJson"
-							},
-							"operation": {
-								"type": "string",
-								"enum": ["+", "-", "*", "x", "/", "%"]
-							},
-							"right": {
-								"$ref": "#/$defs/CanConvertTypeJson"
-							}
-						}
-					}
-				},
-				"TokenScan": {
-					"type": "object",
-					"const": {
-						"type": "object",
-						"required": ["type", "value"],
-						"additionalProperties": false,
-						"properties": {
-							"type": {"type": "string", "const": "TokenScan"},
-							"value": {"type": "string"}
-						}
-					}
-				},
-				"CanConvertTypeJson": {
-					"type": "object",
-					"const": {
-						"oneOf": [
-							{
-								"$ref": "#/$defs/IntermediaryNumber"
-							},
-							{
-								"$ref": "#/$defs/IntermediaryCalculation"
-							},
-							{
-								"$ref": "#/$defs/TokenScan"
-							}
-						]
 					}
 				}
 			}

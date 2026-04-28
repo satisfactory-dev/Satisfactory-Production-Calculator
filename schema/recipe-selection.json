@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "recipe-selection--meta-schema",
+	"$id": "docs.json.ts--production-planner--lib--recipe-selection--meta-schema",
 	"$defs": {
 		"enum_item": {
 			"oneOf": [
@@ -29,7 +29,15 @@
 			"type": "string",
 			"const": "https://json-schema.org/draft/2020-12/schema"
 		},
-		"$id": {"type": "string", "const": "recipe-selection"},
+		"$id": {
+			"type": "string",
+			"enum": [
+				"docs.json.ts--production-planner--lib--0.8.3.3--recipe-selection",
+				"docs.json.ts--production-planner--lib--1.0.1.4--recipe-selection",
+				"docs.json.ts--production-planner--lib--1.1.2.2--recipe-selection",
+				"docs.json.ts--production-planner--lib--1.2.1.0--recipe-selection"
+			]
+		},
 		"type": {"type": "string", "const": "object"},
 		"additionalProperties": {"type": "boolean", "const": false},
 		"properties": {

@@ -7,5 +7,6 @@
 		"rewriteRelativeImportExtensions": true,
 		"sourceMap": true
 	},
+	"exclude": ["./validator/1.0.1.4.ts"],
 	"include": ["./*.ts", "./lib/**/*.ts", "./tests/**/*.ts"]
 }

@@ -10,6 +10,12 @@ import type {
 	recipe_selection_properties_with_defaults,
 } from './production-data/types.ts';
 
+type numeric_triple = (
+	| amount_string
+	| BigNumber
+	| operand_types
+);
+
 type recipe_selection_schema_key = (
 	keyof recipe_selection_properties_with_defaults
 );
@@ -52,11 +58,7 @@ type combined_production_entry<
 };
 
 type production_result<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types,
+	T extends numeric_triple = operand_types,
 > = {
 	ingredients: production_set<T>,
 	output: production_set<T>,
@@ -70,11 +72,7 @@ type production_item = `${string}_C`;
 type recipe_selection = {[key in production_item]: `${'Recipe'|'Build'}_${string}_C`};
 
 type production_set<
-	T extends (
-		| amount_string
-		| BigNumber
-		| operand_types
-	) = operand_types,
+	T extends numeric_triple = operand_types,
 > = {[key in production_item]: T};
 
 export type {
@@ -85,4 +83,5 @@ export type {
 	production_request,
 	production_set,
 	recipe_selection,
+	numeric_triple,
 };

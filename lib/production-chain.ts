@@ -37,16 +37,20 @@ class Item<
 
 	readonly result: Item<Version>[] = [];
 
+	readonly version: Version;
+
 	constructor(
 		production_data: Item<Version>['production_data'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 		parents: production_item[],
+		version: Version,
 	) {
 		this.production_data = production_data;
 		this.item = item;
 		this.recipe_selection = recipe_selection;
 		this.parents = parents;
+		this.version = version;
 
 		if (!(this instanceof Recursive)) {
 			this.result = this.#calculate();
@@ -71,6 +75,7 @@ class Item<
 		const ingredients: production_item[] = [];
 
 		const production_resolver = new ProductionResolver(
+			this.version,
 			this.production_data,
 			this.item,
 			this.recipe_selection,
@@ -133,6 +138,7 @@ class Item<
 					item,
 					this.recipe_selection,
 					next_parents,
+					this.version,
 				);
 			}
 
@@ -141,6 +147,7 @@ class Item<
 				item,
 				this.recipe_selection,
 				next_parents,
+				this.version,
 			);
 		});
 	}
@@ -166,12 +173,14 @@ export class Root<
 		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
+		version: Version,
 	) {
 		super(
 			production_data,
 			item,
 			recipe_selection,
 			[],
+			version,
 		);
 	}
 
@@ -181,6 +190,7 @@ export class Root<
 		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
+		version: Version,
 	): boolean {
 		if (!this.cache.has(recipe_selection)) {
 			this.cache.set(recipe_selection, {});
@@ -194,7 +204,7 @@ export class Root<
 			(
 				this.cache.get(recipe_selection) as {[key: string]: boolean}
 			)[item] = (
-				new Root(production_data, item, recipe_selection)
+				new Root(production_data, item, recipe_selection, version)
 			).is_recursive();
 		}
 

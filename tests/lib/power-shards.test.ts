@@ -17,18 +17,13 @@ import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
 
-// eslint-disable-next-line @stylistic/max-len
-import update8_production_request_schema from '../../validator/0.8.3.3.mjs';
-
-// eslint-disable-next-line @stylistic/max-len
-import v1_production_request_schema from '../../validator/1.0.1.4.mjs';
-
 import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
 
 import type {
 	production_request,
+	recipe_selection,
 } from '../../lib/types.ts';
 
 import {
@@ -41,19 +36,21 @@ import type {
 import production_data from '../utilities/production-data.ts';
 
 const update8_validators = await GenerateValidators.fromStandalone(
-	Promise.resolve({
-		default: update8_production_request_schema as Is<
-			production_request
-		>,
-	}),
+	import(
+		`${import.meta.dirname}/../../validator/0.8.3.3.ts`,
+	) as Promise<{
+		recipe_selection_validator: Is<recipe_selection>,
+		production_request_validator: Is<production_request>,
+	}>,
 );
 
 const v1_validators = await GenerateValidators.fromStandalone(
-	Promise.resolve({
-		default: v1_production_request_schema as Is<
-			production_request
-		>,
-	}),
+	import(
+		`${import.meta.dirname}/../../validator/1.0.1.4.ts`,
+	) as Promise<{
+		recipe_selection_validator: Is<recipe_selection>,
+		production_request_validator: Is<production_request>,
+	}>,
 );
 
 void describe('Power Shards\' existence in production data', () => {
@@ -75,6 +72,7 @@ void describe('Power Shards\' existence in production data', () => {
 		);
 
 		const calculator = new ProductionCalculator(
+			'0.8.3.3',
 			u8_production_data,
 			update8_validators,
 		);
@@ -132,6 +130,7 @@ void describe('Power Shards\' existence in production data', () => {
 		);
 
 		const calculator = new ProductionCalculator(
+			'1.0.1.4',
 			v1_production_data,
 			v1_validators,
 		);
@@ -217,6 +216,7 @@ void describe('Power Shards\' existence in production data', () => {
 				{
 					Desc_CrystalShard_C: 'Recipe_SyntheticPowerShard_C',
 				},
+				'1.0.1.4',
 			);
 
 			console.debug({

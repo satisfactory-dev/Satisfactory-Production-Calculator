@@ -21,17 +21,22 @@ export class DeferredProductionResolver<
 
 	#resolves: {[key: string]: ProductionResolver<Version>} = {};
 
+	#version: Version;
+
 	constructor(
 		production_data: by_version[Version]['ProductionData'],
 		recipe_selection: recipe_selection,
+		version: Version,
 	) {
 		this.#production_data = production_data;
 		this.#recipe_selection = recipe_selection;
+		this.#version = version;
 	}
 
 	resolve(item: production_item): ProductionResolver<Version> {
 		if (!(item in this.#resolves)) {
 			this.#resolves[item] = new ProductionResolver(
+				this.#version,
 				this.#production_data,
 				item,
 				this.#recipe_selection,

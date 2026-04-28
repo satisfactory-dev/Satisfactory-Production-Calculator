@@ -17,15 +17,13 @@ import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
 
-// eslint-disable-next-line @stylistic/max-len
-import v1_production_request_schema from '../../validator/1.0.1.4.mjs';
-
 import {
 	ProductionCalculator,
 } from '../../lib/ProductionCalculator.ts';
 
 import type {
 	production_request,
+	recipe_selection,
 } from '../../lib/types.ts';
 
 import {
@@ -37,16 +35,18 @@ import {
 } from '../utilities/flattened-production-ingredients-request-result.ts';
 
 const v1_validators = await GenerateValidators.fromStandalone(
-	Promise.resolve({
-		default: v1_production_request_schema as Is<
-			production_request
-		>,
-	}),
+	import(
+		`${import.meta.dirname}/../../validator/1.0.1.4.ts`,
+	) as Promise<{
+		recipe_selection_validator: Is<recipe_selection>,
+		production_request_validator: Is<production_request>,
+	}>,
 );
 
 void describe('Power Booster Fuel', () => {
 	void it('Behaves as expected on 1.0', async () => {
 		const calculator = new ProductionCalculator(
+			'1.0.1.4',
 			v1_production_data,
 			v1_validators,
 		);

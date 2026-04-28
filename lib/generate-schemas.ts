@@ -12,13 +12,21 @@ import type {
 } from './supported.ts';
 
 
-type recipe_selection = SchemaObject & {
+type recipe_selection<
+	Version extends supported_versions = supported_versions,
+> = SchemaObject & {
+	$id: `docs.json.ts--production-planner--lib--${Version}--recipe-selection`,
 	type: 'object',
 	additionalProperties: false,
 	properties: recipe_selection_properties_with_defaults,
 };
 
-type production_request = SchemaObject & {
+type production_request<
+	Version extends supported_versions = supported_versions,
+> = SchemaObject & {
+	$id: `docs.json.ts--production-planner--lib--${
+		Version
+	}--production-request`,
 	type: 'object',
 	required: ['pool'],
 	additionalProperties: false,
@@ -131,7 +139,9 @@ type production_request = SchemaObject & {
 			},
 		},
 		recipe_selection: {
-			$ref: 'recipe-selection',
+			$ref: `docs.json.ts--production-planner--lib--${
+				Version
+			}--recipe-selection`,
 		},
 		pool: {
 			$ref: '#/$defs/item_amount_object',
@@ -144,6 +154,8 @@ export class GenerateSchemas<
 > {
 	#data: by_version[Version]['ProductionData'];
 
+	#version: Version;
+
 	readonly production_request: production_request;
 
 	readonly recipe_selection: recipe_selection;
@@ -154,9 +166,11 @@ export class GenerateSchemas<
 	> = new WeakMap();
 
 	private constructor(
+		version: Version,
 		production_data: by_version[Version]['ProductionData'],
 	) {
 		this.#data = production_data;
+		this.#version = version;
 
 		const {
 			recipe_selection,
@@ -165,12 +179,10 @@ export class GenerateSchemas<
 
 		this.recipe_selection = {
 			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'recipe-selection',
 			...recipe_selection,
 		};
 		this.production_request = {
 			$schema: 'https://json-schema.org/draft/2020-12/schema',
-			$id: 'production-request',
 			...production_request,
 		};
 	}
@@ -181,12 +193,18 @@ export class GenerateSchemas<
 		} = this.#data.data;
 
 		const recipe_selection: recipe_selection = {
+			$id: `docs.json.ts--production-planner--lib--${
+				this.#version
+			}--recipe-selection`,
 			type: 'object',
 			additionalProperties: false,
 			properties: recipe_selection_enums,
 		};
 
 		const production_request: production_request = {
+			$id: `docs.json.ts--production-planner--lib--${
+				this.#version
+			}--production-request`,
 			type: 'object',
 			required: ['pool'],
 			additionalProperties: false,
@@ -305,7 +323,10 @@ export class GenerateSchemas<
 					},
 				},
 				recipe_selection: {
-					$ref: 'recipe-selection',
+					// oxlint-disable-next-line @stylistic/max-len
+					$ref: `docs.json.ts--production-planner--lib--${
+						this.#version
+					}--recipe-selection`,
 				},
 				pool: {
 					$ref: '#/$defs/item_amount_object',
@@ -322,12 +343,13 @@ export class GenerateSchemas<
 	static factory<
 		Version extends supported_versions,
 	>(
+		version: Version,
 		production_data: by_version[Version]['ProductionData'],
 	): GenerateSchemas<Version> {
 		let existing = this.#instances.get(production_data);
 
 		if (!existing) {
-			existing = new this(production_data);
+			existing = new this(version, production_data);
 			this.#instances.set(production_data, existing);
 		}
 

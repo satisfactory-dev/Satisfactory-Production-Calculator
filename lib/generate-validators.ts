@@ -6,13 +6,15 @@ import standalone from 'ajv/dist/standalone/index.js';
 
 import type {
 	Is,
+	TypeScriptifyConfig,
 } from '@satisfactory-dev/ajv-utilities';
 import {
-	esmify,
+	typescriptify,
 } from '@satisfactory-dev/ajv-utilities';
 
 import type {
 	production_request,
+	recipe_selection,
 } from './types.ts';
 
 import type {
@@ -80,18 +82,48 @@ export class GenerateValidators {
 	}
 
 	static async fromStandalone(module: Promise<{
-		default: Is<production_request>,
+		recipe_selection_validator: Is<recipe_selection>,
+		production_request_validator: Is<production_request>,
 	}>) {
-		return new this((await module).default);
+		return new this((await module).production_request_validator);
 	}
 
 	static toStandalone(
 		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
+		specify_types_by_validate_function_name: TypeScriptifyConfig[
+			'specify_types_by_validate_function_name'
+		],
 	): string {
-		return esmify(standalone(
-			ajv,
-			this.#compile(schemas, ajv),
-		));
+		ajv.addSchema(schemas.recipe_selection);
+		ajv.addSchema(schemas.production_request);
+
+		return typescriptify(
+			standalone(
+				ajv,
+				{
+					recipe_selection_validator: schemas.recipe_selection.$id,
+
+					// oxlint-disable-next-line @stylistic/max-len
+					production_request_validator: schemas.production_request.$id,
+					item_amount_object_validator: `${
+						schemas.production_request.$id
+					}#/$defs/item_amount_object`,
+				},
+			),
+			{
+				specify_types: {
+					[schemas.recipe_selection.$id]: [
+						'recipe_selection',
+						'../lib/types.ts',
+					],
+					[schemas.production_request.$id]: [
+						'production_request',
+						'../lib/types.ts',
+					],
+				},
+				specify_types_by_validate_function_name,
+			},
+		);
 	}
 }

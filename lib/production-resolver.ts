@@ -54,16 +54,20 @@ export class ProductionResolver<
 
 	private recipe_selection: recipe_selection;
 
+	#version: Version;
+
 	private static allowed_empty_ingredients = new WeakMap<
 		by_version[supported_versions]['ProductionData'],
 		`Recipe_${string}_C`[]
 	>();
 
 	constructor(
+		version: Version,
 		production_data: by_version[Version]['ProductionData'],
 		item: production_item,
 		recipe_selection: recipe_selection,
 	) {
+		this.#version = version;
 		this.production_data = production_data;
 		this.item = item;
 		this.recipe_selection = recipe_selection;
@@ -202,7 +206,10 @@ export class ProductionResolver<
 	get recipe(): `${string}_C` {
 		const {
 			recipe_selection: recipe_selection_schema,
-		} = GenerateSchemas.factory(this.production_data);
+		} = GenerateSchemas.factory(
+			this.#version,
+			this.production_data,
+		);
 
 		let maybe_recipe: `${string}_C`|undefined = undefined;
 

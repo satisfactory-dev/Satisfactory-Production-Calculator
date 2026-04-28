@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "production-request--meta-schema",
+	"$id": "docs.json.ts--production-planner--lib--production-request--meta-schema",
 	"$defs": {
 		"number_arg": {
 			"type": "object",
@@ -30,7 +30,15 @@
 			"type": "string",
 			"const": "https://json-schema.org/draft/2020-12/schema"
 		},
-		"$id": {"type": "string", "const": "production-request"},
+		"$id": {
+			"type": "string",
+			"enum": [
+				"docs.json.ts--production-planner--lib--0.8.3.3--production-request",
+				"docs.json.ts--production-planner--lib--1.0.1.4--production-request",
+				"docs.json.ts--production-planner--lib--1.1.2.2--production-request",
+				"docs.json.ts--production-planner--lib--1.2.1.0--production-request"
+			]
+		},
 		"$defs": {
 			"type": "object",
 			"required": [
@@ -231,7 +239,12 @@
 				},
 				"recipe_selection": {
 					"type": "object",
-					"const": {"$ref": "recipe-selection"}
+					"enum": [
+						"docs.json.ts--production-planner--lib--0.8.3.3--recipe-selection",
+						"docs.json.ts--production-planner--lib--1.0.1.4--recipe-selection",
+						"docs.json.ts--production-planner--lib--1.1.2.2--recipe-selection",
+						"docs.json.ts--production-planner--lib--1.2.1.0--recipe-selection"
+					]
 				},
 				"pool": {
 					"type": "object",

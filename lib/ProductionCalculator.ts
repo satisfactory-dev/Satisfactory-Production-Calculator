@@ -89,10 +89,14 @@ export class ProductionCalculator<
 
 	protected readonly check: Is<production_request>;
 
+	#version: Version;
+
 	constructor(
+		version: Version,
 		production_data: by_version[Version]['ProductionData'],
 		generator_validators: GenerateValidators,
 	) {
+		this.#version = version;
 		this.check = generator_validators.validation_function;
 		this.production_data = production_data;
 
@@ -127,6 +131,7 @@ export class ProductionCalculator<
 		const deferred_production_resolver = new DeferredProductionResolver(
 			this.production_data,
 			validated.recipe_selection || {},
+			this.#version,
 		);
 
 		return this.calculate_validated({
@@ -669,7 +674,10 @@ export class ProductionCalculator<
 
 		const {
 			recipe_selection: recipe_selection_schema,
-		} = GenerateSchemas.factory(this.production_data);
+		} = GenerateSchemas.factory(
+			this.#version,
+			this.production_data,
+		);
 
 		const initial_result = await this.calculate_precisely({
 			data,
@@ -762,6 +770,7 @@ export class ProductionCalculator<
 						this.production_data,
 						check_deeper_item,
 						data.recipe_selection || {},
+						this.#version,
 					);
 
 					if (possibly_recursive) {

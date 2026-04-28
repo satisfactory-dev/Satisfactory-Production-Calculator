@@ -74,6 +74,7 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, async () => {
 						production_data,
 						item,
 						recipe_selection,
+						'0.8.3.3',
 					);
 
 					assert.strictEqual(
@@ -103,6 +104,7 @@ void describe('Root', skip_because_docs_dot_json_not_yet_bundled, async () => {
 				production_data,
 				item,
 				recipe_selection,
+				'0.8.3.3',
 			));
 		}
 	});

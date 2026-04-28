@@ -6,6 +6,10 @@ import {
 import assert from 'node:assert/strict';
 
 import type {
+	Is,
+} from '@satisfactory-dev/ajv-utilities';
+
+import type {
 	FGBuildableFrackingActivator,
 	FGBuildableResourceExtractor_miner_mk1,
 	FGBuildableResourceExtractor_miner_mk2,
@@ -34,6 +38,7 @@ import {
 import type {
 	production_request,
 	production_result,
+	recipe_selection,
 } from '../../lib/types.ts';
 
 import {
@@ -65,10 +70,6 @@ import factory from '../utilities/production-data.ts';
 import {
 	GenerateValidators,
 } from '../../lib/generate-validators.ts';
-
-import type {
-	Is,
-} from '@satisfactory-dev/ajv-utilities';
 
 import {
 	flattened_production_ingredients_request_result,
@@ -122,12 +123,15 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 
 	const validators = await GenerateValidators.fromStandalone(
 		import(
-			`${import.meta.dirname}/../../validator/0.8.3.3.mjs`,
-		) as unknown as Promise<{
-			default: Is<production_request>,
+			`${import.meta.dirname}/../../validator/0.8.3.3.ts`,
+		) as Promise<{
+			recipe_selection_validator: Is<recipe_selection>,
+			production_request_validator: Is<production_request>,
 		}>,
 	);
+
 	const instance = new ProductionCalculator(
+		'0.8.3.3',
 		production_data,
 		validators,
 	);

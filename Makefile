@@ -27,7 +27,6 @@ generate--post-build:
 
 generate--validators:
 	@node ./generate-validators.ts
-	@./node_modules/.bin/tsc --allowJs --declaration --emitDeclarationOnly --skipLibCheck --ignoreConfig ./validator/*.mjs
 
 lint--tsc:
 	@echo 'running syntax check'

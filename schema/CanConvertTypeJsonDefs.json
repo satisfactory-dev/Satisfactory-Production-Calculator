@@ -62,14 +62,7 @@
 				"left": {"$ref": "#/$defs/CanConvertTypeJson"},
 				"operation": {
 					"type": "string",
-					"enum": [
-						"+",
-						"-",
-						"*",
-						"x",
-						"/",
-						"%"
-					]
+					"enum": ["+", "-", "*", "x", "/", "%"]
 				},
 				"right": {"$ref": "#/$defs/CanConvertTypeJson"}
 			}

@@ -41,9 +41,7 @@
 		},
 		"$defs": {
 			"type": "object",
-			"required": [
-				"item_amount_object"
-			],
+			"required": ["item_amount_object"],
 			"additionalProperties": false,
 			"properties": {
 				"item_amount_object": {

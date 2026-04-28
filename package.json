@@ -13,7 +13,7 @@
       "default": "./index.js",
       "types": "./index.js"
     },
-    "./schema/CanConvertTypeJsonDefs-request": {
+    "./schema/CanConvertTypeJsonDefs": {
       "default": "./schema/CanConvertTypeJsonDefs.json"
     },
     "./schema/production-request": {

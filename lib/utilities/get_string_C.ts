@@ -1,5 +1,5 @@
 
-const regex_already_string_C = /^[A-Z][A-Za-z0-9_]+_C$/;
+const regex_already_string_C = /^[A-Z][A-Za-z0-9_-]+_C$/;
 const regex_get_string_C = /\/([^./]+).(\1_C)/i;
 
 export function get_string_C(maybe: string): `${string}_C` {

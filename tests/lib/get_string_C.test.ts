@@ -35,6 +35,7 @@ const data_set: (
 	],
 	['/Script/FactoryGame.FGBuildGun', false, 'BP_BuildGun_C'],
 	['nope', false],
+	['Schematic_2-5_C', true, 'Schematic_2-5_C'],
 ];
 
 void describe('has_string_C', () => {

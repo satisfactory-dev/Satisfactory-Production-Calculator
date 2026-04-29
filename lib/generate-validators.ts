@@ -119,11 +119,11 @@ export class GenerateValidators {
 				specify_types: {
 					[schemas.recipe_selection.$id]: [
 						'recipe_selection',
-						'../lib/types.ts',
+						'@satisfactory-dev/docs.json.ts-production-planner',
 					],
 					[schemas.production_request.$id]: [
 						'production_request',
-						'../lib/types.ts',
+						'@satisfactory-dev/docs.json.ts-production-planner',
 					],
 				},
 				specify_types_by_validate_function_name,

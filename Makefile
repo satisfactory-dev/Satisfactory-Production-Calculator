@@ -19,7 +19,7 @@ generate--skip-checks--version-1-1:
 	@DOCSDOTJSON_SEMVER=1.1.2.2 node ./generate-Docs.json.ts en-US
 
 generate--skip-checks--version-1-2:
-	@DOCSDOTJSON_SEMVER=1.2.1.0 node ./generate-Docs.json.ts en-US
+	@DOCSDOTJSON_SEMVER=1.2.2.0 node ./generate-Docs.json.ts en-US
 
 generate--post-build:
 	@./node_modules/.bin/tsc --project ./tsconfig.generated-types-check.json

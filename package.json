@@ -46,7 +46,7 @@
   "peerDependencies": {
     "@satisfactory-dev/ajv-utilities": "^0.22.0",
     "@satisfactory-dev/custom-assert": "^0.3.0",
-    "@satisfactory-dev/docs.json.ts": "^1.2.3",
+    "@satisfactory-dev/docs.json.ts": "^1.3.0",
     "@satisfactory-dev/predicates.ts": "^0.3.0",
     "@signpostmarv/intermediary-number": "^0.8.0",
     "@signpostmarv/js-types": "^0.2.0",

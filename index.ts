@@ -4,7 +4,7 @@ import factory_in_release_1_0 from './lib/version-specific/1.0.1.4/factory.ts';
 
 import factory_in_release_1_1 from './lib/version-specific/1.1.2.2/factory.ts';
 
-import factory_in_release_1_2 from './lib/version-specific/1.2.1.0/factory.ts';
+import factory_in_release_1_2 from './lib/version-specific/1.2.2.0/factory.ts';
 
 import {
 	find as find_in_update8,
@@ -20,7 +20,7 @@ import {
 
 import {
 	find as find_in_release_1_2,
-} from './lib/version-specific/1.2.1.0/find.ts';
+} from './lib/version-specific/1.2.2.0/find.ts';
 
 export * from './lib/amend-itemclass-amount.ts';
 export * from './lib/types.ts';

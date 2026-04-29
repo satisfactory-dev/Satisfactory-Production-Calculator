@@ -3,8 +3,8 @@ import type {
 } from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/Base.ts';
 
 import type {
-	release_1_2_1_0_docs,
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.1.0/types';
+	release_1_2_2_0_docs,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.2.0/types';
 
 import type {
 	NativeClass__type,
@@ -15,7 +15,7 @@ export function find<
 	T1 extends `FG${string}`,
 >(
 	NativeClassName: T1,
-	from: release_1_2_1_0_docs,
+	from: release_1_2_2_0_docs,
 ): NativeClass__type<
 	typeof NativeClassName,
 	T0

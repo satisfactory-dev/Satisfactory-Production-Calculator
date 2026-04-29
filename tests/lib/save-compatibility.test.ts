@@ -16,7 +16,7 @@ void describe('ProductionData::save_compatibility_targets', async () => {
 		'0.8.3.3',
 		'1.0.1.4',
 		'1.1.2.2',
-		'1.2.1.0',
+		'1.2.2.0',
 	];
 
 	const data_sets: [string, boolean][] = [

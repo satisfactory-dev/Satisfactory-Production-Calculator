@@ -65,8 +65,8 @@ import type {
 } from '@satisfactory-dev/docs.json.ts/src/version-specific/1.1.2.2/supported_lang.js';
 
 import type {
-	release_1_2_1_0_docs,
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.1.0/types.js';
+	release_1_2_2_0_docs,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.2.0/types.js';
 
 import type {
 	ItemClass_Amount_list_item as ItemClass_Amount_list_item__v1p2,
@@ -78,7 +78,7 @@ import type {
 	generation_factory as factory__v1p2,
 
 // oxlint-disable-next-line @stylistic/max-len
-} from '@satisfactory-dev/docs.json.ts/src/version-specific/1.2.1.0/generation_factory.js';
+} from '@satisfactory-dev/docs.json.ts/src/version-specific/1.2.2.0/generation_factory.js';
 
 import type {
 	is_supported as is_supported_lang__v1p2,
@@ -129,12 +129,12 @@ type by_version = {
 		is_supported_lang: typeof is_supported_lang__v1p1,
 		generation_factory: typeof factory__v1p1,
 	},
-	'1.2.1.0': {
+	'1.2.2.0': {
 		imports: version_1p2_imports,
 		data: version_1p2_data,
-		ProductionData: ProductionData<'1.2.1.0'>,
+		ProductionData: ProductionData<'1.2.2.0'>,
 		ItemClass_Amount_list_item: ItemClass_Amount_list_item__v1p2,
-		docs: release_1_2_1_0_docs,
+		docs: release_1_2_2_0_docs,
 		is_supported_lang: typeof is_supported_lang__v1p2,
 		generation_factory: typeof factory__v1p2,
 	},
@@ -146,7 +146,7 @@ const supported_semver: supported_versions[] = [
 	'0.8.3.3',
 	'1.0.1.4',
 	'1.1.2.2',
-	'1.2.1.0',
+	'1.2.2.0',
 ];
 
 const is_supported_from: {
@@ -159,7 +159,7 @@ const is_supported_from: {
 	'0.8.3.3': '0.3.7.7',
 	'1.0.1.4': '1.0.1.4',
 	'1.1.2.2': '1.1.2.2',
-	'1.2.1.0': '1.2.0.0',
+	'1.2.2.0': '1.2.0.0',
 });
 
 function is_supported_semver(
@@ -186,7 +186,7 @@ function docs_filename<
 		'0.8.3.3': 'Docs.utf8.json',
 		'1.0.1.4': `${lang}.utf8.json`,
 		'1.1.2.2': `${lang}.utf8.json`,
-		'1.2.1.0': `${lang}.utf8.json`,
+		'1.2.2.0': `${lang}.utf8.json`,
 	};
 
 	return docs_filename[version];

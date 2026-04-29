@@ -1,6 +1,6 @@
 import type {
-	release_1_2_1_0_docs,
-} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.1.0/types.ts';
+	release_1_2_2_0_docs,
+} from '@satisfactory-dev/docs.json.ts/generated-types/1.2.2.0/types.ts';
 
 
 import type {
@@ -64,8 +64,8 @@ import {
 } from './find.ts';
 
 export default (
-	release_1_2: release_1_2_1_0_docs,
-): ProductionData<'1.2.1.0'> => {
+	release_1_2: release_1_2_2_0_docs,
+): ProductionData<'1.2.2.0'> => {
 	const FGAmmoTypeProjectile: version_1p2_imports[
 		'FGAmmoTypeProjectile'
 	] = find<
@@ -255,7 +255,7 @@ export default (
 	>('FGSchematic', release_1_2);
 
 	return new ProductionData<
-		'1.2.1.0'
+		'1.2.2.0'
 	>(() => ({
 		FGAmmoTypeProjectile,
 		FGAmmoTypeInstantHit,

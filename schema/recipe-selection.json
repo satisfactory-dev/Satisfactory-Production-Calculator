@@ -35,7 +35,7 @@
 				"docs.json.ts--production-planner--lib--0.8.3.3--recipe-selection",
 				"docs.json.ts--production-planner--lib--1.0.1.4--recipe-selection",
 				"docs.json.ts--production-planner--lib--1.1.2.2--recipe-selection",
-				"docs.json.ts--production-planner--lib--1.2.1.0--recipe-selection"
+				"docs.json.ts--production-planner--lib--1.2.2.0--recipe-selection"
 			]
 		},
 		"type": {"type": "string", "const": "object"},

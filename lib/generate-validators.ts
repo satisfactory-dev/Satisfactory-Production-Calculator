@@ -6,7 +6,6 @@ import standalone from 'ajv/dist/standalone/index.js';
 
 import type {
 	Is,
-	TypeScriptifyConfig,
 } from '@satisfactory-dev/ajv-utilities';
 import {
 	typescriptify,
@@ -97,13 +96,13 @@ export class GenerateValidators {
 	static toStandalone(
 		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
-		specify_types_by_validate_function_name: TypeScriptifyConfig[
-			'specify_types_by_validate_function_name'
-		],
 	): string {
 		ajv.addSchema(CanConvertTypeJsonDefs);
 		ajv.addSchema(schemas.recipe_selection);
 		ajv.addSchema(schemas.production_request);
+
+
+		const from_self = '@satisfactory-dev/docs.json.ts-production-planner';
 
 		return typescriptify(
 			standalone(
@@ -119,14 +118,71 @@ export class GenerateValidators {
 				specify_types: {
 					[schemas.recipe_selection.$id]: [
 						'recipe_selection',
-						'@satisfactory-dev/docs.json.ts-production-planner',
+						from_self,
 					],
 					[schemas.production_request.$id]: [
 						'production_request',
-						'@satisfactory-dev/docs.json.ts-production-planner',
+						from_self,
+						[
+							[
+								{
+									name: 'production_request',
+									sub_type_chain: ['pool'],
+								},
+								from_self,
+								{
+									instancePath_partial: '/pool',
+									parentDataProperty: 'pool',
+								},
+							],
+							[
+								'number_arg_json',
+								from_self,
+								{
+									instancePath_partial: '/input/',
+									parentDataProperty: null,
+								},
+								[
+									[
+										'CanConvertTypeJson',
+										from_self,
+										{
+											instancePath: null,
+											parentDataProperty: null,
+										},
+										[
+											[
+												'IntermediaryCalculation',
+												from_self,
+												{
+													instancePath: null,
+													parentDataProperty: null,
+												},
+											],
+										],
+									],
+								],
+							],
+						],
 					],
 				},
-				specify_types_by_validate_function_name,
+				specify_types_by_inside_out_match: [
+					[
+						{
+							name: 'IntermediaryNumber',
+							sub_type_chain: ['value'],
+						},
+						'@signpostmarv/intermediary-number',
+						{
+							instancePath_partial: '/value',
+							parentDataProperty: 'value',
+						},
+						[
+							'IntermediaryNumber',
+							'@signpostmarv/intermediary-number',
+						],
+					],
+				],
 			},
 		);
 	}

@@ -43,32 +43,6 @@ for (const semver of Object.keys(is_supported_from)) {
 				await production_data(semver, 'en-US'),
 			),
 			new Ajv(ajv_options),
-			{
-				validate23: [
-					'number_arg_json',
-					'../lib/types.ts',
-				],
-				validate24: [
-					'CanConvertTypeJson',
-					'../lib/types.ts',
-				],
-				validate25: [
-					'IntermediaryNumber',
-					'../lib/types.ts',
-				],
-				validate26: [
-					'amount_string_flexible',
-					'../lib/types.ts',
-				],
-				validate29: [
-					'IntermediaryCalculation',
-					'../lib/types.ts',
-				],
-				validate33: [
-					'production_pool',
-					'../lib/types.ts',
-				],
-			},
 		),
 	);
 }

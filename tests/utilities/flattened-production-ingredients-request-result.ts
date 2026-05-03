@@ -4,10 +4,10 @@ import type {
 import type {
 	amount_string,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 import {
 	IntermediaryNumber,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type {
 } from '@signpostmarv/js-types';

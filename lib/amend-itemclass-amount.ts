@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import type {
 	number_arg,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import {
 	get_string_C,

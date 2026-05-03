@@ -1,9 +1,9 @@
 import type {
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 import {
 	IntermediaryNumber,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import {
 	get_string_C,

@@ -1,6 +1,6 @@
 import type {
 	amount_string,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import {
 	instance as v1_production_data,

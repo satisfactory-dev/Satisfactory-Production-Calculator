@@ -48,12 +48,12 @@ import {
 import type {
 	amount_string,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import {
 	IntermediaryCalculation,
 	IntermediaryNumber,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import {
 	skip_because_docs_dot_json_not_yet_bundled,

@@ -1,7 +1,7 @@
 import type {
 	amount_string,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type {
 	production_pool,

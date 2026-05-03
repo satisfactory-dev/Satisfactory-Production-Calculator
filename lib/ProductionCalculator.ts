@@ -14,12 +14,12 @@ import type {
 	amount_string,
 	number_arg,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 import {
 	IntermediaryNumber,
 	IntermediaryNumberInfinity,
 	Numbers,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type {
 } from '@signpostmarv/js-types';

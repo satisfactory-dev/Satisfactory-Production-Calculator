@@ -1,12 +1,12 @@
 import type {
 	integer_string__type,
 	StringPassedRegExp,
-} from '@signpostmarv/intermediary-number/Docs.json.ts';
+} from '@satisfactory-dev/intermediary-number/Docs.json.ts';
 import type {
 	amount_string,
 	number_arg,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type BigNumber from 'bignumber.js';
 

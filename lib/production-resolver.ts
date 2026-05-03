@@ -7,7 +7,7 @@ import {
 import type {
 	number_arg,
 	operand_types,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type {
 	production_item,

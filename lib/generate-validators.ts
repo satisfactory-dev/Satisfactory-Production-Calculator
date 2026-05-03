@@ -172,14 +172,14 @@ export class GenerateValidators {
 							name: 'IntermediaryNumber',
 							sub_type_chain: ['value'],
 						},
-						'@signpostmarv/intermediary-number',
+						'@satisfactory-dev/intermediary-number',
 						{
 							instancePath_partial: '/value',
 							parentDataProperty: 'value',
 						},
 						[
 							'IntermediaryNumber',
-							'@signpostmarv/intermediary-number',
+							'@satisfactory-dev/intermediary-number',
 						],
 					],
 				],

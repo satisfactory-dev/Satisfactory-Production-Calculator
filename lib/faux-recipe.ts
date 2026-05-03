@@ -2,7 +2,7 @@ import assert from 'assert';
 
 import {
 	IntermediaryNumber,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 
 import type {
 	production_set,

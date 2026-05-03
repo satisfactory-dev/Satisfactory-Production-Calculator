@@ -32,7 +32,7 @@ import {
 
 import type {
 	amount_string,
-} from '@signpostmarv/intermediary-number';
+} from '@satisfactory-dev/intermediary-number';
 import production_data from '../utilities/production-data.ts';
 
 const update8_validators = await GenerateValidators.fromStandalone(

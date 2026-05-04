@@ -612,7 +612,7 @@ type recipe_selection_properties = {
 };
 
 type recipe_selection_properties_with_default = (
-	& recipe_selection_properties
+	& recipe_selection_properties[`${string}_C`]
 	& {
 		default: `${string}_C`,
 	}

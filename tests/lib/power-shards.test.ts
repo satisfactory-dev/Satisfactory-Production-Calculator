@@ -74,7 +74,9 @@ void describe('Power Shards\' existence in production data', () => {
 		const calculator = new ProductionCalculator(
 			'0.8.3.3',
 			u8_production_data,
-			update8_validators,
+			{
+				production_request: update8_validators.validation_function,
+			},
 		);
 
 		assert.doesNotThrow(() => {
@@ -132,7 +134,9 @@ void describe('Power Shards\' existence in production data', () => {
 		const calculator = new ProductionCalculator(
 			'1.0.1.4',
 			v1_production_data,
-			v1_validators,
+			{
+				production_request: v1_validators.validation_function,
+			},
 		);
 
 		const power_shard_data = {

@@ -133,7 +133,9 @@ void describe('ProductionCalculator', skip_because_docs_dot_json_not_yet_bundled
 	const instance = new ProductionCalculator(
 		'0.8.3.3',
 		production_data,
-		validators,
+		{
+			production_request: validators.validation_function,
+		},
 	);
 
 	let does_not_throw_cases: `${string}_C`[] = (

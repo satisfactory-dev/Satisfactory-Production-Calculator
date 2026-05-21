@@ -32,10 +32,6 @@ import type {
 	production_set,
 } from './types.ts';
 
-import type {
-	GenerateValidators,
-} from './generate-validators.ts';
-
 import {
 	DeferredProductionResolver,
 } from './production-resolver--deferred.ts';
@@ -94,10 +90,12 @@ export class ProductionCalculator<
 	constructor(
 		version: Version,
 		production_data: by_version[Version]['ProductionData'],
-		generator_validators: GenerateValidators,
+		validators: {
+			production_request: Is<production_request>,
+		},
 	) {
 		this.#version = version;
-		this.check = generator_validators.validation_function;
+		this.check = validators.production_request;
 		this.production_data = production_data;
 
 		const allowed_empty_ingredients: `Recipe_${string}_C`[] = [];

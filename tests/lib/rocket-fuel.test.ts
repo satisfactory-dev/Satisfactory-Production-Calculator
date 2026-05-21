@@ -48,7 +48,9 @@ void describe('Power Booster Fuel', () => {
 		const calculator = new ProductionCalculator(
 			'1.0.1.4',
 			v1_production_data,
-			v1_validators,
+			{
+				production_request: v1_validators.validation_function,
+			},
 		);
 
 		const unpackaged_rocket_fuel = {

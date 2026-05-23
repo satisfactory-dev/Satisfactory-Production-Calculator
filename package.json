@@ -44,7 +44,7 @@
     "prettier": "^3.8.2"
   },
   "peerDependencies": {
-    "@satisfactory-dev/ajv-utilities": "^0.27.1",
+    "@satisfactory-dev/ajv-utilities": "^0.27.2",
     "@satisfactory-dev/custom-assert": "^0.3.0",
     "@satisfactory-dev/docs.json.ts": "^1.4.3",
     "@satisfactory-dev/intermediary-number": "^1.0.0",

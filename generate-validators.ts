@@ -8,6 +8,8 @@ import {
 	writeFile,
 } from 'node:fs/promises';
 
+import ts from 'typescript';
+
 import {
 	GenerateSchemas,
 } from './lib/generate-schemas.ts';
@@ -43,6 +45,7 @@ for (const semver of Object.keys(is_supported_from)) {
 				await production_data(semver, 'en-US'),
 			),
 			new Ajv(ajv_options),
+			ts,
 		),
 	);
 }

@@ -96,6 +96,7 @@ export class GenerateValidators {
 	static toStandalone(
 		schemas: GenerateSchemas<supported_versions>,
 		ajv: Ajv2020,
+		ts: Parameters<typeof typescriptify>[1],
 	): string {
 		ajv.addSchema(CanConvertTypeJsonDefs);
 		ajv.addSchema(schemas.recipe_selection);
@@ -114,6 +115,7 @@ export class GenerateValidators {
 					production_request_validator: schemas.production_request.$id,
 				},
 			),
+			ts,
 			{
 				specify_types: {
 					[schemas.recipe_selection.$id]: [

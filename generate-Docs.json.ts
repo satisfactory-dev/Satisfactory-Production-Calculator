@@ -1,4 +1,12 @@
 import type {
+	NodeFactory,
+} from '@signpostmarv/json-schema-typescript-codegen';
+
+import {
+	factory,
+} from 'typescript';
+
+import type {
 	by_version,
 	supported_versions,
 } from './lib/supported.ts';
@@ -93,6 +101,7 @@ async function handle<
 			),
 			root_directory: `${import.meta.dirname}/`,
 		},
+		factory as NodeFactory,
 	);
 }
 

@@ -2,7 +2,7 @@ import type {
 	NodeFactory,
 } from '@signpostmarv/json-schema-typescript-codegen';
 
-import {
+import ts, {
 	factory,
 } from 'typescript';
 
@@ -101,7 +101,10 @@ async function handle<
 			),
 			root_directory: `${import.meta.dirname}/`,
 		},
-		factory as NodeFactory,
+		{
+			...ts,
+			factory: factory as NodeFactory,
+		},
 	);
 }
 

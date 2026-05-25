@@ -677,10 +677,15 @@ type data<
 		| undefined
 	),
 
+	T_FGBuildableConveyorBelt extends FGBuildableConveyorBelt | undefined,
+	T_FGBuildableConveyorLift extends FGBuildableConveyorLift | undefined,
+
 	T_FGBuildableManufacturer extends FGBuildableManufacturer | undefined,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableManufacturerVariablePower extends FGBuildableManufacturerVariablePower | undefined,
+
+	T_FGBuildablePipeline extends FGBuildablePipeline | undefined,
 
 	T_FGBuildingDescriptor extends FGBuildingDescriptor | undefined,
 
@@ -727,6 +732,9 @@ type data<
 	biomass: {
 		[key: `${string}_C`]: Exclude<T_FGItemDescriptorBiomass, undefined>,
 	},
+	belts: {
+		[key: `${string}_C`]: Exclude<T_FGBuildableConveyorBelt, undefined>,
+	},
 	buildable: {
 		[key: `${string}_C`]: Exclude<T_FGBuildable, undefined>,
 	},
@@ -746,6 +754,9 @@ type data<
 		>,
 	},
 	items: {[key: `${string}_C`]: Exclude<T_FGItemDescriptor, undefined>},
+	lifts: {
+		[key: `${string}_C`]: Exclude<T_FGBuildableConveyorLift, undefined>,
+	},
 	manufacturers: {
 		[key: `${string}_C`]: (
 			| Exclude<
@@ -758,6 +769,7 @@ type data<
 			>
 		),
 	},
+	pipes: {[key: `${string}_C`]: Exclude<T_FGBuildablePipeline, undefined>},
 	poles: {[key: `${string}_C`]: Exclude<T_FGPoleDescriptor, undefined>},
 	power_booster_fuel: {
 		[key: `${string}_C`]: Exclude<
@@ -798,6 +810,8 @@ type update8_data = data<
 		| FGBuildable_tiered__update8
 		| FGBuildable_unoccupied_and_untiered__update8
 	),
+	FGBuildableConveyorBelt__update8,
+	FGBuildableConveyorLift__update8,
 	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__update6
 		| FGBuildableManufacturer_Build_Blender_C__update6
@@ -809,6 +823,7 @@ type update8_data = data<
 		| FGBuildableManufacturer_Build_Packager_C__update6
 		| FGBuildableManufacturer_Build_SmelterMk1_C__update6
 	),
+	FGBuildablePipeline__update8,
 	undefined,
 	FGBuildingDescriptor__update8,
 	FGConsumableDescriptor__update8,
@@ -904,6 +919,8 @@ type version_1p0_data = data<
 		| FGBuildable_tiered__v1p0
 		| FGBuildable_unoccupied_and_untiered__v1p0
 	),
+	FGBuildableConveyorBelt__v1p0,
+	FGBuildableConveyorLift__v1p0,
 	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p0
 		| FGBuildableManufacturer_Build_Blender_C__v1p0
@@ -919,6 +936,7 @@ type version_1p0_data = data<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p0
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0
 	),
+	FGBuildablePipeline__v1p0,
 	FGBuildingDescriptor__v1p0,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -1015,6 +1033,8 @@ type version_1p1_data = data<
 		| FGBuildable_tiered__v1p1
 		| FGBuildable_unoccupied_and_untiered__v1p1
 	),
+	FGBuildableConveyorBelt__v1p1,
+	FGBuildableConveyorLift__v1p1,
 	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p1
 		| FGBuildableManufacturer_Build_Blender_C__v1p1
@@ -1030,6 +1050,7 @@ type version_1p1_data = data<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p1
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1
 	),
+	FGBuildablePipeline__v1p1,
 	FGBuildingDescriptor__v1p1,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -1130,6 +1151,8 @@ type version_1p2_data = data<
 		| FGBuildable_tiered__v1p2
 		| FGBuildable_unoccupied_and_untiered__v1p2
 	),
+	FGBuildableConveyorBelt__v1p2,
+	FGBuildableConveyorLift__v1p2,
 	(
 		| FGBuildableManufacturer_Build_AssemblerMk1_C__v1p2
 		| FGBuildableManufacturer_Build_Blender_C__v1p2
@@ -1145,6 +1168,7 @@ type version_1p2_data = data<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p2
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2
 	),
+	FGBuildablePipeline__v1p2,
 	FGBuildingDescriptor__v1p2,
 	FGConsumableDescriptor__v1p2,
 	FGEquipmentDescriptor__v1p2,

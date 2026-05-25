@@ -1,3 +1,7 @@
+import type {
+	FGBuildablePipeline,
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes.js';
+
 import {
 	get_string_C,
 } from './utilities/get_string_C.ts';
@@ -64,6 +68,9 @@ class ProductionData<
 			FGAmmoTypeSpreadshot,
 			FGItemDescriptorBiomass,
 			FGBuildable,
+			FGBuildableConveyorBelt,
+			FGBuildableConveyorLift,
+			FGBuildablePipeline,
 			FGBuildingDescriptor,
 			FGConsumableDescriptor,
 			FGEquipmentDescriptor,
@@ -108,6 +115,52 @@ class ProductionData<
 			(was, is): result['ammo'] => {
 				if (is) {
 					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const belts: result['belts'] = [
+			FGBuildableConveyorBelt,
+		].reduce(
+			(was, is): result['belts'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		const lifts: result['lifts'] = [
+			FGBuildableConveyorLift,
+		].reduce(
+			(was, is): result['lifts'] => {
+				if (is) {
+					for (const item of is.Classes) {
+						was[item.ClassName] = item;
+					}
+				}
+
+				return was;
+			},
+			{},
+		);
+
+		// @todo figure out why update 8 pipes is listed as never
+		const pipes = [
+			FGBuildablePipeline,
+		].reduce(
+			(was, is): {[key: `${string}_C`]: FGBuildablePipeline} => {
+				if (is) {
+					for (const item of is.Classes as FGBuildablePipeline[]) {
 						was[item.ClassName] = item;
 					}
 				}
@@ -393,6 +446,7 @@ class ProductionData<
 
 		return {
 			ammo,
+			belts,
 			biomass,
 			buildable,
 			buildings,
@@ -400,7 +454,9 @@ class ProductionData<
 			equipment,
 			fuel_nuclear,
 			items,
+			lifts,
 			manufacturers,
+			pipes,
 			poles,
 			power_booster_fuel,
 			power_shards,

@@ -11,6 +11,8 @@ import type {
 	FGBuildable_occupied,
 	FGBuildable_tiered,
 	FGBuildable_unoccupied_and_untiered,
+	FGBuildableConveyorBelt,
+	FGBuildableConveyorLift,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
 	FGBuildableManufacturer_Build_AssemblerMk1_C,
@@ -24,6 +26,7 @@ import type {
 	FGBuildableManufacturer_Build_Packager_C,
 	FGBuildableManufacturer_Build_QuantumEncoder_C,
 	FGBuildableManufacturer_Build_SmelterMk1_C,
+	FGBuildablePipeline,
 	FGBuildableResourceExtractor_miner_mk1,
 	FGBuildableResourceExtractor_miner_mk2,
 	FGBuildableResourceExtractor_miner_mk3,
@@ -254,6 +257,27 @@ export default (
 		'FGSchematic'
 	>('FGSchematic', release_1_2);
 
+	const FGBuildableConveyorBelt: version_1p2_imports[
+		'FGBuildableConveyorBelt'
+	] = find<
+		FGBuildableConveyorBelt,
+		'FGBuildableConveyorBelt'
+	>('FGBuildableConveyorBelt', release_1_2);
+
+	const FGBuildableConveyorLift: version_1p2_imports[
+		'FGBuildableConveyorLift'
+	] = find<
+		FGBuildableConveyorLift,
+		'FGBuildableConveyorLift'
+	>('FGBuildableConveyorLift', release_1_2);
+
+	const FGBuildablePipeline: version_1p2_imports[
+		'FGBuildablePipeline'
+	] = find<
+		FGBuildablePipeline,
+		'FGBuildablePipeline'
+	>('FGBuildablePipeline', release_1_2);
+
 	return new ProductionData<
 		'1.2.2.0'
 	>(() => ({
@@ -280,5 +304,8 @@ export default (
 		FGPowerShardDescriptor,
 		FGItemDescriptorPowerBoosterFuel,
 		FGSchematic,
+		FGBuildableConveyorBelt,
+		FGBuildableConveyorLift,
+		FGBuildablePipeline,
 	}));
 };

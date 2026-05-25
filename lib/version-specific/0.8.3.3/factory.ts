@@ -11,8 +11,11 @@ import type {
 	FGBuildable_occupied,
 	FGBuildable_tiered,
 	FGBuildable_unoccupied_and_untiered,
+	FGBuildableConveyorBelt,
+	FGBuildableConveyorLift,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
+	FGBuildablePipeline,
 	FGBuildableResourceExtractor_miner_mk1,
 	FGBuildableResourceExtractor_miner_mk2,
 	FGBuildableResourceExtractor_miner_mk3,
@@ -227,6 +230,27 @@ export default (update8: update8_docs): ProductionData<
 		'FGSchematic'
 	>('FGSchematic', update8);
 
+	const FGBuildableConveyorBelt: update8_imports[
+		'FGBuildableConveyorBelt'
+	] = find<
+		FGBuildableConveyorBelt,
+		'FGBuildableConveyorBelt'
+	>('FGBuildableConveyorBelt', update8);
+
+	const FGBuildableConveyorLift: update8_imports[
+		'FGBuildableConveyorLift'
+	] = find<
+		FGBuildableConveyorLift,
+		'FGBuildableConveyorLift'
+	>('FGBuildableConveyorLift', update8);
+
+	const FGBuildablePipeline: update8_imports[
+		'FGBuildablePipeline'
+	] = find<
+		FGBuildablePipeline,
+		'FGBuildablePipeline'
+	>('FGBuildablePipeline', update8);
+
 	return new ProductionData<
 		'0.8.3.3'
 	>(() => ({
@@ -253,5 +277,8 @@ export default (update8: update8_docs): ProductionData<
 		FGPowerShardDescriptor: undefined,
 		FGItemDescriptorPowerBoosterFuel: undefined,
 		FGSchematic,
+		FGBuildableConveyorBelt,
+		FGBuildableConveyorLift,
+		FGBuildablePipeline,
 	}));
 };

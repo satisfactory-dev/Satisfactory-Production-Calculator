@@ -84,8 +84,11 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__update8,
+	FGBuildableConveyorBelt as FGBuildableConveyorBelt__update8,
+	FGBuildableConveyorLift as FGBuildableConveyorLift__update8,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__update8,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__update8,
+	FGBuildablePipeline as FGBuildablePipeline__update8,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__update8,
@@ -117,6 +120,8 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p0,
+	FGBuildableConveyorBelt as FGBuildableConveyorBelt__v1p0,
+	FGBuildableConveyorLift as FGBuildableConveyorLift__v1p0,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p0,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p0,
 
@@ -152,6 +157,8 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p0,
+
+	FGBuildablePipeline as FGBuildablePipeline__v1p0,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p0,
@@ -214,6 +221,8 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p1,
+	FGBuildableConveyorBelt as FGBuildableConveyorBelt__v1p1,
+	FGBuildableConveyorLift as FGBuildableConveyorLift__v1p1,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p1,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p1,
 
@@ -250,6 +259,8 @@ import type {
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p1,
 
+	FGBuildablePipeline as FGBuildablePipeline__v1p1,
+
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p1,
 
@@ -285,6 +296,8 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildable_unoccupied_and_untiered as FGBuildable_unoccupied_and_untiered__v1p2,
+	FGBuildableConveyorBelt as FGBuildableConveyorBelt__v1p2,
+	FGBuildableConveyorLift as FGBuildableConveyorLift__v1p2,
 	FGBuildableFrackingActivator as FGBuildableFrackingActivator__v1p2,
 	FGBuildableGeneratorNuclear as FGBuildableGeneratorNuclear__v1p2,
 
@@ -320,6 +333,8 @@ import type {
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableManufacturer_Build_SmelterMk1_C as FGBuildableManufacturer_Build_SmelterMk1_C__v1p2,
+
+	FGBuildablePipeline as FGBuildablePipeline__v1p2,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	FGBuildableResourceExtractor_miner_mk1 as FGBuildableResourceExtractor_miner_mk1__v1p2,
@@ -384,10 +399,13 @@ import type {
 	FGBuildable_occupied,
 	FGBuildable_tiered,
 	FGBuildable_unoccupied_and_untiered,
+	FGBuildableConveyorBelt,
+	FGBuildableConveyorLift,
 	FGBuildableFrackingActivator,
 	FGBuildableGeneratorNuclear,
 	FGBuildableManufacturer,
 	FGBuildableManufacturerVariablePower,
+	FGBuildablePipeline,
 	FGBuildableResourceExtractor,
 	FGBuildingDescriptor,
 	FGConsumableDescriptor,
@@ -466,6 +484,9 @@ type imports<
 		| FGBuildable_unoccupied_and_untiered
 	) | undefined,
 
+	T_FGBuildableConveyorBelt extends FGBuildableConveyorBelt | undefined,
+	T_FGBuildableConveyorLift extends FGBuildableConveyorLift | undefined,
+
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableFrackingActivator extends FGBuildableFrackingActivator | undefined,
 
@@ -476,6 +497,8 @@ type imports<
 
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableManufacturerVariablePower extends FGBuildableManufacturerVariablePower | undefined,
+
+	T_FGBuildablePipeline extends FGBuildablePipeline | undefined,
 
 	// oxlint-disable-next-line @stylistic/max-len
 	T_FGBuildableResourceExtractor extends FGBuildableResourceExtractor | undefined,
@@ -538,6 +561,14 @@ type imports<
 		'FGBuildable',
 		T_FGBuildable
 	>,
+	FGBuildableConveyorBelt: NativeClass__type<
+		'FGBuildableConveyorBelt',
+		T_FGBuildableConveyorBelt
+	>,
+	FGBuildableConveyorLift: NativeClass__type<
+		'FGBuildableConveyorLift',
+		T_FGBuildableConveyorLift
+	>,
 	FGBuildableManufacturer: NativeClass__type<
 		'FGBuildableManufacturer',
 		T_FGBuildableManufacturer
@@ -545,6 +576,10 @@ type imports<
 	FGBuildableManufacturerVariablePower: NativeClass__type<
 		'FGBuildableManufacturerVariablePower',
 		T_FGBuildableManufacturerVariablePower
+	>,
+	FGBuildablePipeline: NativeClass__type<
+		'FGBuildablePipeline',
+		T_FGBuildablePipeline
 	>,
 	FGBuildingDescriptor: NativeClass__type<
 		'FGBuildingDescriptor',
@@ -809,6 +844,8 @@ type update8_imports = imports<
 		| FGBuildable_tiered__update8
 		| FGBuildable_unoccupied_and_untiered__update8
 	),
+	FGBuildableConveyorBelt__update8,
+	FGBuildableConveyorLift__update8,
 	FGBuildableFrackingActivator__update8,
 	FGBuildableGeneratorNuclear__update8,
 	(
@@ -824,6 +861,7 @@ type update8_imports = imports<
 	(
 		| FGBuildableManufacturer_Build_HadronCollider_C__update6
 	),
+	FGBuildablePipeline__update8,
 	(
 		| FGBuildableResourceExtractor_miner_mk1__update8
 		| FGBuildableResourceExtractor_miner_mk2__update8
@@ -915,6 +953,8 @@ type version_1p0_imports = imports<
 		| FGBuildable_tiered__v1p0
 		| FGBuildable_unoccupied_and_untiered__v1p0
 	),
+	FGBuildableConveyorBelt__v1p0,
+	FGBuildableConveyorLift__v1p0,
 	FGBuildableFrackingActivator__v1p0,
 	FGBuildableGeneratorNuclear__v1p0,
 	(
@@ -932,6 +972,7 @@ type version_1p0_imports = imports<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p0
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0
 	),
+	FGBuildablePipeline__v1p0,
 	(
 		| FGBuildableResourceExtractor_miner_mk1__v1p0
 		| FGBuildableResourceExtractor_miner_mk2__v1p0
@@ -1023,6 +1064,8 @@ type version_1p1_imports = imports<
 		| FGBuildable_tiered__v1p1
 		| FGBuildable_unoccupied_and_untiered__v1p1
 	),
+	FGBuildableConveyorBelt__v1p1,
+	FGBuildableConveyorLift__v1p1,
 	FGBuildableFrackingActivator__v1p1,
 	FGBuildableGeneratorNuclear__v1p1,
 	(
@@ -1040,6 +1083,7 @@ type version_1p1_imports = imports<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p1
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1
 	),
+	FGBuildablePipeline__v1p1,
 	(
 		| FGBuildableResourceExtractor_miner_mk1__v1p1
 		| FGBuildableResourceExtractor_miner_mk2__v1p1
@@ -1138,6 +1182,8 @@ type version_1p2_imports = imports<
 		| FGBuildable_tiered__v1p2
 		| FGBuildable_unoccupied_and_untiered__v1p2
 	),
+	FGBuildableConveyorBelt__v1p2,
+	FGBuildableConveyorLift__v1p2,
 	FGBuildableFrackingActivator__v1p2,
 	FGBuildableGeneratorNuclear__v1p2,
 	(
@@ -1155,6 +1201,7 @@ type version_1p2_imports = imports<
 		| FGBuildableManufacturer_Build_HadronCollider_C__v1p2
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2
 	),
+	FGBuildablePipeline__v1p2,
 	(
 		| FGBuildableResourceExtractor_miner_mk1__v1p2
 		| FGBuildableResourceExtractor_miner_mk2__v1p2

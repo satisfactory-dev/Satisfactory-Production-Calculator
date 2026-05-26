@@ -1,6 +1,6 @@
 import type {
-	FGBuildablePipeline,
-} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes.js';
+	hasClassName,
+} from '@satisfactory-dev/docs.json.ts/generated-types/common/classes/Base.js';
 
 import {
 	get_string_C,
@@ -14,6 +14,10 @@ import type {
 	by_version,
 	supported_versions,
 } from './supported.ts';
+
+import type {
+	NativeClass__type,
+} from './production-data/types.ts';
 
 class ProductionData<
 	Version extends supported_versions,
@@ -78,6 +82,7 @@ class ProductionData<
 			FGItemDescriptor,
 			FGPoleDescriptor,
 			FGRecipe,
+			FGSchematic,
 			FGResourceDescriptor,
 			FGVehicleDescriptor,
 			FGBuildableGeneratorNuclear,
@@ -107,279 +112,54 @@ class ProductionData<
 				: undefined
 		);
 
-		const ammo: result['ammo'] = [
-			FGAmmoTypeProjectile,
-			FGAmmoTypeInstantHit,
-			FGAmmoTypeSpreadshot,
-		].reduce(
-			(was, is): result['ammo'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const ammo = {
+			...ProductionData.#reduce(FGAmmoTypeProjectile),
+			...ProductionData.#reduce(FGAmmoTypeInstantHit),
+			...ProductionData.#reduce(FGAmmoTypeSpreadshot),
+		};
 
-				return was;
-			},
-			{},
-		);
+		const belts = ProductionData.#reduce(FGBuildableConveyorBelt);
 
-		const belts: result['belts'] = [
-			FGBuildableConveyorBelt,
-		].reduce(
-			(was, is): result['belts'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const lifts = ProductionData.#reduce(FGBuildableConveyorLift);
 
-				return was;
-			},
-			{},
-		);
+		const pipes = ProductionData.#reduce(FGBuildablePipeline);
 
-		const lifts: result['lifts'] = [
-			FGBuildableConveyorLift,
-		].reduce(
-			(was, is): result['lifts'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const biomass = ProductionData.#reduce(FGItemDescriptorBiomass);
 
-				return was;
-			},
-			{},
-		);
+		const buildable = ProductionData.#reduce(FGBuildable);
 
-		// @todo figure out why update 8 pipes is listed as never
-		const pipes = [
-			FGBuildablePipeline,
-		].reduce(
-			(was, is): {[key: `${string}_C`]: FGBuildablePipeline} => {
-				if (is) {
-					for (const item of is.Classes as FGBuildablePipeline[]) {
-						was[item.ClassName] = item;
-					}
-				}
+		const buildings = ProductionData.#reduce(FGBuildingDescriptor);
 
-				return was;
-			},
-			{},
-		);
+		const consumable = ProductionData.#reduce(FGConsumableDescriptor);
 
-		const biomass: result['biomass'] = [
-			FGItemDescriptorBiomass,
-		].reduce(
-			(was, is): result['biomass'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const equipment = ProductionData.#reduce(FGEquipmentDescriptor);
 
-				return was;
-			},
-			{},
-		);
-
-		const buildable: result['buildable'] = [
-			FGBuildable,
-		].reduce(
-			(was, is): result['buildable'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const buildings: result['buildings'] = [
-			FGBuildingDescriptor,
-		].reduce(
-			(was, is): result['buildings'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const consumable: result['consumable'] = [
-			FGConsumableDescriptor,
-		].reduce(
-			(was, is): result['consumable'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const equipment: result['equipment'] = [
-			FGEquipmentDescriptor,
-		].reduce(
-			(was, is): result['equipment'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const fuel_nuclear: result['fuel_nuclear'] = [
+		const fuel_nuclear = ProductionData.#reduce(
 			FGItemDescriptorNuclearFuel,
-		].reduce(
-			(was, is): result['fuel_nuclear'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
 		);
 
-		const items: result['items'] = [
-			FGItemDescriptor,
-		].reduce(
-			(was, is): result['items'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const items = ProductionData.#reduce(FGItemDescriptor);
 
-				return was;
-			},
-			{},
-		);
+		const manufacturers = {
+			...ProductionData.#reduce(FGBuildableManufacturer),
+			...ProductionData.#reduce(FGBuildableManufacturerVariablePower),
+		};
 
-		const manufacturers: result['manufacturers'] = [
-			FGBuildableManufacturer,
-			FGBuildableManufacturerVariablePower,
-		].reduce(
-			(was, is): result['manufacturers'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const poles = ProductionData.#reduce(FGPoleDescriptor);
 
-				return was;
-			},
-			{},
-		);
-
-		const poles: result['poles'] = [
-			FGPoleDescriptor,
-		].reduce(
-			(was, is): result['poles'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const power_booster_fuel: result['power_booster_fuel'] = [
+		const power_booster_fuel = ProductionData.#reduce(
 			FGItemDescriptorPowerBoosterFuel,
-		].reduce(
-			(was, is): result['power_booster_fuel'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
 		);
 
-		const power_shards: result['power_shards'] = [
-			FGPowerShardDescriptor,
-		].reduce(
-			(was, is): result['power_shards'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const power_shards = ProductionData.#reduce(FGPowerShardDescriptor);
 
-				return was;
-			},
-			{},
-		);
+		const recipes = ProductionData.#reduce(FGRecipe);
 
-		const recipes: result['recipes'] = [
-			FGRecipe,
-		].reduce(
-			(was, is): result['recipes'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
+		const resources = ProductionData.#reduce(FGResourceDescriptor);
 
-				return was;
-			},
-			{},
-		);
+		const vehicles = ProductionData.#reduce(FGVehicleDescriptor);
 
-		const resources: result['resources'] = [
-			FGResourceDescriptor,
-		].reduce(
-			(was, is): result['resources'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
-
-		const vehicles: result['vehicles'] = [
-			FGVehicleDescriptor,
-		].reduce(
-			(was, is): result['vehicles'] => {
-				if (is) {
-					for (const item of is.Classes) {
-						was[item.ClassName] = item;
-					}
-				}
-
-				return was;
-			},
-			{},
-		);
+		const schematics = ProductionData.#reduce(FGSchematic);
 
 		const ingredients: result[
 			'ingredients'
@@ -444,6 +224,35 @@ class ProductionData<
 			...Object.keys(resources),
 		];
 
+		const compatibility_schematic = FGSchematic.Classes.find(
+			(maybe) => 'Schematic_SaveCompatibility_C' === maybe.ClassName,
+		);
+
+		const skip_unless_one_of_these = FGSchematic.Classes.filter(
+			(maybe) => 'Schematic_SaveCompatibility_C' !== maybe.ClassName,
+		).flatMap((
+			schematic,
+		) => schematic.mUnlocks
+			.filter((maybe) => 'mRecipes' in maybe)
+			.flatMap((
+				recipes,
+			) => recipes.mRecipes.map((e) => get_string_C(e))),
+		);
+
+		const compatibility_recipes = (
+			(
+				compatibility_schematic?.mUnlocks
+					.filter((maybe) => 'mRecipes' in maybe)
+					.flatMap((
+						recipes,
+					) => recipes.mRecipes.map((e) => get_string_C(e)))
+			) || []
+		).filter((maybe) => !skip_unless_one_of_these.includes(maybe));
+
+		const supported_recipes = FGRecipe.Classes.filter((
+			maybe,
+		) => !compatibility_recipes.includes(maybe.ClassName));
+
 		return {
 			ammo,
 			belts,
@@ -466,11 +275,33 @@ class ProductionData<
 			ingredients,
 			products,
 			resource_keys,
+			schematics,
 			known_byproduct,
 			known_not_sourced_from_recipe,
 			recipe_selection_enums: recipe_selection_enums_value,
 			faux_ingredients_list,
+			compatibility_recipes,
+			supported_recipes,
 		} as result;
+	}
+
+	static #reduce<
+		T1 extends NativeClass__type<`FG${string}`, hasClassName>,
+	>(
+		source: T1 | undefined,
+	): {[key: `${string}_C`]: T1['Classes'][number]} {
+		if (!source) {
+			return {};
+		}
+
+		return source.Classes.reduce((
+			was,
+			is,
+		): {[key: `${string}_C`]: T1['Classes'][number]} => {
+			was[is.ClassName] = is;
+
+			return was;
+		}, {});
 	}
 }
 

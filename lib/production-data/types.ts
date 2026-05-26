@@ -711,6 +711,8 @@ type data<
 
 	T_FGResourceDescriptor extends FGResourceDescriptor | undefined,
 
+	T_FGSchematic extends FGSchematic | undefined,
+
 	T_FGVehicleDescriptor extends FGVehicleDescriptor | undefined,
 > = {
 	ammo: {
@@ -786,6 +788,9 @@ type data<
 	resources: {
 		[key: `${string}_C`]: Exclude<T_FGResourceDescriptor, undefined>,
 	},
+	schematics: {
+		[key: `${string}_C`]: Exclude<T_FGSchematic, undefined>,
+	},
 	vehicles: {
 		[key: `${string}_C`]: Exclude<T_FGVehicleDescriptor, undefined>,
 	},
@@ -796,6 +801,8 @@ type data<
 	known_not_sourced_from_recipe: `${string}_C`[],
 	recipe_selection_enums: recipe_selection_properties_with_defaults,
 	faux_ingredients_list: string[],
+	compatibility_recipes: `${string}_C`[],
+	supported_recipes: Exclude<T_FGRecipe, undefined>[],
 };
 
 type update8_data = data<
@@ -836,6 +843,7 @@ type update8_data = data<
 	undefined,
 	FGRecipe__update8,
 	FGResourceDescriptor__update6,
+	FGSchematic__update8,
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__update8
 		| FGVehicleDescriptor_Desc_DroneTransport_C__update8
@@ -948,6 +956,7 @@ type version_1p0_data = data<
 	FGPowerShardDescriptor__v1p0,
 	FGRecipe__v1p0,
 	FGResourceDescriptor__v1p0,
+	FGSchematic__v1p0,
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p0
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p0
@@ -1062,6 +1071,10 @@ type version_1p1_data = data<
 	FGPowerShardDescriptor__v1p0,
 	FGRecipe__v1p0,
 	FGResourceDescriptor__v1p0,
+	(
+		| FGSchematic_with_described_unlocks__v1p1
+		| FGSchematic_without_described_unlocks__v1p1
+	),
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p0
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p0
@@ -1183,6 +1196,10 @@ type version_1p2_data = data<
 	FGPowerShardDescriptor__v1p2,
 	FGRecipe__v1p2,
 	FGResourceDescriptor__v1p2,
+	(
+		| FGSchematic_with_described_unlocks__v1p2
+		| FGSchematic_without_described_unlocks__v1p2
+	),
 	(
 		| FGVehicleDescriptor_Desc_CyberWagon_C__v1p2
 		| FGVehicleDescriptor_Desc_DroneTransport_C__v1p2

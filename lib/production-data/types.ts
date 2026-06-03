@@ -788,7 +788,12 @@ type data<
 	recipes: {
 		[key: `${string}_C`]: Exclude<T_FGRecipe, undefined>,
 	},
-	resource_extractors: Exclude<T_FGBuildableResourceExtractor, undefined>,
+	resource_extractors: {
+		[key: `${string}_C`]: Exclude<
+			T_FGBuildableResourceExtractor,
+			undefined
+		>,
+	},
 	resources: {
 		[key: `${string}_C`]: Exclude<T_FGResourceDescriptor, undefined>,
 	},

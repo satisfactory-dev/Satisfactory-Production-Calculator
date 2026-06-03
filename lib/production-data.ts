@@ -75,6 +75,8 @@ class ProductionData<
 			FGBuildableConveyorBelt,
 			FGBuildableConveyorLift,
 			FGBuildablePipeline,
+			FGBuildableResourceExtractor,
+			FGBuildableWaterPump,
 			FGBuildingDescriptor,
 			FGConsumableDescriptor,
 			FGEquipmentDescriptor,
@@ -123,6 +125,11 @@ class ProductionData<
 		const lifts = ProductionData.#reduce(FGBuildableConveyorLift);
 
 		const pipes = ProductionData.#reduce(FGBuildablePipeline);
+
+		const resource_extractors = {
+			...ProductionData.#reduce(FGBuildableResourceExtractor),
+			...ProductionData.#reduce(FGBuildableWaterPump),
+		};
 
 		const biomass = ProductionData.#reduce(FGItemDescriptorBiomass);
 
@@ -266,6 +273,7 @@ class ProductionData<
 			lifts,
 			manufacturers,
 			pipes,
+			resource_extractors,
 			poles,
 			power_booster_fuel,
 			power_shards,

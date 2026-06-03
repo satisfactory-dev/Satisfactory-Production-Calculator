@@ -687,6 +687,9 @@ type data<
 
 	T_FGBuildablePipeline extends FGBuildablePipeline | undefined,
 
+	// oxlint-disable-next-line @stylistic/max-len
+	T_FGBuildableResourceExtractor extends FGBuildableResourceExtractor | undefined,
+
 	T_FGBuildingDescriptor extends FGBuildingDescriptor | undefined,
 
 	T_FGConsumableDescriptor extends FGConsumableDescriptor | undefined,
@@ -785,6 +788,7 @@ type data<
 	recipes: {
 		[key: `${string}_C`]: Exclude<T_FGRecipe, undefined>,
 	},
+	resource_extractors: Exclude<T_FGBuildableResourceExtractor, undefined>,
 	resources: {
 		[key: `${string}_C`]: Exclude<T_FGResourceDescriptor, undefined>,
 	},
@@ -830,8 +834,15 @@ type update8_data = data<
 		| FGBuildableManufacturer_Build_Packager_C__update6
 		| FGBuildableManufacturer_Build_SmelterMk1_C__update6
 	),
-	FGBuildablePipeline__update8,
 	undefined,
+	FGBuildablePipeline__update8,
+	(
+		| FGBuildableResourceExtractor_miner_mk1__update8
+		| FGBuildableResourceExtractor_miner_mk2__update8
+		| FGBuildableResourceExtractor_miner_mk3__update8
+		| FGBuildableWaterPump__update8
+		| FGBuildableResourceExtractor_oil__update8
+	),
 	FGBuildingDescriptor__update8,
 	FGConsumableDescriptor__update8,
 	FGEquipmentDescriptor__update6,
@@ -945,6 +956,13 @@ type version_1p0_data = data<
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p0
 	),
 	FGBuildablePipeline__v1p0,
+	(
+		| FGBuildableResourceExtractor_miner_mk1__v1p0
+		| FGBuildableResourceExtractor_miner_mk2__v1p0
+		| FGBuildableResourceExtractor_miner_mk3__v1p0
+		| FGBuildableWaterPump__v1p0
+		| FGBuildableResourceExtractor_oil__v1p0
+	),
 	FGBuildingDescriptor__v1p0,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -1060,6 +1078,13 @@ type version_1p1_data = data<
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p1
 	),
 	FGBuildablePipeline__v1p1,
+	(
+		| FGBuildableResourceExtractor_miner_mk1__v1p1
+		| FGBuildableResourceExtractor_miner_mk2__v1p1
+		| FGBuildableResourceExtractor_miner_mk3__v1p1
+		| FGBuildableWaterPump__v1p1
+		| FGBuildableResourceExtractor_oil__v1p1
+	),
 	FGBuildingDescriptor__v1p1,
 	FGConsumableDescriptor__v1p0,
 	FGEquipmentDescriptor__v1p0,
@@ -1182,6 +1207,13 @@ type version_1p2_data = data<
 		| FGBuildableManufacturer_Build_QuantumEncoder_C__v1p2
 	),
 	FGBuildablePipeline__v1p2,
+	(
+		| FGBuildableResourceExtractor_miner_mk1__v1p2
+		| FGBuildableResourceExtractor_miner_mk2__v1p2
+		| FGBuildableResourceExtractor_miner_mk3__v1p2
+		| FGBuildableWaterPump__v1p2
+		| FGBuildableResourceExtractor_oil__v1p2
+	),
 	FGBuildingDescriptor__v1p2,
 	FGConsumableDescriptor__v1p2,
 	FGEquipmentDescriptor__v1p2,

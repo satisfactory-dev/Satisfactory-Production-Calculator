@@ -14,6 +14,7 @@ import type {
 	FGBuildableConveyorBelt,
 	FGBuildableConveyorLift,
 	FGBuildableFrackingActivator,
+	FGBuildableFrackingExtractor,
 	FGBuildableGeneratorNuclear,
 	FGBuildablePipeline,
 	FGBuildableResourceExtractor_miner_mk1,
@@ -208,6 +209,13 @@ export default (update8: update8_docs): ProductionData<
 		'FGBuildableFrackingActivator'
 	>('FGBuildableFrackingActivator', update8);
 
+	const FGBuildableFrackingExtractor: update8_imports[
+		'FGBuildableFrackingExtractor'
+	] = find<
+		FGBuildableFrackingExtractor,
+		'FGBuildableFrackingExtractor'
+	>('FGBuildableFrackingExtractor', update8);
+
 	const FGBuildableWaterPump: update8_imports['FGBuildableWaterPump'] = find<
 		FGBuildableWaterPump,
 		'FGBuildableWaterPump'
@@ -272,6 +280,7 @@ export default (update8: update8_docs): ProductionData<
 		FGVehicleDescriptor,
 		FGBuildableGeneratorNuclear,
 		FGBuildableFrackingActivator,
+		FGBuildableFrackingExtractor,
 		FGBuildableWaterPump,
 		FGBuildableResourceExtractor,
 		FGPowerShardDescriptor: undefined,

@@ -13,6 +13,7 @@ import type {
 	FGBuildableConveyorBelt,
 	FGBuildableConveyorLift,
 	FGBuildableFrackingActivator,
+	FGBuildableFrackingExtractor,
 	FGBuildableGeneratorNuclear,
 	FGBuildableManufacturer_Build_AssemblerMk1_C,
 	FGBuildableManufacturer_Build_Blender_C,
@@ -202,6 +203,13 @@ export default (
 		'FGBuildableFrackingActivator'
 	>('FGBuildableFrackingActivator', release_1_0);
 
+	const FGBuildableFrackingExtractor: version_1p0_imports[
+		'FGBuildableFrackingExtractor'
+	] = find<
+		FGBuildableFrackingExtractor,
+		'FGBuildableFrackingExtractor'
+	>('FGBuildableFrackingExtractor', release_1_0);
+
 	const FGBuildableManufacturer: version_1p0_imports[
 		'FGBuildableManufacturer'
 	] = find<
@@ -296,6 +304,7 @@ export default (
 		FGVehicleDescriptor,
 		FGBuildableGeneratorNuclear,
 		FGBuildableFrackingActivator,
+		FGBuildableFrackingExtractor,
 		FGBuildableWaterPump,
 		FGBuildableResourceExtractor,
 		FGPowerShardDescriptor,

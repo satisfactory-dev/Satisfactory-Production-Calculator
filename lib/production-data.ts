@@ -114,6 +114,18 @@ class ProductionData<
 				: undefined
 		);
 
+		const FGBuildableFrackingActivator = (
+			('FGBuildableFrackingActivator' in this.#imports)
+				? this.#imports.FGBuildableFrackingActivator
+				: undefined
+		);
+
+		const FGBuildableFrackingExtractor = (
+			('FGBuildableFrackingExtractor' in this.#imports)
+				? this.#imports.FGBuildableFrackingExtractor
+				: undefined
+		);
+
 		const ammo = {
 			...ProductionData.#reduce(FGAmmoTypeProjectile),
 			...ProductionData.#reduce(FGAmmoTypeInstantHit),
@@ -167,6 +179,14 @@ class ProductionData<
 		const vehicles = ProductionData.#reduce(FGVehicleDescriptor);
 
 		const schematics = ProductionData.#reduce(FGSchematic);
+
+		const fracking_activator = ProductionData.#reduce(
+			FGBuildableFrackingActivator,
+		);
+
+		const fracking_extractor = ProductionData.#reduce(
+			FGBuildableFrackingExtractor,
+		);
 
 		const ingredients: result[
 			'ingredients'
@@ -268,6 +288,8 @@ class ProductionData<
 			buildings,
 			consumable,
 			equipment,
+			fracking_activator,
+			fracking_extractor,
 			fuel_nuclear,
 			items,
 			lifts,

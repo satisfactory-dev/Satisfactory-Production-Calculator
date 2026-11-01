@@ -28,6 +28,28 @@ generate--post-build:
 generate--validators:
 	@node ./generate-validators.ts
 
+generate--validators--update8:
+	@node ./generate-validators.ts 0.8.3.3
+
+generate--validators--version-1:
+	@node ./generate-validators.ts 1.0.1.4
+
+generate--validators--version-1-1:
+	@node ./generate-validators.ts 1.1.2.2
+
+generate--validators--version-1-2:
+	@node ./generate-validators.ts 1.2.2.0
+
+# Single-version pipelines: generate data + validators for one game version
+# without requiring Docs.json for every supported version to be present.
+generate--version--update8: generate--skip-checks--update8 generate--validators--update8
+
+generate--version--1: generate--skip-checks--version-1 generate--validators--version-1
+
+generate--version--1-1: generate--skip-checks--version-1-1 generate--validators--version-1-1
+
+generate--version--1-2: generate--skip-checks--version-1-2 generate--validators--version-1-2
+
 lint--tsc:
 	@echo 'running syntax check'
 	@./node_modules/.bin/tsc --skipLibCheck --project ./tsconfig.app-check.json

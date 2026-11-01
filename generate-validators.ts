@@ -22,6 +22,7 @@ import production_data from './tests/utilities/production-data.ts';
 
 import {
 	is_supported_from,
+	is_supported_semver,
 } from './lib/supported.ts';
 
 const ajv_options: Options = {
@@ -36,7 +37,18 @@ const ajv_options: Options = {
 	},
 };
 
-for (const semver of Object.keys(is_supported_from)) {
+// Optional CLI args restrict generation to specific versions,
+// e.g. `node ./generate-validators.ts 1.2.2.0`. Defaults to all.
+const [, , ...requested_versions] = process.argv;
+
+const versions
+	= requested_versions.length > 0
+		? requested_versions
+		: Object.keys(is_supported_from);
+
+for (const semver of versions) {
+	is_supported_semver(semver);
+
 	await writeFile(
 		`${import.meta.dirname}/validator/${semver}.ts`,
 		GenerateValidators.toStandalone(
